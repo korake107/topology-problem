@@ -1,0 +1,114 @@
+\documentclass[11pt, dvipdfmx]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[margin=35truemm]{geometry} % 余白を35mmに設定
+\usepackage{tikz-feynhand}
+% --- 数学関連のパッケージ ---
+\usepackage{amsmath}      % 様々な数式環境
+\usepackage{amsthm}       % 定理環境
+\usepackage{amsfonts}     % 数学用フォント
+\usepackage{physics}      % 物理学の数式用マクロ (bra, ket, dvなど)
+\usepackage{bm}           % 太字の数式 \bm{}
+\usepackage{showkeys}
+% --- 図や色、レイアウト関連のパッケージ ---
+\usepackage{graphicx, color} % 図の挿入や色の利用
+\usepackage{tikz}         % 図形描画
+\usetikzlibrary{intersections,calc,arrows.meta}
+\usepackage{float}        % 図表の位置を調整 [H]など
+\usepackage{siunitx}      % 単位をきれいに表示 \SI{100}{\kilo\gram}など
+\usepackage{ascmac}       % itemboxなどの囲み枠
+\usepackage{amsmath}
+\usepackage{amssymb}      % 数学記号 (\becauseなど)
+\numberwithin{equation}{section}
+% --- その他 ---
+\parindent = 0pt % 全体の段落開始時のインデントをなくす
+\newcommand{\intinf}{\int_{-\infty}^\infty}
+\newcommand{\pathint}{\int \mathcal{D}\varphi}
+\newenvironment{note}{
+    \vspace{1ex} % 上部の余白（お好みで調整）
+    \par\footnotesize\noindent\textbf{【注】}
+}{
+    \par\vspace{1ex} % 下部の余白
+}
+% --- ハイパーリンク関連 (できるだけ最後に読み込む) ---
+\usepackage[
+    dvipdfmx,
+    bookmarks=true,
+    bookmarksnumbered=true,
+    bookmarkstype=toc,
+    colorlinks=true,
+    linkcolor=blue,
+    citecolor=blue,
+    urlcolor=blue
+]{hyperref}
+\usepackage{pxjahyper} % hyperrefの日本語文字化け対策
+\usepackage{amsmath, amssymb}
+\usepackage[many]{tcolorbox} % manyオプションでskinsやtheoremsなどを一括読み込み
+
+% tcolorboxを用いた新しい定理環境の定義
+\tcbset{
+    myboxstyle/.style={
+        enhanced,
+        colback=white,           % メインボックスの背景色（白）
+        boxrule=0.8pt,           % 枠線の太さ
+        arc=1.5mm,               % 角の丸み
+        coltitle=white,          % タイトル文字の色（白）
+        attach boxed title to top left={xshift=5mm, yshift=-\tcboxedtitleheight/2},
+        description font=\normalfont,
+        separator sign={:}       % 番号の後のコロン
+    }
+}
+
+% ==========================================
+% 2. 各環境の定義（色のみ個別設定）
+% ==========================================
+
+% --- 定理 (Theorem) : グレー系 ---
+\newtcbtheorem[number within=section]{mythm}{Theorem}{
+    myboxstyle,
+    colframe=red!75!black,           % 枠線の色（赤系に合わせて変更）
+    boxed title style={
+        colback=red!50,              % タイトル背景色をグレーから赤に変更
+        colframe=red!75!black,       % タイトル枠線の色（赤系に合わせて変更）
+        boxrule=0.8pt,
+        arc=1.5mm
+    }
+}{thm}
+
+% --- 定義 (Definition) : ブルー系 ---
+\newtcbtheorem[number within=section]{mydef}{Definition}{
+    myboxstyle,
+    colframe=blue!70!black,      % 枠線の色（青70% + 黒30%）
+    boxed title style={
+        colback=blue!60!gray!80, % タイトル背景色（少しグレーを混ぜた落ち着いた青）
+        colframe=blue!70!black,
+        boxrule=0.8pt,
+        arc=1.5mm
+    }
+}{def}
+
+% --- 補題 (Lemma) : グリーン系 ---
+\newtcbtheorem[number within=section]{mylem}{Lemma}{
+    myboxstyle,
+    colframe=green!50!black,     % 枠線の色（緑50% + 黒50%）
+    boxed title style={
+        colback=green!50!gray,   % タイトル背景色（渋めの緑）
+        colframe=green!50!black,
+        boxrule=0.8pt,
+        arc=1.5mm
+    }
+}{lem}
+
+\begin{document}
+
+\title{テスト文書}
+\author{小武}
+\date{\today}
+\maketitle
+\section{はじめに}
+
+\bibliographystyle{unsrturl}
+
+% Zoteroから出力した .bib ファイルの名前（拡張子 .bib は不要）
+\bibliography{マイライブラリ}
+\end{document}
