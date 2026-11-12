@@ -1,0 +1,839 @@
+%================================================
+\chapter{モース理論・超対称量子力学・K理論への入口}\label{ch:11}
+% 15問
+%================================================
+
+\section{物理からの動機}
+
+\subsection*{超対称量子力学の基底状態を数える}
+超対称性が自発的に破れるかどうかは、エネルギー $E=0$ の状態（超対称な真空）が存在するかどうかで決まる。超対称性を持つ理論では $H=\{Q,Q^\dagger\}\ge0$ なので、$E=0$ の状態は $Q\psi=Q^\dagger\psi=0$ をみたす状態にほかならない。ところが、摂動論で $E=0$ の状態が見つかっても、トンネル効果（インスタントン）によってエネルギーがわずかに持ち上がり、超対称性が\textbf{非摂動的に}破れることがある。破れるかどうかを摂動論に頼らず判定する量として、ウィッテンは
+\[
+\Tr(-1)^F e^{-\beta H}=n_B^{E=0}-n_F^{E=0}
+\]
+（\term{ウィッテン指数}{Witten index}）を導入した。$E>0$ の状態はボソンとフェルミオンが必ず対になるので、この量は $\beta$ によらず、パラメータを連続的に変えても変わらない。指数が $0$ でなければ超対称性は破れない。
+
+1次元の超対称量子力学で、超ポテンシャル $W(x)=\lambda(x^3/3-a^2x)$ をとると、ボソン的なポテンシャルは $V=W'^2=\lambda^2(x^2-a^2)^2$ の二重井戸になる（下図）。調和近似では2つの井戸の底にそれぞれ $E=0$ の状態ができるが、一方はボソン的、もう一方はフェルミオン的であり、指数は $1-1=0$。実際には井戸の間のトンネル効果がこの2状態を混ぜて $E\sim e^{-2\Delta W}>0$ に持ち上げ、超対称性は破れる（問題 \ref{ch11-prob-dw}）。
+
+\begin{center}
+\begin{tikzpicture}[scale=1.15]
+  \draw[-{Stealth[length=2mm]}] (-2.6,0) -- (2.8,0) node[right] {$x$};
+  \draw[-{Stealth[length=2mm]}] (0,-0.2) -- (0,2.5) node[above] {$V=W'^2$};
+  \draw[very thick,blue!70!black,domain=-1.6:1.6,samples=100,smooth]
+     plot (\x,{0.9*(\x*\x-1)*(\x*\x-1)});
+  \node[vtx] at (1,0) {}; \node[vtx] at (-1,0) {};
+  \node[below] at (1,-0.05) {\footnotesize $+a$};
+  \node[below] at (-1,-0.05) {\footnotesize $-a$};
+  \draw[red!70!black,thick] (0.75,0.32) -- (1.25,0.32);
+  \draw[green!40!black,thick] (-1.25,0.32) -- (-0.75,0.32);
+  \node[red!70!black,right] at (1.3,0.42) {\footnotesize ボソン（$W''>0$）};
+  \node[green!40!black,left] at (-1.3,0.42) {\footnotesize フェルミオン（$W''<0$）};
+  \draw[-{Stealth[length=2mm]},thick,dashed,orange!80!black] (-0.75,0.5) .. controls (-0.3,1.3) and (0.3,1.3) .. (0.75,0.5);
+  \draw[-{Stealth[length=2mm]},thick,dashed,orange!80!black] (0.75,0.45) .. controls (0.3,1.1) and (-0.3,1.1) .. (-0.75,0.45);
+  \node[orange!80!black] at (0,1.55) {\footnotesize インスタントン};
+\end{tikzpicture}
+\zucap{超ポテンシャル $W=\lambda(x^3/3-a^2x)$ の超対称量子力学。調和近似では各井戸に $E=0$ の状態が1つずつあるが、統計が逆である。トンネル効果で両者が結びつき、どちらも $E>0$ に持ち上がる。}
+\end{center}
+
+\subsection*{超対称量子力学 $=$ ド・ラーム理論}
+ウィッテン（1982）は、リーマン多様体 $M$ 上を動く粒子の超対称量子力学が、$M$ 上の微分形式の理論そのものであることに気づいた。
+\begin{itemize}
+\item 状態空間は $M$ 上の微分形式全体、フェルミオン数 $F$ は形式の次数。
+\item 超電荷は外微分 $Q=d$、ハミルトニアンはラプラシアン $H=dd^\dagger+d^\dagger d$。
+\item $E=0$ の状態は調和形式であり、ホッジの定理（第5章）によりド・ラーム・コホモロジーと1対1。よってウィッテン指数はオイラー標数 $\chi(M)=\sum(-1)^pb_p$ である。
+\end{itemize}
+さらに $M$ 上の関数 $h$ を超ポテンシャルとして加え（$d_t=e^{-th}de^{th}$）、結合 $t$ を大きくすると、低エネルギーの状態は $h$ の臨界点の近くに局在し、各臨界点に「フェルミオン数 $=$ その臨界点の指数」の摂動的真空が1つずつできる。真の基底状態はこのうちの一部であり、どれが生き残るかは臨界点を結ぶインスタントン（$h$ の勾配流）が決める。こうして\textbf{臨界点の数}と\textbf{トポロジー（ベッチ数）}を結ぶ古典的な\term{モース理論}{Morse theory}が、超対称量子力学の言葉で自然に導かれる。
+
+\subsection*{Dブレーンの電荷とK理論}
+タイプII弦理論の Dp ブレーンは RR 場の電荷をもち、ド・ラーム・コホモロジー（RR 形式の束縛）で数えるのが素朴な考えである。しかし、BPS でない（超対称性を保たない）にもかかわらず安定なブレーンがあり、その電荷は $\Z_2$ に値をとる（タイプI 弦理論の D0 ブレーンなど）。これはコホモロジーでは捉えられない。
+
+センは、D9 ブレーンと反 D9 ブレーンの対の上のタキオン場が凝縮すると両者が対消滅し、タキオンが位相的に巻き付いた渦の芯に低次元の Dブレーンが残ることを示した。ブレーンと反ブレーンの上のゲージ束を $E,F$ とすると、「対消滅で消えるもの」を同一視した電荷は形式的差 $[E]-[F]$ であり、これが\term{K理論}{K-theory}の元である。球面の K 群は\term{ボット周期性}{Bott periodicity}によって完全に計算でき、その結果は既知の安定な Dブレーンの一覧と見事に一致する。
+
+\begin{physbox}[：本章の辞書]
+\begin{center}
+\small
+\begin{tabular}{p{0.47\linewidth}p{0.43\linewidth}}
+物理 & 数学\\ \hline
+超対称量子力学の状態・フェルミオン数 & 微分形式・形式の次数\\
+超電荷 $Q$、ハミルトニアン $H$ & 外微分 $d$、ラプラシアン $\Delta$\\
+超対称な真空（$E=0$ の状態） & 調和形式 $\cong$ ド・ラーム・コホモロジー\\
+ウィッテン指数 $\Tr(-1)^F$ & オイラー標数 $\chi(M)$\\
+超ポテンシャル $t\,h$ & モース関数 $h$\\
+摂動的真空 & 臨界点（フェルミオン数 $=$ 指数）\\
+インスタントン（トンネル効果） & 勾配流線、モース・ウィッテン微分\\
+トンネル効果による超対称性の破れ & モース複体の微分が $0$ でない\\
+ブレーン・反ブレーン対（Chan--Paton 束 $E,F$） & K理論の元 $[E]-[F]$\\
+対消滅 & $[E]-[E]=0$\\
+Dブレーン電荷（$\Z$ や $\Z_2$） & $\tilde K(S^n)$, $\widetilde{KO}(S^n)$
+\end{tabular}
+\end{center}
+\end{physbox}
+
+\section{基本事項のまとめ}
+
+\subsection{モース関数}
+以下 $M$ は $n$ 次元の滑らかな多様体、$h\colon M\to\R$ は滑らかな関数とする。
+
+\begin{mydef}{臨界点・モース関数・指数}{ch11-morse}
+$dh_p=0$ となる点 $p$ を $h$ の\term{臨界点}{critical point}という。局所座標でのヘッセ行列 $\bigl(\partial_i\partial_jh(p)\bigr)$ が正則なとき $p$ は\term{非退化}{nondegenerate}であるといい、その負の固有値の個数（重複込み）を $p$ の\term{指数}{index}（モース指数、$\ind p$）という（座標によらない）。すべての臨界点が非退化な関数を\term{モース関数}{Morse function}という。指数 $k$ の臨界点の個数を $c_k$ と書く。
+\end{mydef}
+
+\begin{mythm}{モースの補題}{ch11-lemma}
+$p$ が指数 $k$ の非退化臨界点ならば、$p$ のまわりの局所座標 $(x_1,\dots,x_n)$ で
+\[
+h=h(p)-x_1^2-\dots-x_k^2+x_{k+1}^2+\dots+x_n^2
+\]
+となるものがとれる。特に非退化臨界点は孤立している。
+\end{mythm}
+物理の言葉では、臨界点の近くで $h$ は（座標を選べば）厳密に2次であり、指数は「不安定方向の数」である。極小は指数 $0$、極大は指数 $n$、その間が鞍点である。コンパクト多様体上の「一般の」関数はモース関数である（モース関数全体は稠密）。
+
+\begin{myex}{立てたトーラスの高さ関数}{ch11-torus}
+トーラス $T^2$ を鉛直面内に立て、高さ $h$ を関数とする。臨界点は下図の4点で、下から順に極小（指数 $0$）、鞍点（指数 $1$）、鞍点（指数 $1$）、極大（指数 $2$）である。$(c_0,c_1,c_2)=(1,2,1)$ はベッチ数 $(b_0,b_1,b_2)=(1,2,1)$ と一致する（問題 \ref{ch11-prob-torus}）。
+\begin{center}
+\begin{tikzpicture}[scale=0.95]
+  \fill[blue!8,even odd rule] (0,0) circle (2) (0,0) circle (1);
+  \draw[thick] (0,0) circle (2);
+  \draw[thick] (0,0) circle (1);
+  % tube cross sections
+  \draw[gray] (0,1.5) ellipse (0.18 and 0.5);
+  \draw[gray] (0,-1.5) ellipse (0.18 and 0.5);
+  \draw[gray] (1.5,0) ellipse (0.5 and 0.18);
+  \draw[gray] (-1.5,0) ellipse (0.5 and 0.18);
+  \node[vtx,red!70!black] at (0,-2) {}; \node[below] at (0,-2) {\footnotesize 極小（指数 0）};
+  \node[vtx,orange!80!black] at (0,-1) {}; \node[above] at (0,-1) {\footnotesize 鞍点（1）};
+  \node[vtx,orange!80!black] at (0,1) {}; \node[below] at (0,1) {\footnotesize 鞍点（1）};
+  \node[vtx,blue!70!black] at (0,2) {}; \node[above] at (0,2) {\footnotesize 極大（指数 2）};
+  \draw[-{Stealth[length=2mm]}] (3.3,-2.3) -- (3.3,2.5) node[above] {$h$};
+  \foreach \y/\l in {-2/-2,-1/-1,1/1,2/2}{
+    \draw[densely dotted] (0.1,\y) -- (3.3,\y);
+    \node[right] at (3.35,\y) {\footnotesize $\l$};
+  }
+\end{tikzpicture}
+\zucap{鉛直に立てたトーラスの正面図（外側の輪郭の半径 $R+r=2$、穴の輪郭の半径 $R-r=1$）。灰色の楕円は管の断面。高さ関数 $h$ の臨界点は4つ。}
+\end{center}
+\end{myex}
+
+\subsection{胞体分解とモース不等式}
+部分レベル集合 $M^a=\{x\in M:h(x)\le a\}$ が $a$ とともにどう変わるかを見る。
+
+\begin{mythm}{臨界点を通過すると胞体が付く}{ch11-handle}
+$M$ はコンパクト、$h$ はモース関数とする。
+\begin{enumerate}
+\item $[a,b]$ に臨界値がなければ、$M^a$ は $M^b$ の変位レトラクトで、$M^a\cong M^b$。
+\item 臨界値 $c$ に指数 $k$ の臨界点がちょうど1つあるなら、十分小さい $\varepsilon>0$ で $M^{c+\varepsilon}\simeq M^{c-\varepsilon}\cup e^k$（$k$ 胞体を1つ貼り付けたもの）。
+\end{enumerate}
+したがって $M$ は、指数 $k$ の臨界点1つにつき $k$ 胞体1つをもつ CW 複体とホモトピー同値である。
+\end{mythm}
+\begin{note}
+(2) の直観：モースの補題の座標で、臨界点を通過すると「不安定方向 $x_1,\dots,x_k$ の $k$ 次元円板」が新たに $M^c$ に入ってくる。安定方向 $x_{k+1},\dots,x_n$ は縮められるので、ホモトピー的には $k$ 胞体を貼るだけである。
+\end{note}
+
+胞体ホモロジー（第4章）で $\dim C_k=c_k$ の鎖複体から $H_k$ が計算されることから、次が従う。$b_k=\dim H_k(M;\mathbb{F})$ は任意の体 $\mathbb{F}$ 係数のベッチ数（$\mathbb{F}=\Q$ か $\Z_2$）である。
+
+\begin{mythm}{モース不等式}{ch11-ineq}
+$M$ をコンパクト、$h$ をモース関数とする。
+\begin{enumerate}
+\item（弱モース不等式）$c_k\ge b_k$ \ （$k=0,1,\dots,n$）。
+\item（強モース不等式）各 $k$ について
+\[
+c_k-c_{k-1}+\dots+(-1)^kc_0\ \ge\ b_k-b_{k-1}+\dots+(-1)^kb_0 ,
+\]
+かつ $k=n$ では等号：$\displaystyle\sum_k(-1)^kc_k=\sum_k(-1)^kb_k=\chi(M)$。
+\item（多項式形）$M_t=\sum c_kt^k$、$P_t=\sum b_kt^k$ とおくと、非負整数係数の多項式 $R(t)$ があって
+\[
+M_t-P_t=(1+t)R(t).
+\]
+\end{enumerate}
+\end{mythm}
+\begin{note}
+(3) の導出：鎖複体 $0\to C_n\to\dots\to C_0\to0$ で $Z_k=\ker\partial_k$、$B_k=\operatorname{im}\partial_{k+1}$、$r_k=\dim B_k$ とおくと $c_k=\dim Z_k+r_{k-1}$、$b_k=\dim Z_k-r_k$ なので $c_k-b_k=r_k+r_{k-1}$。よって $M_t-P_t=\sum_k(r_k+r_{k-1})t^k=(1+t)\sum_kr_kt^k$。(1)(2) は (3) の係数比較から従う（問題 \ref{ch11-prob-ineq}）。
+\end{note}
+
+$c_k=b_k$（すべての $k$）となるモース関数を\term{完全モース関数}{perfect Morse function}という。指数がすべて偶数なら（より一般に、隣り合う指数の臨界点がなければ）完全である（\term{欠落原理}{lacunary principle}、問題 \ref{ch11-prob-ineq}）。
+
+\subsection{モース・ホモロジー（ウィッテン複体）}
+$M$ にリーマン計量を入れ、勾配流
+\[
+\frac{dx}{d\tau}=-\nabla h(x)
+\]
+を考える。$h$ は流れに沿って減少する。臨界点 $p$ から出発して（$\tau\to-\infty$ で $p$ に近づき）$q$ に流れ込む（$\tau\to+\infty$ で $q$ に近づく）解を、$p$ から $q$ への\term{勾配流線}{gradient flow line}という（時間の平行移動は同一視する）。$p$ から出る流線全体は $p$ の\term{不安定多様体}{unstable manifold} $W^u(p)$ をなし、その次元は $\ind p$ である。$q$ に流れ込む流線全体 $W^s(q)$ の次元は $n-\ind q$。
+
+すべての $p,q$ で $W^u(p)$ と $W^s(q)$ が横断的に交わるとき（\term{モース・スメール条件}{Morse--Smale condition}；計量を少し動かせば常に成り立つ）、$\ind p=\ind q+1$ なら $p$ から $q$ への流線は有限個である。各 $W^u(p)$ に向きを選んでおくと、各流線 $\gamma$ に符号 $\epsilon(\gamma)=\pm1$ が定まる。
+
+\begin{mythm}{モース・ホモロジー}{ch11-morsehom}
+$C_k$ を指数 $k$ の臨界点で生成される自由加群とし、
+\[
+\partial p=\sum_{\ind q=\ind p-1}n(p,q)\,q,\qquad n(p,q)=\sum_{\gamma:\,p\to q}\epsilon(\gamma)
+\]
+と定めると $\partial^2=0$ であり、$H_k(C_\bullet,\partial)\cong H_k(M;\Z)$。$\Z_2$ 係数では符号を無視して流線の数を $\bmod 2$ で数えればよい。
+\end{mythm}
+符号の規則は、1次元の場合が典型である：$\ind p=1$ の臨界点の不安定多様体は向きのついた弧で、その2つの端に流れ着く極小 $q_\pm$（向きの正の側を $q_+$）に対し $\partial p=q_+-q_-$ である。これは胞体の境界 $\partial e^1=(\text{終点})-(\text{始点})$ と同じである。
+ウィッテンの立場では、余境界 $\delta=\partial^T$（指数を1上げる）が変形した外微分 $d_t$ の行列要素（インスタントン振幅）として現れる（後述）。
+
+\subsection{超対称量子力学とウィッテン指数}
+
+\begin{mydef}{超対称量子力学}{ch11-sqm}
+ヒルベルト空間 $\mathcal{H}=\mathcal{H}_B\oplus\mathcal{H}_F$ 上に、\term{フェルミオン数演算子}{fermion number} $(-1)^F$（$\mathcal H_B$ 上 $+1$、$\mathcal H_F$ 上 $-1$）と、$(-1)^F$ と反可換な\term{超電荷}{supercharge} $Q$ があって
+\[
+Q^2=0,\qquad H=\{Q,Q^\dagger\}=QQ^\dagger+Q^\dagger Q
+\]
+となる系を（$\mathcal N=2$ の）超対称量子力学という。$[H,Q]=0$、$H\ge0$ である。
+\end{mydef}
+
+\begin{myprop}{エネルギー正の状態の対合とウィッテン指数}{ch11-pair}
+\begin{enumerate}
+\item $H\psi=0\iff Q\psi=Q^\dagger\psi=0$。
+\item $E>0$ の固有空間 $\mathcal H_E$ では、$Q_1=(Q+Q^\dagger)/\sqrt E$ が $\mathcal H_E\cap\mathcal H_B$ と $\mathcal H_E\cap\mathcal H_F$ の同型を与える。
+\item したがって\term{ウィッテン指数}{Witten index}
+\[
+I_W=\Tr(-1)^Fe^{-\beta H}=n_B^0-n_F^0
+\]
+は $\beta$ によらない。$n_{B,F}^0$ は $E=0$ のボソン・フェルミオン状態の数。
+\item $I_W\neq0$ ならば $E=0$ の状態が存在し、超対称性は自発的に破れない。
+\end{enumerate}
+\end{myprop}
+証明は問題 \ref{ch11-prob-pair}。$I_W$ はパラメータの連続変形で変わらない：状態は $E>0$ の対として出入りするだけだからである。ただし、非コンパクトな空間で漸近的振る舞いが変わる変形（基底状態が無限遠に逃げる）では変わりうる（問題 \ref{ch11-prob-W}）。
+
+\begin{myex}{多様体上の超対称量子力学}{ch11-sqmM}
+コンパクトなリーマン多様体 $M$ 上の超対称シグマ模型（符号・規格化は文献により異なるが、ラグランジアン $L=\tfrac12g_{ij}\dot x^i\dot x^j+i\bar\psi_i\tfrac{D\psi^i}{dt}-\tfrac14R_{ijkl}\psi^i\bar\psi^j\psi^k\bar\psi^l$）を量子化すると、フェルミオンは $\psi^i\to dx^i\wedge$、$\bar\psi_i\to\iota_{\partial_i}$ のように微分形式への作用として実現され
+\[
+\mathcal H=\bigoplus_{p=0}^n\Omega^p(M)\ (L^2),\qquad F=p,\qquad Q=d,\quad Q^\dagger=d^\dagger,\quad H=dd^\dagger+d^\dagger d=\Delta .
+\]
+$E=0$ の状態は調和形式であり、ホッジの定理（第5章）により $\dim\ker\Delta|_{\Omega^p}=b_p(M)$。よって
+\[
+\Tr(-1)^Fe^{-\beta H}=\sum_p(-1)^pb_p(M)=\chi(M).
+\]
+\end{myex}
+
+\subsection{ウィッテンの変形}
+$h$ を $M$ 上の関数、$t\in\R$ とし
+\[
+d_t=e^{-th}\,d\,e^{th}=d+t\,dh\wedge,\qquad d_t^\dagger=e^{th}\,d^\dagger e^{-th},\qquad H_t=d_td_t^\dagger+d_t^\dagger d_t
+\]
+とおく。$d_t^2=0$ であり、$d_t$ のコホモロジーは $e^{th}$ との共役で $d$ のコホモロジーと同型なので、$H_t$ の $E=0$ 状態の数は各次数で $b_p$ のままである（問題 \ref{ch11-prob-pair}）。これは超ポテンシャル $th$ をもつ超対称量子力学である。
+
+\begin{myprop}{変形したハミルトニアン}{ch11-Ht}
+局所的な正規直交座標（平坦近似）で $a^{i\dagger}=dx^i\wedge$、$a^i=\iota_{\partial_i}$（$\{a^i,a^{j\dagger}\}=\delta^{ij}$）とすると
+\[
+H_t=\Delta+t^2\lvert\nabla h\rvert^2+t\sum_{i,j}\frac{\partial^2h}{\partial x^i\partial x^j}\,[a^{i\dagger},a^j].
+\]
+\end{myprop}
+\begin{note}
+1次元 $M=\R$ では、$0$ 形式 $f$ と $1$ 形式 $g\,dx$ に対し $d_tf=(f'+th'f)\,dx$、$d_t^\dagger(g\,dx)=-g'+th'g$ で
+\[
+H_t\big|_{\Omega^0}=-\frac{d^2}{dx^2}+t^2h'^2-th'',\qquad H_t\big|_{\Omega^1}=-\frac{d^2}{dx^2}+t^2h'^2+th''.
+\]
+$[a^\dagger,a]$ は $0$ 形式上 $-1$、$1$ 形式上 $+1$ であり、一般式と一致する。$E=0$ の解は $0$ 形式 $e^{-th}$、$1$ 形式 $e^{th}dx$ である。
+\end{note}
+
+$t\to\infty$ では $t^2\lvert\nabla h\rvert^2$ が大きくなるので、低エネルギーの状態は臨界点の近くに局在する。臨界点 $p$ でヘッセ行列を対角化して固有値を $\lambda_1,\dots,\lambda_n$ とすると、調和近似で $H_t$ は独立な超対称調和振動子の和になり、その固有値は
+\[
+E=t\sum_{i=1}^n\bigl(\lvert\lambda_i\rvert(2N_i+1)+\lambda_i\varepsilon_i\bigr),\qquad N_i=0,1,2,\dots,\quad \varepsilon_i=\begin{cases}+1&(dx^i\ \text{を含む})\\-1&(\text{含まない})\end{cases}
+\]
+である。$E=0$ となるのは $N_i=0$ かつ「$\lambda_i<0$ の方向にだけ $dx^i$ を含む」ときで、ちょうど1状態、その次数は $\ind p$ である（問題 \ref{ch11-prob-witten}）。
+
+\begin{mythm}{ウィッテンによるモース理論}{ch11-witten}
+$t\to\infty$ で、$H_t|_{\Omega^k}$ の固有値のうち $O(t)$ より小さいもの（低エネルギー状態）の個数は $c_k$ に等しく、それらは指数 $k$ の臨界点に局在した摂動的真空で近似される。
+\begin{enumerate}
+\item 真の $E=0$ 状態は低エネルギー状態の一部なので $b_k\le c_k$（弱モース不等式）。
+\item 低エネルギー状態の空間に制限した $d_t$ は、指数 $k$ の臨界点の状態を指数 $k+1$ の臨界点の状態へ写し、その行列要素は2点を結ぶ勾配流線（インスタントン）の寄与の和 $\sim\pm e^{-t(h(q)-h(p))}$ で与えられる。この複体のコホモロジーが $E=0$ 状態を与え、モース・ホモロジー（定理 \ref{thm:ch11-morsehom}）の双対版になる。
+\item 指数：$\displaystyle\chi(M)=\sum_k(-1)^kc_k$。
+\end{enumerate}
+\end{mythm}
+
+\subsection{ボット周期性}
+$U=\bigcup_NU(N)$、$O=\bigcup_NO(N)$、$Sp=\bigcup_NSp(N)$ を包含 $U(N)\subset U(N+1)$ などによる帰納極限とする（\term{安定}{stable}な古典群）。
+
+\begin{mythm}{ボット周期性}{ch11-bott}
+\[
+\pi_k(U)\cong\pi_{k+2}(U),\qquad \pi_k(O)\cong\pi_{k+8}(O),\qquad \pi_k(Sp)\cong\pi_{k+4}(O).
+\]
+具体的には
+\begin{center}
+\begin{tabular}{c|cccccccc}
+$k\bmod 8$ & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7\\ \hline
+$\pi_k(U)$ & 0 & $\Z$ & 0 & $\Z$ & 0 & $\Z$ & 0 & $\Z$\\
+$\pi_k(O)$ & $\Z_2$ & $\Z_2$ & 0 & $\Z$ & 0 & 0 & 0 & $\Z$\\
+$\pi_k(Sp)$ & 0 & 0 & 0 & $\Z$ & $\Z_2$ & $\Z_2$ & 0 & $\Z$
+\end{tabular}
+\end{center}
+\end{mythm}
+
+\begin{myprop}{安定域}{ch11-stable}
+ファイブレーション $U(N-1)\to U(N)\to S^{2N-1}$ などのホモトピー完全列（第3章）から、包含は次の範囲で $\pi_k$ の同型を与える：
+\begin{gather*}
+\pi_k(U(N))\cong\pi_k(U)\ \ (k\le2N-1),\qquad \pi_k(O(N))\cong\pi_k(O)\ \ (k\le N-2),\\
+\pi_k(Sp(N))\cong\pi_k(Sp)\ \ (k\le4N+1).
+\end{gather*}
+また $SU(N)\to U(N)$ は $k\ge2$ で $\pi_k$ の同型を与える（$U(N)\cong SU(N)\times U(1)$）。
+\end{myprop}
+例えば $\pi_3(SU(N))=\Z$（$N\ge2$、インスタントン数、第3, 8章）、$\pi_1(SO(N))=\Z_2$（$N\ge3$、スピン、第2章）、$\pi_4(SU(N))=0$（$N\ge3$）だが $\pi_4(SU(2))=\pi_4(Sp(1))=\Z_2$（安定域内なので $Sp$ の値；ウィッテンの $SU(2)$ アノマリー、第9章）。
+
+\begin{center}
+\begin{tikzpicture}[scale=1.0]
+  \draw[thick,gray] (0,0) circle (2.2);
+  \foreach \k/\g in {0/\Z_2,1/\Z_2,2/0,3/\Z,4/0,5/0,6/0,7/\Z}{
+    \pgfmathsetmacro{\ang}{90-45*\k}
+    \node[circle,draw,fill=white,inner sep=1.5pt,minimum size=7mm] at (\ang:2.2) {\footnotesize $\g$};
+    \node at (\ang:2.95) {\footnotesize $k\equiv\k$};
+  }
+  \draw[-{Stealth[length=2mm]},thick,blue!60!black] (80:1.75) arc (80:-250:1.75);
+  \node at (0,0.25) {\footnotesize $\pi_k(O)$};
+  \node at (0,-0.25) {\footnotesize 周期 8};
+  \begin{scope}[xshift=6.4cm]
+    \draw[thick,gray] (0,0) circle (1.2);
+    \node[circle,draw,fill=white,inner sep=1.5pt,minimum size=7mm] at (90:1.2) {\footnotesize $0$};
+    \node[circle,draw,fill=white,inner sep=1.5pt,minimum size=7mm] at (-90:1.2) {\footnotesize $\Z$};
+    \node at (90:1.85) {\footnotesize $k$ 偶数};
+    \node at (-90:1.85) {\footnotesize $k$ 奇数};
+    \node at (0,0.2) {\footnotesize $\pi_k(U)$};
+    \node at (0,-0.2) {\footnotesize 周期 2};
+  \end{scope}
+\end{tikzpicture}
+\zucap{ボット周期性の「時計」。左：$\pi_k(O)$ は $k\bmod8$ で決まる（$k=0$ を真上に置き時計回り）。右：$\pi_k(U)$ は $k\bmod2$ で決まる。}
+\end{center}
+
+\subsection{K理論}
+
+\begin{mydef}{K群}{ch11-K}
+$X$ をコンパクト空間とする。$X$ 上の複素ベクトル束の同型類全体は直和 $\oplus$ について可換モノイドをなす。その\term{グロタンディーク群}{Grothendieck group}、すなわち形式的差 $[E]-[F]$ 全体に
+\[
+[E]-[F]=[E']-[F']\iff E\oplus F'\oplus\C^N\cong E'\oplus F\oplus\C^N\ (\text{ある } N)
+\]
+で同値関係を入れた群を $K(X)$ と書く。テンソル積で環になる。$X$ が基点 $x_0$ をもつとき、階数 $[E]-[F]\mapsto\dim E_{x_0}-\dim F_{x_0}$ の核を\term{簡約K群}{reduced K-group} $\tilde K(X)$ とし、$K(X)=\Z\oplus\tilde K(X)$。実ベクトル束で同様に作ったものを $KO(X)$、$\widetilde{KO}(X)$ と書く。
+\end{mydef}
+コンパクトな $X$ 上の任意の束 $F$ には $F\oplus F'\cong\C^N$ となる $F'$ があるので、$K(X)$ の元は常に $[E]-[\C^N]$ の形に書ける。$[E]=[E']$ は「安定同型」（自明束を足せば同型）を意味する。
+
+\begin{mythm}{球面の K 群}{ch11-Ksphere}
+球面上の階数 $N$ の束は、赤道 $S^{n-1}$ 上の貼り合わせ関数のホモトピー類で分類される（第7章）：$\mathrm{Vect}_N(S^n)\cong[S^{n-1},U(N)]$。安定化して
+\[
+\tilde K(S^n)\cong\pi_{n-1}(U)=\begin{cases}\Z&(n\ \text{偶数})\\0&(n\ \text{奇数})\end{cases},\qquad
+\widetilde{KO}(S^n)\cong\pi_{n-1}(O).
+\]
+$\widetilde{KO}(S^n)$ は $n\bmod 8=0,1,\dots,7$ に応じて $\Z,\Z_2,\Z_2,0,\Z,0,0,0$。
+\end{mythm}
+$n=2m$ のとき同型 $\tilde K(S^{2m})\to\Z$ は $[E]-[\C^N]\mapsto\int_{S^{2m}}\ch_m(E)$ で与えられる（$\ch=\tr\exp(F/2\pi)$）。$\tilde K(S^2)$ の生成元は単位モノポール束 $L_1$ を用いた $[L_1]-1$（問題 \ref{ch11-prob-KS2}）、$\tilde K(S^4)$ の生成元はインスタントン数 $\pm1$ の $SU(2)$ 束である。
+
+高次の K 群は懸垂で定める：$\tilde K^{-j}(X)=\tilde K(\Sigma^jX)$。特に $\tilde K^{-1}(S^n)=\tilde K(S^{n+1})$。ボット周期性は $\tilde K^{-j}\cong\tilde K^{-j-2}$、$\widetilde{KO}^{-j}\cong\widetilde{KO}^{-j-8}$ と表される。チャーン指標 $\ch\colon K(X)\otimes\Q\to H^{\mathrm{even}}(X;\Q)$ は環同型だが、$K(X)$ のねじれ（$KO$ の $\Z_2$ など）はコホモロジーでは見えない。
+
+\begin{mythm}{アティヤ・ボット・シャピロ構成}{ch11-ABS}
+$\R^{2k}$ のクリフォード代数 $\{\Gamma_\mu,\Gamma_\nu\}=2\delta_{\mu\nu}$ の既約表現をカイラリティで分けた $S^\pm\cong\C^{2^{k-1}}$ に対し、$T(x)=x^\mu\Gamma_\mu\colon S^+\to S^-$ は $x\neq0$ で同型である。三つ組 $(S^+,S^-,T)$ は「$\R^{2k}$ 上でコンパクト台をもつ K 理論の元」すなわち $\tilde K(S^{2k})$ の元を定め、これは生成元（ボット元）である。実クリフォード代数を用いると $\widetilde{KO}$ の生成元も同様に得られる。
+\end{mythm}
+
+\subsection{Dブレーン電荷とK理論}
+
+\begin{physbox}[：センのタキオン凝縮とウィッテンの K 理論的分類]
+タイプIIB 弦理論で、$N$ 枚の D9 ブレーンと $N$ 枚の反 D9 ブレーンを重ねる。それぞれの上のチャン・パトン束を $E,F$（階数 $N$）とすると、両者を結ぶ開弦の基底状態はタキオン $T\in\Gamma(\Hom(E,F))$ である。タキオンのポテンシャルの最小値 $\lvert T\rvert=T_0$ ではブレーン対は消滅して閉弦の真空になる（センの予想）。
+\begin{itemize}
+\item $T$ がいたるところ同型なら $E\cong F$ で、全体が真空に崩壊する：$[E]-[F]=0$。
+\item $T$ が $\R^{2k}$ 方向に巻き付いた配位（アティヤ・ボット・シャピロ型 $T=x^\mu\Gamma_\mu$、$N=2^{k-1}$）は、$x=0$ の芯に D$(9-2k)$ ブレーンを残す。
+\end{itemize}
+よって Dp ブレーンの電荷は横方向 $\R^{9-p}$ のコンパクト台 K 群 $\tilde K(S^{9-p})$ に値をとる。
+\begin{center}
+\small
+\begin{tabular}{l|l|l}
+理論 & 電荷の群 & 安定な Dp ブレーン\\ \hline
+IIB & $\tilde K(S^{9-p})$ & $p$ 奇数で $\Z$\\
+IIA & $\tilde K^{-1}(S^{9-p})=\tilde K(S^{10-p})$ & $p$ 偶数で $\Z$\\
+タイプI & $\widetilde{KO}(S^{9-p})$ & $p=1,5,9$ で $\Z$；$p=-1,0,7,8$ で $\Z_2$
+\end{tabular}
+\end{center}
+タイプIの $\Z_2$ 電荷のブレーンは BPS ではないが安定である（問題 \ref{ch11-prob-dbrane}）。
+\end{physbox}
+
+\begin{center}
+\begin{tikzpicture}[scale=0.95]
+  % left: D9 and anti-D9
+  \fill[blue!10] (0,1.4) -- (3,1.4) -- (3.8,2.2) -- (0.8,2.2) -- cycle;
+  \draw[thick,blue!70!black] (0,1.4) -- (3,1.4) -- (3.8,2.2) -- (0.8,2.2) -- cycle;
+  \fill[red!10] (0,0) -- (3,0) -- (3.8,0.8) -- (0.8,0.8) -- cycle;
+  \draw[thick,red!70!black] (0,0) -- (3,0) -- (3.8,0.8) -- (0.8,0.8) -- cycle;
+  \node[blue!70!black,left] at (0,1.8) {\footnotesize D9 ($E$)};
+  \node[red!70!black,left] at (0,0.4) {\footnotesize $\overline{\mathrm{D9}}$ ($F$)};
+  \draw[thick,domain=0.45:1.75,samples=60,smooth] plot ({1.9+0.06*sin(\x*900)},\x);
+  \node[right] at (1.95,1.1) {\footnotesize $T$};
+  \draw[-{Stealth[length=2.5mm]},very thick] (4.3,1.1) -- (5.6,1.1);
+  \node[above] at (4.95,1.15) {\footnotesize 凝縮};
+  % right: vortex leaving D7
+  \begin{scope}[xshift=6.2cm,yshift=0.2cm]
+    \draw[dashed,gray] (0,0) -- (3.4,0) -- (4.2,1.6) -- (0.8,1.6) -- cycle;
+    \foreach \a in {0,45,...,315}{
+      \draw[-{Stealth[length=1.6mm]},orange!80!black,thick] ($(2.1,0.8)+(\a:0.55 and 0.3)$) -- ++(\a+90:0.3 and 0.17);
+    }
+    \draw[very thick,green!40!black] (2.1,-0.5) -- (2.1,2.1);
+    \node[green!40!black,right] at (2.15,2.0) {\footnotesize D7（芯）};
+    \node[orange!80!black] at (3.5,0.25) {\footnotesize $T\propto x^1+ix^2$};
+  \end{scope}
+\end{tikzpicture}
+\zucap{ブレーン・反ブレーン対消滅の模式図。左：D9 と反 D9 の間の開弦がタキオン $T$ を与える。右：$T$ が横方向の平面 $(x^1,x^2)$ で1回巻き付いた渦配位で凝縮すると、芯（余次元 2）に D7 ブレーンが残る（縦の線は芯の残りの方向を表す）。}
+\end{center}
+
+\section{問題}
+
+\subsection{モース関数とモース不等式}
+
+\begin{problem}[難易度 A]\label{ch11-prob-torus}
+例 \ref{ex:ch11-torus} の立てたトーラスを、次のように $z$ 軸のまわりの回転面として与える：$T^2=\{((R+r\cos\phi)\cos\theta,\ (R+r\cos\phi)\sin\theta,\ r\sin\phi)\}$（$R>r>0$）。高さ関数として $h=x$（$x$ 座標）をとる（$x$ 軸を鉛直とみれば、トーラスは鉛直面 $xy$ 内に立っている）。\\
+(1) $h(\theta,\phi)=(R+r\cos\phi)\cos\theta$ の臨界点を求め、各点のヘッセ行列から指数を求めよ。\\
+(2) $c_k$ とトーラスのベッチ数 $b_k$ を比べ、弱・強モース不等式と $\sum(-1)^kc_k=\chi(T^2)$ を確かめよ。\\
+(3) 定理 \ref{thm:ch11-handle} によるトーラスの胞体分解を述べよ。
+\end{problem}
+
+\begin{solution}
+(1) $\partial_\theta h=-(R+r\cos\phi)\sin\theta$、$\partial_\phi h=-r\sin\phi\cos\theta$。$R+r\cos\phi>0$ なので $\sin\theta=0$、すなわち $\theta=0,\pi$。このとき $\cos\theta=\pm1\neq0$ なので $\sin\phi=0$、$\phi=0,\pi$。臨界点は4つ。2階微分は
+\[
+\partial_\theta^2h=-(R+r\cos\phi)\cos\theta,\quad \partial_\phi^2h=-r\cos\phi\cos\theta,\quad \partial_\theta\partial_\phi h=r\sin\phi\sin\theta=0\ (\text{臨界点で}).
+\]
+\begin{center}
+\begin{tabular}{c|c|cc|c}
+$(\theta,\phi)$ & $h$ & $\partial_\theta^2h$ & $\partial_\phi^2h$ & 指数\\ \hline
+$(\pi,0)$ & $-(R+r)$ & $R+r$ & $r$ & 0\\
+$(\pi,\pi)$ & $-(R-r)$ & $R-r$ & $-r$ & 1\\
+$(0,\pi)$ & $R-r$ & $-(R-r)$ & $r$ & 1\\
+$(0,0)$ & $R+r$ & $-(R+r)$ & $-r$ & 2
+\end{tabular}
+\end{center}
+いずれもヘッセ行列は対角で正則なので $h$ はモース関数であり、$R=\tfrac32$、$r=\tfrac12$ とすれば例の図の4点（高さ $-2,-1,1,2$）に一致する。
+
+(2) $(c_0,c_1,c_2)=(1,2,1)$、$(b_0,b_1,b_2)=(1,2,1)$（第4章）。弱不等式 $c_k\ge b_k$ は等号で成り立つ。強不等式は $k=0$：$1\ge1$、$k=1$：$c_1-c_0=1\ge b_1-b_0=1$、$k=2$：$c_2-c_1+c_0=0=b_2-b_1+b_0$。よって $\chi(T^2)=1-2+1=0$ で、$h$ は完全モース関数である。
+
+(3) 下から順に：極小で $e^0$（円板 $\simeq$ 点）、第1の鞍点で $e^1$ を付けて $S^1$ と同じ型（円筒）、第2の鞍点で $e^1$ を付けて $S^1\vee S^1$ の型（穴のあいたトーラス）、極大で $e^2$ を付けて閉じる。$T^2\simeq e^0\cup e^1\cup e^1\cup e^2$ で、2胞体の接着写像は交換子 $aba^{-1}b^{-1}$ である（第2, 4章）。
+\end{solution}
+
+\begin{problem}[難易度 B]\label{ch11-prob-cpn}
+(1) $S^n\subset\R^{n+1}$ 上の高さ関数 $h=x_{n+1}$ の臨界点は北極・南極の2点で、指数はそれぞれ $n$, $0$ であることを局所座標で示せ。$n\ge2$ のとき、モース不等式から $S^n$ のベッチ数を求めよ。$n=1$ ではどうか。\\
+(2) 実数 $\lambda_0<\lambda_1<\dots<\lambda_n$ に対し、$\CP^n$ 上の関数
+\[
+f([z])=\frac{\sum_{j=0}^n\lambda_j\lvert z_j\rvert^2}{\sum_{j=0}^n\lvert z_j\rvert^2}
+\]
+を考える。量子力学の言葉では、ハミルトニアン $\hat H=\operatorname{diag}(\lambda_0,\dots,\lambda_n)$ をもつ $(n+1)$ 準位系の、状態 $[z]$（射線）でのエネルギー期待値である。$f$ の臨界点が固有状態 $[e_j]$ であり、その指数が $2j$ であることを示せ。\\
+(3) $\CP^n$ のベッチ数（$\Z$ 係数ホモロジー）を求め、$\chi(\CP^n)$ を計算せよ。
+\end{problem}
+
+\begin{solution}
+(1) 南極 $S=(0,\dots,0,-1)$ の近くでは $(x_1,\dots,x_n)$ が局所座標で $h=-\sqrt{1-\lvert x\rvert^2}=-1+\tfrac12\lvert x\rvert^2+O(\lvert x\rvert^4)$：指数 $0$ の非退化臨界点。北極では $h=1-\tfrac12\lvert x\rvert^2+\dots$：指数 $n$。それ以外の点では、$dh$ は $S^n$ への $e_{n+1}$ の射影 $e_{n+1}-x_{n+1}x$ に対応し、これは $x\neq\pm e_{n+1}$ で $0$ でないので臨界点ではない。
+
+$n\ge2$ では $c_0=c_n=1$、他は $0$ で、隣り合う指数がないので完全（欠落原理）：$b_0=b_n=1$、他は $0$。直接には、弱不等式で $b_k=0$（$k\neq0,n$）、$b_0=1$（連結）、$\chi=1+(-1)^n=b_0+(-1)^nb_n$ から $b_n=1$。
+$n=1$ では指数 $0,1$ が隣り合うので不等式だけでは $b_1\in\{0,1\}$ の可能性が残るが、$\chi=c_0-c_1=0=b_0-b_1$ より $b_1=1$。
+
+(2) $[e_j]$ の近傍では $z_j\neq0$ なので $z_j=1$ と規格化し、$w_k=z_k/z_j$（$k\neq j$）を複素座標にとる。
+\[
+f=\frac{\lambda_j+\sum_{k\neq j}\lambda_k\lvert w_k\rvert^2}{1+\sum_{k\neq j}\lvert w_k\rvert^2}=\lambda_j+\sum_{k\neq j}(\lambda_k-\lambda_j)\lvert w_k\rvert^2+O(\lvert w\rvert^4).
+\]
+よって $w=0$ は臨界点で、ヘッセ行列は実座標 $(\mathrm{Re}\,w_k,\mathrm{Im}\,w_k)$ について対角 $2(\lambda_k-\lambda_j)$（各2重）。$\lambda_k-\lambda_j<0$ となるのは $k<j$ の $j$ 個で、各々が実2次元を与えるので指数は $2j$。
+他に臨界点がないこと：射線上の変分 $\delta f=0$ は、$\lvert z\rvert=1$ に規格化し $\delta z\perp z$ をとると $\delta f=2\,\mathrm{Re}\langle\delta z,(\hat H-f)z\rangle$ なので、すべての $\delta z\perp z$ について $0$ になることは $(\hat H-f)z\parallel z$、すなわち $\hat Hz=fz$（固有ベクトル）と同値。固有値が相異なるので $[z]=[e_j]$。これは「エネルギー期待値の停留点は固有状態」というレイリー・リッツの変分原理であり、指数 $2j$ は「より低い固有状態の数 $\times2$」（その方向へ混ぜるとエネルギーが下がる）である。
+
+(3) 指数は $0,2,\dots,2n$ でどれも隣り合わないので完全：$b_{2j}=1$（$0\le j\le n$）、奇数次は $0$。モース・ホモロジーで見ても $C_k$ は奇数次で $0$ なので $\partial=0$、$H_{2j}(\CP^n;\Z)=\Z$、$H_{\text{odd}}=0$ が $\Z$ 係数で成り立つ。$\chi(\CP^n)=n+1$。$n=1$ で $\CP^1\cong S^2$ と (1) に一致する。
+\end{solution}
+
+\begin{problem}[難易度 C]\label{ch11-prob-rpn}
+$\lambda_0<\lambda_1<\dots<\lambda_n$ とし、$S^n$ 上の関数 $f(x)=\sum_{i=0}^n\lambda_ix_i^2$（$x=(x_0,\dots,x_n)$）を考える。$f(-x)=f(x)$ なので $f$ は $\RP^n$ 上の関数 $\bar f$ を定める。\\
+(1) $f$ の臨界点は $\pm e_k$ で指数 $k$ であること、$\bar f$ の臨界点は $[e_k]$（$k=0,\dots,n$）で指数 $k$ であることを示せ。\\
+(2) 丸い計量に関する勾配流 $\dot x=-\nabla f$ の解が $x(\tau)=e^{-2\Lambda\tau}c/\lvert e^{-2\Lambda\tau}c\rvert$（$\Lambda=\operatorname{diag}(\lambda_i)$、$c\in\R^{n+1}\setminus0$）であることを示し、$e_k$ から $\pm e_{k-1}$ への流線をすべて求めよ。$\RP^n$ では $[e_k]$ から $[e_{k-1}]$ への流線は何本か。\\
+(3) 2本の流線の符号の比は $(-1)^k$ である（$[e_k]$ の不安定多様体の閉包は $\RP^k$ で、その接着写像 $S^{k-1}\to\RP^{k-1}$ の、$[e_{k-1}]$ の2つの逆像 $\pm e_{k-1}$ での局所写像度が対蹠写像の写像度 $(-1)^k$ だけ異なる）ことを認めて、モース複体 $\partial[e_k]=(1+(-1)^k)[e_{k-1}]$ を導き、$H_*(\RP^n;\Z)$ と $H_*(\RP^n;\Z_2)$ を求めよ。$\Z_2$ 係数では $\bar f$ が完全であることを確かめよ。\\
+(4) $SO(3)\cong\RP^3$ と、ネマティック液晶の秩序変数空間 $\RP^2$ について、(3) の結果を述べよ。
+\end{problem}
+
+\begin{solution}
+(1) ラグランジュ乗数法：$\lvert x\rvert^2=1$ の下で $f$ の停留点は $\Lambda x=\mu x$、すなわち固有ベクトル $x=\pm e_k$（固有値が相異なる）。$e_k$ の近くで $x_k=\sqrt{1-\sum_{i\neq k}x_i^2}$ とし $(x_i)_{i\neq k}$ を座標にとると
+\[
+f=\lambda_k+\sum_{i\neq k}(\lambda_i-\lambda_k)x_i^2+O(\lvert x\rvert^4).
+\]
+負の係数は $i<k$ の $k$ 個なので指数 $k$。$-e_k$ でも同じ。$\RP^n$ への射影 $S^n\to\RP^n$ は局所微分同相なので、$\bar f$ の臨界点は $[e_k]$ の $n+1$ 個で指数 $k$。
+
+(2) $f$ の $\R^{n+1}$ での勾配は $2\Lambda x$ で、球面への射影は $\nabla f=2\Lambda x-2(x\cdot\Lambda x)x=2\Lambda x-2fx$。$y=e^{-2\Lambda\tau}c$ とおくと $\dot y=-2\Lambda y$ で、$x=y/\lvert y\rvert$ について
+\[
+\dot x=\frac{\dot y}{\lvert y\rvert}-\frac{y\,(y\cdot\dot y)}{\lvert y\rvert^3}=-2\Lambda x+2(x\cdot\Lambda x)x=-\nabla f .
+\]
+初期値は任意にとれるので、これがすべての解である。成分は $x_i\propto c_ie^{-2\lambda_i\tau}$ なので、$\tau\to-\infty$ では $c_i\neq0$ となる最大の $i$ の成分が、$\tau\to+\infty$ では最小の $i$ の成分が支配する。$\tau\to-\infty$ で $e_k$ に近づくには「$i>k$ で $c_i=0$、$c_k>0$」、$\tau\to+\infty$ で $\pm e_{k-1}$ に近づくには「$i<k-1$ で $c_i=0$、$\pm c_{k-1}>0$」が必要十分。よって $c=(0,\dots,0,c_{k-1},c_k,0,\dots)$ で、$c$ の正の定数倍と $\tau$ の平行移動は同じ曲線を与えるので、流線は
+\[
+\gamma_\pm:\ x=\cos\varphi\,e_k\pm\sin\varphi\,e_{k-1}\quad(\varphi:0\to\tfrac\pi2)
+\]
+の2本（$e_k$ から $e_{k-1}$ へ1本、$-e_{k-1}$ へ1本）。この大円の弧上で $f=\lambda_k\cos^2\varphi+\lambda_{k-1}\sin^2\varphi$ は単調減少している。$\RP^n$ では、$\gamma_+$ と $\gamma_-$ は $[e_k]$ から $[e_{k-1}]$ への異なる2本の流線になる（$\gamma_-\neq\pm\gamma_+$ なので射影は異なる。$-e_k$ から出る流線 $-\gamma_\pm$ は $\RP^n$ では $\gamma_\pm$ と同じ曲線に射影されるので、新たには数えない）。よって $\RP^n$ では2本。
+
+(3) 2本の符号の比が $(-1)^k$ なので、全体の符号を適当に選んで
+\[
+\partial[e_k]=\bigl(1+(-1)^k\bigr)[e_{k-1}]=\begin{cases}2[e_{k-1}]&(k\ \text{偶数}\ge2)\\0&(k\ \text{奇数})\end{cases},\qquad \partial[e_0]=0 .
+\]
+$\Z$ 係数：$C_k=\Z$（$0\le k\le n$）。$k$ が奇数なら $\partial_k=0$、偶数 $k\ge2$ なら $\partial_k=\times2$。
+\begin{itemize}
+\item $H_0=\Z/\operatorname{im}\partial_1=\Z$。
+\item $0<k<n$、$k$ 奇数：$\ker\partial_k=\Z$、$\operatorname{im}\partial_{k+1}=2\Z$ なので $H_k=\Z_2$。
+\item $0<k<n$、$k$ 偶数：$\ker\partial_k=0$ なので $H_k=0$。
+\item $k=n$：$n$ 奇数なら $\ker\partial_n=\Z$ で上からの像はないので $H_n=\Z$；$n$ 偶数なら $H_n=0$。
+\end{itemize}
+$\Z_2$ 係数では $2=0$ なので $\partial=0$、$H_k(\RP^n;\Z_2)=\Z_2$（$0\le k\le n$）。よって $b_k(\Z_2)=1=c_k$ で $\bar f$ は $\Z_2$ 係数で完全。$\Q$ 係数では $b_0=1$、$b_n=1$（$n$ 奇数）以外は $0$ で、完全ではない（流線が「2本で打ち消さずに足し合う」ことが $\Z_2$ ねじれの原因）。$\chi(\RP^n)=\sum(-1)^kc_k=(1+(-1)^n)/2$ もわかる。
+
+(4) $SO(3)\cong\RP^3$：$H_0=\Z$、$H_1=\Z_2$、$H_2=0$、$H_3=\Z$。$H_1=\Z_2$ は $\pi_1(SO(3))=\Z_2$ のアーベル化であり、$2\pi$ 回転が $-1$ を与えるスピン $\tfrac12$ の起源（第2章）。$\RP^2$：$H_0=\Z$、$H_1=\Z_2$、$H_2=0$；$\pi_1(\RP^2)=\Z_2$ はネマティック液晶の線欠陥（$\tfrac12$ 回位）が $\Z_2$ 電荷をもつこと（2本が合体すると消える）に対応する（第3章）。
+\end{solution}
+
+\begin{problem}[難易度 B]\label{ch11-prob-ineq}
+定理 \ref{thm:ch11-ineq}(3) の多項式形 $M_t-P_t=(1+t)R(t)$（$R$ は非負整数係数）を認める。\\
+(1) $t^k$ の係数を比べて弱モース不等式を、$(1+t)^{-1}=\sum(-t)^j$ を用いて強モース不等式を導け。$t=-1$ を代入して $\sum(-1)^kc_k=\chi(M)$ を示せ。\\
+(2)（欠落原理）すべての $k$ で $c_kc_{k+1}=0$ ならば $h$ は完全である（$c_k=b_k$）ことを示せ。\\
+(3) 種数 $g$ の閉曲面 $\Sigma_g$ 上のモース関数は少なくとも $2g+2$ 個の臨界点をもつことを示せ。\\
+(4) $n$ 次元閉多様体上で、$-h$ の指数 $k$ の臨界点は $h$ の指数 $n-k$ の臨界点であることを用いて、$n$ が奇数なら $\chi(M)=0$ であることを示せ。
+\end{problem}
+
+\begin{solution}
+$R(t)=\sum_kr_kt^k$（$r_k\ge0$、$r_{-1}=r_n=0$）とする。
+
+(1) $t^k$ の係数：$c_k-b_k=r_k+r_{k-1}\ge0$。これが弱不等式。また $(M_t-P_t)/(1+t)=R(t)$ を形式的べき級数で展開すると
+\[
+r_k=\sum_{j=0}^k(-1)^{k-j}(c_j-b_j)\ge0 ,
+\]
+これが強不等式。さらに $R$ は多項式で $\deg R\le n-1$ なので $r_n=0$、すなわち $k=n$ で等号。$t=-1$ を代入すると右辺は $0$ で $\sum(-1)^kc_k=\sum(-1)^kb_k=\chi(M)$。
+
+(2) $R\neq0$ とし、$r_j>0$ となる $j$ をとる。$t^j$ の係数より $c_j\ge b_j+r_j>0$、$t^{j+1}$ の係数より $c_{j+1}\ge b_{j+1}+r_j>0$。これは $c_jc_{j+1}=0$ に反する。よって $R=0$、$M_t=P_t$。特に指数がすべて偶数なら完全である（$\CP^n$、問題 \ref{ch11-prob-cpn}）。
+
+(3) $b_0=b_2=1$、$b_1=2g$ なので、弱不等式より $c_0+c_1+c_2\ge b_0+b_1+b_2=2g+2$。立てた $\Sigma_g$（$g$ 個の穴が縦に並んだ面）の高さ関数は極小1、鞍点 $2g$、極大1で、この下限が実現される。
+
+(4) $-h$ のヘッセ行列は $h$ のヘッセ行列の $-1$ 倍なので、負の固有値の数は $n-\ind p$。よって $c_k(-h)=c_{n-k}(h)$ で
+\[
+\chi(M)=\sum_k(-1)^kc_k(-h)=\sum_k(-1)^kc_{n-k}(h)=(-1)^n\sum_j(-1)^jc_j(h)=(-1)^n\chi(M).
+\]
+$n$ 奇数なら $\chi=-\chi$、$\chi(M)=0$。（ポアンカレ双対 $b_k=b_{n-k}$ の、モース理論による表れである。）
+\end{solution}
+
+\begin{problem}[難易度 B]\label{ch11-prob-sphaleron}
+$M$ をコンパクトで連結な多様体、$h$ をモース関数とする。\\
+(1) $h$ が2つ以上の極小（指数 $0$ の臨界点）をもつならば、指数 $1$ の臨界点が存在すること、より詳しく $c_1\ge c_0-1+b_1$ を、強モース不等式から示せ。\\
+(2) $h$ の極小がただ1つでも、$b_1(M)\ge1$ ならば指数 $1$ の臨界点があることを示せ。\\
+(3) 場の理論で $h$ をエネルギー汎関数、$M$ を配位空間とみなす。電弱理論では、チャーン・サイモンズ数の異なる古典的真空どうしがエネルギー障壁で隔てられており、その最低点にある不安定な静的解を\term{スファレロン}{sphaleron}という（クリンカマー・マントン）。(1)(2) が示唆するスファレロンの性質（指数）を述べ、「山越えの補題（最小の山越え経路は指数 $1$ の鞍点を通る）」との関係を説明せよ。（配位空間は無限次元なので、ここでは類推として述べればよい。）
+\end{problem}
+
+\begin{solution}
+(1) 強不等式の $k=1$：$c_1-c_0\ge b_1-b_0$。連結なので $b_0=1$。よって $c_1\ge c_0-1+b_1\ge c_0-1$。$c_0\ge2$ なら $c_1\ge1$。
+直観的には、2つの谷 $A,B$ を結ぶ道の最高点をできるだけ低くしたもの（峠）が指数1の鞍点である。$h$ の部分レベル集合 $M^a$ で $A,B$ が別の連結成分にある $a$ から、同じ成分になる $a$ へ移るところで、定理 \ref{thm:ch11-handle} により 1 胞体が付かなければならない（$0$ 胞体は成分を増やし、$k\ge2$ 胞体は成分をつながない）。
+
+(2) $c_0=1$ でも $c_1\ge b_1\ge1$（弱不等式）。モース・ホモロジーで言えば、$H_1\neq0$ の生成元を代表するには1次の鎖、すなわち指数1の臨界点が要る。マントンの「ほどけないループ」の議論（配位空間の非自明なループの上でエネルギーを最大化し、それを最小化すると鞍点が得られる）はこの類推である。
+
+(3) チャーン・サイモンズ数 $N_{CS}=n$ と $n+1$ の真空（$h$ の極小）は異なり、両者は連続な配位の道で結べるが、途中で必ずエネルギー障壁を越える。(1) の類推から、両者の間に指数1の臨界点があり、それがスファレロンである：エネルギー汎関数のヘッセ行列（揺らぎ演算子）がちょうど1つの負の固有値をもち、その方向が「真空 $n$ へ転がり落ちる方向／真空 $n+1$ へ転がり落ちる方向」を与える。最小山越え経路（2つの真空を結ぶ道の中で最高エネルギーが最小のもの）の最高点が指数1の鞍点であることは (1) の直観的説明そのものであり、スファレロンのエネルギー $E_{\mathrm{sph}}$（電弱理論で約 $9\ \mathrm{TeV}$）は、高温で $B+L$ を破る遷移率 $\sim e^{-E_{\mathrm{sph}}/T}$ を決める。
+\end{solution}
+
+\subsection{超対称量子力学とウィッテン指数}
+
+\begin{problem}[難易度 A]\label{ch11-prob-sho}
+ボソンの消滅演算子 $a$（$[a,a^\dagger]=1$）とフェルミオンの消滅演算子 $b$（$\{b,b^\dagger\}=1$、$b^2=0$）、$\omega>0$ に対し
+\[
+Q=\sqrt\omega\,a\,b^\dagger,\qquad F=b^\dagger b
+\]
+とする（\term{超対称調和振動子}{supersymmetric harmonic oscillator}）。\\
+(1) $Q^2=0$ と $H=\{Q,Q^\dagger\}=\omega(a^\dagger a+b^\dagger b)$ を示せ。\\
+(2) $H$ のスペクトルと縮退度を求め、$E>0$ の各準位でボソン状態とフェルミオン状態が $Q$ で対になることを確かめよ。\\
+(3) $\Tr(-1)^Fe^{-\beta H}$ を直接計算し、$\beta$ によらず $1$ であることを示せ。
+\end{problem}
+
+\begin{solution}
+(1) $Q^2=\omega\,a^2(b^\dagger)^2=0$（$a$ と $b^\dagger$ は可換、$(b^\dagger)^2=0$）。$Q^\dagger=\sqrt\omega\,a^\dagger b$ で
+\[
+\begin{aligned}
+\{Q,Q^\dagger\}&=\omega\bigl(ab^\dagger a^\dagger b+a^\dagger b\,ab^\dagger\bigr)=\omega\bigl(aa^\dagger\,b^\dagger b+a^\dagger a\,bb^\dagger\bigr)\\
+&=\omega\bigl((a^\dagger a+1)b^\dagger b+a^\dagger a(1-b^\dagger b)\bigr)=\omega(a^\dagger a+b^\dagger b).
+\end{aligned}
+\]
+
+(2) 基底 $\lvert n,n_F\rangle$（$n=0,1,\dots$、$n_F=0,1$）で $E=\omega(n+n_F)$。$E=0$ は $\lvert0,0\rangle$（ボソン）のみ。$E=m\omega$（$m\ge1$）は $\lvert m,0\rangle$（ボソン）と $\lvert m-1,1\rangle$（フェルミオン）の2重縮退。$Q\lvert m,0\rangle=\sqrt\omega\,a\lvert m\rangle\otimes b^\dagger\lvert0\rangle=\sqrt{m\omega}\,\lvert m-1,1\rangle$、$Q^\dagger\lvert m-1,1\rangle=\sqrt{m\omega}\,\lvert m,0\rangle$ で、両者は $Q$ で対になる。
+
+(3)
+\[
+\Tr(-1)^Fe^{-\beta H}=\sum_{n\ge0}e^{-\beta\omega n}-\sum_{n\ge0}e^{-\beta\omega(n+1)}=\frac{1-e^{-\beta\omega}}{1-e^{-\beta\omega}}=1 .
+\]
+$E>0$ の寄与は各準位で $e^{-\beta m\omega}-e^{-\beta m\omega}=0$ と打ち消し、$E=0$ のボソン1個だけが残る。座標表示では $a=(\sqrt\omega x+ip/\sqrt\omega)/\sqrt2$ で $H=\tfrac12(p^2+\omega^2x^2)+\tfrac\omega2[b^\dagger,b]$ となり、超ポテンシャル $W=\tfrac12\omega x^2$ の模型（問題 \ref{ch11-prob-W} の規格化の $\tfrac12$ 倍）である。$\omega<0$ にあたる $W=-\tfrac12\lvert\omega\rvert x^2$ では基底状態がフェルミオン的になり、指数は $-1$ となる。
+\end{solution}
+
+\begin{problem}[難易度 B]\label{ch11-prob-pair}
+定義 \ref{def:ch11-sqm} の超対称量子力学を考える。\\
+(1) $\langle\psi|H|\psi\rangle=\lVert Q\psi\rVert^2+\lVert Q^\dagger\psi\rVert^2$ を示し、$H\psi=0\iff Q\psi=Q^\dagger\psi=0$ を導け。\\
+(2) $E>0$ の固有空間 $\mathcal H_E$ で $Q_1=(Q+Q^\dagger)/\sqrt E$ が $Q_1^2=1$ をみたし、$(-1)^F$ と反可換であることを示し、$\dim(\mathcal H_E\cap\mathcal H_B)=\dim(\mathcal H_E\cap\mathcal H_F)$ を結論せよ。これより $\Tr(-1)^Fe^{-\beta H}=n_B^0-n_F^0$ を示せ。\\
+(3) 各固有空間が有限次元で、$\mathcal H$ が $\ker H\oplus\operatorname{im}Q\oplus\operatorname{im}Q^\dagger$ と直交分解されることを認めて、$\ker H\cong\ker Q/\operatorname{im}Q$（$Q$ コホモロジー）を示せ。\\
+(4) $W$ をボソン的なエルミート演算子とし $Q_t=e^{-tW}Qe^{tW}$ とする。$Q_t^2=0$ を示し、$Q_t$ コホモロジーが $Q$ コホモロジーと同型であることから、（(3) の仮定のもとで）$H_t=\{Q_t,Q_t^\dagger\}$ の $E=0$ 状態の数がボソン・フェルミオン別に $t$ によらないことを示せ。$H_t$ のスペクトル自体は $t$ によって変わることに注意せよ。
+\end{problem}
+
+\begin{solution}
+(1) $\langle\psi|QQ^\dagger+Q^\dagger Q|\psi\rangle=\langle Q^\dagger\psi|Q^\dagger\psi\rangle+\langle Q\psi|Q\psi\rangle$。右辺は非負で、$0$ になるのは $Q\psi=Q^\dagger\psi=0$ のとき。逆にそのとき $H\psi=0$ は明らか。
+
+(2) $Q^2=(Q^\dagger)^2=0$ より $(Q+Q^\dagger)^2=QQ^\dagger+Q^\dagger Q=H$。$[H,Q]=[H,Q^\dagger]=0$ なので $Q_1$ は $\mathcal H_E$ を保ち、そこで $Q_1^2=H/E=1$。$(-1)^F$ と $Q$, $Q^\dagger$ は反可換なので $Q_1$ も反可換で、$Q_1$ は $\mathcal H_E\cap\mathcal H_B$ を $\mathcal H_E\cap\mathcal H_F$ に写し、その逆写像も $Q_1$ である。よって両者は同型で次元が等しい。したがって
+\[
+\Tr(-1)^Fe^{-\beta H}=\sum_Ee^{-\beta E}\bigl(\dim\mathcal H_E^B-\dim\mathcal H_E^F\bigr)=n_B^0-n_F^0 .
+\]
+
+(3) $\ker H\subset\ker Q$ は (1) より。$\operatorname{im}Q\subset\ker Q$（$Q^2=0$）。$\ker Q\cap\operatorname{im}Q^\dagger=0$：$Q Q^\dagger\chi=0$ なら $\lVert Q^\dagger\chi\rVert^2=\langle\chi|QQ^\dagger\chi\rangle=0$。よって直交分解から $\ker Q=\ker H\oplus\operatorname{im}Q$ となり、$\ker Q/\operatorname{im}Q\cong\ker H$。$Q$ が $F$ を保つ次数（$F\to F\pm1$）をもつ場合は各次数ごとに成り立つ。これはホッジ分解（第5章）の抽象版である。
+
+(4) $Q_t^2=e^{-tW}Q^2e^{tW}=0$。$e^{tW}$ は可逆で $(-1)^F$ と可換なので、$\psi\mapsto e^{-tW}\psi$ は $\ker Q\to\ker Q_t$、$\operatorname{im}Q\to\operatorname{im}Q_t$ の同型を与え、$Q$ コホモロジーと $Q_t$ コホモロジーは次数ごとに同型。$H_t=\{Q_t,Q_t^\dagger\}$ に (3) を適用すると、$\ker H_t$ の次元は次数ごとに $t$ によらない。ただし $e^{tW}$ はユニタリでないので $H_t$ は $H$ とユニタリ同値ではなく、$E>0$ のスペクトルや $E=0$ 状態の波動関数は $t$ とともに変わる（ウィッテン変形で $t\to\infty$ とすると波動関数が臨界点に局在するのはこのため）。非コンパクトな空間では $e^{tW}$ が $L^2$ を保たず結論が破れうる（問題 \ref{ch11-prob-W}）。
+\end{solution}
+
+\begin{problem}[難易度 B]\label{ch11-prob-torusQM}
+平坦なトーラス $T^n=\R^n/2\pi\Z^n$ 上の超対称量子力学（$Q=d$、$H=\Delta$、$F=$ 形式の次数）を考える。\\
+(1) $n=1$（$S^1$）のとき、$\Omega^0$ と $\Omega^1$ での $H$ の固有関数と固有値を求め、$Q$ による対を具体的に示せ。$E=0$ の状態を求め、ウィッテン指数が $\chi(S^1)=0$ であることを確かめよ。\\
+(2) 一般の $n$ で、$H$ の固有値と各次数の縮退度を求め、$\Tr(-1)^Fe^{-\beta H}=0=\chi(T^n)$ を示せ。$E=0$ の状態の数を次数ごとに求め、ベッチ数 $b_p(T^n)=\binom np$ と比べよ。\\
+(3) $S^2$ 上の超対称量子力学のウィッテン指数はいくつか。$S^2$ 上で $E=0$ の状態をすべて書け。
+\end{problem}
+
+\begin{solution}
+(1) $\Omega^0$：$f_m=e^{im\theta}$、$H=d^\dagger d=-\partial_\theta^2$ で $E=m^2$。$\Omega^1$：$g_m=e^{im\theta}d\theta$、$H=dd^\dagger=-\partial_\theta^2$ で $E=m^2$（$d^\dagger(g\,d\theta)=-g'$）。$Q f_m=d f_m=im\,e^{im\theta}d\theta=im\,g_m$ なので、$m\neq0$ では $f_m\leftrightarrow g_m$ が対になる（$Q^\dagger g_m=-im f_m$）。$E=0$ は $f_0=1$（ボソン）と $g_0=d\theta$（フェルミオン）。
+\[
+\Tr(-1)^Fe^{-\beta H}=\sum_{m\in\Z}e^{-\beta m^2}(1-1)=0=\chi(S^1).
+\]
+基底状態は2つあるが統計が逆なので指数は $0$。指数 $0$ は超対称性の破れを意味しない（実際破れていない）ことに注意。
+
+(2) 平坦計量では $\Delta(f\,d\theta^{i_1}\wedge\dots\wedge d\theta^{i_p})=(-\sum_j\partial_j^2f)\,d\theta^{i_1}\wedge\dots\wedge d\theta^{i_p}$。固有形式は $e^{i\bm m\cdot\bm\theta}d\theta^I$（$\bm m\in\Z^n$、$\lvert I\rvert=p$）で $E=\lvert\bm m\rvert^2$。エネルギー $E$ の $p$ 形式の数は $N(E)\binom np$（$N(E)=\#\{\bm m:\lvert\bm m\rvert^2=E\}$）なので
+\[
+\Tr(-1)^Fe^{-\beta H}=\sum_{\bm m}e^{-\beta\lvert\bm m\rvert^2}\sum_{p=0}^n(-1)^p\binom np=\Bigl(\sum_{\bm m}e^{-\beta\lvert\bm m\rvert^2}\Bigr)(1-1)^n=0 .
+\]
+$E=0$ は $\bm m=0$ の定数係数形式 $d\theta^I$ で、$p$ 形式は $\binom np$ 個、合計 $2^n$ 個。これは $b_p(T^n)=\binom np$ に一致し（第5章）、$\chi(T^n)=(1-1)^n=0$。フェルミオン零モード $\psi^i$（$n$ 個）の量子化で $2^n$ 状態ができる、と理解することもできる。
+
+(3) 例 \ref{ex:ch11-sqmM} より $\chi(S^2)=2$。$E=0$ 状態は調和形式で、$b_0=b_2=1$、$b_1=0$ より、定数関数 $1$（ボソン）と体積形式 $\mathrm{vol}_{S^2}$（$F=2$ でボソン）の2つ。指数 $2-0=2\neq0$ なので、どんな変形（計量を変える、超ポテンシャルを加える）をしても超対称性は破れない。
+\end{solution}
+
+\begin{problem}[難易度 B]\label{ch11-prob-W}
+1次元の超対称量子力学を、$\R$ 上の $0$ 形式 $f(x)$（ボソン）と $1$ 形式 $g(x)\,dx$（フェルミオン）の空間で $Q=d_W=e^{-W}de^{W}$ により定める（$W(x)$ は実多項式、\term{超ポテンシャル}{superpotential}）。\\
+(1) $H=\{Q,Q^\dagger\}$ が $0$ 形式上 $-\partial_x^2+W'^2-W''$、$1$ 形式上 $-\partial_x^2+W'^2+W''$ であることを示せ。\\
+(2) $E=0$ の状態を求め、ウィッテン指数が次で与えられることを示せ：
+\[
+I_W=\begin{cases}+1&(W\to+\infty\ (x\to\pm\infty))\\-1&(W\to-\infty\ (x\to\pm\infty))\\0&(\text{それ以外：}x\to\pm\infty\text{ で符号が逆})\end{cases}
+\]
+特に $W$ の次数を $N$、最高次係数を $w_N$ とすると $I_W$ は $N$ 偶数なら $\operatorname{sign}w_N$、奇数なら $0$。\\
+(3) $W=\tfrac14x^4-\tfrac12a^2x^2$（$a>0$）で、調和近似による摂動的真空を数え、(2) の厳密な結果と比べよ。\\
+(4) $W_\epsilon=\epsilon x^3+x^2$ の指数を $\epsilon=0$ と $\epsilon\neq0$ で比べ、「指数は連続変形で不変」と矛盾しない理由を説明せよ。
+\end{problem}
+
+\begin{solution}
+(1) $Qf=e^{-W}(e^Wf)'dx=(f'+W'f)dx$、$Q^\dagger(g\,dx)=e^{W}d^\dagger(e^{-W}g\,dx)=-e^W(e^{-W}g)'=-g'+W'g$。$0$ 形式上 $H=Q^\dagger Q$：
+\[
+Q^\dagger Qf=-(f'+W'f)'+W'(f'+W'f)=-f''-W''f+W'^2f .
+\]
+$1$ 形式上 $H=QQ^\dagger$：$(\partial+W')(-g'+W'g)=-g''+W''g+W'g'-W'g'+W'^2g=-g''+W'^2g+W''g$。
+
+(2) 問題 \ref{ch11-prob-pair}(1) より $E=0\iff Q\psi=Q^\dagger\psi=0$。$0$ 形式では $Q^\dagger f=0$ は自動的で、$Qf=0$ より $f=Ce^{-W}$。$1$ 形式では $Q(g\,dx)=0$ は自動的で、$Q^\dagger(g\,dx)=0$ より $g=Ce^{W}$。$e^{-W}$ が $L^2$ に入るのは $W\to+\infty$（両側）のとき、$e^W$ が $L^2$ に入るのは $W\to-\infty$（両側）のときで、両方同時には起こらない。多項式なので $\lvert W\rvert\to\infty$ は少なくとも1次で起こり、指数関数的に減衰するので確かに $L^2$。よって $I_W=+1,-1,0$ が表のとおり。$N$ 偶数では $x\to\pm\infty$ で $W\sim w_Nx^N$ の符号が両側同じで $\operatorname{sign}w_N$、奇数では逆符号で $I_W=0$。
+
+(3) $W'=x^3-a^2x=x(x-a)(x+a)$、$W''=3x^2-a^2$。臨界点 $x=\pm a$ で $W''=2a^2>0$（$W$ の極小）、$x=0$ で $W''=-a^2<0$（極大）。臨界点 $x_0$ の近くで $W'^2\approx W''(x_0)^2(x-x_0)^2$ なので、$\omega=\lvert W''(x_0)\rvert$ として $-\partial^2+\omega^2y^2$ の固有値は $\omega(2n+1)$。
+\begin{itemize}
+\item $W''>0$：$0$ 形式で $\omega(2n+1)-\omega=2n\omega$ → $n=0$ で $E=0$（ボソン）。$1$ 形式は $2(n+1)\omega>0$。
+\item $W''<0$：$1$ 形式で $\omega(2n+1)-\omega=2n\omega$ → $E=0$（フェルミオン）。
+\end{itemize}
+よって摂動的真空はボソン2個（$x=\pm a$）、フェルミオン1個（$x=0$）。指数は $2-1=1$ で、(2) の厳密な値 $I_W=+1$（$N=4$、$w_4>0$）と一致する。厳密には $E=0$ 状態は $e^{-W}$ のただ1つ（両井戸に広がったボソン状態）で、残りのボソン1個とフェルミオン1個は、$0$ から $\pm a$ への勾配流線（インスタントン）を介して混ざり、$E>0$ の対に持ち上がる。モース複体で言えば $W$ の極大 $0$（指数1）から極小 $\pm a$ へ流線が1本ずつあり、$\partial(0)=(+a)-(-a)$、$H_0=\Z$、$H_1=0$（$\R$ のホモロジー）。
+
+(4) $\epsilon=0$：$W=x^2$ は両側で $+\infty$、$I_W=1$（超対称調和振動子）。$\epsilon\neq0$：$N=3$ で $I_W=0$。$\epsilon\to0$ で、$W_\epsilon$ には $x\approx-2/(3\epsilon)$ に新しい臨界点が無限遠から現れる（$W'_\epsilon=3\epsilon x^2+2x=0$）。$\epsilon\neq0$ で摂動的真空は $x=0$（ボソン）と $x=-2/(3\epsilon)$（フェルミオン、$W''=-2$）の2つで、トンネル効果で持ち上がる。$\epsilon\to0$ でフェルミオン的真空が無限遠へ逃げ、ボソン的真空とのトンネル振幅が $0$ になるので、状態の対が「無限遠から出入り」して指数が変わる。指数の不変性は、漸近的振る舞い（$W$ の最高次）を変えない変形に対してのみ成り立つ。
+\end{solution}
+
+\begin{problem}[難易度 C]\label{ch11-prob-dw}
+問題 \ref{ch11-prob-W} の設定で $W(x)=\lambda\bigl(\tfrac13x^3-a^2x\bigr)$（$\lambda,a>0$）とする。ボソン的ポテンシャル $W'^2=\lambda^2(x^2-a^2)^2$ は二重井戸である（第1節の図）。\\
+(1) 調和近似で、$x=+a$ にボソン的な、$x=-a$ にフェルミオン的な $E=0$ の摂動的真空が1つずつあることを示し、ウィッテン指数を求めよ。\\
+(2) 厳密な $E=0$ 状態が存在しないことを示せ。すなわち超対称性は自発的に破れる。\\
+(3) $H$ の規格化 $H=p^2+W'^2\pm W''$ に対応するユークリッド作用 $S_E=\int d\tau\bigl(\tfrac14\dot x^2+W'^2\bigr)$（ボソン部分）について、$-a$ から $+a$ へ移る任意の道で $S_E\ge\lvert W(-a)-W(a)\rvert$ を示し、等号が $\dot x=\pm2W'$（勾配流）で成り立つことを示せ。$\Delta W=W(-a)-W(a)$ を計算せよ。\\
+(4) 基底エネルギーが $E_0\sim e^{-2\Delta W}$（前因子を除く）のように振る舞うことを、「$\langle\psi_F\lvert Q\rvert\psi_B\rangle\sim e^{-\Delta W}$ と $E_0\approx\lvert\langle\psi_F|Q|\psi_B\rangle\rvert^2$」から説明し、これが $\lambda$ について摂動展開のどの次数にも現れない理由を述べよ。モース複体の言葉ではどう表されるか。
+\end{problem}
+
+\begin{solution}
+(1) $W'=\lambda(x^2-a^2)$、$W''=2\lambda x$。$x=+a$：$W''=2\lambda a>0$、$x=-a$：$W''=-2\lambda a<0$。問題 \ref{ch11-prob-W}(3) と同じ調和近似（$\omega=2\lambda a$）で、$x=+a$ に $0$ 形式（ボソン）、$x=-a$ に $1$ 形式（フェルミオン）の $E=0$ 状態が1つずつ。指数は $1-1=0$。これは $W$ が3次（奇数次）であることと整合する。
+
+(2) $E=0$ 状態の候補は $e^{-W}$ と $e^{W}dx$ だが、$W\sim\lambda x^3/3$ は $x\to+\infty$ で $+\infty$、$x\to-\infty$ で $-\infty$ なので、$e^{-W}$ は $x\to-\infty$ で、$e^W$ は $x\to+\infty$ で発散し、どちらも規格化できない。よって $E=0$ 状態はなく、基底エネルギー $E_0>0$：超対称性は破れる。指数 $0$ はこれと矛盾しない（指数 $\neq0$ なら破れないが、$0$ なら破れも破れないもありうる）。
+
+(3) 平方完成：
+\[
+\tfrac14\dot x^2+W'^2=\Bigl(\tfrac12\dot x\mp W'\Bigr)^2\pm\dot xW'=\Bigl(\tfrac12\dot x\mp W'\Bigr)^2\pm\frac{dW}{d\tau}.
+\]
+積分して $S_E\ge\pm\bigl(W(x(+\infty))-W(x(-\infty))\bigr)$、符号を選んで $S_E\ge\lvert W(a)-W(-a)\rvert$。等号は $\dot x=\pm2W'$、すなわち $W$ の（時間を2倍に伸縮した）勾配流のとき。$(-a,a)$ では $W'<0$ なので、$-a$ から $a$ への流線は $\dot x=-2W'>0$（$W$ を減らす向き）。
+\[
+W(-a)=\lambda\Bigl(-\frac{a^3}3+a^3\Bigr)=\frac{2\lambda a^3}{3},\quad W(a)=-\frac{2\lambda a^3}3,\quad \Delta W=\frac{4\lambda a^3}{3}.
+\]
+これがインスタントン作用であり、インスタントンは $W$ の勾配流線（BPS 方程式 $\dot x=-2W'$ の解）である。
+
+(4) 摂動的真空 $\psi_B$（$+a$ に局在）と $\psi_F$（$-a$ に局在）の空間に制限すると、$Q$ は $\psi_B\mapsto c\,\psi_F$ の形の $1\times1$ 行列で、低エネルギーの $H=\{Q,Q^\dagger\}$ の固有値は $\lvert c\rvert^2$。$c$ は $\psi_B\sim e^{-(W-W(a))}$ と $\psi_F\sim e^{W-W(-a)}$ の重なり（WKB の裾）で決まり、流線に沿った半古典評価で $c\sim e^{-\Delta W}$、したがって $E_0\sim e^{-2\Delta W}=e^{-8\lambda a^3/3}$。結合を $W\to W/g$ のように入れれば $E_0\sim e^{-8\lambda a^3/(3g)}$ であり、$g$ のべき級数展開ではすべての次数で $0$ になる。これは「摂動論の各次数で超対称性は破れない」（非繰り込み定理）と「非摂動的には破れる」ことの典型例である。
+モース複体では、$W$ の極大 $-a$（指数1）から極小 $+a$（指数0）へ流線が1本だけあり（$-a$ から左へ出る流線は $W\to-\infty$ へ逃げて臨界点に着かない）、$\partial(-a)=\pm(+a)$。複体 $\Z\xrightarrow{\pm1}\Z$ のホモロジーは $0$ で、$E=0$ 状態がないこと（$\R$ 上で「無限遠を相対的に扱った」ホモロジーが $0$）に対応する。
+\end{solution}
+
+\begin{problem}[難易度 B]\label{ch11-prob-s1complex}
+円周 $S^1$（反時計回りに向きをつける）上の関数 $h(\theta)=\cos2\theta$ を考える。臨界点は極大 $M_1$（$\theta=0$）、$M_2$（$\theta=\pi$）と極小 $m_1$（$\theta=\pi/2$）、$m_2$（$\theta=3\pi/2$）である（下図）。
+\begin{center}
+\begin{tikzpicture}[scale=1.25]
+  \draw[thick,gray!60] (0,0) circle (1.5);
+  \draw[very thick,blue!70!black,mid arrow] (5:1.5) arc (5:85:1.5);
+  \draw[very thick,blue!70!black,mid arrow] (175:1.5) arc (175:95:1.5);
+  \draw[very thick,blue!70!black,mid arrow] (185:1.5) arc (185:265:1.5);
+  \draw[very thick,blue!70!black,mid arrow] (355:1.5) arc (355:275:1.5);
+  \node[vtx,red!70!black] at (0:1.5) {}; \node[right] at (0:1.5) {$M_1$ ($\theta=0$)};
+  \node[vtx,red!70!black] at (180:1.5) {}; \node[left] at (180:1.5) {$M_2$ ($\theta=\pi$)};
+  \node[hvtx] at (90:1.5) {}; \node[above] at (90:1.5) {$m_1$ ($\theta=\pi/2$)};
+  \node[hvtx] at (270:1.5) {}; \node[below] at (270:1.5) {$m_2$ ($\theta=3\pi/2$)};
+  \draw[-{Stealth[length=2mm]},gray] (30:0.6) arc (30:150:0.6);
+  \node[gray] at (0,0.1) {\footnotesize 向き};
+  \node[blue!70!black] at (45:1.95) {$\gamma_1$};
+  \node[blue!70!black] at (135:1.95) {$\gamma_2$};
+  \node[blue!70!black] at (225:1.95) {$\gamma_3$};
+  \node[blue!70!black] at (315:1.95) {$\gamma_4$};
+\end{tikzpicture}
+\zucap{$h=\cos2\theta$ の勾配流線（$-\nabla h$ の向き）。赤い点は極大（指数1）、白丸は極小（指数0）。}
+\end{center}
+(1) 4本の流線 $\gamma_1,\dots,\gamma_4$ の符号を、節の規則（$\ind p=1$ の点から、向きの正の側へ出る流線を $+1$、負の側へ出る流線を $-1$）で定め、モース複体の $\partial M_1$、$\partial M_2$ を求めよ。\\
+(2) モース・ホモロジーを計算し $H_*(S^1;\Z)$ と一致することを確かめよ。$\Z_2$ 係数ではどうか。\\
+(3) ウィッテン変形した超対称量子力学（$d_t=e^{-th}de^{th}$、$t\gg1$）で、摂動的真空はいくつあり、それぞれボソンかフェルミオンか。余境界 $\delta=\partial^T$ を用いて、厳密な $E=0$ 状態として生き残る組合せを求めよ。これらが厳密解 $e^{-th}$、$e^{th}d\theta$ の局在の様子と一致することを確かめよ。
+\end{problem}
+
+\begin{solution}
+(1) $\gamma_1$：$M_1$ から正の向き（$\theta$ 増加）に出て $m_1$ へ、$+1$。$\gamma_4$：$M_1$ から負の向きに出て $m_2$ へ、$-1$。$\gamma_3$：$M_2$ から正の向きに出て $m_2$ へ、$+1$。$\gamma_2$：$M_2$ から負の向きに出て $m_1$ へ、$-1$。よって
+\[
+\partial M_1=m_1-m_2,\qquad \partial M_2=m_2-m_1,\qquad \partial m_i=0 .
+\]
+（$M_1$ の不安定多様体は弧 $(3\pi/2-2\pi,\pi/2)$ を正の向きに向きづけたもので、その境界が終点 $-$ 始点 $=m_1-m_2$ であることと一致する。）
+
+(2) $C_1=\Z M_1\oplus\Z M_2$、$C_0=\Z m_1\oplus\Z m_2$、$\partial=\begin{pmatrix}1&-1\\-1&1\end{pmatrix}$（列が $M_1,M_2$）。$\ker\partial_1=\Z(M_1+M_2)$ で $H_1=\Z$（生成元は円周全体 $M_1+M_2$）。$\operatorname{im}\partial_1=\Z(m_1-m_2)$ で、$H_0=\Z^2/\Z(m_1-m_2)\cong\Z$（$m_1-m_2$ は直和因子を生成するので商はねじれなし）。$H_*(S^1)$ と一致。$\Z_2$ 係数では $\partial M_1=\partial M_2=m_1+m_2$、$\ker=\Z_2(M_1+M_2)$、$H_1=\Z_2$、$H_0=\Z_2^2/\Z_2=\Z_2$。完全ではない（$c=(2,2)$、$b=(1,1)$）が、$\sum(-1)^kc_k=0=\chi(S^1)$。
+
+(3) 摂動的真空は4つ：$m_1,m_2$ に $0$ 形式（ボソン、$F=0$）、$M_1,M_2$ に $1$ 形式（フェルミオン、$F=1$）。指数は $2-2=0$。$\delta=\partial^T$：
+\[
+\delta m_1=M_1-M_2,\qquad \delta m_2=-M_1+M_2 .
+\]
+$\ker\delta|_{C^0}=\Z(m_1+m_2)$：ボソン的基底状態は2つの極小の\textbf{対称な}組合せ。$C^1/\operatorname{im}\delta=\Z^2/\Z(M_1-M_2)$ の生成元は $M_1$（$\equiv M_2$）で、直交補空間で代表すれば $M_1+M_2$：フェルミオン的基底状態は2つの極大の対称な組合せ。反対称な組合せ $m_1-m_2$ と $M_1-M_2$ はインスタントン（流線）で結ばれて $E>0$ に持ち上がる。
+厳密解：$e^{-th}=e^{-t\cos2\theta}$ は $\cos2\theta=-1$ の点 $\theta=\pi/2,3\pi/2$（$m_1,m_2$）に等しい重みで局在し、$e^{th}d\theta$ は $\theta=0,\pi$（$M_1,M_2$）に等しい重みで局在する。いずれも $S^1$ 上で一価で、対称な組合せに対応する。これらは $b_0=b_1=1$ に対応する。
+\end{solution}
+
+\begin{problem}[難易度 D]\label{ch11-prob-witten}
+$n$ 次元コンパクト・リーマン多様体 $M$ 上のウィッテン変形 $d_t=e^{-th}de^{th}$ を考える。\\
+(1) 平坦な座標の近傍で $d=\sum_ia^{i\dagger}\partial_i$、$d^\dagger=-\sum_ia^i\partial_i$（$a^{i\dagger}=dx^i\wedge$、$a^i=\iota_{\partial_i}$）と書けることを用いて、命題 \ref{prop:ch11-Ht} の式
+\[
+H_t=-\sum_i\partial_i^2+t^2\lvert\nabla h\rvert^2+t\sum_{i,j}(\partial_i\partial_jh)[a^{i\dagger},a^j]
+\]
+を導け。\\
+(2) 臨界点 $p$ でヘッセ行列が $\operatorname{diag}(\lambda_1,\dots,\lambda_n)$（すべて $\neq0$）となる座標で、調和近似 $h\approx h(p)+\tfrac12\sum\lambda_ix_i^2$ の下での $H_t$ のスペクトルを求めよ。$E=0$ の状態がちょうど1つで、その次数が $\ind p$ であることを示し、その波動関数を書け。\\
+(3)「$t\to\infty$ で、$H_t|_{\Omega^k}$ の $O(t)$ より小さい固有値の数は、調和近似で $E=0$ となる状態の数に一致する」ことを認めて、弱モース不等式 $b_k\le c_k$ と $\chi(M)=\sum_k(-1)^kc_k$ を導け。\\
+(4) ベクトル場 $V$ の孤立零点 $p$ の指数を $\operatorname{sign}\det(\partial_iV^j(p))$（非退化の場合）とする。勾配ベクトル場 $V=\nabla h$ の零点 $p$ の指数が $(-1)^{\ind p}$ であることを示し、(3) から $\sum_{V(p)=0}(\text{指数})=\chi(M)$（勾配場に対するポアンカレ・ホップの定理）を導け。$S^2$ 上で高さ関数を用いて確かめ、$S^2$ 上のいたるところ $0$ でないベクトル場は存在しないことを、「任意のベクトル場の零点の指数和は $\chi$ に等しい」（一般のポアンカレ・ホップ）を認めて結論せよ。
+\end{problem}
+
+\begin{solution}
+(1) $\{a^i,a^{j\dagger}\}=\delta^{ij}$、$\{a^i,a^j\}=\{a^{i\dagger},a^{j\dagger}\}=0$。$d_t=d+t\sum_i(\partial_ih)a^{i\dagger}$、$d_t^\dagger=d^\dagger+t\sum_j(\partial_jh)a^j$。
+\[
+H_t=\{d,d^\dagger\}+t^2\{\partial_ih\,a^{i\dagger},\partial_jh\,a^j\}+t\bigl(\{d,\partial_jh\,a^j\}+\{\partial_ih\,a^{i\dagger},d^\dagger\}\bigr)
+\]
+（$\{d,d\}$ 型の項はない。同じ添字は和をとる。）第1項は $-\sum\partial_i^2$（平坦）、第2項は $(\partial_ih)(\partial_jh)\delta^{ij}=\lvert\nabla h\rvert^2$。第3項の計算は次の【注】。結果は $t(\partial_i\partial_jh)[a^{i\dagger},a^j]$。
+\begin{note}
+形式 $\omega$ に作用させる。微分は係数にのみ作用し、$a$ は定数行列とみなせる。
+\[
+\{a^{i\dagger}\partial_i,\ \partial_jh\,a^j\}\omega=a^{i\dagger}a^j(\partial_i\partial_jh)\omega+\partial_jh\,(a^{i\dagger}a^j+a^ja^{i\dagger})\partial_i\omega=(\partial_i\partial_jh)a^{i\dagger}a^j\omega+(\partial_ih)\partial_i\omega,
+\]
+\[
+\{\partial_ih\,a^{i\dagger},\ -a^j\partial_j\}\omega=-\partial_ih\,a^{i\dagger}a^j\partial_j\omega-a^ja^{i\dagger}(\partial_j\partial_ih)\omega-\partial_ih\,a^ja^{i\dagger}\partial_j\omega=-(\partial_ih)\partial_i\omega-(\partial_i\partial_jh)a^ja^{i\dagger}\omega .
+\]
+和は $(\partial_i\partial_jh)(a^{i\dagger}a^j-a^ja^{i\dagger})\omega$。1階微分の項は打ち消す。
+\end{note}
+
+(2) 調和近似で $\partial_ih=\lambda_ix_i$、$\partial_i\partial_jh=\lambda_i\delta_{ij}$ なので
+\[
+H_t=\sum_{i=1}^n\Bigl(-\partial_i^2+t^2\lambda_i^2x_i^2+t\lambda_i[a^{i\dagger},a^i]\Bigr),
+\]
+互いに可換な $n$ 個の1次元の項の和。$[a^{i\dagger},a^i]=2a^{i\dagger}a^i-1$ は $dx^i$ を含む形式に $+1$、含まない形式に $-1$ をかける（$\varepsilon_i$）。$-\partial^2+t^2\lambda^2x^2$ の固有値は $t\lvert\lambda\rvert(2N+1)$ なので
+\[
+E=t\sum_i\bigl(\lvert\lambda_i\rvert(2N_i+1)+\lambda_i\varepsilon_i\bigr).
+\]
+各項は $\ge t(\lvert\lambda_i\rvert-\lvert\lambda_i\rvert)=0$ で、$0$ になるのは $N_i=0$ かつ $\varepsilon_i=-\operatorname{sign}\lambda_i$、すなわち「$\lambda_i<0$ なら $dx^i$ を含み、$\lambda_i>0$ なら含まない」とき。よって $E=0$ の状態はただ1つで、その次数は負の固有値の数 $=\ind p$。波動関数は、負の方向の添字を $i_1<\dots<i_k$ として
+\[
+\psi_p=\exp\Bigl(-\frac t2\sum_i\lvert\lambda_i\rvert x_i^2\Bigr)\,dx^{i_1}\wedge\dots\wedge dx^{i_k}.
+\]
+（1次元の $e^{-th}$, $e^{th}dx$ の積になっている。）他の状態は $E\ge2t\min\lvert\lambda_i\rvert$ で、$t\to\infty$ で持ち上がる。
+
+(3) 認めた事実により、$\Omega^k$ の低エネルギー状態の数は「調和近似で $E=0$ の状態が次数 $k$ である臨界点」の数、すなわち $c_k$ である。真の $E=0$ 状態の数は（問題 \ref{ch11-prob-pair}(4) より $t$ によらず）$b_k$ で、それは低エネルギー状態の一部なので $b_k\le c_k$。また $\Tr(-1)^Fe^{-\beta H_t}$ は $t$ によらず $\chi(M)$ で、$t\to\infty$ で低エネルギー状態のうち $E>0$ のものは $d_t$ で対になる（低エネルギー部分空間は $d_t$ で保たれる）ので、$\chi(M)=\sum(-1)^kc_k$。
+
+(4) $V^j=g^{jk}\partial_kh$ の零点は臨界点で、正規直交座標で $\partial_iV^j(p)=\partial_i\partial_jh(p)$。よって指数は $\operatorname{sign}\prod_i\lambda_i=(-1)^{\#\{\lambda_i<0\}}=(-1)^{\ind p}$。(3) より
+\[
+\sum_{V(p)=0}(-1)^{\ind p}=\sum_k(-1)^kc_k=\chi(M).
+\]
+$S^2$ の高さ関数では、南極（指数0）と北極（指数2）の勾配場の指数はどちらも $+1$ で、和は $2=\chi(S^2)$。北極では勾配は「流れ出し」、南極では「流れ込み」だが、2次元では湧き出しも吸い込みも指数 $+1$ である。一般のポアンカレ・ホップより、零点のないベクトル場があれば指数和は $0$ で $\chi(S^2)=2$ に反する。よって $S^2$ 上のベクトル場は必ず零点をもつ（「毛玉の定理」）。$T^2$（$\chi=0$）にはいたるところ $0$ でないベクトル場 $\partial_\theta$ がある。超対称量子力学の言葉では、ウィッテン指数はベクトル場（超ポテンシャルの勾配）の零点での局所的寄与の和に局在する。これは第9章の指数定理の局在公式の原型である。
+\end{solution}
+
+\subsection{ボット周期性とK理論}
+
+\begin{problem}[難易度 A]\label{ch11-prob-bott}
+定理 \ref{thm:ch11-bott} の表と命題 \ref{prop:ch11-stable} の安定域を用いて次を答えよ。\\
+(1) $\pi_3(SU(N))$（$N\ge2$）、$\pi_3(SO(N))$（$N\ge5$）、$\pi_3(Sp(N))$。4次元ゲージ理論での意味は何か。\\
+(2) $\pi_4(SU(2))$、$\pi_4(SU(N))$（$N\ge3$）、$\pi_4(Sp(N))$。4次元の $Sp(N)$ ゲージ理論にウィッテン型の大域的アノマリー（第9章）が起こりうるか。\\
+(3) $\pi_1(SO(N))$（$N\ge3$）と $\pi_7(SO(N))$（$N\ge9$）。\\
+(4) $\tilde K(S^n)$ と $\widetilde{KO}(S^n)$ を $n=1,\dots,8$ について表にせよ。
+\end{problem}
+
+\begin{solution}
+(1) $\pi_3(SU(N))=\pi_3(U)=\Z$（$3\le2N-1$、$N\ge2$）。$\pi_3(SO(N))=\pi_3(O)=\Z$（$3\le N-2$、$N\ge5$）。$\pi_3(Sp(N))=\pi_3(Sp)=\Z$（$3\le4N+1$、すべての $N\ge1$）。いずれも、ユークリッド4次元で遠方の純ゲージ $g\colon S^3_\infty\to G$ の巻き付き数、すなわちインスタントン数が整数であることを示す（第3, 8章）。$SO(4)$ は安定域外で、実際 $\pi_3(SO(4))=\Z\oplus\Z$。
+
+(2) $SU(2)=Sp(1)$ で $4\le4\cdot1+1$ なので $\pi_4(SU(2))=\pi_4(Sp)=\Z_2$。$N\ge3$ では $4\le2N-1$ なので $\pi_4(SU(N))=\pi_4(U)=0$。$\pi_4(Sp(N))=\pi_4(Sp)=\Z_2$（すべての $N$）。ウィッテンの $SU(2)$ アノマリーは $\pi_4(G)=\Z_2$ の生成元に沿った大きなゲージ変換の下でのフェルミオン行列式の符号反転なので、$Sp(N)$ 理論でも、擬実表現（基本表現など）のワイル・フェルミオンが奇数個あれば起こる。$SU(N\ge3)$ では $\pi_4=0$ なのでこの型の大域的アノマリーはない（その代わり摂動的アノマリーの相殺が必要）。
+
+(3) $\pi_1(SO(N))=\pi_1(O)=\Z_2$（$1\le N-2$）：$2\pi$ 回転の非可縮性とスピノル（第2章）。$\pi_7(SO(N))=\pi_7(O)=\Z$（$7\le N-2$）。
+
+(4) $\tilde K(S^n)=\pi_{n-1}(U)$、$\widetilde{KO}(S^n)=\pi_{n-1}(O)$ より
+\begin{center}
+\begin{tabular}{c|cccccccc}
+$n$ & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8\\ \hline
+$\tilde K(S^n)$ & 0 & $\Z$ & 0 & $\Z$ & 0 & $\Z$ & 0 & $\Z$\\
+$\widetilde{KO}(S^n)$ & $\Z_2$ & $\Z_2$ & 0 & $\Z$ & 0 & 0 & 0 & $\Z$
+\end{tabular}
+\end{center}
+例えば $\widetilde{KO}(S^1)=\Z_2$ は円周上の実直線束がメビウスの帯と自明束の2種であること、$\widetilde{KO}(S^2)=\Z_2$ は $S^2$ 上の実束のスピン構造の障害 $w_2$ に対応する。
+\end{solution}
+
+\begin{problem}[難易度 C]\label{ch11-prob-KS2}
+$S^2$ を北半球 $D_N$ と南半球 $D_S$ に分け、赤道 $S^1$（座標 $\varphi$）上の貼り合わせ関数 $g_n(\varphi)=e^{in\varphi}\in U(1)$ で作った複素直線束を $L_n$ とする（モノポール電荷 $n$ の束；向きを適当に選んで $\int_{S^2}c_1(L_n)=n$、第7, 8章）。階数 $r$ の束は貼り合わせ関数のホモトピー類 $[S^1,U(r)]=\pi_1(U(r))\cong\Z$（$\det$ の巻き付き数）で分類されることを認める。\\
+(1) $L_n\oplus L_m\cong L_{n+m}\oplus L_0$ を、貼り合わせ関数のホモトピーを具体的に作って示せ。\\
+(2) $S^2$ 上の任意の階数 $r$ の束 $E$ は $L_n\oplus\C^{r-1}$（$n=\int c_1(E)$）と同型であることを示し、$\tilde K(S^2)\cong\Z$ で生成元が $x=[L_1]-1$ であることを示せ。\\
+(3) $L_n\otimes L_m\cong L_{n+m}$ を用いて、環としての関係 $x^2=0$、$K(S^2)\cong\Z[x]/(x^2)$、$[L_n]=1+nx$ を示せ。\\
+(4) チャーン指標 $\ch(L_n)=1+c_1(L_n)$ を用いて、同型 $\tilde K(S^2)\to\Z$ が $\xi\mapsto\int_{S^2}\ch(\xi)$ で与えられることを確かめよ。\\
+(5) $SU(2)\to U(1)$ と破れたゲージ理論（ジョージ・グラショウ模型）の 't Hooft--Polyakov モノポールでは、遠方の $U(1)$ 束は $L_1$ で非自明だが、$SU(2)$ の随伴的な見方では $L_1\oplus L_{-1}$ の形の階数2の束が現れる。$L_1\oplus L_{-1}$ が自明であることを示し、その物理的意味を述べよ。
+\end{problem}
+
+\begin{solution}
+(1) $L_n\oplus L_m$ の貼り合わせ関数は $\operatorname{diag}(e^{in\varphi},e^{im\varphi})=\operatorname{diag}(e^{i(n+m)\varphi},1)\cdot u(\varphi)$、$u(\varphi)=\operatorname{diag}(e^{-im\varphi},e^{im\varphi})\in SU(2)$。$u$ が $SU(2)$ 内で定値ループ $\mathbf 1$ にホモトピックであることを示せばよい。$SU(2)$ の元を $a_0\mathbf 1+i\bm a\cdot\bm\sigma$（$a_0^2+\lvert\bm a\rvert^2=1$）と書くと（第1章）
+\[
+u(\varphi)=\cos m\varphi\,\mathbf 1-i\sin m\varphi\,\sigma_3,\qquad (a_0,a_1,a_2,a_3)=(\cos m\varphi,0,0,-\sin m\varphi)
+\]
+で、$u$ は $a_1=a_2=0$ の大円上にある。特に点 $P=i\sigma_1$（$(a_0,\bm a)=(0,1,0,0)$）を通らない。$S^3\setminus\{P\}$ は $P$ からの立体射影 $\sigma_P$ で $\R^3$ と同相なので、
+\[
+u_s(\varphi)=\sigma_P^{-1}\bigl((1-s)\,\sigma_P(u(\varphi))+s\,\sigma_P(\mathbf 1)\bigr)\qquad(0\le s\le1)
+\]
+は $SU(2)\setminus\{P\}$ 内のループの連続な族で、$u_0=u$、$u_1=\mathbf 1$（定値）。よって $u\simeq\mathbf 1$。
+
+したがって貼り合わせ関数は $U(2)$ 内で $\operatorname{diag}(e^{i(n+m)\varphi},1)$ にホモトピックで、これは $L_{n+m}\oplus L_0$ の貼り合わせ関数である。貼り合わせ関数がホモトピックなら束は同型（第7章）なので $L_n\oplus L_m\cong L_{n+m}\oplus\C$。（$\det$ の巻き付き数がどちらも $n+m$ であることからも、認めた分類より直ちに従う。）
+
+(2) $E$ の貼り合わせ関数 $g\colon S^1\to U(r)$ の $\det$ の巻き付き数を $n$ とすると、$\operatorname{diag}(e^{in\varphi},1,\dots,1)$ も巻き付き数 $n$ なので、分類より $E\cong L_n\oplus\C^{r-1}$。$c_1$ は直和で加法的で $c_1(\C)=0$ なので $n=\int c_1(E)$。
+$\tilde K(S^2)$ の元は $[E]-[\C^r]=[L_n]-1$ と書ける。(1) を繰り返すと $L_1^{\oplus n}\cong L_n\oplus\C^{n-1}$（$n\ge1$）なので $[L_n]-1=n([L_1]-1)=nx$。$n<0$ でも $L_n\oplus L_{-n}\cong\C^2$ より $[L_n]-1=-([L_{-n}]-1)=nx$。準同型 $\tilde K(S^2)\to\Z$、$[E]-[\C^r]\mapsto\int c_1(E)$ は well-defined（$c_1$ は安定同型で不変）で、$x\mapsto1$ なので全射、$nx\mapsto n$ より単射。よって $\tilde K(S^2)=\Z x$。
+
+(3) テンソル積の貼り合わせ関数は積 $e^{in\varphi}e^{im\varphi}=e^{i(n+m)\varphi}$ なので $L_n\otimes L_m\cong L_{n+m}$。
+\[
+x^2=[L_1\otimes L_1]-2[L_1]+1=[L_2]+[L_0]-2[L_1]=0,
+\]
+最後は (1) で $n=m=1$ とした $L_1\oplus L_1\cong L_2\oplus L_0$。よって $K(S^2)=\Z\oplus\Z x$、$x^2=0$、すなわち $K(S^2)\cong\Z[x]/(x^2)$。$[L_n]=1+nx$ は (2) から。（$[L_1]^n=(1+x)^n=1+nx$ とも整合する。）
+
+(4) $S^2$ 上では $4$ 形式以上は $0$ なので $\ch(L_n)=1+c_1(L_n)$ で、$\int_{S^2}\ch([L_n]-1)=\int c_1(L_n)=n$。よって $\int\ch$ は (2) の同型 $nx\mapsto n$ と一致する。一般に $\tilde K(S^{2m})\cong\Z$ は $\int\ch_m$ で与えられる（定理 \ref{thm:ch11-Ksphere} の後の注意）。
+
+(5) (1) で $n=1$、$m=-1$ とすれば $L_1\oplus L_{-1}\cong L_0\oplus\C=\C^2$。$SU(2)$ 主束（あるいは基本表現の階数2束）は $\pi_1(SU(2))=0$ によって $S^2$ 上ではすべて自明である。物理的意味：'t Hooft--Polyakov モノポールは $SU(2)$ ゲージ場としては特異点のない滑らかな配位で、$SU(2)$ 束としては自明なまま、ヒッグス場が $U(1)$ 部分群を選ぶことで「$U(1)$ 部分束」が $L_1$（電荷を持つ成分）と $L_{-1}$ に分かれて非自明になる。モノポール電荷は全体の束のトポロジーではなく、ヒッグス場による分解 $\C^2=L_1\oplus L_{-1}$ のトポロジー、すなわち $\pi_2(SU(2)/U(1))=\pi_2(S^2)=\Z$ によって決まる（第3章）。K 理論では $[L_1]+[L_{-1}]-2=x-x=0$。
+\end{solution}
+
+\begin{problem}[難易度 D]\label{ch11-prob-dbrane}
+Dブレーンの電荷が K 理論に値をとるという主張（第2節の physbox）を認める。\\
+(1) 定理 \ref{thm:ch11-Ksphere} とボット周期性を用いて、IIB では $p$ が奇数、IIA では $p$ が偶数の Dp ブレーンだけが $\Z$ に値をとる保存電荷をもつことを示せ（$-1\le p\le9$）。\\
+(2) タイプI弦理論では電荷が $\widetilde{KO}(S^{9-p})$ に値をとる。$p=-1,0,1,\dots,9$ について電荷の群を求め、$\Z$ 電荷をもつもの（BPS の D1, D5, D9）と $\Z_2$ 電荷をもつもの（非 BPS）を答えよ。\\
+(3) IIB で D9 と反 D9 を1枚ずつ重ね、タキオンを $T(x)=T_0\,\phi(\rho)\,e^{i\theta}$（$x^1+ix^2=\rho e^{i\theta}$、$\phi(0)=0$、$\phi(\infty)=1$）とする。遠方の円周上の写像 $T/\lvert T\rvert\colon S^1\to U(1)$ の巻き付き数を求め、これが $\tilde K(S^2)=\pi_1(U)$ の生成元であること、芯に D7 ブレーンが1枚残ることを説明せよ。\\
+(4) 余次元4では D9 と反 D9 を2枚ずつ（$E,F$ の階数2）とし、$x=(x^1,\dots,x^4)$ に対して
+\[
+T(x)=x^4\,\mathbf 1_2+i\sum_{a=1}^3x^a\sigma^a
+\]
+とする（アティヤ・ボット・シャピロ構成）。$T/\lvert T\rvert$ を $S^3\to SU(2)$ とみたときの巻き付き数（$w(g)=\frac1{24\pi^2}\int\tr(g^{-1}dg)^3$）が $\pm1$ であることを示し、芯に D5 ブレーンが1枚残ることを説明せよ。なぜ1枚ずつでは足りないか。\\
+(5) タイプIの D0 ブレーンの電荷が $\Z_2$ であることの物理的意味を述べよ。
+\end{problem}
+
+\begin{solution}
+(1) Dp ブレーンの横方向は $\R^{9-p}$ で、コンパクト台の K 群は $\tilde K(S^{9-p})$。IIB：$\tilde K(S^{9-p})=\pi_{8-p}(U)$ は $9-p$ 偶数、すなわち $p$ 奇数（$p=-1,1,3,5,7,9$）で $\Z$、$p$ 偶数で $0$。IIA：$\tilde K^{-1}(S^{9-p})=\tilde K(S^{10-p})=\pi_{9-p}(U)$ は $p$ 偶数（$p=0,2,4,6,8$）で $\Z$、$p$ 奇数で $0$。これは既知の BPS Dブレーン（IIB は RR 形式 $C_0,C_2,C_4,\dots$ に、IIA は $C_1,C_3,\dots$ に結合する）と一致する。逆に IIB の $p$ 偶数（IIA の $p$ 奇数）の Dp ブレーンは存在するがタキオンをもつ不安定な非 BPS ブレーンであり、保存電荷をもたないこと（$\tilde K=0$）と整合する。
+
+(2) $\widetilde{KO}(S^{9-p})$ は $9-p\bmod8$ で決まる：
+\begin{center}
+\begin{tabular}{c|ccccccccccc}
+$p$ & 9 & 8 & 7 & 6 & 5 & 4 & 3 & 2 & 1 & 0 & $-1$\\ \hline
+$9-p$ & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 & 10\\
+$9-p\bmod 8$ & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 0 & 1 & 2\\
+電荷 & $\Z$ & $\Z_2$ & $\Z_2$ & 0 & $\Z$ & 0 & 0 & 0 & $\Z$ & $\Z_2$ & $\Z_2$
+\end{tabular}
+\end{center}
+（$p=9$ では横方向が点で、$\widetilde{KO}(S^0)=\Z$ とみなす：D9 の枚数。）$\Z$：D9, D5, D1（BPS；D1 は $SO(32)$ 異型弦理論の基本弦と S 双対、D5 は $SO(32)$ のインスタントン）。$\Z_2$：D8, D7, D0, D$(-1)$（非 BPS だが安定）。
+
+(3) $\rho\to\infty$ で $T/\lvert T\rvert=e^{i\theta}$、巻き付き数 $1$。$\tilde K(S^2)$ は横方向 $\R^2$ のコンパクト台の K 群で、$(E,F,T)$ の三つ組は「遠方で $T$ が同型」なので、遠方の円周上の貼り合わせ関数 $T/\lvert T\rvert\in[S^1,U(1)]$ を定め、これが $\pi_1(U)=\Z$ の元である（$S^2=D^2\cup D^2_\infty$ を $E$ と $F$ で貼り合わせた束が $L_{\pm1}$）。巻き付き数 $1$ はその生成元で、$\tilde K(S^2)$ の生成元 $x=[L_1]-1$（問題 \ref{ch11-prob-KS2}）に対応する（符号は向きの規約による）。遠方ではタキオンは真空 $\lvert T\rvert=T_0$ にあり、ブレーン対は閉弦真空へ消滅しているが、$\rho=0$ では $T=0$ で凝縮できない。この余次元2の渦の芯（$x^1=x^2=0$ の8次元）に、1単位の D7 ブレーン電荷が残る。
+
+(4) $\lvert x\rvert=1$ では $T=x^4+i\bm x\cdot\bm\sigma\in SU(2)$（第1章の $a_0+i\bm a\cdot\bm\sigma$ 表示）で、$T|_{S^3}\colon S^3\to SU(2)\cong S^3$ は恒等写像（座標の同一視）である。記法と規約により $S^3$ の向きは恒等写像 $S^3\cong SU(2)$ が $w=1$ となるように選んであるので $w(T/\lvert T\rvert)=1$（逆の向きなら $-1$）。$\pi_3(U(2))\cong\pi_3(U)=\Z$（安定域 $3\le2\cdot2-1$）の生成元なので、$\tilde K(S^4)$ の生成元であり、対応する $S^4$ 上の階数2の束はインスタントン数 $\pm1$ の $SU(2)$ 束である（第8章）。芯 $x=0$（6次元）に D5 ブレーンが1枚残る。
+1枚ずつ（$U(1)$）では足りない理由：$\pi_3(U(1))=0$ なので、$T\colon S^3\to U(1)$ は必ず可縮で位相的な巻き付きをもてない。$\pi_3(U(N))$ が $\Z$ になるのは $N\ge2$ からで、ABS 構成ではスピノル $S^\pm\cong\C^{2^{k-1}}$（$2k=4$ で $2$）が必要枚数を与える。一般に余次元 $2k$ には $2^{k-1}$ 対の D9・反 D9 で足りる。
+
+(5) $\Z_2$ 電荷とは、D0 ブレーン2つは位相的には何もない状態と同じ（$1+1=0$）で、対消滅しうるが、1つだけでは崩壊できないことを意味する。BPS 条件による質量の下限で守られているのではなく、K 理論の位相的な電荷で守られた安定な非 BPS 状態である。実際、タイプI弦理論の D0 ブレーンは $SO(32)$ のスピノル表現の量子数をもつ最も軽い状態で、S 双対な $SO(32)$ 異型弦理論のスピノル状態（摂動的スペクトルに存在する）に対応する（セン）。この $\Z_2$ はコホモロジー（チャーン指標）では見えず、RR 場の電荷として測ることもできない。これが、Dブレーン電荷はコホモロジーではなく K 理論で分類されるべきだという主張の最も鮮やかな証拠である。
+\end{solution}

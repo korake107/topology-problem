@@ -1,0 +1,633 @@
+%================================================
+\chapter{位相空間・ホモトピー・リー群}\label{ch:01}
+% 18問
+%================================================
+
+\section{物理からの動機}
+
+\subsection*{場の配位は写像である}
+2次元空間の複素スカラー場 $\phi(\bm{x})$ で、$U(1)$ 対称なポテンシャル
+\[
+V(\phi)=\lambda\bigl(\lvert\phi\rvert^2-v^2\bigr)^2
+\]
+をもつものを考える。静的な配位のエネルギーは
+\[
+E[\phi]=\int d^2x\,\Bigl(\lvert\nabla\phi\rvert^2+V(\phi)\Bigr)
+\]
+である。$E<\infty$ であるためには、遠方 $r\to\infty$ で $V(\phi)\to0$、すなわち $\phi$ が\term{真空多様体}{vacuum manifold}
+\[
+\mathcal{M}=\{\phi\in\C:\lvert\phi\rvert=v\}\cong S^1
+\]
+に近づかなければならない。したがって十分大きな半径 $R$ の円周上で $\phi$ は写像
+\[
+\phi_\infty\colon S^1_\infty\longrightarrow\mathcal{M}\cong S^1,\qquad \theta\longmapsto\phi(R,\theta)
+\]
+を定める（下図）。
+\begin{center}
+\begin{tikzpicture}[scale=1.1]
+  \draw[-{Stealth[length=2mm]}] (-2.1,0) -- (2.3,0) node[right] {$\mathrm{Re}\,\phi$};
+  \draw[-{Stealth[length=2mm]}] (0,-0.3) -- (0,2.4) node[above] {$V$};
+  \draw[very thick,blue!70!black,domain=-1.55:1.55,samples=80,smooth]
+     plot (\x,{0.9*(\x*\x-1)*(\x*\x-1)});
+  \draw[thick,red!70!black,dashed] (0,0) ellipse (1 and 0.22);
+  \node[vtx,red!70!black] at (1,0) {}; \node[vtx,red!70!black] at (-1,0) {};
+  \node[red!70!black,below right] at (1.05,-0.05) {\footnotesize $\lvert\phi\rvert=v$};
+  \node[blue!70!black] at (1.9,1.6) {\footnotesize $V(\phi)$};
+  \begin{scope}[xshift=5.6cm,yshift=1cm]
+    \fill[gray!25] (0,0) circle (0.35);
+    \draw[thick] (0,0) circle (1.5);
+    \foreach \a in {0,45,...,315}{
+      \draw[-{Stealth[length=1.8mm]},thick,red!70!black] (\a:1.5) -- ($(\a:1.5)+(\a:0.45)$);
+    }
+    \node at (0,0) {\footnotesize 芯};
+    \node at (0,-1.95) {\footnotesize $\phi(R,\theta)=v\,e^{i\theta}$（$n=1$）};
+  \end{scope}
+\end{tikzpicture}
+\zucap{左：メキシカン・ハット型ポテンシャルの断面。底の円周 $\lvert\phi\rvert=v$ が真空多様体。右：遠方の円周上で $\phi$ の位相（矢印の向き）が1回まわる配位。中心付近（芯）では $\phi$ は真空からはずれる。}
+\end{center}
+
+時間発展は（エネルギー有限のまま）連続的に起こるので、写像 $\phi_\infty$ も連続的に変形される。連続的な変形で移り合う写像は「同じもの」とみなすのが自然であり、この同値関係が\term{ホモトピー}{homotopy}である。上の例では、$\phi_\infty$ が円周を何回まわるかという整数（\term{巻き付き数}{winding number}、第2章）は連続変形で変わらないので、\textbf{保存量}になる。これが\term{位相的電荷}{topological charge}の原型であり、渦（ボルテックス）や宇宙ひもの安定性を保証する。
+
+\subsection*{一般の状況}
+一般に、コンパクトなリー群 $G$ の作用で不変なポテンシャルが、点 $\phi_0$ で最小値をとり、その固定部分群が $H$ であるとすると、真空多様体は $G$ 軌道
+\[
+\mathcal{M}=G\cdot\phi_0\cong G/H
+\]
+である（\textbf{軌道・固定部分群定理}、本章）。$d$ 次元空間で有限エネルギーの配位は、遠方の球面 $S^{d-1}_\infty$ から $G/H$ への写像を定め、そのホモトピー類が位相的電荷を与える。どのホモトピー類がありうるかは、$G/H$ の\textbf{ホモトピー群}で決まる（第2, 3章）。
+
+ユークリッド4次元のゲージ理論では、作用有限の条件から、ゲージ場は遠方で純ゲージ $A\to i\,g\,dg^{-1}$ となり、写像 $g\colon S^3_\infty\to G$ が現れる（インスタントン、第3, 8章）。また $\R^n$ に無限遠点を付け加えた空間は $S^n$ と同相なので（立体射影）、「遠方で一定値に近づく配位」は球面 $S^n$ 上の配位とみなせる。
+
+非線形シグマ模型 $\phi\colon(\text{時空})\to\mathcal{M}$ のように、場の値そのものが曲がった空間（\term{標的空間}{target space}）に値をとる理論もある。カイラル・ラグランジアンの標的は $SU(N)$、$O(3)$ 模型の標的は $S^2$、$\CP^{N-1}$ 模型の標的は $\CP^{N-1}$ である。
+
+\begin{physbox}[：本章の辞書]
+\begin{center}
+\small
+\begin{tabular}{p{0.5\linewidth}p{0.4\linewidth}}
+物理 & 数学\\ \hline
+場の配位 & 写像 $X\to\mathcal{M}$\\
+有限エネルギー（有限作用）の境界条件 & 遠方の球面からの写像、あるいは $\R^n\cup\{\infty\}\cong S^n$\\
+エネルギー有限の連続的な時間発展 & ホモトピー\\
+位相的電荷 & ホモトピー類\\
+真空多様体 & 等質空間 $G/H$\\
+ゲージ群・対称性の群 & リー群（多様体としての形：$SU(2)\cong S^3$ など）
+\end{tabular}
+\end{center}
+\end{physbox}
+
+\section{基本事項のまとめ}
+
+\subsection{位相空間と商空間}
+本書では、点集合位相の細部には立ち入らず、次のことを用いる。
+
+\begin{mydef}{位相空間・連続写像・同相}{ch01-top}
+集合 $X$ の部分集合族 $\mathcal{O}$ で、$\emptyset, X\in\mathcal{O}$、任意個の和と有限個の共通部分で閉じたものを\term{位相}{topology}、その元を開集合という。写像 $f\colon X\to Y$ が\term{連続}{continuous}であるとは、開集合の逆像が開集合であることをいう。連続な全単射で逆も連続なものを\term{同相写像}{homeomorphism}といい、$X\cong Y$ と書く。
+\end{mydef}
+$\R^n$ の部分集合には距離から定まる位相を入れる。\textbf{コンパクト}（有界閉集合）、\textbf{弧状連結}（任意の2点が道で結べる）などの概念は通常どおり用いる。次の事実はしばしば使う。
+
+\begin{mythm}{コンパクトからハウスドルフへの連続全単射}{ch01-cpthaus}
+$X$ がコンパクト、$Y$ がハウスドルフ（$\R^N$ の部分集合など）ならば、連続な全単射 $f\colon X\to Y$ は同相写像である。
+\end{mythm}
+
+\begin{mydef}{商空間}{ch01-quot}
+空間 $X$ 上の同値関係 $\sim$ に対し、$q\colon X\to X/{\sim}$ を自然な射影とし、$U\subset X/{\sim}$ は $q^{-1}(U)$ が開集合のとき開集合と定める。これを\term{商空間}{quotient space}という。$X/{\sim}$ からの写像 $\bar f$ が連続であることは、$\bar f\circ q$ が連続であることと同値である。部分集合 $A\subset X$ を1点につぶした空間を $X/A$ と書く。
+\end{mydef}
+
+\begin{myex}{代表的な商空間}{ch01-quotex}
+\begin{itemize}
+\item $D^n/\partial D^n\cong S^n$（円板の境界を1点につぶすと球面）。
+\item $\RP^n=S^n/(x\sim-x)$：原点を通る直線の空間。$\CP^n=S^{2n+1}/(z\sim\lambda z,\ \lvert\lambda\rvert=1)$：複素直線の空間。
+\item トーラス $T^2=I^2/((0,y)\sim(1,y),\ (x,0)\sim(x,1))$。
+\item $SO(3)\cong D^3/(\partial D^3\text{ の対蹠点を同一視})\cong\RP^3$（問題 \ref{ch01-prob-so3}）。
+\end{itemize}
+\end{myex}
+
+\begin{myex}{立体射影と1点コンパクト化}{ch01-stereo}
+北極 $N=(0,\dots,0,1)\in S^n$ からの\term{立体射影}{stereographic projection}
+\[
+\sigma\colon S^n\setminus\{N\}\to\R^n,\qquad \sigma(x)=\frac{(x_1,\dots,x_n)}{1-x_{n+1}}
+\]
+は同相写像で、逆写像は $\sigma^{-1}(y)=\dfrac{(2y,\ \lvert y\rvert^2-1)}{\lvert y\rvert^2+1}$ である。$\lvert y\rvert\to\infty$ が $x\to N$ に対応するので、$\R^n$ に1点 $\infty$ を付け加えた空間（\term{1点コンパクト化}{one-point compactification}）$\R^n\cup\{\infty\}$ は $S^n$ と同相である。
+\begin{center}
+\begin{tikzpicture}[scale=1.3]
+  \draw[thick] (0,0) circle (1);
+  \draw[-{Stealth[length=2mm]}] (-1.8,0) -- (3.3,0) node[right] {$\R^n$};
+  \node[vtx] at (0,1) {}; \node[above] at (0,1) {$N\leftrightarrow\infty$};
+  \draw[red!70!black,thick] (0,1) -- (2.75,0);
+  \node[vtx,red!70!black] at (0.643,0.766) {}; \node[above right,red!70!black] at (0.64,0.78) {$x$};
+  \node[vtx,red!70!black] at (2.75,0) {}; \node[below,red!70!black] at (2.75,0) {$\sigma(x)$};
+  \node[vtx] at (0,-1) {}; \node[below] at (0,-1) {$S\leftrightarrow 0$};
+\end{tikzpicture}
+\zucap{立体射影。北極 $N$ と $x$ を結ぶ直線が赤道面と交わる点が $\sigma(x)$。北極に近づくほど $\sigma(x)$ は遠方へ行く。}
+\end{center}
+物理では「$\lvert x\rvert\to\infty$ で方向によらず一定値に近づく場」を、$S^n$ 上の連続な場とみなすことに使う。
+\end{myex}
+
+\subsection{ホモトピー}
+
+\begin{mydef}{ホモトピー・ホモトピー同値}{ch01-htpy}
+連続写像 $f,g\colon X\to Y$ が\term{ホモトピック}{homotopic}（$f\simeq g$）であるとは、連続写像 $H\colon X\times I\to Y$ で $H(\cdot,0)=f$、$H(\cdot,1)=g$ となるもの（\term{ホモトピー}{homotopy}）があることをいう。
+連続写像 $f\colon X\to Y$ に対し $g\colon Y\to X$ で $g\circ f\simeq\id_X$、$f\circ g\simeq\id_Y$ となるものがあるとき、$f$ を\term{ホモトピー同値写像}{homotopy equivalence}、$X$ と $Y$ は\textbf{ホモトピー同値}であるといい $X\simeq Y$ と書く。1点とホモトピー同値な空間を\term{可縮}{contractible}という。
+\end{mydef}
+
+\begin{mydef}{変位レトラクト}{ch01-retract}
+$A\subset X$ と連続写像 $H\colon X\times I\to X$ で、$H(x,0)=x$、$H(x,1)\in A$、$H(a,t)=a$（$a\in A$）をみたすものがあるとき、$A$ を $X$ の\term{強変位レトラクト}{strong deformation retract}という。このとき包含 $A\hookrightarrow X$ はホモトピー同値であり、$A\simeq X$。
+\end{mydef}
+
+\begin{mythm}{ホモトピーの基本性質}{ch01-htpyprop}
+\begin{enumerate}
+\item $\simeq$ は写像の集合上の同値関係で、合成と両立する：$f\simeq f'$, $g\simeq g'$ なら $g\circ f\simeq g'\circ f'$。同値類の集合を $[X,Y]$ と書く。
+\item ホモトピー同値は空間の同値関係である。
+\item 凸集合（特に $\R^n$, $D^n$）は可縮である。可縮な空間 $Y$ への写像はすべてホモトピックで、$[X,Y]$ は1点。
+\end{enumerate}
+\end{mythm}
+
+\begin{myex}{ヒッグス場の零点を除いた空間}{ch01-punct}
+$\R^n\setminus\{0\}$ は $H(x,t)=(1-t)x+t\,x/\lvert x\rvert$ により $S^{n-1}$ に強変位レトラクトするので $\R^n\setminus\{0\}\simeq S^{n-1}$（問題 \ref{ch01-prob-punct}）。物理的には、「零点をもたないヒッグス場」の値域は、動径方向を忘れれば真空多様体の形をしている。
+\end{myex}
+
+\subsection{CW複体}
+多くの空間は、点（0胞体）に線分（1胞体）、円板（2胞体）、…を境界に沿って貼り合わせて作れる。これを\term{CW複体}{CW complex}という。$n$ 胞体 $D^n$ を貼る写像 $\varphi\colon\partial D^n=S^{n-1}\to X^{n-1}$ を\term{接着写像}{attaching map}と呼ぶ。
+\begin{itemize}
+\item $S^n=e^0\cup e^n$（$D^n$ の境界全体を1点に貼る）。
+\item $\RP^n=e^0\cup e^1\cup\dots\cup e^n$（$e^k$ の接着写像は二重被覆 $S^{k-1}\to\RP^{k-1}$）。
+\item $\CP^n=e^0\cup e^2\cup\dots\cup e^{2n}$。
+\item 種数 $g$ の閉曲面 $\Sigma_g$ は $e^0$、$2g$ 個の $e^1$、1個の $e^2$。
+\end{itemize}
+ホモロジーの計算（第4章）では、この胞体構造が主役になる。
+
+\subsection{リー群のトポロジー}
+ゲージ群や対称性の群は、多様体としての形（トポロジー）をもつ。次は本書全体で繰り返し用いる。
+
+\begin{myprop}{代表的なリー群の形}{ch01-liegroups}
+\begin{enumerate}
+\item $U(1)=\{e^{i\alpha}\}\cong S^1$。
+\item $SU(2)=\{a_0+i\bm{a}\cdot\bm{\sigma}:a_0^2+\lvert\bm{a}\rvert^2=1\}\cong S^3$（単位四元数の群）。
+\item $SO(3)\cong\RP^3$。$SU(2)\to SO(3)$ は2対1の準同型（第2章）。
+\item $U(N)\cong SU(N)\times U(1)$（位相空間として。群としては $U(N)\cong(SU(N)\times U(1))/\Z_N$）。
+\item $GL(n,\R)\simeq O(n)$、$GL(n,\C)\simeq U(n)$（極分解、グラム・シュミット）。
+\item $SO(n)$, $SU(n)$, $U(n)$ は弧状連結、$O(n)$ は2つの連結成分（$\det=\pm1$）をもつ。ローレンツ群 $O(3,1)$ は4つの連結成分をもつ。
+\end{enumerate}
+\end{myprop}
+
+\begin{center}
+\begin{tikzpicture}[scale=1.2]
+  \shade[ball color=blue!10,opacity=0.6] (0,0) circle (1.5);
+  \draw[thick] (0,0) circle (1.5);
+  \draw[dashed,gray] (1.5,0) arc (0:180:1.5 and 0.35);
+  \draw[gray] (-1.5,0) arc (180:360:1.5 and 0.35);
+  \draw[-{Stealth[length=2mm]},thick] (0,0) -- (40:1.05) node[above left] {\footnotesize $\psi\hat{\bm{n}}$};
+  \node[vtx] at (0,0) {}; \node[below] at (0,-0.05) {\footnotesize $\mathbf 1$};
+  \node[vtx,red!70!black] at (40:1.5) {}; \node[vtx,red!70!black] at (220:1.5) {};
+  \node[red!70!black,above right] at (40:1.5) {\footnotesize $\pi\hat{\bm n}$};
+  \node[red!70!black,below left] at (220:1.5) {\footnotesize $-\pi\hat{\bm n}$};
+  \draw[red!70!black,densely dotted,thick] (40:1.55) .. controls (100:2.4) and (160:2.4) .. (220:1.55);
+  \node at (2.6,0.9) {\footnotesize 半径 $\pi$ の球};
+\end{tikzpicture}
+\zucap{$SO(3)$ の軸・角度表示。回転軸 $\hat{\bm n}$ と回転角 $\psi\in[0,\pi]$ を、球の点 $\psi\hat{\bm n}$ で表す。角度 $\pi$ の回転は $\hat{\bm n}$ と $-\hat{\bm n}$ で同じなので、球面上の対蹠点（赤）を同一視する。}
+\end{center}
+
+\subsection{等質空間と真空多様体}
+
+\begin{mythm}{軌道・固定部分群定理}{ch01-orbit}
+コンパクトなリー群 $G$ がハウスドルフ空間 $X$ に連続に作用しているとする。$x_0\in X$ の\term{固定部分群}{stabilizer} $H=G_{x_0}=\{g:gx_0=x_0\}$ は閉部分群で、
+\[
+G/H\longrightarrow G\cdot x_0,\qquad gH\longmapsto g x_0
+\]
+は同相写像である。
+\end{mythm}
+\begin{note}
+well-defined かつ単射であることは $gx_0=g'x_0\iff g^{-1}g'\in H$ から従う。$G/H$ はコンパクト（$G$ の連続像）で、軌道はハウスドルフなので、定理 \ref{thm:ch01-cpthaus} により同相である。
+\end{note}
+
+\begin{myex}{等質空間}{ch01-homog}
+\begin{itemize}
+\item $S^n=SO(n+1)/SO(n)$、$S^{2n-1}=U(n)/U(n-1)=SU(n)/SU(n-1)$。
+\item $\CP^n=SU(n+1)/S(U(n)\times U(1))=U(n+1)/(U(n)\times U(1))$。
+\item グラスマン多様体 $\mathrm{Gr}_k(\C^n)=U(n)/(U(k)\times U(n-k))$（$\C^n$ の $k$ 次元部分空間全体）。
+\end{itemize}
+\end{myex}
+
+\begin{physbox}[：自発的対称性の破れと真空多様体]
+\begin{center}
+\renewcommand{\arraystretch}{1.2}\small
+\begin{tabular}{p{0.36\linewidth}p{0.3\linewidth}l}
+模型（破れ方） & $G\to H$ & 真空多様体 $G/H$\\ \hline
+複素スカラー（メキシカン・ハット） & $U(1)\to1$ & $S^1$\\
+$O(N)$ 模型 & $O(N)\to O(N-1)$ & $S^{N-1}$\\
+随伴ヒッグス（ジョージ・グラショウ） & $SU(2)\to U(1)$ & $S^2$\\
+電弱理論 & $SU(2)\times U(1)_Y\to U(1)_{\mathrm{em}}$ & $S^3$\\
+カイラル対称性の破れ & $SU(N)_L\times SU(N)_R\to SU(N)_V$ & $SU(N)$\\
+$SU(3)$ 随伴（$\langle\phi\rangle\propto\operatorname{diag}(1,1,-2)$） & $SU(3)\to S(U(2)\times U(1))$ & $\CP^2$
+\end{tabular}
+\end{center}
+これらは問題で順に確かめる。どの位相欠陥が安定に存在するかは、第3章でこの表のホモトピー群を計算して決める。
+\end{physbox}
+
+\subsection{ホップ写像}
+第3, 7章で主役になる写像を導入しておく。$S^3=\{z=(z_1,z_2)\in\C^2:\lvert z_1\rvert^2+\lvert z_2\rvert^2=1\}$ に対し
+\[
+h\colon S^3\to S^2,\qquad h(z)^a=z^\dagger\sigma^az\quad(a=1,2,3)
+\]
+を\term{ホップ写像}{Hopf map}という。成分で書くと $h(z)=\bigl(2\,\mathrm{Re}(\bar z_1z_2),\ 2\,\mathrm{Im}(\bar z_1z_2),\ \lvert z_1\rvert^2-\lvert z_2\rvert^2\bigr)$ である。量子力学では、スピン $1/2$ の規格化された状態 $z$ に、そのブロッホ・ベクトル $\langle\bm{\sigma}\rangle$ を対応させる写像にほかならない。各点の逆像は円周 $\{e^{i\alpha}z\}$（状態の全体位相）であり（問題 \ref{ch01-prob-hopf}）、$S^3$ は円周の族に分割される。
+
+\section{問題}
+
+\subsection{ホモトピーの基本}
+
+\begin{problem}[難易度 A]\label{ch01-prob-equiv}
+連続写像 $X\to Y$ の間の関係 $\simeq$（ホモトピック）が同値関係であること、および $f\simeq f'\colon X\to Y$、$g\simeq g'\colon Y\to Z$ ならば $g\circ f\simeq g'\circ f'$ であることを示せ。
+\end{problem}
+
+\begin{solution}
+$I=[0,1]$ とする。
+反射律：$H(x,t)=f(x)$。
+対称律：$H$ が $f\simeq g$ を与えるなら、$H'(x,t)=H(x,1-t)$ が $g\simeq f$ を与える。
+推移律：$H$ が $f\simeq g$、$K$ が $g\simeq h$ を与えるとき
+\[
+L(x,t)=\begin{cases}H(x,2t)&(0\le t\le\tfrac12)\\ K(x,2t-1)&(\tfrac12\le t\le1)\end{cases}
+\]
+とおく。$t=\tfrac12$ では $H(x,1)=g(x)=K(x,0)$ で一致し、$X\times[0,\tfrac12]$ と $X\times[\tfrac12,1]$ は閉集合なので、貼り合わせの補題により $L$ は連続で、$f\simeq h$ を与える。
+
+合成：$H\colon f\simeq f'$、$K\colon g\simeq g'$ とすると、$g\circ H$ は $g\circ f\simeq g\circ f'$ を、$K(f'(x),t)$ は $g\circ f'\simeq g'\circ f'$ を与える。推移律より $g\circ f\simeq g'\circ f'$。
+\end{solution}
+
+\begin{problem}[難易度 A]\label{ch01-prob-convex}
+(1) 空でない凸集合 $C\subset\R^n$ は可縮であり、任意の空間 $X$ からの連続写像 $f,g\colon X\to C$ はホモトピックであることを示せ。\\
+(2) 可縮な空間は弧状連結であることを示せ。\\
+(3) 対称性の破れがなく真空が一意（真空多様体が1点）な理論、あるいは真空多様体が可縮な理論では、遠方の境界条件による位相的電荷（$[S^{d-1},\mathcal{M}]$ の元）は自明であることを説明せよ。
+\end{problem}
+
+\begin{solution}
+(1) $H(x,t)=(1-t)f(x)+t\,g(x)$ とおく。凸性より $H(x,t)\in C$ で、$H$ は連続、$H(\cdot,0)=f$、$H(\cdot,1)=g$。特に $X=C$、$f=\id_C$、$g$ を点 $c_0$ への定値写像とすれば $\id_C\simeq$（定値写像）であり、$C$ は可縮である。
+
+(2) 可縮なら $H\colon X\times I\to X$ で $H(x,0)=x$、$H(x,1)=x_0$ となるものがある。$\gamma_x(t)=H(x,t)$ は $x$ から $x_0$ への道なので、任意の2点は $x_0$ を経由して道で結べる。
+
+(3) $\mathcal{M}$ が可縮なら、$\id_{\mathcal{M}}\simeq c$（定値写像）。任意の $f\colon S^{d-1}\to\mathcal{M}$ に対し $f=\id\circ f\simeq c\circ f$ で、$c\circ f$ は定値写像である。よってすべての境界条件は互いにホモトピックで $[S^{d-1},\mathcal{M}]$ は1点、すなわち位相的に異なるセクターは存在しない。真空多様体が1点の場合はもちろん自明である。位相欠陥が存在するには、真空多様体が「穴」をもつ（可縮でない）ことが必要である。
+\end{solution}
+
+\begin{problem}[難易度 B]\label{ch01-prob-punct}
+$n\ge1$ とする。$S^{n-1}$ が $\R^n\setminus\{0\}$ の強変位レトラクトであることを示し、$\R^n\setminus\{0\}\simeq S^{n-1}$ を結論せよ。これを用いて、$n$ 成分の実スカラー場 $\phi^a$（$O(n)$ 模型）で、ある領域 $\Omega$ 上で $\phi\neq0$ であるものは、写像 $\hat\phi=\phi/\lvert\phi\rvert\colon\Omega\to S^{n-1}$ と（ホモトピーの意味で）同じ情報をもつことを説明せよ。
+\end{problem}
+
+\begin{solution}
+$X=\R^n\setminus\{0\}$ とし
+\[
+H(x,t)=(1-t)x+t\frac{x}{\lvert x\rvert}=\Bigl((1-t)+\frac{t}{\lvert x\rvert}\Bigr)x
+\]
+とおく。係数は正（$1-t$ と $t/\lvert x\rvert$ は非負で同時に $0$ にならない）なので $H(x,t)\neq0$、$H$ は $X\times I\to X$ の連続写像。$H(x,0)=x$、$H(x,1)=x/\lvert x\rvert\in S^{n-1}$、$\lvert a\rvert=1$ なら $H(a,t)=a$。よって強変位レトラクトで、$r(x)=x/\lvert x\rvert$ と包含 $i$ は $r\circ i=\id$、$i\circ r\simeq\id_X$ をみたし $X\simeq S^{n-1}$。
+
+物理への応用：$\phi\colon\Omega\to X$ と $\hat\phi=r\circ\phi$ について、$i\circ\hat\phi=i\circ r\circ\phi\simeq\phi$。したがって $\phi\mapsto\hat\phi$ は全単射 $[\Omega,X]\cong[\Omega,S^{n-1}]$ を与える（逆は $\hat\phi\mapsto i\circ\hat\phi$）。つまり零点をもたない場のホモトピー類は、その「向き」$\hat\phi$ だけで決まり、大きさ $\lvert\phi\rvert$ は位相的に無関係である。零点（欠陥の芯）があるところで初めて位相的な情報が失われうる。
+\end{solution}
+
+\begin{problem}[難易度 B]\label{ch01-prob-stereo}
+(1) 立体射影 $\sigma(x)=(x_1,\dots,x_n)/(1-x_{n+1})$ と $\tau(y)=\bigl(2y,\lvert y\rvert^2-1\bigr)/(\lvert y\rvert^2+1)$ が互いに逆写像であることを確かめ、$S^n\setminus\{N\}\cong\R^n$ を示せ。\\
+(2) $\R^n$ 上の連続な場 $\phi\colon\R^n\to\mathcal{M}$ が、$\lvert x\rvert\to\infty$ で方向によらず一様に一定値 $\phi_\infty$ に収束するとする（$\sup_{\lvert x\rvert\ge R}d(\phi(x),\phi_\infty)\to0$）。$\phi$ は連続写像 $S^n\to\mathcal{M}$ に拡張されることを示せ。\\
+(3) 4次元ユークリッド空間のスカラー場の配位で作用が有限になるものは、しばしば $S^4$ 上の場とみなされる。(2) の意味を述べよ。
+\end{problem}
+
+\begin{solution}
+(1) $y=\sigma(x)$ とおくと $\lvert y\rvert^2=\dfrac{1-x_{n+1}^2}{(1-x_{n+1})^2}=\dfrac{1+x_{n+1}}{1-x_{n+1}}$。よって $\lvert y\rvert^2+1=\dfrac{2}{1-x_{n+1}}$、$\lvert y\rvert^2-1=\dfrac{2x_{n+1}}{1-x_{n+1}}$ であり
+\[
+\tau(\sigma(x))=\Bigl(\frac{2x_i/(1-x_{n+1})}{2/(1-x_{n+1})},\ \frac{2x_{n+1}/(1-x_{n+1})}{2/(1-x_{n+1})}\Bigr)=x .
+\]
+逆に $x=\tau(y)$ は $\lvert x\rvert^2=\dfrac{4\lvert y\rvert^2+(\lvert y\rvert^2-1)^2}{(\lvert y\rvert^2+1)^2}=1$ をみたし、$1-x_{n+1}=\dfrac{2}{\lvert y\rvert^2+1}\neq0$ なので $x\neq N$、$\sigma(\tau(y))=\dfrac{2y/(\lvert y\rvert^2+1)}{2/(\lvert y\rvert^2+1)}=y$。両者とも連続なので同相である。
+
+(2) $\Phi(x)=\phi(\sigma(x))$（$x\neq N$）、$\Phi(N)=\phi_\infty$ と定める。$N$ 以外での連続性は明らか。$N$ での連続性：$x\to N$ は $\lvert\sigma(x)\rvert^2=(1+x_{n+1})/(1-x_{n+1})\to\infty$ と同値であり、仮定から $d(\Phi(x),\phi_\infty)\le\sup_{\lvert y\rvert\ge\lvert\sigma(x)\rvert}d(\phi(y),\phi_\infty)\to0$。
+
+(3) 作用 $\int d^4x\,[\tfrac12(\partial\phi)^2+V(\phi)]$ が有限であるには、遠方で $\phi$ が真空に近づく必要がある。真空が一様な値 $\phi_\infty$ に（方向によらず）近づくなら、(2) により配位は $S^4=\R^4\cup\{\infty\}$ 上の連続な場とみなせ、そのホモトピー類 $[S^4,\mathcal{M}]$ が位相的電荷になる。なお、ゲージ理論のインスタントンでは「場そのもの」ではなく「ゲージ同値類」が遠方で一定になるだけなので、$S^4$ 上には自明でないゲージ束が現れる（第7章）。
+\end{solution}
+
+\subsection{リー群のかたち}
+
+\begin{problem}[難易度 A]\label{ch01-prob-su2}
+$2\times2$ 複素行列 $U$ が $U^\dagger U=\mathbf 1$、$\det U=1$ をみたすための必要十分条件は
+\[
+U=a_0\mathbf 1+i\,\bm a\cdot\bm\sigma,\qquad (a_0,\bm a)\in\R^4,\quad a_0^2+\lvert\bm a\rvert^2=1
+\]
+と書けることであることを示し、$SU(2)\cong S^3$ を結論せよ。
+\end{problem}
+
+\begin{solution}
+$U=\begin{pmatrix}\alpha&\beta\\\gamma&\delta\end{pmatrix}$ とする。$\det U=1$ なら $U^{-1}=\begin{pmatrix}\delta&-\beta\\-\gamma&\alpha\end{pmatrix}$ であり、ユニタリ性 $U^{-1}=U^\dagger=\begin{pmatrix}\bar\alpha&\bar\gamma\\\bar\beta&\bar\delta\end{pmatrix}$ と比べて $\delta=\bar\alpha$、$\gamma=-\bar\beta$。さらに $\det U=\lvert\alpha\rvert^2+\lvert\beta\rvert^2=1$。逆にこの形の行列は $SU(2)$ に属する。
+
+$\alpha=a_0+ia_3$、$\beta=a_2+ia_1$ とおくと
+\[
+a_0\mathbf 1+i(a_1\sigma_1+a_2\sigma_2+a_3\sigma_3)=\begin{pmatrix}a_0+ia_3&a_2+ia_1\\-a_2+ia_1&a_0-ia_3\end{pmatrix}=\begin{pmatrix}\alpha&\beta\\-\bar\beta&\bar\alpha\end{pmatrix}
+\]
+であり、条件は $a_0^2+a_1^2+a_2^2+a_3^2=1$。対応 $U\leftrightarrow(a_0,\bm a)$ は連続な全単射で逆も連続なので $SU(2)\cong S^3$。
+
+物理的には、$SU(2)$ のゲージ変換や $N_f=2$ のカイラル場 $\Sigma\in SU(2)$ は「3次元球面に値をとる場」であり、写像 $S^3\to S^3$ の巻き付き数がインスタントン数やバリオン数になる（第3章）。
+\end{solution}
+
+\begin{problem}[難易度 B]\label{ch01-prob-so3}
+$D=\{\bm v\in\R^3:\lvert\bm v\rvert\le\pi\}$ とし、$\bm v=\psi\hat{\bm n}$ に軸 $\hat{\bm n}$ まわりの角度 $\psi$ の回転 $R(\bm v)\in SO(3)$ を対応させる（$R(\bm 0)=\mathbf 1$）。ロドリゲスの公式
+\[
+R(\bm v)=\mathbf 1+\frac{\sin\psi}{\psi}K+\frac{1-\cos\psi}{\psi^2}K^2,\qquad K_{ij}=-\epsilon_{ijk}v_k,\quad\psi=\lvert\bm v\rvert
+\]
+を認めて、$R$ が同相写像 $D/(\bm v\sim-\bm v,\ \lvert\bm v\rvert=\pi)\cong SO(3)$ を誘導することを示せ。さらにこの空間が $\RP^3$ と同相であることを示せ。
+\end{problem}
+
+\begin{solution}
+\textbf{連続性}：$\sin\psi/\psi$ と $(1-\cos\psi)/\psi^2$ は $\psi^2$ の整級数（$\psi=0$ で $1$, $\tfrac12$）なので $R$ は $D$ 上連続（実は滑らか）。
+
+\textbf{全射}：任意の $R\in SO(3)$ は固有値 $1$ の固有ベクトル（軸）をもち、軸に垂直な平面内の回転なので、ある $\hat{\bm n}$ と $\psi\in[0,\pi]$ で $R=R(\psi\hat{\bm n})$ と書ける（必要なら $\hat{\bm n}\to-\hat{\bm n}$ として角度を $[0,\pi]$ に収める）。
+
+\textbf{同一視される点}：$\operatorname{tr}R(\bm v)=1+2\cos\psi$ なので $R$ から $\psi\in[0,\pi]$ が決まる。反対称部分は $\tfrac12(R-R^{\mathsf T})=\dfrac{\sin\psi}{\psi}K$ である（$K^2$ は対称）。$0<\psi<\pi$ なら $\sin\psi\neq0$ なので $K$、したがって $\bm v$ が $R$ から一意に決まる。$\psi=0$ は $R=\mathbf 1$ のみ。$\psi=\pi$ なら $R=\mathbf 1+2\hat K^2=2\hat{\bm n}\hat{\bm n}^{\mathsf T}-\mathbf 1$（$\hat K=K/\pi$, $\hat K^2=\hat{\bm n}\hat{\bm n}^{\mathsf T}-\mathbf 1$）で、$\hat{\bm n}$ は符号を除いて決まる。よって $R(\bm v)=R(\bm w)$ となるのは $\bm v=\bm w$ か、$\lvert\bm v\rvert=\pi$ かつ $\bm w=-\bm v$ のときに限る。
+
+したがって $R$ は商空間 $D/{\sim}$ からの連続な全単射を誘導する。$D/{\sim}$ はコンパクト、$SO(3)\subset\R^9$ はハウスドルフなので同相（定理 \ref{thm:ch01-cpthaus}）。
+
+\textbf{$\RP^3$ との同相}：$S^3$ の上半球 $S^3_+=\{x_4\ge0\}$ は $D^3$ と同相（$(\bm y,\sqrt{1-\lvert\bm y\rvert^2})\leftrightarrow\bm y$）で、$\RP^3=S^3/(x\sim-x)$ の各点は上半球に代表元をもち、二つの代表元をもつのは赤道 $x_4=0$ 上の対蹠点だけである。よって $\RP^3\cong D^3/(\partial D^3\text{ の対蹠点})$（同じくコンパクト→ハウスドルフの議論）。半径を $\pi$ に拡大すれば上の $D/{\sim}$ である。
+
+この表示で、$\mathbf 1$ から $\pi\hat{\bm n}$ へ行き、対蹠点 $-\pi\hat{\bm n}$ から $\mathbf 1$ へ戻る閉曲線（$2\pi$ 回転）が縮められないことが、スピン $1/2$ の符号の起源になる（第2章）。
+\end{solution}
+
+\begin{problem}[難易度 B]\label{ch01-prob-un}
+$N\ge2$ とする。\\
+(1) $D(z)=\operatorname{diag}(z,1,\dots,1)$ として、$\Phi(U)=\bigl(U\,D(\det U)^{-1},\ \det U\bigr)$ が同相写像 $U(N)\cong SU(N)\times U(1)$ を与えることを示せ。\\
+(2) $U(N)$ と $SU(N)\times U(1)$ は群として同型でないことを示せ。（ヒント：中心の中で $g^N=1$ をみたす元の個数を比べよ。）\\
+(3) 準同型 $SU(N)\times U(1)\to U(N)$、$(V,e^{i\alpha})\mapsto e^{i\alpha}V$ の核を求め、$U(N)\cong(SU(N)\times U(1))/\Z_N$ を示せ。標準模型のゲージ群の「大域構造」がこの種の商で曖昧さをもつことにも注意せよ。
+\end{problem}
+
+\begin{solution}
+(1) $\det\bigl(U D(\det U)^{-1}\bigr)=\det U\cdot(\det U)^{-1}=1$ なので $\Phi$ は $SU(N)\times U(1)$ に値をとる。$\Psi(V,z)=V\,D(z)$ とおくと $\det\Psi(V,z)=z$ で、$\Psi\circ\Phi(U)=U$、$\Phi\circ\Psi(V,z)=(V,z)$。$\Phi,\Psi$ はともに行列成分の多項式と $z^{-1}=\bar z$ で書けるので連続。よって同相。ただし $\Phi$ は準同型ではない（$D(\det U)$ が $U$ と可換とは限らない）。
+
+(2) $U(N)$ の中心はスカラー行列 $\{e^{i\alpha}\mathbf 1\}\cong U(1)$ であり、その中で $g^N=1$ をみたす元は $e^{2\pi ik/N}\mathbf 1$ の $N$ 個。$SU(N)\times U(1)$ の中心は $Z(SU(N))\times U(1)=\Z_N\times U(1)$ で、$g^N=1$ をみたす元は $N\cdot N=N^2$ 個。群同型は中心を中心に写し、$g^N=1$ をみたす元の個数を保つので、$N\ge2$ では同型でない。
+
+(3) $e^{i\alpha}V=\mathbf 1$ なら $V=e^{-i\alpha}\mathbf 1\in SU(N)$ なので $e^{-iN\alpha}=1$。核は $\{(\omega^{-1}\mathbf 1,\omega):\omega^N=1\}\cong\Z_N$。全射性：$U\in U(N)$ に対し $\det U=e^{iN\alpha}$ となる $\alpha$ をとれば $V=e^{-i\alpha}U\in SU(N)$。よって $U(N)\cong(SU(N)\times U(1))/\Z_N$（同型定理）。
+
+標準模型では、すべての場の電荷がある $\Z_6$ 部分群の作用を自明にするため、ゲージ群は $SU(3)\times SU(2)\times U(1)_Y$ を $\Gamma\subset\Z_6$ で割ったもののどれか（$\Gamma=1,\Z_2,\Z_3,\Z_6$）でありうる。局所的な物理（摂動論）では区別できないが、許される線演算子やモノポールの電荷（第3, 7章）が変わる。
+\end{solution}
+
+\begin{problem}[難易度 C]\label{ch01-prob-gl}
+(1) $A\in GL(n,\R)$ の列にグラム・シュミットの直交化を施して $A=Q(A)R(A)$（$Q\in O(n)$、$R$ は対角成分が正の上三角行列）と分解する。$Q,R$ が $A$ の連続関数であることを認めて、
+\[
+H(A,t)=Q(A)\bigl((1-t)R(A)+t\mathbf 1\bigr)
+\]
+が $O(n)$ を $GL(n,\R)$ の強変位レトラクトとすることを示せ。\\
+(2) 同様に $GL(n,\C)\simeq U(n)$ を示し、$GL(n,\C)$ は弧状連結、$GL(n,\R)$ はちょうど2つの弧状連結成分をもつことを示せ（$SO(n)$, $U(n)$ の弧状連結性は用いてよい）。
+\end{problem}
+
+\begin{solution}
+(1) $(1-t)R(A)+t\mathbf 1$ は対角成分 $(1-t)R_{kk}+t>0$ をもつ上三角行列なので正則であり、$H(A,t)\in GL(n,\R)$。$H$ は連続、$H(A,0)=QR=A$、$H(A,1)=Q(A)\in O(n)$。$A\in O(n)$ なら列はすでに正規直交なのでグラム・シュミットは何もせず $Q(A)=A$、$R(A)=\mathbf 1$、よって $H(A,t)=A$。以上で強変位レトラクトであり、$GL(n,\R)\simeq O(n)$。
+
+(2) 複素内積でグラム・シュミットを行えば $A=Q(A)R(A)$（$Q\in U(n)$、$R$ は対角成分が正の上三角）となり、同じ $H$ が $GL(n,\C)\simeq U(n)$ を与える。
+
+ホモトピー同値写像は弧状連結成分の集合の全単射を誘導する（$f\colon X\to Y$, $g\colon Y\to X$ で $g\circ f\simeq\id$ なら、各点 $x$ と $g(f(x))$ はホモトピーの軌跡で結ばれる）。$U(n)$ は弧状連結なので $GL(n,\C)$ も弧状連結。$O(n)=SO(n)\sqcup R_1SO(n)$（$R_1=\operatorname{diag}(-1,1,\dots,1)$）で、各成分は弧状連結、かつ連続関数 $\det$ が値 $\pm1$ をとるので両者は結べない。よって $O(n)$、したがって $GL(n,\R)$ はちょうど2つの成分をもつ（$\det>0$ と $\det<0$）。
+
+物理的には、$GL(4,\R)$ の2成分は向きを保つ／反転する座標変換に対応し、一般相対論の「一般座標変換」でも向きの反転は連続変形では得られない。
+\end{solution}
+
+\begin{problem}[難易度 A]\label{ch01-prob-lorentz}
+(1) $O(n)$ は少なくとも2つの弧状連結成分をもつことを示せ。\\
+(2) ローレンツ群 $O(3,1)=\{\Lambda:\Lambda^{\mathsf T}\eta\Lambda=\eta\}$（$\eta=\operatorname{diag}(-1,1,1,1)$）について、$\det\Lambda=\pm1$ かつ $\lvert\Lambda^0{}_0\rvert\ge1$ を示し、$O(3,1)$ が少なくとも4つの弧状連結成分をもつことを示せ。（固有直交時間順ローレンツ群 $SO^+(3,1)$ が弧状連結であることを認めれば、ちょうど4つである。）パリティ $P$ や時間反転 $T$ が「連続的な対称性の極限」として得られないことを説明せよ。
+\end{problem}
+
+\begin{solution}
+(1) $\det\colon O(n)\to\{\pm1\}$ は連続で、$\mathbf 1$ と $\operatorname{diag}(-1,1,\dots,1)$ で異なる値をとる。道 $\gamma$ で両者が結ばれれば $\det\circ\gamma\colon[0,1]\to\{\pm1\}$ は連続で $1$ から $-1$ に変わることになり、中間値の定理に反する。
+
+(2) $\det(\Lambda^{\mathsf T}\eta\Lambda)=\det\eta$ より $(\det\Lambda)^2=1$。$(0,0)$ 成分を見ると $-1=\eta_{00}=\Lambda^\mu{}_0\eta_{\mu\nu}\Lambda^\nu{}_0=-(\Lambda^0{}_0)^2+\sum_i(\Lambda^i{}_0)^2$ なので $(\Lambda^0{}_0)^2=1+\sum_i(\Lambda^i{}_0)^2\ge1$。
+
+したがって連続写像 $\Lambda\mapsto(\det\Lambda,\ \operatorname{sgn}\Lambda^0{}_0)\in\{\pm1\}\times\{\pm1\}$ が定まり（$\Lambda^0{}_0$ は $0$ にならないので符号は連続）、$\mathbf 1$, $P=\operatorname{diag}(1,-1,-1,-1)$, $T=\operatorname{diag}(-1,1,1,1)$, $PT$ がそれぞれ $(1,1)$, $(-1,1)$, $(-1,-1)$, $(1,-1)$ をとる。(1) と同じ議論で4つの元は互いに道で結べず、少なくとも4成分。$SO^+(3,1)$ が弧状連結なら、各成分はその剰余類 $SO^+$, $P\,SO^+$, $T\,SO^+$, $PT\,SO^+$ でちょうど4つ。
+
+連続的なローレンツ変換（ブーストと回転を連続的に合成したもの）は $\mathbf 1$ と道で結ばれているので $SO^+(3,1)$ に属する。$P$ や $T$ は別の成分にあるので、どんな連続変形の極限としても得られない。したがってローレンツ不変性（連続対称性）から $P$ や $T$ の不変性は従わず、実際、弱い相互作用はこれらを破る（$CPT$ 定理は別の論理による）。
+\end{solution}
+
+\subsection{等質空間と真空多様体}
+
+\begin{problem}[難易度 B]\label{ch01-prob-sphere}
+(1) $n\ge1$ のとき、$SO(n+1)$ は $S^n$ に推移的に作用し、北極 $e_{n+1}$ の固定部分群は $SO(n)$（左上ブロック）であることを示し、$S^n\cong SO(n+1)/SO(n)$ を結論せよ。\\
+(2) 同様に $S^{2n-1}\cong SU(n)/SU(n-1)$（$n\ge2$）を示せ。\\
+(3) $O(N)$ 模型 $\mathcal L=-\tfrac12\partial_\mu\phi^a\partial^\mu\phi^a-\lambda(\phi^a\phi^a-v^2)^2$ の真空多様体と、対称性の破れ方 $G\to H$ を答えよ。
+\end{problem}
+
+\begin{solution}
+(1) 単位ベクトル $u\in S^n$ に対し、$u$ を最後の列にもつ正規直交基底 $(u_1,\dots,u_n,u)$ をとる（グラム・シュミット）。行列式が $-1$ なら $u_1$ を $-u_1$ に替えれば（$n\ge1$ なので可能）$g\in SO(n+1)$ で $g e_{n+1}=u$。よって推移的。$ge_{n+1}=e_{n+1}$ なら $g$ の最後の列は $e_{n+1}$、直交性から最後の行も $e_{n+1}^{\mathsf T}$ で、$g=\operatorname{diag}(g',1)$、$g'\in SO(n)$。軌道・固定部分群定理により $S^n\cong SO(n+1)/SO(n)$。
+
+(2) $u\in S^{2n-1}\subset\C^n$ を最後の列とするユニタリ行列を作り（複素グラム・シュミット）、最初の列に位相 $\overline{\det}$ を掛けて行列式を $1$ にすれば $g\in SU(n)$、$ge_n=u$。固定部分群は $\operatorname{diag}(g',1)$、$g'\in SU(n-1)$。よって $S^{2n-1}\cong SU(n)/SU(n-1)$。
+
+(3) ポテンシャルの最小点は $\phi^a\phi^a=v^2$ で、真空多様体は半径 $v$ の $S^{N-1}$。$G=O(N)$ が推移的に作用し、$\phi_0=(0,\dots,0,v)$ の固定部分群は $O(N-1)$。$O(N)\to O(N-1)$ と破れ、$\mathcal M=O(N)/O(N-1)\cong S^{N-1}$（$SO$ で考えても同じ）。南部・ゴールドストーン粒子の数は $\dim\mathcal M=N-1$ である。
+\end{solution}
+
+\begin{problem}[難易度 B]\label{ch01-prob-ew}
+電弱理論のヒッグス2重項 $H=(h_1,h_2)^{\mathsf T}\in\C^2$ はポテンシャル $V=\lambda\bigl(H^\dagger H-\tfrac{v^2}{2}\bigr)^2$ をもち、$SU(2)_L\times U(1)_Y$ の元 $(U,e^{i\beta})$ は $H\mapsto e^{i\beta/2}UH$（超電荷 $Y=\tfrac12$）と作用する。\\
+(1) 真空多様体が $S^3$ であることを示せ。\\
+(2) $H_0=(0,v/\sqrt2)^{\mathsf T}$ の固定部分群を求め、それが $Q=T_3+Y$（$T_3=\sigma_3/2$）で生成される $U(1)_{\mathrm{em}}$ であることを示せ。\\
+(3) $SU(2)\times U(1)_Y$ のこの作用は忠実でないことを示し、実際に作用している群が $U(2)$ であることを説明せよ。
+\end{problem}
+
+\begin{solution}
+(1) 最小点は $H^\dagger H=v^2/2$、すなわち $\lvert h_1\rvert^2+\lvert h_2\rvert^2=v^2/2$ で、$\C^2=\R^4$ の半径 $v/\sqrt2$ の球面 $S^3$。$SU(2)$ だけで推移的である：$U=\begin{pmatrix}\alpha&\beta\\-\bar\beta&\bar\alpha\end{pmatrix}$ に対し $UH_0=\tfrac{v}{\sqrt2}(\beta,\bar\alpha)^{\mathsf T}$ で、$(\beta,\bar\alpha)$ は $S^3$ 全体を動く。
+
+(2) $e^{i\beta/2}UH_0=H_0$ は $U e_2=e^{-i\beta/2}e_2$ を意味する。$U$ はユニタリなので $e_1$ も固有ベクトル、$\det U=1$ より $U=\operatorname{diag}(e^{i\beta/2},e^{-i\beta/2})$。したがって固定部分群は
+\[
+\Bigl\{\bigl(\operatorname{diag}(e^{i\beta/2},e^{-i\beta/2}),\,e^{i\beta}\bigr)\Bigr\}=\{\exp(i\beta(T_3+Y))\}
+\]
+である。実際 $T_3+Y$ は $H$ の上成分に $\tfrac12+\tfrac12=1$、下成分に $-\tfrac12+\tfrac12=0$ を与えるので、中性成分 $h_2$ を保つ。これが電磁気の $U(1)_{\mathrm{em}}$、$Q=T_3+Y$ である。軌道定理より $\mathcal M\cong(SU(2)\times U(1)_Y)/U(1)_{\mathrm{em}}\cong S^3$。
+
+(3) $(U,e^{i\beta})=(-\mathbf 1,e^{2\pi i})$、すなわち $\beta=2\pi$ で $U=-\mathbf 1$ の元は $H\mapsto e^{i\pi}(-H)=H$ と自明に作用する。（$U(1)_Y$ の元 $e^{i\beta}$ を $\beta\in[0,4\pi)$ でパラメータ化し、$H$ には $e^{i\beta/2}$ で作用すると考えると、核は $\Z_2$。）実際に $H$ に作用する変換の全体は $\{e^{i\beta/2}U\}=U(2)$ であり、$U(2)$ は $\C^2$ の単位球面 $S^3$ に推移的、$e_2$ の固定部分群は $\{\operatorname{diag}(e^{i\gamma},1)\}\cong U(1)$ で $U(2)/U(1)\cong S^3$。
+
+$\mathcal M=S^3$ は単連結で $\pi_2(S^3)=0$ なので、電弱理論には位相的に安定なひもやモノポールはない（第3章）。
+\end{solution}
+
+\begin{problem}[難易度 B]\label{ch01-prob-adj}
+ジョージ・グラショウ模型では $SU(2)$ の随伴表現のヒッグス場 $\phi=\phi^a\tfrac{\sigma^a}{2}$（$\phi^a\in\R$）が $\phi\mapsto U\phi U^\dagger$ と変換し、$V=\lambda(\phi^a\phi^a-v^2)^2$ である。\\
+(1) $U\phi U^\dagger=R(U)^a{}_b\phi^b\tfrac{\sigma^a}{2}$ で $R(U)\in SO(3)$ となることを用い、真空多様体が $S^2$ であることを示せ。\\
+(2) $\phi_0=v\tfrac{\sigma^3}{2}$ の固定部分群を求め、$\mathcal M\cong SU(2)/U(1)$ を示せ。破れずに残るゲージ場（光子）はどの生成子に対応するか。
+\end{problem}
+
+\begin{solution}
+(1) $\phi^a\phi^a=2\tr\phi^2$ は共役で不変、$U\phi U^\dagger$ もトレースゼロのエルミート行列なので $\phi'^a\sigma^a/2$ と書け、$\phi^a\mapsto\phi'^a$ はノルムを保つ線形写像 $R(U)$ である（$SU(2)$ が連結なので $\det R=1$）。最小点は $\phi^a\phi^a=v^2$、すなわち $\R^3$ の半径 $v$ の球面 $S^2$。$SU(2)\to SO(3)$ は全射（第2章）で $SO(3)$ は $S^2$ に推移的なので、真空多様体全体が1つの軌道である。
+
+(2) $U\sigma^3U^\dagger=\sigma^3$ は $U$ が $\sigma^3$ と可換であることを意味し、$U$ は対角：$U=\operatorname{diag}(e^{i\alpha},e^{-i\alpha})=\exp(i\alpha\sigma^3)$。固定部分群は $U(1)=\{\exp(i\alpha\sigma^3)\}$ であり、$\mathcal M\cong SU(2)/U(1)\cong S^2$。残る生成子は $T^3=\sigma^3/2$（$\phi_0$ の方向）で、これに対応するゲージ場が質量ゼロの光子、$T^1,T^2$ に対応する $W^\pm$ は質量 $\propto v$ を得る。$\pi_2(S^2)=\Z$ がトフーフト・ポリャコフ・モノポールの存在を保証する（第3章）。
+\end{solution}
+
+\begin{problem}[難易度 C]\label{ch01-prob-cp2}
+$SU(3)$ の随伴表現のヒッグス場 $\phi$（$3\times3$ のトレースゼロ・エルミート行列、$\phi\mapsto U\phi U^\dagger$）の真空が $\phi_0=v\operatorname{diag}(1,1,-2)$ の軌道であるとする。\\
+(1) 固定部分群が $S(U(2)\times U(1))=\{\operatorname{diag}(A,e^{i\gamma}):A\in U(2),\ \det A\,e^{i\gamma}=1\}$ であり、これが $U(2)$ と同型であることを示せ。\\
+(2) 軌道上の行列 $\phi$ に、固有値 $-2v$ の固有空間（$\C^3$ の複素直線）を対応させることで、真空多様体が $\CP^2$ と同相であることを示せ。\\
+(3) 真空多様体の実次元と、破れた生成子の数（＝重くなるゲージ場の数）が一致することを確かめよ。
+\end{problem}
+
+\begin{solution}
+(1) $U\phi_0U^\dagger=\phi_0$ は $U$ が $\operatorname{diag}(1,1,-2)$ と可換であることと同値で、$U$ は固有空間 $\C^2\oplus\C$ を保つブロック対角行列 $\operatorname{diag}(A,e^{i\gamma})$、$A\in U(2)$。$\det U=1$ より $e^{i\gamma}=(\det A)^{-1}$。写像 $A\mapsto\operatorname{diag}(A,(\det A)^{-1})$ は $U(2)$ から固定部分群への群同型である。
+
+(2) 軌道上の $\phi=U\phi_0U^\dagger$ は固有値 $v$（重複度2）と $-2v$（重複度1）をもつ。$-2v$ の固有空間を $L_\phi=U\C e_3$ とすると、$P_L$ をその上への直交射影として
+\[
+\phi=v(\mathbf 1-P_L)-2vP_L=v(\mathbf 1-3P_L)
+\]
+と書ける。よって $\phi\mapsto L_\phi$ は軌道から $\CP^2$（$\C^3$ の直線全体）への写像で、$L\mapsto v(\mathbf 1-3P_L)$ が逆を与える。$SU(3)$ は直線全体に推移的に作用する（直線の単位ベクトルを最後の列とする $SU(3)$ の元がとれる）ので全射。$P_L=uu^\dagger$（$u$ は単位ベクトル）は $u$ の位相によらず連続に依存するので、両方向とも連続。よって $\mathcal M\cong\CP^2\cong SU(3)/S(U(2)\times U(1))$。
+
+(3) $\dim_\R\CP^2=4$。一方 $\dim SU(3)-\dim U(2)=8-4=4$ で、破れた生成子は4個（$\operatorname{diag}(1,1,-2)$ と可換でない、$(1,3),(2,3)$ ブロックの非対角生成子 $T^4,\dots,T^7$）。ヒッグス機構でこれらに対応する4つのゲージ場が質量を得る。一般に $\dim G/H=\dim G-\dim H$ である。
+\end{solution}
+
+\begin{problem}[難易度 B]\label{ch01-prob-chiral}
+$N_f=N$ フレーバーの QCD では、クォーク凝縮 $\langle\bar q_{Ri}q_{Lj}\rangle\propto\Sigma_{ji}$ が $SU(N)_L\times SU(N)_R$ のもとで $\Sigma\mapsto L\Sigma R^\dagger$ と変換し、真空は $\Sigma=\mathbf 1$ にとれる。\\
+(1) $\Sigma=\mathbf 1$ の軌道が $SU(N)$ 全体であり、固定部分群が対角部分群 $SU(N)_V=\{(V,V)\}$ であることを示せ。\\
+(2) 写像 $(L,R)\mapsto LR^\dagger$ が同相 $(SU(N)_L\times SU(N)_R)/SU(N)_V\cong SU(N)$ を誘導することを示せ。\\
+(3) $N=2$ のときカイラル・ラグランジアンの標的空間は何と同相か。南部・ゴールドストーン粒子（パイオン）の数を答えよ。
+\end{problem}
+
+\begin{solution}
+(1) 軌道は $\{L R^\dagger\}$ であり、$R=\mathbf 1$ ととれば任意の $L\in SU(N)$ が現れるので $SU(N)$ 全体。$L R^\dagger=\mathbf 1\iff L=R$ なので固定部分群は $\{(V,V)\}$。
+
+(2) 軌道・固定部分群定理そのものである：$(L,R)$ と $(L',R')$ が同じ剰余類（$(L',R')=(LV,RV)$）なら $L'R'^\dagger=LVV^\dagger R^\dagger=LR^\dagger$。逆に $LR^\dagger=L'R'^\dagger$ なら $V=L^{-1}L'=R^{-1}R'$。コンパクト→ハウスドルフなので同相。
+
+(3) $N=2$ では標的は $SU(2)\cong S^3$。パイオン場は $\Sigma=\exp(2i\pi^aT^a/f_\pi)$ と書け、$\dim SU(2)=3$ 個の $\pi^\pm,\pi^0$ が現れる。写像 $\R^3\cup\{\infty\}\cong S^3\to S^3$ の巻き付き数がスカーミオン（バリオン）数である（第3章）。
+\end{solution}
+
+\begin{problem}[難易度 B]\label{ch01-prob-hopf}
+$z\in S^3\subset\C^2$ に対し $n^a(z)=z^\dagger\sigma^az$ とおく。\\
+(1) $\sum_a\sigma^a_{ij}\sigma^a_{kl}=2\delta_{il}\delta_{jk}-\delta_{ij}\delta_{kl}$ を用いて $\lvert\bm n\rvert=1$ を示せ。したがってホップ写像 $h\colon S^3\to S^2$, $z\mapsto\bm n$ が定まる。\\
+(2) $zz^\dagger=\tfrac12(\mathbf 1+\bm n\cdot\bm\sigma)$ を示し、$h(z)=h(w)\iff w=e^{i\alpha}z$ を導け。$h$ の各点の逆像は円周である。\\
+(3) $\CP^1$（$\C^2$ の複素直線全体）が $S^2$ と同相であることを示せ。量子力学では何に対応するか。
+\end{problem}
+
+\begin{solution}
+(1) $\sum_a(z^\dagger\sigma^az)^2=\sum_a\bar z_iz_j\bar z_kz_l\,\sigma^a_{ij}\sigma^a_{kl}=2(\bar z_iz_i)(\bar z_kz_k)-(\bar z_iz_i)(\bar z_kz_k)=(z^\dagger z)^2=1$。ここで第1項は $\delta_{il}\delta_{jk}$ により $\bar z_iz_j\bar z_jz_i=\lvert z\rvert^4$、第2項は $\delta_{ij}\delta_{kl}$ により $\lvert z\rvert^4$ である。
+
+(2) $2\times2$ エルミート行列は $\tfrac12(c_0\mathbf 1+\bm c\cdot\bm\sigma)$ と書け、$c_0=\tr$, $c^a=\tr(\,\cdot\,\sigma^a)$ である。$P=zz^\dagger$ について $\tr P=z^\dagger z=1$、$\tr(P\sigma^a)=z^\dagger\sigma^az=n^a$ なので $P=\tfrac12(\mathbf 1+\bm n\cdot\bm\sigma)$。したがって $h(z)=h(w)$ なら $zz^\dagger=ww^\dagger$。両辺を $z$ に作用させると $z=w(w^\dagger z)$ で、$\lvert w^\dagger z\rvert=1$（ノルムを比較）なので $z=e^{i\alpha}w$。逆は明らか。よって $h^{-1}(\bm n)=\{e^{i\alpha}z\}\cong S^1$。
+
+(3) $\CP^1=S^3/(z\sim e^{i\alpha}z)$ であり、(2) より $h$ は連続な全単射 $\bar h\colon\CP^1\to S^2$ を誘導する（全射性：任意の $\bm n\in S^2$ に対し射影 $\tfrac12(\mathbf 1+\bm n\cdot\bm\sigma)$ は階数1で、その像の単位ベクトル $z$ が $h(z)=\bm n$ をみたす）。$\CP^1$ はコンパクト、$S^2$ はハウスドルフなので同相。量子力学では、スピン $1/2$ の状態（全体位相を除いた射線）の空間 $\CP^1$ が\term{ブロッホ球}{Bloch sphere} $S^2$ であることに対応し、$\bm n=\langle\bm\sigma\rangle$ がスピンの向きである。このブロッホ球上のベリー位相が単極子の場になること（第8章）は、ホップ写像のねじれ（第3, 7章）の物理的な現れである。
+\end{solution}
+
+\subsection{図形とホモトピー型}
+
+\begin{problem}[難易度 C]\label{ch01-prob-torus}
+トーラス $T^2$ を正方形 $I^2$ の対辺を同一視した空間とし、$p$ を正方形の中心 $c=(\tfrac12,\tfrac12)$ の像とする。$T^2\setminus\{p\}$ が $S^1\vee S^1$（2つの円周を1点で貼り合わせた8の字）に強変位レトラクトすることを示せ。（物理的には、トーラス上に1つだけ点状の渦や電荷を置いたときの「その点を除いた空間」の形である。）
+\end{problem}
+
+\begin{solution}
+\begin{center}
+\begin{tikzpicture}[scale=2.2]
+  \fill[blue!6] (0,0) rectangle (1,1);
+  \draw[thick,red!70!black,mid arrow] (0,0) -- (1,0);
+  \draw[thick,red!70!black,mid arrow] (0,1) -- (1,1);
+  \draw[thick,blue!70!black,mid arrows] (0,0) -- (0,1);
+  \draw[thick,blue!70!black,mid arrows] (1,0) -- (1,1);
+  \foreach \a in {0,30,...,330}{
+    \draw[-{Stealth[length=1.6mm]},gray] ($(0.5,0.5)+(\a:0.08)$) -- ($(0.5,0.5)+(\a:0.3)$);
+  }
+  \node[hvtx] at (0.5,0.5) {};
+  \node[below] at (0.5,0) {$a$};
+  \node[left] at (0,0.5) {$b$};
+\end{tikzpicture}
+\qquad
+\begin{tikzpicture}[scale=1.2]
+  \draw[thick,red!70!black,mid arrow] (0,0) .. controls (-1.6,1.2) and (-1.6,-1.2) .. (0,0);
+  \draw[thick,blue!70!black,mid arrows] (0,0) .. controls (1.6,1.2) and (1.6,-1.2) .. (0,0);
+  \node[vtx] at (0,0) {};
+  \node at (-1.4,0) {$a$};
+  \node at (1.4,0) {$b$};
+  \node at (0,-1.1) {$q(\partial I^2)\cong S^1\vee S^1$};
+\end{tikzpicture}
+\zucap{中心を除いた正方形を放射状に境界へ押し出す（左）。境界の4辺は $a,b$ の2本に、4頂点は1点に同一視され、8の字になる（右）。}
+\end{center}
+$q\colon I^2\to T^2$ を商写像、$Q=I^2\setminus\{c\}$、$\lVert z\rVert_\infty=\max(\lvert z_1\rvert,\lvert z_2\rvert)$ とする。$I^2=\{\lVert z-c\rVert_\infty\le\tfrac12\}$ で、境界は $\lVert z-c\rVert_\infty=\tfrac12$ の部分である。
+\[
+\tilde H(z,t)=c+\Bigl((1-t)+\frac{t}{2\lVert z-c\rVert_\infty}\Bigr)(z-c)
+\]
+とおくと、係数は正なので $\tilde H(z,t)\neq c$、$\lVert\tilde H(z,t)-c\rVert_\infty=(1-t)\lVert z-c\rVert_\infty+\tfrac t2\le\tfrac12$ で $\tilde H(z,t)\in Q$。$\tilde H(z,0)=z$、$\tilde H(z,1)\in\partial I^2$、境界上の点は動かない。
+
+同一視されるのは境界の点だけで、それらは動かないので、$q\circ\tilde H$ は商写像 $q\times\id_I$（$I$ は局所コンパクト）のファイバー上で一定であり、連続写像 $H\colon(T^2\setminus\{p\})\times I\to T^2\setminus\{p\}$ を誘導する。よって $A=q(\partial I^2)$ は強変位レトラクトである。
+
+$A$ は $q([0,1]\times\{0\})$（両端が同一視された線分 $\cong S^1$、図の $a$）と $q(\{0\}\times[0,1])$（$b$）の和で、両者は1点 $q(0,0)$ のみを共有する。よって $A\cong S^1\vee S^1$。
+\end{solution}
+
+\begin{problem}[難易度 B]\label{ch01-prob-letters}
+下図のように、アルファベットの大文字を（黒丸を頂点とする）有限グラフとみなす。
+\begin{center}
+\begin{tikzpicture}[scale=0.62,line width=1.1pt]
+  \begin{scope}[xshift=0cm] % A
+    \draw (0,0) -- (0.2,0.64) -- (0.5,1.6) -- (0.8,0.64) -- (1,0) (0.2,0.64) -- (0.8,0.64);
+    \foreach \p in {(0,0),(0.2,0.64),(0.5,1.6),(0.8,0.64),(1,0)} \node[vtx] at \p {};
+  \end{scope}
+  \begin{scope}[xshift=1.8cm] % B
+    \draw (0,0) -- (0,1.6);
+    \draw (0,1.6) .. controls (0.9,1.6) and (0.9,0.8) .. (0,0.8);
+    \draw (0,0.8) .. controls (1.05,0.8) and (1.05,0) .. (0,0);
+    \foreach \p in {(0,0),(0,0.8),(0,1.6)} \node[vtx] at \p {};
+  \end{scope}
+  \begin{scope}[xshift=3.4cm] % C
+    \draw (1.03,1.33) arc (45:315:0.75);
+    \foreach \p in {(1.03,1.33),(1.03,0.27)} \node[vtx] at \p {};
+  \end{scope}
+  \begin{scope}[xshift=5.2cm] % D
+    \draw (0,0) -- (0,1.6) .. controls (1.2,1.6) and (1.2,0) .. (0,0);
+    \foreach \p in {(0,0),(0,1.6)} \node[vtx] at \p {};
+  \end{scope}
+  \begin{scope}[xshift=6.9cm] % E
+    \draw (0.9,1.6) -- (0,1.6) -- (0,0) -- (0.9,0) (0,0.8) -- (0.7,0.8);
+    \foreach \p in {(0,0),(0,0.8),(0,1.6),(0.9,1.6),(0.7,0.8),(0.9,0)} \node[vtx] at \p {};
+  \end{scope}
+  \begin{scope}[xshift=8.5cm] % O
+    \draw (0.5,0.8) ellipse (0.5 and 0.8);
+    \foreach \p in {(0.5,0),(0.5,1.6)} \node[vtx] at \p {};
+  \end{scope}
+  \begin{scope}[xshift=10.1cm] % P
+    \draw (0,0) -- (0,1.6) .. controls (0.9,1.6) and (0.9,0.8) .. (0,0.8);
+    \foreach \p in {(0,0),(0,0.8),(0,1.6)} \node[vtx] at \p {};
+  \end{scope}
+  \begin{scope}[xshift=11.6cm] % Q
+    \draw (0.5,0.8) ellipse (0.5 and 0.8);
+    \draw (0.65,0.45) -- (1.06,0.02);
+    \foreach \p in {(0.5,1.6),(0.854,0.234),(0.65,0.45),(1.06,0.02)} \node[vtx] at \p {};
+  \end{scope}
+  \begin{scope}[xshift=13.3cm] % R
+    \draw (0,0) -- (0,1.6) .. controls (0.9,1.6) and (0.9,0.8) .. (0,0.8) -- (0.9,0);
+    \foreach \p in {(0,0),(0,0.8),(0,1.6),(0.9,0)} \node[vtx] at \p {};
+  \end{scope}
+  \begin{scope}[xshift=14.9cm] % X
+    \draw (0,0) -- (1,1.6) (0,1.6) -- (1,0);
+    \foreach \p in {(0,0),(1,1.6),(0,1.6),(1,0),(0.5,0.8)} \node[vtx] at \p {};
+  \end{scope}
+\end{tikzpicture}
+\zucap{A, B, C, D, E, O, P, Q, R, X をグラフとみなしたもの（Q の尾は円周と1点で交わる）。}
+\end{center}
+(1) 頂点数 $V$、辺数 $E$ の連結な有限グラフは $E-V+1$ 個の円周の楔和とホモトピー同値であることを示せ。ただし「CW対 $(X,A)$ で $A$ が可縮なら $X\to X/A$ はホモトピー同値」および「有限グラフの木は可縮」は用いてよい。\\
+(2) 10文字をホモトピー型で分類せよ。（$E-V+1$ はファインマン図のループ数と同じ量である。第4章。）
+\end{problem}
+
+\begin{solution}
+(1) $G$ の極大な木 $T$（閉路をもたない連結部分グラフで包含について極大）をとる。$T$ はすべての頂点を含む：含まない頂点があれば、$G$ の連結性から $T$ の頂点と $T$ 外の頂点を結ぶ辺 $e$ があり、$T\cup e$ はより大きな木になって矛盾。$V$ 頂点の木の辺数は $V-1$（次数1の頂点と辺を1つずつ除く帰納法）。$T$ は可縮な部分複体なので $G\simeq G/T$ で、$G/T$ は1頂点と、$T$ に含まれない $E-(V-1)$ 本の辺がループになったグラフ、すなわち $\bigvee^{E-V+1}S^1$。
+
+(2) 各文字の $(V,E,E-V+1)$ は
+\begin{center}
+\begin{tabular}{c|cccccccccc}
+文字 & A & B & C & D & E & O & P & Q & R & X\\ \hline
+$V$ & 5 & 3 & 2 & 2 & 6 & 2 & 3 & 4 & 4 & 5\\
+$E$ & 5 & 4 & 1 & 2 & 5 & 2 & 3 & 4 & 4 & 4\\
+$E-V+1$ & 1 & 2 & 0 & 1 & 0 & 1 & 1 & 1 & 1 & 0
+\end{tabular}
+\end{center}
+（Q は円周が2頂点で2本の弧に分かれ、尾が交点で2本に分かれる。）よって
+可縮：C, E, X。$S^1$ とホモトピー同値：A, D, O, P, Q, R。$S^1\vee S^1$ とホモトピー同値：B。
+3つの類が互いに異なることは、基本群（$1$, $\Z$, 自由群 $F_2$；第2章）か、$H_1$ の階数 $0,1,2$（第4章）で区別される。
+\end{solution}
+
+\begin{problem}[難易度 D]\label{ch01-prob-vortex}
+2次元空間の複素スカラー場 $\phi$ が $V=\lambda(\lvert\phi\rvert^2-v^2)^2$ をもつとする。\\
+(1) \textbf{大域的 $U(1)$ の場合}：静的エネルギー $E=\int d^2x\,(\lvert\nabla\phi\rvert^2+V)$ の配位で、$r\ge r_0$ で $\phi=v\,e^{in\theta}$（$n\in\Z$）となるものを考える。$n\neq0$ ならば半径 $R$ の円板内のエネルギーが $R\to\infty$ で $2\pi n^2v^2\log(R/r_0)$ のように発散することを示せ。\\
+(2) \textbf{ゲージ化した場合}：$U(1)$ ゲージ場 $A$ を導入し、電荷 $q$ の場の共変微分 $D\phi=(d-iqA)\phi$ を用いて $E=\int d^2x\,(\tfrac12F_{12}^2+\lvert D\phi\rvert^2+V)$ とする。$r\ge r_0$ で $\phi=v\,e^{in\theta}$、$A=\tfrac nq\,d\theta$ とすれば、外側の領域からのエネルギーの寄与がゼロになることを示せ。このとき渦を貫く磁束 $\int F$ を求めよ。\\
+(3) 連続な時間発展 $\phi(\bm x,t)$ で、各時刻で遠方の円周 $\lvert\bm x\rvert=R$ 上 $\phi\neq0$ であるとき、$\theta\mapsto\phi(R,\theta,t)/\lvert\phi\rvert$ のホモトピー類は $t$ によらないことを説明せよ。\\
+(4) 遠方の円周上の写像 $\phi/\lvert\phi\rvert\colon S^1\to S^1$ が定値写像とホモトピックでない（巻き付き数 $n\neq0$）とき、$\phi$ は円板の内部で必ず零点をもつことを示せ。ただし「円板 $D^2$ 全体で定義された連続写像 $D^2\to S^1$ の境界への制限は定値写像とホモトピック」であることを証明の中で示すこと。
+\end{problem}
+
+\begin{solution}
+(1) 極座標で $\lvert\nabla\phi\rvert^2=\lvert\partial_r\phi\rvert^2+r^{-2}\lvert\partial_\theta\phi\rvert^2$。$r\ge r_0$ では $\partial_r\phi=0$、$\lvert\partial_\theta\phi\rvert=n v$、$V=0$ なので
+\[
+E(R)\ge\int_{r_0}^R\!\!\int_0^{2\pi}\frac{n^2v^2}{r^2}\,r\,d\theta\,dr=2\pi n^2v^2\log\frac{R}{r_0}\xrightarrow{R\to\infty}\infty .
+\]
+大域的な渦（例えば超流動の渦）のエネルギーは系の大きさの対数で発散する（デリックの定理と整合）。
+
+(2) $r\ge r_0$ で $d\phi=in\phi\,d\theta$、$qA=n\,d\theta$ なので $D\phi=i(n-n)\phi\,d\theta=0$。また $A=\tfrac nq d\theta$ は $r>0$ で $F=dA=\tfrac nq\,d(d\theta)=0$、$V=0$。よって外側のエネルギー密度はゼロで、エネルギーは芯の付近だけから来て有限になりうる（アブリコソフ・ニールセン・オレセン渦）。
+磁束は、内部で $A$ が滑らかに続くとしてストークスの定理より
+\[
+\int_{D_R}F=\oint_{\lvert x\rvert=R}A=\frac nq\oint d\theta=\frac{2\pi n}{q}.
+\]
+単位電荷 $q=1$ では $2\pi n$ で、磁束が量子化される（第5章のディラック量子化と同じ構造）。
+
+(3) $\Phi(\theta,t)=\phi(R,\theta,t)/\lvert\phi(R,\theta,t)\rvert$ は $S^1\times[t_0,t_1]$ 上連続（分母は零にならない）なので、$t_0$ での写像と $t_1$ での写像の間のホモトピーそのものである。よってホモトピー類（第2章で整数の巻き付き数と同一視される）は保存される。
+
+(4) まず主張：$g\colon D^2\to S^1$ が連続なら、$H(\theta,t)=g\bigl((1-t)e^{i\theta}\bigr)$ は $S^1\times I\to S^1$ の連続写像で、$H(\cdot,0)=g|_{\partial D^2}$、$H(\cdot,1)=g(0)$（定値）。よって境界への制限は定値写像とホモトピック。
+本題：$\phi$ が円板 $\lvert\bm x\rvert\le R$ 上で零点をもたなければ、$g=\phi/\lvert\phi\rvert$ は円板全体で連続な $S^1$ 値写像であり、上の主張より境界の写像は定値写像とホモトピック、すなわち $n=0$。対偶により、$n\neq0$ なら円板内に零点がある。これが渦の「芯」であり、そこでは $V(\phi)=\lambda v^4>0$ のエネルギーが必ず集中する。
+\end{solution}

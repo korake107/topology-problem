@@ -1,0 +1,902 @@
+%================================================
+\chapter{高次ホモトピー群と位相欠陥}\label{ch:03}
+% 20問
+%================================================
+
+\section{物理からの動機}
+
+\subsection*{欠陥を「囲む球面」}
+第1章で見たように、対称性 $G$ が $H$ に自発的に破れると、真空の全体は等質空間 $\mathcal{M}=G/H$（真空多様体）になる。宇宙の温度が下がって相転移が起こるとき、因果的に結びついていない領域どうしは真空 $\mathcal M$ のどの点を選ぶかを独立に決めるので、それらの境目では場が真空からはずれた「傷」が残りうる（\term{キブル機構}{Kibble mechanism}）。この傷を\term{位相欠陥}{topological defect}という。
+
+3次元空間の中の欠陥を、それを取り囲む小さな球面で囲んでみる（下図）。
+\begin{itemize}
+\item 面状の欠陥（\term{ドメイン・ウォール}{domain wall}）は、壁の両側の2点 $S^0$ で囲まれる。
+\item 線状の欠陥（\term{ひも}{string}、渦糸）は、それを1周する円周 $S^1$ で囲まれる。
+\item 点状の欠陥（\term{モノポール}{monopole}）は、それを包む球面 $S^2$ で囲まれる。
+\end{itemize}
+欠陥から離れたところでは場は真空 $\mathcal M$ の値をとるので、囲む球面上の場は写像 $S^{k-1}\to\mathcal{M}$ を定める（$k$ は欠陥の\term{余次元}{codimension}）。この写像が連続変形で定値写像に縮められないとき、欠陥はほどけない。こうして「$\mathcal M$ の中の $(k-1)$ 次元球面のホモトピー類」、すなわち\textbf{高次ホモトピー群} $\pi_{k-1}(\mathcal M)$ が欠陥を分類する。
+
+\begin{center}
+\begin{tikzpicture}[scale=0.95]
+  % (a) wall
+  \begin{scope}
+    \fill[blue!12] (-1.1,-1.3) -- (0.5,-0.7) -- (0.5,1.5) -- (-1.1,0.9) -- cycle;
+    \draw[blue!60!black,thick] (-1.1,-1.3) -- (0.5,-0.7) -- (0.5,1.5) -- (-1.1,0.9) -- cycle;
+    \node[vtx,red!70!black] at (-1.25,0.25) {}; \node[red!70!black,left] at (-1.25,0.25) {\footnotesize $-v$};
+    \node[vtx,red!70!black] at (0.9,0.0) {}; \node[red!70!black,right] at (0.9,0.0) {\footnotesize $+v$};
+    \draw[red!70!black,densely dotted] (-1.25,0.25) -- (0.9,0.0);
+    \node at (-0.3,-2.0) {\small (a) 壁：$S^0$，$\pi_0(\mathcal M)$};
+  \end{scope}
+  % (b) string
+  \begin{scope}[xshift=4.3cm]
+    \draw[ultra thick,blue!60!black] (0,-1.4) -- (0,-0.32);
+    \draw[ultra thick,blue!60!black] (0,-0.12) -- (0,1.6);
+    \draw[thick,red!70!black] (0,0) ellipse (1.0 and 0.35);
+    \draw[ultra thick,blue!60!black] (0,0.36) -- (0,0.5);
+    \draw[-{Stealth[length=2mm]},red!70!black,thick] (0.35,-0.33) -- (0.45,-0.31);
+    \node[red!70!black] at (1.35,0.25) {\footnotesize $S^1$};
+    \node at (0,-2.0) {\small (b) ひも：$S^1$，$\pi_1(\mathcal M)$};
+  \end{scope}
+  % (c) monopole
+  \begin{scope}[xshift=8.4cm]
+    \shade[ball color=red!8,opacity=0.7] (0,0) circle (1.1);
+    \draw[thick,red!70!black] (0,0) circle (1.1);
+    \draw[red!70!black,dashed] (1.1,0) arc (0:180:1.1 and 0.3);
+    \draw[red!70!black] (-1.1,0) arc (180:360:1.1 and 0.3);
+    \node[circle,fill=blue!60!black,inner sep=2pt] at (0,0) {};
+    \node[red!70!black] at (1.35,0.8) {\footnotesize $S^2$};
+    \node at (0,-2.0) {\small (c) モノポール：$S^2$，$\pi_2(\mathcal M)$};
+  \end{scope}
+\end{tikzpicture}
+\zucap{3次元空間の位相欠陥（青）と、それを囲む球面（赤）。囲む球面上の場の値は真空多様体 $\mathcal M$ への写像を与え、そのホモトピー類が欠陥の位相的電荷である。}
+\end{center}
+
+\subsection*{渦とハリネズミ}
+最も簡単な例を2つ挙げる。$U(1)\to1$ の破れ（$\mathcal M=S^1$）では、渦を1周すると位相 $\arg\phi$ が $2\pi n$ だけ回る。$n\in\Z=\pi_1(S^1)$ が渦の巻き数である（第2章）。
+
+\begin{center}
+\begin{tikzpicture}[scale=0.55]
+  \foreach \s/\xs/\lab in {1/0/{$n=+1$（渦）},-1/9/{$n=-1$（反渦）}}{
+    \begin{scope}[xshift=\xs cm]
+      \foreach \x in {-3,-2,...,3}{
+        \foreach \y in {-3,-2,...,3}{
+          \pgfmathsetmacro\rr{sqrt(\x*\x+\y*\y)}
+          \ifdim \rr pt>0.1pt
+            \pgfmathsetmacro\ang{\s*atan2(\y,\x)}
+            \draw[-{Stealth[length=1.4mm]},thick,blue!60!black] ($(\x,\y)-0.35*({cos(\ang)},{sin(\ang)})$) -- ($(\x,\y)+0.35*({cos(\ang)},{sin(\ang)})$);
+          \fi
+        }
+      }
+      \node[circle,fill=red!70!black,inner sep=2.2pt] at (0,0) {};
+      \draw[red!70!black,dashed] (0,0) circle (2.5);
+      \node at (0,-4.1) {\small \lab};
+    \end{scope}
+  }
+\end{tikzpicture}
+\zucap{2次元の $U(1)$ 渦。矢印は各点での $\phi/\lvert\phi\rvert\in S^1$ の向き（位相）。破線の円周を1周すると、矢印は左では正の向きに1回、右では負の向きに1回まわる。中心（赤）では $\phi=0$ でなければならない。}
+\end{center}
+
+$SU(2)$ の随伴表現のヒッグス場が $U(1)$ に破れる場合（ジョージ・グラショウ模型、$\mathcal M=S^2$）には、遠方で $\phi^a\to v\,x^a/r$ となる\term{ハリネズミ}{hedgehog}配位が可能である。遠方の球面 $S^2_\infty$ から真空の球面 $S^2$ への写像は恒等写像であり、写像度1をもつ。これが\term{トフーフト・ポリャコフ・モノポール}{'t Hooft--Polyakov monopole}であり、その磁荷は写像度で決まる。
+
+\begin{center}
+\begin{tikzpicture}[scale=1.0]
+  \shade[ball color=blue!8,opacity=0.6] (0,0) circle (1.6);
+  \draw[thick] (0,0) circle (1.6);
+  \draw[dashed,gray] (1.6,0) arc (0:180:1.6 and 0.4);
+  \draw[gray] (-1.6,0) arc (180:360:1.6 and 0.4);
+  \foreach \a in {0,30,...,330}{
+    \draw[-{Stealth[length=2mm]},thick,red!70!black] (\a:1.6) -- (\a:2.25);
+    \draw[-{Stealth[length=1.5mm]},red!50!black] (\a+15:0.55) -- (\a+15:0.95);
+  }
+  \node[circle,fill=black,inner sep=1.5pt] at (0,0) {};
+  \node at (0,-2.65) {\small $\phi^a(\bm x)\to v\,\hat x^a$};
+  \begin{scope}[xshift=6cm]
+    \shade[ball color=red!8,opacity=0.6] (0,0) circle (1.2);
+    \draw[thick] (0,0) circle (1.2);
+    \draw[dashed,gray] (1.2,0) arc (0:180:1.2 and 0.3);
+    \draw[gray] (-1.2,0) arc (180:360:1.2 and 0.3);
+    \node at (0,-2.0) {\small 真空多様体 $\{\phi^a\phi^a=v^2\}\cong S^2$};
+  \end{scope}
+  \draw[-{Stealth[length=2.5mm]},thick] (2.6,0.4) to[bend left=20] node[above] {\footnotesize $\hat{\bm x}\mapsto\bm\phi/v$（写像度 1）} (4.6,0.4);
+\end{tikzpicture}
+\zucap{ハリネズミ配位。空間の各方向 $\hat{\bm x}$ に、内部空間の同じ方向を向いたヒッグス場を対応させる。中心では $\phi=0$。}
+\end{center}
+
+\subsection*{欠陥以外の位相的な対象}
+\begin{itemize}
+\item \textbf{テクスチャー・スカーミオン}：空間全体で場が真空にあり、遠方で一定値に近づく配位は $\R^3\cup\{\infty\}\cong S^3\to\mathcal M$ を定め、$\pi_3(\mathcal M)$ で分類される。カイラル・ラグランジアン（$\mathcal M=SU(2)\cong S^3$）では、これが\term{スカーミオン}{Skyrmion}であり、その巻き付き数はバリオン数と解釈される。
+\item \textbf{インスタントン}：4次元ユークリッドのゲージ理論で作用が有限の配位は、遠方で $A\to i\,g\,dg^{-1}$（純ゲージ）となり、$g\colon S^3_\infty\to G$ が現れる。そのホモトピー類 $\pi_3(G)\cong\Z$ がインスタントン数を決める（詳細は第8章）。量子論では、真空が $\pi_3(G)$ の元で番号づけられ、$\theta$ 真空が生じる。
+\item \textbf{2次元のソリトン・ホップ粒子}：2次元の $O(3)$ 模型の場 $\bm n\colon\R^2\cup\{\infty\}\to S^2$ は $\pi_2(S^2)=\Z$ で分類され（\term{ランプ}{lump}、磁性体のスカーミオン）、3次元では $\bm n\colon S^3\to S^2$ が $\pi_3(S^2)=\Z$（ホップ写像）で分類される（\term{ホップ粒子}{hopfion}）。
+\item \textbf{大域的アノマリー}：$\pi_4(SU(2))=\Z_2$ は、ウィッテンの $SU(2)$ アノマリー（第9章）の源である。
+\end{itemize}
+本章では、これらを統一的に扱う道具として高次ホモトピー群 $\pi_n$ を導入し、ファイブレーションの長完全列を使って $\pi_n(G/H)$ を計算する方法を学ぶ。
+
+\section{基本事項のまとめ}
+
+\subsection{高次ホモトピー群}
+
+\begin{mydef}{ホモトピー群}{ch03-pin}
+$n\ge1$ とし、$I^n=[0,1]^n$、$\partial I^n$ をその境界とする。基点 $x_0\in X$ に対し、連続写像 $f\colon(I^n,\partial I^n)\to(X,x_0)$（境界を $x_0$ に写す写像）を、境界を $x_0$ に固定したままのホモトピーで同一視した類の集合を $\pi_n(X,x_0)$ と書く。積を
+\[
+(f+g)(s_1,\dots,s_n)=\begin{cases}f(2s_1,s_2,\dots,s_n)&(s_1\le\tfrac12)\\ g(2s_1-1,s_2,\dots,s_n)&(s_1\ge\tfrac12)\end{cases}
+\]
+で定めると $\pi_n(X,x_0)$ は群になり、これを $n$ 次の\term{ホモトピー群}{homotopy group}という。$n=1$ は基本群（第2章）である。また $\pi_0(X)$ は弧状連結成分の集合を表す（一般には群ではない）。
+\end{mydef}
+$I^n/\partial I^n\cong S^n$ なので、$\pi_n(X,x_0)$ は基点付き写像 $(S^n,*)\to(X,x_0)$ の基点付きホモトピー類の集合 $[S^n,X]_*$ と同じである。物理で現れる「遠方で一定値 $x_0$ に近づく $\R^n$ 上の場」は、まさにこの元である（第1章の立体射影）。
+
+\begin{mythm}{$n\ge2$ で $\pi_n$ は可換群}{ch03-abelian}
+$n\ge2$ のとき $\pi_n(X,x_0)$ は可換群である。
+\end{mythm}
+証明の要点は、$n\ge2$ では「別の座標方向」に $f$ と $g$ を並べ替える余地があることである（\term{エックマン・ヒルトンの議論}{Eckmann--Hilton argument}、問題 \ref{ch03-prob-abelian}）。下図のように、境界（基点に写る部分）を広げて $f$ と $g$ をそれぞれ小さな箱に縮め、箱どうしをすれ違わせれば $f+g\simeq g+f$ が得られる。$n=1$ では箱が1次元の線分上に並ぶのですれ違えない。
+
+\begin{center}
+\begin{tikzpicture}[scale=0.9]
+  \foreach \i/\lab in {0/1,1/2,2/3,3/4}{
+    \draw[thick] (3.3*\i,0) rectangle +(2.4,2.4);
+  }
+  % 1
+  \fill[blue!15] (0,0) rectangle (1.2,2.4); \fill[red!15] (1.2,0) rectangle (2.4,2.4);
+  \draw (1.2,0) -- (1.2,2.4); \node at (0.6,1.2) {$f$}; \node at (1.8,1.2) {$g$};
+  % 2
+  \fill[blue!15] (3.3+0.2,0.25) rectangle (3.3+1.0,1.05); \node at (3.3+0.6,0.65) {$f$};
+  \fill[red!15] (3.3+1.4,1.35) rectangle (3.3+2.2,2.15); \node at (3.3+1.8,1.75) {$g$};
+  % 3
+  \fill[blue!15] (6.6+1.4,0.25) rectangle (6.6+2.2,1.05); \node at (6.6+1.8,0.65) {$f$};
+  \fill[red!15] (6.6+0.2,1.35) rectangle (6.6+1.0,2.15); \node at (6.6+0.6,1.75) {$g$};
+  \draw[-{Stealth[length=1.8mm]},thick,blue!60!black] (6.6+0.6,0.65) -- (6.6+1.5,0.65);
+  \draw[-{Stealth[length=1.8mm]},thick,red!60!black] (6.6+1.8,1.75) -- (6.6+0.9,1.75);
+  % 4
+  \fill[red!15] (9.9,0) rectangle (9.9+1.2,2.4); \fill[blue!15] (9.9+1.2,0) rectangle (9.9+2.4,2.4);
+  \draw (9.9+1.2,0) -- (9.9+1.2,2.4); \node at (9.9+0.6,1.2) {$g$}; \node at (9.9+1.8,1.2) {$f$};
+  \foreach \i in {0,1,2}{ \node at (3.3*\i+2.85,1.2) {$\simeq$}; }
+\end{tikzpicture}
+\zucap{$\pi_2$ の可換性（エックマン・ヒルトン）。白い部分はすべて基点 $x_0$ に写る。$f$ と $g$ の箱を縦方向にずらしてから横方向にすれ違わせると、$f+g\simeq g+f$。}
+\end{center}
+
+\begin{myprop}{ホモトピー群の基本性質}{ch03-pinprop}
+\begin{enumerate}
+\item \textbf{関手性}：$\phi\colon X\to Y$（$\phi(x_0)=y_0$）は準同型 $\phi_*\colon\pi_n(X,x_0)\to\pi_n(Y,y_0)$ を誘導し、$(\psi\circ\phi)_*=\psi_*\phi_*$。ホモトピー同値は同型を誘導する。特に可縮な空間では $\pi_n=0$。
+\item \textbf{積}：$\pi_n(X\times Y)\cong\pi_n(X)\times\pi_n(Y)$。
+\item \textbf{被覆}：$p\colon\tilde X\to X$ が被覆写像なら、$n\ge2$ で $p_*\colon\pi_n(\tilde X)\to\pi_n(X)$ は同型。特に $\pi_n(S^1)=\pi_n(\R)=0$（$n\ge2$）、$\pi_n(\RP^m)\cong\pi_n(S^m)$（$n\ge2$）、$\pi_n(SO(3))\cong\pi_n(SU(2))$（$n\ge2$）。
+\item \textbf{基点の取り替えと $\pi_1$ の作用}：$X$ が弧状連結なら $\pi_n(X,x_0)$ の同型類は基点によらない。ただし同型は基点を結ぶ道のホモトピー類に依存し、特に閉じた道により $\pi_1(X,x_0)$ が $\pi_n(X,x_0)$ に作用する。基点を固定しない写像 $S^n\to X$ のホモトピー類 $[S^n,X]$ は $\pi_n(X)$ をこの作用で割った集合と一致する。$X$ が単連結なら $[S^n,X]=\pi_n(X)$。
+\end{enumerate}
+\end{myprop}
+最後の性質は物理的に重要である。基点付きの写像は「遠方で決まった値に近づく配位」に、基点なしの写像は「欠陥を囲む球面上の場」（どの値を基準にするかは決まっていない）に対応する。$\pi_1(\mathcal M)\neq0$ の場合、点欠陥の電荷は $\pi_2(\mathcal M)$ の元そのものではなく、ひもの周りを回すことによる作用の軌道で決まる（問題 \ref{ch03-prob-nematic}）。
+
+\subsection{球面のホモトピー群と写像度}
+
+\begin{mythm}{球面のホモトピー群（低次）}{ch03-spheres}
+\begin{enumerate}
+\item $k<n$ ならば $\pi_k(S^n)=0$。
+\item $\pi_n(S^n)\cong\Z$ であり、同型は写像度で与えられる（ホップの定理）。
+\item $\pi_3(S^2)\cong\Z$ であり、ホップ写像 $h\colon S^3\to S^2$ が生成元である。
+\end{enumerate}
+\end{mythm}
+(1) の直観的な理由：$k<n$ なら $f\colon S^k\to S^n$ は（滑らかに近似すれば）全射になりえず、1点 $p$ を取りこぼす。$S^n\setminus\{p\}\cong\R^n$ は可縮なので $f$ は定値写像に縮む。(3) は本章で長完全列から導く。より高い次数については次の表を引用する（計算には本書の範囲を超える道具を要する）。
+\begin{center}
+\renewcommand{\arraystretch}{1.15}
+\begin{tabular}{c|ccccc}
+ & $\pi_1$ & $\pi_2$ & $\pi_3$ & $\pi_4$ & $\pi_5$\\ \hline
+$S^1$ & $\Z$ & $0$ & $0$ & $0$ & $0$\\
+$S^2$ & $0$ & $\Z$ & $\Z$ & $\Z_2$ & $\Z_2$\\
+$S^3$ & $0$ & $0$ & $\Z$ & $\Z_2$ & $\Z_2$\\
+$S^4$ & $0$ & $0$ & $0$ & $\Z$ & $\Z_2$
+\end{tabular}
+\end{center}
+
+\begin{mydef}{写像度}{ch03-degree}
+$M,N$ を向きのついた連結な閉 $n$ 次元多様体、$f\colon M\to N$ を滑らかな写像とする。\term{正則値}{regular value} $y\in N$（$f^{-1}(y)$ のすべての点で微分 $df$ が同型）に対し
+\[
+\deg f=\sum_{x\in f^{-1}(y)}\operatorname{sign}\det(df_x)
+\]
+を\term{写像度}{degree}という。これは $y$ の選び方によらない整数で、ホモトピー不変である。$\int_N\Omega\neq0$ をみたす任意の $n$ 形式 $\Omega$ に対し
+\[
+\deg f=\frac{\int_Mf^*\Omega}{\int_N\Omega}.
+\]
+\end{mydef}
+
+\begin{myex}{$S^2$ への写像の写像度}{ch03-deg2}
+$S^2\subset\R^3$ に外向き法線で向きを入れると、面積形式は
+\[
+\omega=\tfrac12\epsilon_{abc}\,n^a\,dn^b\wedge dn^c=\sin\theta\,d\theta\wedge d\varphi,\qquad\int_{S^2}\omega=4\pi .
+\]
+したがって $\bm n\colon\R^2\cup\{\infty\}\to S^2$（$\R^2$ の向きは $dx^1\wedge dx^2$）の写像度は
+\begin{equation}
+Q=\frac{1}{8\pi}\int\epsilon_{abc}\,n^a\,dn^b\wedge dn^c=\frac1{4\pi}\int d^2x\;\bm n\cdot(\partial_1\bm n\times\partial_2\bm n)\label{eq:ch03-Q}
+\end{equation}
+である（問題 \ref{ch03-prob-degint}）。被積分関数は\term{位相的電荷密度}{topological charge density}と呼ばれる。
+\end{myex}
+
+\subsection{ファイブレーションの長完全列}
+高次ホモトピー群の計算の主な道具は次の定理である。ファイバー束の一般論は第7章で扱い、ここでは道具として認める。
+
+\begin{mythm}{ホモトピー長完全列}{ch03-les}
+$p\colon E\to B$ をファイバー束（より一般にファイブレーション）、$B$ を弧状連結、$F=p^{-1}(b_0)$ をファイバー、$e_0\in F$ とする。このとき完全列
+\[
+\begin{aligned}\cdots\to\pi_n(F)\xrightarrow{i_*}\pi_n(E)\xrightarrow{p_*}\pi_n(B)&\xrightarrow{\partial}\pi_{n-1}(F)\xrightarrow{i_*}\pi_{n-1}(E)\\&\to\cdots\to\pi_0(F)\to\pi_0(E)\to0\end{aligned}
+\]
+がある。ここで\term{完全}{exact}とは、各所で「前の写像の像＝次の写像の核」となることをいう。
+\end{mythm}
+\begin{note}
+境界写像 $\partial$ の作り方：$[f]\in\pi_n(B)$ を $f\colon(I^n,\partial I^n)\to(B,b_0)$ で表す。$I^n=I^{n-1}\times I$ と見て、$I^{n-1}\times\{0\}\cup\partial I^{n-1}\times I$ を $e_0$ に写すように $f$ を $\tilde f\colon I^n\to E$ に持ち上げる（ホモトピー持ち上げ性質）。$p\circ\tilde f=f$ なので上面 $I^{n-1}\times\{1\}$ は $F$ に写り、これが $\pi_{n-1}(F)$ の元 $\partial[f]$ を与える。直観的には「$B$ の球面を $E$ に持ち上げようとして閉じきらない分が、ファイバーの中の1つ低い次元の球面として残る」。
+\end{note}
+
+$G$ をリー群、$H$ を閉部分群とすると、$H\to G\to G/H$ はファイバー束である。コンパクト・リー群について $\pi_2(G)=0$ が成り立つ（下の表）ので、次を得る。
+
+\begin{mythm}{等質空間のホモトピー群}{ch03-GH}
+$G$ を連結なコンパクト・リー群、$H$ を閉部分群とすると、完全列
+\[
+0=\pi_2(G)\to\pi_2(G/H)\xrightarrow{\partial}\pi_1(H)\xrightarrow{i_*}\pi_1(G)\to\pi_1(G/H)\xrightarrow{\partial}\pi_0(H)\to0
+\]
+がある。したがって
+\[
+\pi_2(G/H)\cong\ker\bigl(\pi_1(H)\to\pi_1(G)\bigr).
+\]
+特に $G$ が単連結なら $\pi_2(G/H)\cong\pi_1(H)$、$\pi_1(G/H)\cong\pi_0(H)$ である。また $\pi_2(H)=0$ より $\pi_3(G/H)\cong\coker\bigl(\pi_3(H)\to\pi_3(G)\bigr)$。
+\end{mythm}
+$G$ が単連結でないときは、普遍被覆 $\tilde G$ と $H$ の逆像 $\tilde H$ をとれば $G/H=\tilde G/\tilde H$ なので、単連結の場合に帰着できる。物理的には、$\pi_2(G/H)\cong\pi_1(H)$ は「モノポールの磁荷は、破れずに残った群 $H$ のループで測られる」ことを意味する（$H$ の $U(1)$ 因子が磁荷の量子化を与える）。
+
+\begin{myex}{ホップ・ファイブレーションと複素射影空間}{ch03-hopf}
+第1章のホップ写像 $h(z)^a=z^\dagger\sigma^az$ は $S^1\to S^3\xrightarrow{h}S^2$ というファイバー束であり（ファイバーは状態の全体位相 $\{e^{i\alpha}z\}$）、長完全列は
+\begin{center}
+\begin{tikzcd}[column sep=small]
+\pi_3(S^1)=0\arrow[r]&\pi_3(S^3)\arrow[r,"h_*"]&\pi_3(S^2)\arrow[r]&\pi_2(S^1)=0,\\
+\pi_2(S^3)=0\arrow[r]&\pi_2(S^2)\arrow[r,"\partial"]&\pi_1(S^1)\arrow[r]&\pi_1(S^3)=0
+\end{tikzcd}
+\end{center}
+となる。よって $\pi_3(S^2)\cong\pi_3(S^3)\cong\Z$（生成元は $h$）、$\pi_2(S^2)\cong\pi_1(S^1)\cong\Z$。同様に $S^1\to S^{2n+1}\to\CP^n$ から、$\pi_2(\CP^n)\cong\Z$、$\pi_1(\CP^n)=0$、$k\ge3$ で $\pi_k(\CP^n)\cong\pi_k(S^{2n+1})$。
+\end{myex}
+
+\subsection{リー群のホモトピー群}
+\begin{myprop}{コンパクト・リー群のホモトピー群}{ch03-liegroups}
+\begin{enumerate}
+\item 任意のコンパクト・リー群 $G$ について $\pi_2(G)=0$（ボットの定理。本書では証明しない）。
+\item コンパクトな単純リー群 $G$ について $\pi_3(G)\cong\Z$。$SU(2)\subset G$ を（指数1の）適当な埋め込みで選ぶと、包含が $\pi_3$ の同型を誘導する。
+\item 主なリー群について次の表が成り立つ。
+\end{enumerate}
+\begin{center}
+\renewcommand{\arraystretch}{1.15}
+\begin{tabular}{l|cccc}
+$G$ & $\pi_1$ & $\pi_2$ & $\pi_3$ & $\pi_4$\\ \hline
+$U(1)$ & $\Z$ & $0$ & $0$ & $0$\\
+$SU(2)\cong Sp(1)\cong S^3$ & $0$ & $0$ & $\Z$ & $\Z_2$\\
+$SU(N)$ ($N\ge3$) & $0$ & $0$ & $\Z$ & $0$\\
+$U(N)$ ($N\ge3$) & $\Z$ & $0$ & $\Z$ & $0$\\
+$Sp(N)$ ($N\ge2$) & $0$ & $0$ & $\Z$ & $\Z_2$\\
+$SO(3)$ & $\Z_2$ & $0$ & $\Z$ & $\Z_2$\\
+$SO(4)$ & $\Z_2$ & $0$ & $\Z\oplus\Z$ & $\Z_2\oplus\Z_2$\\
+$SO(5)$ & $\Z_2$ & $0$ & $\Z$ & $\Z_2$\\
+$SO(N)$ ($N\ge6$) & $\Z_2$ & $0$ & $\Z$ & $0$
+\end{tabular}
+\end{center}
+\end{myprop}
+$\pi_3$ の生成元は、写像 $g\colon S^3\to G$ の\term{巻き付き数}{winding number}
+\begin{equation}
+w(g)=\frac{1}{24\pi^2}\int_{S^3}\tr\bigl(g^{-1}dg\bigr)^3\label{eq:ch03-w}
+\end{equation}
+で検出される（$SU(N)$ の基本表現でトレースをとる。$S^3$ の向きは恒等写像 $S^3\cong SU(2)$ で $w=1$ となるように選ぶ。記法と規約を参照）。$w$ は整数で、各点ごとの積について加法的 $w(gh)=w(g)+w(h)$ である（問題 \ref{ch03-prob-wadd}）。$\pi_4(SU(2))=\Z_2$ は第9章でウィッテンのアノマリーに用いる。$\pi_k$ の周期性（ボット周期性）は第11章で扱う。
+
+\subsection{位相欠陥の分類}
+
+\begin{mythm}{欠陥の分類}{ch03-defects}
+$d$ 次元空間で、真空多様体 $\mathcal M$ をもつ理論を考える。
+\begin{enumerate}
+\item 余次元 $k$ の欠陥（$d=3$ では $k=1,2,3$ がそれぞれ壁・ひも・点）は、それを囲む $S^{k-1}$ 上の場のホモトピー類、すなわち $[S^{k-1},\mathcal M]$（$\mathcal M$ が単連結なら $\pi_{k-1}(\mathcal M)$）で分類される。$\pi_{k-1}(\mathcal M)\neq0$ が位相的に安定な欠陥の存在の必要条件である。
+\item 特異点をもたず遠方で一定値に近づく配位（テクスチャー、スカーミオン）は $\pi_d(\mathcal M)$ で分類される。
+\item 4次元ユークリッドのゲージ理論で作用有限の配位は、遠方の純ゲージ $A\to i\,g\,dg^{-1}$ を通して $\pi_3(G)$ で分類される。
+\end{enumerate}
+\end{mythm}
+ここで「位相的に安定」とは、エネルギー有限のまま連続変形でほどけないという意味であり、エネルギー的に安定な静的解が実際に存在するかどうかは力学の問題である（デリックの定理、問題 \ref{ch03-prob-skyrmion}）。
+
+\begin{physbox}[：対称性の破れと位相欠陥]
+\begin{center}
+\renewcommand{\arraystretch}{1.2}\small
+\begin{tabular}{p{0.29\linewidth}p{0.15\linewidth}p{0.17\linewidth}p{0.25\linewidth}}
+模型（破れ方） & $\mathcal M$ & 非自明な $\pi_k$ & 位相的対象（3次元空間）\\ \hline
+実スカラー $\phi^4$：$\Z_2\to1$ & $\{\pm v\}$ & $\pi_0$ & ドメイン・ウォール\\
+複素スカラー：$U(1)\to1$ & $S^1$ & $\pi_1=\Z$ & ひも（ANO 渦、宇宙ひも）\\
+ジョージ・グラショウ：$SU(2)\to U(1)$（随伴） & $S^2$ & $\pi_2=\pi_3=\Z$ & モノポール\\
+電弱：$SU(2)_L\times U(1)_Y\to U(1)_{\mathrm{em}}$ & $S^3$ & $\pi_3=\Z$ のみ & 安定な欠陥なし（テクスチャー）\\
+カイラル：$SU(2)_L\times SU(2)_R\to SU(2)_V$ & $SU(2)\cong S^3$ & $\pi_3=\Z$ & スカーミオン（バリオン）\\
+$SU(5)$ 大統一：$\to(SU(3)\times SU(2)\times U(1))/\Z_6$ & 12次元 & $\pi_2=\Z$ & 大統一モノポール\\
+一軸ネマチック液晶 & $\RP^2$ & $\pi_1=\Z_2$, $\pi_2=\Z$ & 回位、点欠陥\\
+$O(3)$ 模型（$\bm n\in S^2$） & $S^2$ & $\pi_2,\pi_3$ & 2次元ランプ、3次元ホップ粒子\\
+4次元ユークリッド $SU(N)$ ゲージ理論 & --- & $\pi_3(G)=\Z$ & インスタントン、$\theta$ 真空
+\end{tabular}
+\end{center}
+\end{physbox}
+
+\subsection{トフーフト・ポリャコフ・モノポールの磁荷}
+本書の規約（$D=d-iA$、生成子 $T^a=\sigma^a/2$、結合定数は $A$ に吸収）で、$SU(2)$ 随伴ヒッグス場 $\phi=\phi^aT^a$ の共変微分と場の強さは
+\[
+(D_\mu\phi)^a=\partial_\mu\phi^a+\epsilon^{abc}A^b_\mu\phi^c,\qquad F^a_{\mu\nu}=\partial_\mu A^a_\nu-\partial_\nu A^a_\mu+\epsilon^{abc}A^b_\mu A^c_\nu
+\]
+である（$D\phi=d\phi-i[A,\phi]$ と $[T^a,T^b]=i\epsilon^{abc}T^c$ から）。$\hat\phi=\phi/\lvert\phi\rvert$ の定義される領域で、\term{トフーフトの場の強さ}{'t Hooft field strength}
+\[
+\mathcal F_{\mu\nu}=\hat\phi^aF^a_{\mu\nu}-\epsilon^{abc}\hat\phi^aD_\mu\hat\phi^bD_\nu\hat\phi^c
+\]
+はゲージ不変であり、真空（$D\hat\phi=0$）では破れずに残る $U(1)$（$\hat\phi\cdot T$ で生成される）の場の強さに一致する。直接計算により
+\begin{equation}
+\mathcal F=d(\hat\phi^aA^a)-\tfrac12\epsilon^{abc}\hat\phi^a\,d\hat\phi^b\wedge d\hat\phi^c\label{eq:ch03-thooft}
+\end{equation}
+が示せる。
+
+\begin{myprop}{磁荷は写像度で決まる}{ch03-magcharge}
+遠方の球面 $S^2_\infty$（外向き法線で向きづける）上で $\phi$ が真空にあり $D\hat\phi\to0$ とすると
+\[
+\int_{S^2_\infty}\mathcal F=-4\pi\,\deg\bigl(\hat\phi\colon S^2_\infty\to S^2\bigr).
+\]
+特にハリネズミ $\hat\phi^a=\hat x^a$ では磁場は $\bm B=-\hat{\bm x}/r^2$ で、磁束は $-4\pi$。
+\end{myprop}
+\begin{note}
+(\ref{eq:ch03-thooft}) の第1項は閉曲面上で積分すると消え、第2項は $-\omega$ の引き戻しなので、例 \ref{ex:ch03-deg2} から $-4\pi\deg\hat\phi$ を得る。ハリネズミの場合を直接確かめる：$D_i\hat\phi=0$ となる漸近形は $A^a_i=\epsilon_{aij}x^j/r^2$ であり、これから $\hat\phi^aF^a_{ij}=-2\epsilon_{aij}x^a/r^3+\epsilon_{ijk}x^k/r^3=-\epsilon_{ijk}x^k/r^3$、$B_k=\tfrac12\epsilon_{kij}\mathcal F_{ij}=-x^k/r^3$。符号は $D=d-iA$ という規約による（$D=d+iA$ なら逆符号）。
+\end{note}
+$U(1)$ の電荷は $\hat\phi\cdot T$ の固有値で測られ、$W^\pm$ ボソンは電荷 $\pm1$、もし基本表現（2重項）の場があれば電荷 $\pm\tfrac12$ をもつ。ディラックの条件 $q\int\mathcal F\in2\pi\Z$ は $q=\tfrac12$ でもみたされる（$\tfrac12\cdot4\pi=2\pi$）。結合定数 $e$ をあらわに書けば磁荷は $4\pi/e$ の整数倍である。ディラック・モノポールとの関係は第5章、モノポール束としての解釈は第7章で扱う。
+
+\section{問題}
+
+\subsection{ホモトピー群と写像度}
+
+\begin{problem}[難易度 B]\label{ch03-prob-abelian}
+$n\ge2$ とし、$f,g\colon(I^n,\partial I^n)\to(X,x_0)$ に対し、第 $i$ 座標方向に並べた和 $f+_ig$（$i=1,2$）を定義 \ref{def:ch03-pin} と同様に定める。定値写像を $c$ とする。\\
+(1) 写像として $(f+_1g)+_2(h+_1k)=(f+_2h)+_1(g+_2k)$ が成り立つことを確かめよ。\\
+(2) (1) を用いて、ホモトピー類について $[f]+_1[g]=[f]+_2[g]=[g]+_1[f]$ を示し、$\pi_n(X,x_0)$ が可換であることを結論せよ。\\
+(3) $n=1$ でこの議論が使えない理由を述べよ。
+\end{problem}
+
+\begin{solution}
+(1) 両辺とも、$I^n$ を $s_1\le\frac12$ / $s_1\ge\frac12$ と $s_2\le\frac12$ / $s_2\ge\frac12$ で4つに分け、
+左下 $(s_1,s_2\le\frac12)$ に $f$、右下に $g$、左上に $h$、右上に $k$ を（それぞれの小区画を $I^n$ に拡大して）置いた写像である。実際、左辺で $s_2\le\frac12$ の部分は $(f+_1g)(s_1,2s_2,\dots)$ で、$s_1\le\frac12$ なら $f(2s_1,2s_2,\dots)$。右辺で $s_1\le\frac12$ の部分は $(f+_2h)(2s_1,s_2,\dots)$ で、$s_2\le\frac12$ なら $f(2s_1,2s_2,\dots)$。他の区画も同様に一致する。
+
+(2) $[c]$ は $+_1$, $+_2$ どちらについても単位元である（$f+_ic\simeq f$ は区画を伸縮するホモトピーで示せる）。(1) で $h=k=c$ や $f=k=c$ などを代入すると
+\begin{align*}
+[f]+_1[g]&=([f]+_2[c])+_1([c]+_2[g])=([f]+_1[c])+_2([c]+_1[g])=[f]+_2[g],\\
+[f]+_1[g]&=([c]+_2[f])+_1([g]+_2[c])=([c]+_1[g])+_2([f]+_1[c])=[g]+_2[f].
+\end{align*}
+第1式から2つの演算は一致し、それを第2式に使えば $[f]+_1[g]=[g]+_1[f]$。よって $\pi_n(X,x_0)$ は可換である。図（本章の基本事項）は、この議論を「箱をすれ違わせる」連続変形として描いたものである。
+
+(3) $n=1$ では座標が1つしかなく、$+_2$ が定義できない。幾何学的には、区間 $I$ 上に並んだ $f$ と $g$ の区画は、端点を基点に固定したまま互いに追い越すことができない。実際、基本群は一般に非可換である（例：8の字の基本群は自由群 $F_2$、第2章）。物理的には、2次元以上の「欠陥の配置空間」では欠陥どうしが空間の余分な方向を使って避け合えるが、ひも（$\pi_1$）はそうできない、という違いに対応する。
+\end{solution}
+
+\begin{problem}[難易度 B]\label{ch03-prob-degint}
+単位ベクトル場 $\bm n=(n^1,n^2,n^3)$、$\lvert\bm n\rvert=1$ について考える。\\
+(1) 2形式 $\omega=\frac12\epsilon_{abc}n^a\,dn^b\wedge dn^c$ を $S^2$ の極座標 $\bm n=(\sin\theta\cos\varphi,\sin\theta\sin\varphi,\cos\theta)$ で表すと $\sin\theta\,d\theta\wedge d\varphi$ になることを示せ。\\
+(2) $\bm n\colon\R^2\to S^2$ が遠方で一定値に近づくとき、$Q=\frac1{4\pi}\int d^2x\,\bm n\cdot(\partial_1\bm n\times\partial_2\bm n)$ は写像度に等しいことを説明せよ。\\
+(3) 微小変形 $\bm n\to\bm n+\delta\bm n$（$\bm n\cdot\delta\bm n=0$、$\delta\bm n$ は遠方で $0$）に対し、$q=\bm n\cdot(\partial_1\bm n\times\partial_2\bm n)$ の変化が全微分
+\[
+\delta q=\partial_1\bigl(\bm n\cdot(\delta\bm n\times\partial_2\bm n)\bigr)+\partial_2\bigl(\bm n\cdot(\partial_1\bm n\times\delta\bm n)\bigr)
+\]
+になることを示し、$Q$ が連続変形で不変であることを直接確かめよ。
+\end{problem}
+
+\begin{solution}
+(1) $\bm e_r=\bm n$、$\bm e_\theta=\partial_\theta\bm n$、$\bm e_\varphi=\partial_\varphi\bm n/\sin\theta$ は右手系の正規直交基底（$\bm e_r\times\bm e_\theta=\bm e_\varphi$）。$d\bm n=\bm e_\theta\,d\theta+\sin\theta\,\bm e_\varphi\,d\varphi$ なので、外積とウェッジ積を組み合わせた $(d\bm n\times d\bm n)^a=\epsilon_{abc}dn^b\wedge dn^c$ は
+\[
+d\bm n\times d\bm n=\sin\theta\,(\bm e_\theta\times\bm e_\varphi)\,d\theta\wedge d\varphi+\sin\theta\,(\bm e_\varphi\times\bm e_\theta)\,d\varphi\wedge d\theta=2\sin\theta\,\bm e_r\,d\theta\wedge d\varphi .
+\]
+よって $\omega=\frac12\bm n\cdot(d\bm n\times d\bm n)=\sin\theta\,d\theta\wedge d\varphi$。これは外向き法線で向きづけた $S^2$ の面積形式で、$\int_{S^2}\omega=4\pi$。
+
+(2) 立体射影により $\R^2\cup\{\infty\}\cong S^2$ であり、遠方で一定値に近づく $\bm n$ は連続写像 $S^2\to S^2$ に拡張される（第1章）。$\bm n^*\omega=\frac12\epsilon_{abc}n^a(\partial_in^b\partial_jn^c)dx^i\wedge dx^j=\bm n\cdot(\partial_1\bm n\times\partial_2\bm n)\,dx^1\wedge dx^2$ なので、定義 \ref{def:ch03-degree} の積分公式から $Q=\frac{1}{4\pi}\int\bm n^*\omega=\deg\bm n$。（$\infty$ の1点は測度ゼロで積分に寄与しない。）
+
+(3) $q=\epsilon_{abc}n^a\partial_1n^b\partial_2n^c$ を変分すると3項が出る。\\
+第1項 $\epsilon_{abc}\delta n^a\partial_1n^b\partial_2n^c=\delta\bm n\cdot(\partial_1\bm n\times\partial_2\bm n)$：$\partial_i\bm n\perp\bm n$ なので $\partial_1\bm n\times\partial_2\bm n\parallel\bm n$ で、$\delta\bm n\perp\bm n$ より $0$。\\
+第2・3項は部分積分の形に書き換える：
+\begin{align*}
+\epsilon_{abc}n^a\partial_1\delta n^b\partial_2n^c&=\partial_1(\epsilon_{abc}n^a\delta n^b\partial_2n^c)-\epsilon_{abc}\partial_1n^a\delta n^b\partial_2n^c-\epsilon_{abc}n^a\delta n^b\partial_1\partial_2n^c,\\
+\epsilon_{abc}n^a\partial_1n^b\partial_2\delta n^c&=\partial_2(\epsilon_{abc}n^a\partial_1n^b\delta n^c)-\epsilon_{abc}\partial_2n^a\partial_1n^b\delta n^c-\epsilon_{abc}n^a\partial_1\partial_2n^b\delta n^c .
+\end{align*}
+2階微分の項の和は $-\epsilon_{abc}n^a(\delta n^bX^c+X^b\delta n^c)=0$（$X=\partial_1\partial_2\bm n$、$b,c$ について反対称）。残りの2項はどちらも $\delta\bm n\cdot(\partial_2\bm n\times\partial_1\bm n)$ に等しく、第1項と同じ理由で $0$。したがって
+\[
+\delta q=\partial_1\bigl(\bm n\cdot(\delta\bm n\times\partial_2\bm n)\bigr)+\partial_2\bigl(\bm n\cdot(\partial_1\bm n\times\delta\bm n)\bigr),
+\]
+$\delta\bm n$ が遠方で消えれば $\delta Q=0$。$Q$ は局所的な変形で変わらない。$Q$ が整数であること（(2)）と合わせると、$Q$ は連続変形で不変な位相的電荷である。
+\end{solution}
+
+\begin{problem}[難易度 A]\label{ch03-prob-degex}
+(1) ハリネズミ写像 $\bm n(\bm x)=\bm x/\lvert\bm x\rvert$ を $S^2_R=\{\lvert\bm x\rvert=R\}$（外向き法線で向きづける）から $S^2$ への写像とみて、その写像度が $1$ であることを示せ。また $\bm n(\bm x)=-\bm x/\lvert\bm x\rvert$ の写像度を求めよ。\\
+(2) $n\in\Z$ に対し、極座標で $f_n(\theta,\varphi)=(\theta,n\varphi)$ と定める写像 $f_n\colon S^2\to S^2$ が連続であることを確かめ、その写像度が $n$ であることを、正則値の逆像を数える方法と積分公式の両方で示せ。
+\end{problem}
+
+\begin{solution}
+(1) $\bm x\mapsto\bm x/R$ は向きを保つ微分同相 $S^2_R\to S^2$ なので、写像度は $1$（任意の点の逆像は1点で、そこで向きを保つ）。対蹠写像 $\bm x\mapsto-\bm x$ は $\R^3$ の向きを反転し（$\det(-\mathbf 1_3)=-1$）、外向き法線を外向き法線に写すので、$S^2$ の向きを反転する。よって $-\bm x/\lvert\bm x\rvert$ の写像度は $-1$。一般に $S^n$ の対蹠写像の写像度は $(-1)^{n+1}$ である。
+
+(2) 連続性：$\theta=0,\pi$（極）では $\varphi$ によらず極に写るので、$f_n$ は極でも連続である。\\
+逆像を数える方法：$n\ge1$ のとき、極でない点 $(\theta_0,\varphi_0)$ の逆像は $(\theta_0,(\varphi_0+2\pi j)/n)$、$j=0,\dots,n-1$ の $n$ 点。局所座標 $(\theta,\varphi)$ でヤコビ行列は $\operatorname{diag}(1,n)$ で行列式 $n>0$、どの点でも向きを保つので $\deg f_n=n$。$n\le-1$ では $\lvert n\rvert$ 点で各々行列式 $n<0$ なので $\deg f_n=-\lvert n\rvert=n$。$n=0$ では像は経線1本で全射でないので、像にない点を正則値にとれば逆像は空で $\deg f_0=0$。\\
+積分公式：$f_n^*(\sin\theta\,d\theta\wedge d\varphi)=\sin\theta\,d\theta\wedge n\,d\varphi$ なので
+\[
+\deg f_n=\frac{1}{4\pi}\int_0^\pi\!\!\int_0^{2\pi}n\sin\theta\,d\varphi\,d\theta=\frac{n\cdot4\pi}{4\pi}=n .
+\]
+同じ結果は、$\bm n=(\sin\theta\cos n\varphi,\sin\theta\sin n\varphi,\cos\theta)$ について $\partial_\theta\bm n\times\partial_\varphi\bm n=n\sin\theta\,\bm n$ を確かめても得られる。物理的には、赤道に沿って $\bm n$ の水平成分が $n$ 回まわる「巻き数 $n$ のハリネズミ」であり、ジョージ・グラショウ模型では磁荷 $n$ 単位のモノポールの漸近形を与える。
+\end{solution}
+
+\begin{problem}[難易度 A]\label{ch03-prob-table}
+命題 \ref{prop:ch03-pinprop} と定理 \ref{thm:ch03-spheres} を用いて次を求めよ。\\
+(1) $\pi_n(S^1)$（$n\ge2$）、$\pi_n(T^2)$（$n\ge2$）。\\
+(2) $\pi_2(\RP^2)$、$\pi_3(SO(3))$、$\pi_2(S^2\times S^1)$。\\
+(3) $\pi_1(S^3)$、$\pi_2(S^3)$、$\pi_3(SU(2)\times SU(2))$。\\
+(4) 2次元トーラス上のスカラー場 $\phi\colon T^2\to S^1$ は渦をもちうるが、$S^1$ 値の場で「点状のソリトン」（$\pi_2$ で分類される対象）がありえないのはなぜか。
+\end{problem}
+
+\begin{solution}
+(1) $\R\to S^1$ は被覆で $\R$ は可縮なので、$n\ge2$ で $\pi_n(S^1)\cong\pi_n(\R)=0$。$T^2=S^1\times S^1$ なので $\pi_n(T^2)=\pi_n(S^1)^2=0$（$n\ge2$）。（$\R^2\to T^2$ も被覆である。）
+
+(2) $S^2\to\RP^2$ は2重被覆なので $\pi_2(\RP^2)\cong\pi_2(S^2)\cong\Z$。$SU(2)\to SO(3)$ も2重被覆で $\pi_3(SO(3))\cong\pi_3(S^3)\cong\Z$。積の公式より $\pi_2(S^2\times S^1)\cong\pi_2(S^2)\oplus\pi_2(S^1)=\Z$。
+
+(3) $k<n$ で $\pi_k(S^n)=0$ なので $\pi_1(S^3)=\pi_2(S^3)=0$。$\pi_3(SU(2)\times SU(2))\cong\Z\oplus\Z$。$SO(4)=(SU(2)\times SU(2))/\Z_2$ なので被覆により $\pi_3(SO(4))\cong\Z\oplus\Z$ でもある（命題 \ref{prop:ch03-liegroups} の表）。カイラル対称性 $SU(2)_L\times SU(2)_R$ のゲージ変換を考えると、左右それぞれに独立な巻き付き数がある。
+
+(4) $\pi_2(S^1)=0$ なので、点を囲む $S^1$ 値の場（2次元では点を囲むのは $S^1$ で、これは渦を与える $\pi_1$）は別として、「空間全体を覆う」タイプの $S^2\to S^1$ の配位はすべて自明である。より具体的には、$S^1$ 値の場の位相的電荷は各ループに沿った巻き数（$\pi_1$ や $H^1$ の情報）だけであり、$\pi_2$ 型の電荷は存在しない。点状のソリトン（ランプ）を作るには、$\pi_2\neq0$ の標的（例えば $S^2$）が必要である。
+\end{solution}
+
+\subsection{長完全列と真空多様体}
+
+\begin{problem}[難易度 B]\label{ch03-prob-su2u1}
+(1) $G=SU(2)$、$H=U(1)=\{\exp(i\alpha\sigma^3)\}$ として、定理 \ref{thm:ch03-GH} の完全列から $\pi_2(SU(2)/U(1))\cong\Z$、$\pi_1(SU(2)/U(1))=0$ を導け。\\
+(2) $U(\theta,\varphi)=e^{-i\varphi\sigma^3/2}e^{-i\theta\sigma^2/2}e^{i\varphi\sigma^3/2}$ とおく。$U\sigma^3U^\dagger=\hat{\bm x}\cdot\bm\sigma$（$\hat{\bm x}$ は極座標 $(\theta,\varphi)$ の単位ベクトル）を示せ。$U$ は北極 $\theta=0$ では $\varphi$ によらないが、南極 $\theta=\pi$ では $U=-i\sigma^2e^{i\varphi\sigma^3}$ となることを示し、境界写像 $\partial$ がハリネズミを $\pi_1(H)$ の生成元に写すことを説明せよ。\\
+(3) 同じ $S^2$ を $SO(3)/SO(2)$ と見ると、$\pi_2(S^2)\cong\ker\bigl(\pi_1(SO(2))\to\pi_1(SO(3))\bigr)=2\Z$ となる。(2) との関係を説明せよ。
+\end{problem}
+
+\begin{solution}
+(1) 定理 \ref{thm:ch03-GH} の完全列は
+\[
+0=\pi_2(SU(2))\to\pi_2(G/H)\xrightarrow{\partial}\pi_1(U(1))\to\pi_1(SU(2))=0\to\pi_1(G/H)\to\pi_0(U(1))=0 .
+\]
+よって $\partial$ は同型 $\pi_2(G/H)\cong\pi_1(U(1))\cong\Z$、$\pi_1(G/H)=0$。もちろん $G/H\cong S^2$（第1章）と整合する。
+
+(2) $e^{-i\alpha X}Ye^{i\alpha X}$ の展開と $[\sigma^2,\sigma^3]=2i\sigma^1$、$[\sigma^3,\sigma^1]=2i\sigma^2$ を用いると
+\[
+e^{-i\theta\sigma^2/2}\sigma^3e^{i\theta\sigma^2/2}=\sigma^3\cos\theta+\sigma^1\sin\theta,\qquad e^{-i\varphi\sigma^3/2}\sigma^1e^{i\varphi\sigma^3/2}=\sigma^1\cos\varphi+\sigma^2\sin\varphi .
+\]
+$e^{i\varphi\sigma^3/2}$ は $\sigma^3$ と可換なので
+\[
+U\sigma^3U^\dagger=\sin\theta\cos\varphi\,\sigma^1+\sin\theta\sin\varphi\,\sigma^2+\cos\theta\,\sigma^3=\hat{\bm x}\cdot\bm\sigma .
+\]
+つまり $U$ はハリネズミ $\hat{\bm x}\mapsto\hat{\bm x}\cdot\bm\sigma\in G/H$ の $G$ への持ち上げである。$\theta=0$ では $U=e^{-i\varphi\sigma^3/2}e^{i\varphi\sigma^3/2}=\mathbf 1$。$\theta=\pi$ では $e^{-i\pi\sigma^2/2}=-i\sigma^2$ で、$\sigma^2$ と $\sigma^3$ が反可換なので $e^{-i\varphi\sigma^3/2}\sigma^2=\sigma^2e^{i\varphi\sigma^3/2}$。よって
+\[
+U(\pi,\varphi)=-i\sigma^2\,e^{i\varphi\sigma^3/2}e^{i\varphi\sigma^3/2}=-i\sigma^2e^{i\varphi\sigma^3}.
+\]
+北極（基点）付近では持ち上げは一意だが、南極では $\varphi$ に依存してしまい、そのずれは $H$ のループ $\varphi\mapsto e^{i\varphi\sigma^3}$（$\varphi\in[0,2\pi]$）である。これは $H=\{e^{i\alpha\sigma^3}\}$ をちょうど1周するので $\pi_1(H)$ の生成元である。境界写像 $\partial$ の構成（基本事項の【注】）はまさに「持ち上げの閉じきらない分」を取り出すものなので、$\partial[\text{ハリネズミ}]=\pm1$（符号は向きの約束による）。
+
+(3) $SO(3)$ では $\pi_1(SO(2))=\Z\to\pi_1(SO(3))=\Z_2$ は2で割った余りをとる写像（$z$ 軸まわりの $2\pi$ 回転は $SO(3)$ の非自明なループ）なので、核は $2\Z$。一方 (2) のループ $e^{i\varphi\sigma^3}$ を $SO(3)$ に写すと、随伴作用は $z$ 軸まわりの角度 $2\varphi$ の回転なので、$\varphi\in[0,2\pi]$ で $SO(2)$ を2周する。したがってハリネズミ（$\pi_2(S^2)$ の生成元）は $\pi_1(SO(2))$ では $2$ に対応し、像が $2\Z$ になることと整合する。物理的には、$SO(2)$ のループを単位とすると最小のモノポールは「2単位」の磁荷をもつ。これは命題 \ref{prop:ch03-magcharge} の磁束 $4\pi$ が、整数電荷の場（随伴表現など）に対するディラックの最小値 $2\pi$ の2倍であることに対応する。奇数の元は $\pi_1(SO(3))=\Z_2$ の非自明な元に写り、滑らかな配位としては実現されない（ゲージ束のトポロジーとしての解釈は第7章）。
+\end{solution}
+
+\begin{problem}[難易度 A]\label{ch03-prob-ew}
+電弱理論の真空多様体は $\mathcal M\cong(SU(2)_L\times U(1)_Y)/U(1)_{\mathrm{em}}\cong S^3$ である（第1章）。\\
+(1) $\pi_0(\mathcal M)$、$\pi_1(\mathcal M)$、$\pi_2(\mathcal M)$、$\pi_3(\mathcal M)$ を求め、電弱理論には位相的に安定なドメイン・ウォール、ひも、モノポールがないことを結論せよ。\\
+(2) 定理 \ref{thm:ch03-GH} の最後の主張を用いて、$\pi_3(\mathcal M)$ を $G=SU(2)\times U(1)$、$H=U(1)$ から計算せよ。
+\end{problem}
+
+\begin{solution}
+(1) $S^3$ は弧状連結なので $\pi_0$ は1点、$k<3$ で $\pi_k(S^3)=0$ なので $\pi_1=\pi_2=0$、$\pi_3(S^3)=\Z$。定理 \ref{thm:ch03-defects} より、壁（$\pi_0$）、ひも（$\pi_1$）、モノポール（$\pi_2$）はいずれも位相的に安定ではない。電弱理論で議論される $Z$ ひもなどは、存在するとしても位相的には保護されず、力学的な理由でのみ準安定になりうる。$\pi_3=\Z$ はテクスチャー（3次元空間全体の配位）を許すが、ゲージ理論ではゲージ場が巻き付きをほどくことができ、安定なソリトンにはならない（大きなゲージ変換との関係は第8章）。
+
+(2) $\pi_2(H)=0$ なので完全列 $\pi_3(H)\to\pi_3(G)\to\pi_3(G/H)\to\pi_2(H)=0$ より $\pi_3(G/H)\cong\coker(\pi_3(H)\to\pi_3(G))$。$\pi_3(U(1))=0$、$\pi_3(SU(2)\times U(1))=\pi_3(SU(2))\oplus\pi_3(U(1))=\Z$ なので $\pi_3(\mathcal M)\cong\Z$。(1) と一致する。
+\end{solution}
+
+\begin{problem}[難易度 C]\label{ch03-prob-gut}
+$SU(5)$ 大統一理論で、随伴ヒッグスが $\operatorname{diag}(2,2,2,-3,-3)$ に比例する期待値をもつと、残る群は
+\[
+H=\{\operatorname{diag}(A,B):A\in U(3),\ B\in U(2),\ \det A\det B=1\}
+\]
+となる。\\
+(1) $\Phi(U_3,U_2,e^{i\alpha})=\operatorname{diag}(e^{2i\alpha}U_3,\ e^{-3i\alpha}U_2)$ が全射準同型 $SU(3)\times SU(2)\times U(1)\to H$ を与え、その核が $\Z_6$ であることを示せ。すなわち $H\cong(SU(3)\times SU(2)\times U(1))/\Z_6$。\\
+(2) $\pi_1(H)\cong\Z$ を示し、$\pi_2(SU(5)/H)\cong\Z$ を導け（大統一モノポール）。\\
+(3) $SU(5)$ のループ $\gamma(t)=\operatorname{diag}(1,1,e^{2\pi it},1,e^{-2\pi it})$（$t\in[0,1]$）が $\pi_1(H)$ の生成元であること、および超電荷のループ $\alpha\colon0\to2\pi$（$U_3=U_2=\mathbf 1$）が生成元の6倍であることを示せ。この結果は最小の大統一モノポールの磁荷について何を意味するか。
+\end{problem}
+
+\begin{solution}
+(1) $\Phi$ は準同型。$\det(e^{2i\alpha}U_3)\det(e^{-3i\alpha}U_2)=e^{6i\alpha}e^{-6i\alpha}=1$ なので像は $H$ に入る。全射：$\operatorname{diag}(A,B)\in H$ に対し $\det B=e^{-6i\alpha}$ となる $\alpha$ を選び、$U_2=e^{3i\alpha}B$、$U_3=e^{-2i\alpha}A$ とおくと $\det U_2=e^{6i\alpha}\det B=1$、$\det U_3=e^{-6i\alpha}\det A=\det B\det A=1$。核：$e^{2i\alpha}U_3=\mathbf 1$、$e^{-3i\alpha}U_2=\mathbf 1$ より $U_3=e^{-2i\alpha}\mathbf 1_3\in SU(3)$ で $e^{-6i\alpha}=1$、$U_2=e^{3i\alpha}\mathbf 1_2\in SU(2)$ で $e^{6i\alpha}=1$。よって $\alpha\in\frac{2\pi}{6}\Z$ で、核は $\{(e^{-2i\alpha}\mathbf 1,e^{3i\alpha}\mathbf 1,e^{i\alpha}):e^{6i\alpha}=1\}\cong\Z_6$。
+
+(2) 準同型 $\det_2\colon H\to U(1)$, $\operatorname{diag}(A,B)\mapsto\det B$ は全射で、核は $\det A=\det B=1$ の部分 $SU(3)\times SU(2)$。リー群の全射準同型はファイバー束なので長完全列
+\[
+\pi_1(SU(3)\times SU(2))=0\to\pi_1(H)\to\pi_1(U(1))=\Z\to\pi_0(SU(3)\times SU(2))=0
+\]
+より $\pi_1(H)\cong\Z$（同型は $\det B$ の巻き数）。$SU(5)$ は単連結で $\pi_2(SU(5))=0$ なので、定理 \ref{thm:ch03-GH} より $\pi_2(SU(5)/H)\cong\pi_1(H)\cong\Z$。
+
+(3) $\gamma(t)$ では $B=\operatorname{diag}(1,e^{-2\pi it})$、$\det B=e^{-2\pi it}$ はちょうど1回（負の向きに）まわるので、$\gamma$ は $\pi_1(H)$ の生成元（の逆）である。一方、超電荷のループ $\Phi(\mathbf 1,\mathbf 1,e^{i\alpha})=\operatorname{diag}(e^{2i\alpha}\mathbf 1_3,e^{-3i\alpha}\mathbf 1_2)$ では $\det B=e^{-6i\alpha}$ が $\alpha\in[0,2\pi]$ で6回まわるので、生成元の6倍（符号を除く）。
+
+別の見方：$\gamma(t)=\Phi(U_3(t),U_2(t),e^{i\pi t/3})$ と書ける。実際 $U_3(t)=\exp(2\pi it\operatorname{diag}(-\frac13,-\frac13,\frac23))$、$U_2(t)=\exp(2\pi it\operatorname{diag}(\frac12,-\frac12))$ とすると
+\[
+e^{2\pi it/3}U_3(t)=\operatorname{diag}(1,1,e^{2\pi it}),\qquad e^{-i\pi t}U_2(t)=\operatorname{diag}(1,e^{-2\pi it}).
+\]
+$t=1$ で $(U_3,U_2,e^{i\alpha})=(e^{-2\pi i/3}\mathbf 1,-\mathbf 1,e^{i\pi/3})$ は $\Z_6$ の生成元であり、$\gamma$ は $SU(3)\times SU(2)\times U(1)$ では閉じず、$\Z_6$ の分だけずれた道である。超電荷の $\frac16$ 周、色の中心 $\Z_3$、弱アイソスピンの中心 $\Z_2$ を組み合わせて初めて $H$ の中で閉じる。
+
+物理的意味：モノポールの磁荷は $\pi_2(SU(5)/H)\cong\pi_1(H)$ の元で、最小のモノポールは $\gamma$ に対応する。その生成子 $\operatorname{diag}(0,0,1,0,-1)$ は超電荷 $Y=\operatorname{diag}(-\frac13,-\frac13,-\frac13,\frac12,\frac12)$、色の生成子 $\operatorname{diag}(-\frac13,-\frac13,\frac23,0,0)$、弱アイソスピン $\operatorname{diag}(0,0,0,\frac12,-\frac12)$ の組み合わせ $-Y+(\text{色})+(T_3)$ であり、最小の大統一モノポールは純粋に $U(1)_Y$ の磁荷ではなく、色磁荷と弱磁荷も帯びる。超電荷だけで測れば、$Y$ 方向の磁束は「$U(1)_Y$ のディラック・モノポールとして素朴に期待される最小値」の $\frac16$ であり、これは分数電荷 $Y\in\frac16\Z$ をもつクォークとディラック条件が整合するための仕組みである。キブル機構でこのモノポールが大量に生成されることが宇宙論の\term{モノポール問題}{monopole problem}である。
+\end{solution}
+
+\begin{problem}[難易度 C]\label{ch03-prob-nematic}
+ネマチック液晶の配向は、棒状分子の向き $\bm n\in S^2$ を $\bm n\sim-\bm n$ で同一視したもの（\term{ダイレクター}{director}）で表される。オーダー・パラメータは $Q_{ij}=n_in_j-\frac13\delta_{ij}$ で、$SO(3)$ は $Q\mapsto RQR^{\mathsf T}$ と作用する。\\
+(1) $Q_0=\operatorname{diag}(-\frac13,-\frac13,\frac23)$ の固定部分群 $H\subset SO(3)$ が $O(2)$ と同型で2つの連結成分をもつこと、および真空多様体が $\RP^2$ であることを示せ。\\
+(2) $SU(2)\to SO(3)$ による $H$ の逆像 $\tilde H$ を用いて、$\pi_1(\RP^2)\cong\Z_2$、$\pi_2(\RP^2)\cong\Z$ を導け。物理的には何が存在するか。\\
+(3) $\pi_1(\RP^2)$ の非自明な元は $\pi_2(\RP^2)\cong\Z$ に $N\mapsto-N$ と作用することを説明し、点欠陥の電荷は $\lvert N\rvert$ でしか意味をもたないことを論ぜよ。\\
+(4) \term{二軸性ネマチック}{biaxial nematic}では $Q_0=\operatorname{diag}(a,b,c)$（相異なる、和は $0$）である。$\pi_1(\mathcal M)$ が四元数群 $Q_8=\{\pm1,\pm i\sigma^1,\pm i\sigma^2,\pm i\sigma^3\}$ となることを示し、線欠陥の種類が何通りあるかを答えよ。
+\end{problem}
+
+\begin{solution}
+(1) $RQ_0R^{\mathsf T}=Q_0$ は $R$ が $Q_0$ と可換、すなわち固有空間 $\R^2\oplus\R e_3$ を保つことと同値で、$R=\operatorname{diag}(r,\epsilon)$、$r\in O(2)$、$\epsilon=\pm1$。$\det R=1$ より $\epsilon=\det r$。$r\mapsto\operatorname{diag}(r,\det r)$ は同型 $O(2)\cong H$ で、$\det r=\pm1$ の2成分をもつ。軌道は $\{n n^{\mathsf T}-\frac13\mathbf 1:\bm n\in S^2\}$ で、$nn^{\mathsf T}$ は $\pm\bm n$ を同一視したもの（直線への射影）なので $\mathcal M\cong S^2/(\bm n\sim-\bm n)=\RP^2$。軌道・固定部分群定理より $\mathcal M\cong SO(3)/O(2)$。
+
+(2) $\tilde H$ の単位元成分は $\{e^{i\alpha\sigma^3}\}\cong U(1)$ で、もう1つの成分は $i\sigma^1e^{i\alpha\sigma^3}$（$x$ 軸まわりの $\pi$ 回転の持ち上げ、$\bm n\to-\bm n$ に対応）。$\mathcal M=SU(2)/\tilde H$ で $SU(2)$ は単連結なので、定理 \ref{thm:ch03-GH} より
+\[
+\pi_1(\RP^2)\cong\pi_0(\tilde H)\cong\Z_2,\qquad\pi_2(\RP^2)\cong\pi_1(\tilde H)\cong\pi_1(U(1))\cong\Z .
+\]
+（被覆 $S^2\to\RP^2$ からも $\pi_2(\RP^2)\cong\pi_2(S^2)$ が得られる。）物理的には、$\pi_1=\Z_2$ はダイレクターが1周で $\bm n\to-\bm n$ と半回転する線欠陥（\term{回位}{disclination}、強さ $\frac12$）を、$\pi_2=\Z$ はハリネズミ型の点欠陥を与える。回位は2本合わさると消えうる（$\Z_2$）。
+
+(3) $\pi_1(\RP^2)$ の非自明なループを $S^2$ に持ち上げると、$\bm n$ から $-\bm n$ への道になる。点欠陥を囲む球面上の配位をこのループに沿って運ぶと、持ち上げた写像 $S^2\to S^2$ は対蹠写像と合成されたものに変わる。対蹠写像の写像度は $-1$（問題 \ref{ch03-prob-degex}）なので、作用は $N\mapsto-N$。基点を決めない欠陥の分類は $[S^2,\RP^2]=\pi_2(\RP^2)/\pi_1(\RP^2)=\Z/(N\sim-N)$、すなわち $\lvert N\rvert\in\{0,1,2,\dots\}$ である。実際、ハリネズミ $\bm n=\hat{\bm x}$ と $\bm n=-\hat{\bm x}$ はダイレクターとしては同一の配位である。物理的には、点欠陥を回位のまわりに1周させると電荷の符号が反転する。
+
+(4) 固定部分群は、$Q_0$ の3つの（相異なる固有値の）固有軸をそれぞれ保つ回転、すなわち $D_2=\{\mathbf 1,\operatorname{diag}(1,-1,-1),\operatorname{diag}(-1,1,-1),\operatorname{diag}(-1,-1,1)\}\cong\Z_2\times\Z_2$（各座標軸まわりの $\pi$ 回転）。$x^k$ 軸まわりの $\pi$ 回転の $SU(2)$ での持ち上げは $\pm e^{-i\pi\sigma^k/2}=\mp i\sigma^k$ なので、$\tilde H=Q_8$。$SU(2)$ は単連結なので $\pi_1(\mathcal M)\cong\pi_0(\tilde H)=Q_8$（$\tilde H$ は離散）。これは非可換であり（$(i\sigma^1)(i\sigma^2)=-(i\sigma^2)(i\sigma^1)$）、線欠陥は基点を固定しないので共役類で分類される。$Q_8$ の共役類は $\{1\}$, $\{-1\}$, $\{\pm i\sigma^1\}$, $\{\pm i\sigma^2\}$, $\{\pm i\sigma^3\}$ の5つなので、自明なものを含めて5種類（非自明なものは4種類）。非可換性の帰結として、$i\sigma^1$ 型と $i\sigma^2$ 型の線欠陥は互いをすり抜けられず、交差させると交換子 $-1$ に対応する線欠陥でつながれる。
+\end{solution}
+
+\begin{problem}[難易度 B]\label{ch03-prob-kink}
+1次元空間の実スカラー場で、作用 $S=\int d^2x\,\bigl[-\frac12\partial_\mu\phi\,\partial^\mu\phi-V(\phi)\bigr]$、$V=\frac\lambda4(\phi^2-v^2)^2$ をもつものを考える（計量は mostly plus）。\\
+(1) 真空多様体 $\mathcal M$ と $\pi_0(\mathcal M)$ を求め、静的エネルギー $E=\int dx\,[\frac12\phi'^2+V]$ が有限の配位が4つのセクターに分かれることを示せ。\\
+(2) $E=\int dx\,\frac12\bigl(\phi'\mp\sqrt{2V}\bigr)^2\pm\int dx\,\phi'\sqrt{2V}$ と書き直して、$\phi(\mp\infty)=\mp v$ のセクターで $E\ge\frac{2\sqrt2}{3}\sqrt\lambda\,v^3$ を示せ。等号を与える解（\term{キンク}{kink}）を求め、真空のまわりの粒子の質量 $m$ を用いて $\phi=v\tanh(mx/2)$、壁の張力が $\sigma=m^3/(3\lambda)$ となることを示せ。\\
+(3) 3次元空間ではこの解は何を表すか。
+\begin{center}
+\begin{tikzpicture}[scale=0.9]
+  \draw[-{Stealth[length=2mm]}] (-3.6,0) -- (3.8,0) node[right] {$x$};
+  \draw[-{Stealth[length=2mm]}] (0,-1.5) -- (0,1.7) node[above] {$\phi$};
+  \draw[dashed,gray] (-3.5,1) -- (3.5,1) node[right] {\footnotesize $+v$};
+  \draw[dashed,gray] (-3.5,-1) -- (3.5,-1) node[right] {\footnotesize $-v$};
+  \draw[very thick,blue!70!black,domain=-3.5:3.5,samples=80,smooth] plot (\x,{tanh(1.2*\x)});
+  \fill[red!40,opacity=0.5,domain=-2.5:2.5,samples=80,smooth] plot (\x,{1.2/(cosh(1.2*\x)^4)}) -- (2.5,0) -- (-2.5,0) -- cycle;
+  \node[red!60!black] at (1.5,0.75) {\footnotesize エネルギー密度};
+  \node[blue!70!black] at (-2.3,-0.65) {\footnotesize $v\tanh(mx/2)$};
+\end{tikzpicture}
+\zucap{キンク解（青）とそのエネルギー密度（赤、$\propto\cosh^{-4}(mx/2)$）。場は $x\to\mp\infty$ で異なる真空 $\mp v$ に近づき、その間でエネルギーが局在する。}
+\end{center}
+\end{problem}
+
+\begin{solution}
+(1) $V=0$ となるのは $\phi=\pm v$ なので $\mathcal M=\{-v,+v\}$、$\pi_0(\mathcal M)$ は2点からなる。$E<\infty$ には $x\to\pm\infty$ で $V\to0$ が必要で、$\phi(\pm\infty)\in\{\pm v\}$。左右の値の組 $(\phi(-\infty),\phi(+\infty))$ は連続な時間発展で変わらない（変えるには無限遠までの無限大のエネルギーが必要）ので、4つのセクター $(\pm v,\pm v)$ に分かれる。$(-v,+v)$ がキンク、$(+v,-v)$ が反キンク、残り2つが真空セクターである。
+
+(2) $\frac12(\phi'\mp\sqrt{2V})^2=\frac12\phi'^2+V\mp\phi'\sqrt{2V}$ なので書き直しは恒等式。$\sqrt{2V}=\sqrt{\lambda/2}\,\lvert v^2-\phi^2\rvert$ で、$W(\phi)=\sqrt{\lambda/2}(v^2\phi-\phi^3/3)$ とおくと、$\lvert\phi\rvert\le v$ の範囲で $\phi'\sqrt{2V}=\frac{d}{dx}W(\phi(x))$。キンク・セクター（$\phi(-\infty)=-v$、$\phi(\infty)=v$）で上の符号をとると
+\[
+E\ge W(v)-W(-v)=\sqrt{\frac\lambda2}\cdot2\Bigl(v^3-\frac{v^3}3\Bigr)=\sqrt{\frac\lambda2}\cdot\frac{4v^3}{3}=\frac{2\sqrt2}{3}\sqrt\lambda\,v^3 .
+\]
+（$\lvert\phi\rvert>v$ となる区間があっても、そこでは被積分関数がさらに大きくなるだけで下限は変わらない。）等号は $\phi'=\sqrt{2V}=\sqrt{\lambda/2}(v^2-\phi^2)$ のとき。$\phi=v\tanh(kx)$ とおくと $\phi'=vk(1-\tanh^2kx)=\frac kv(v^2-\phi^2)$ なので $k=v\sqrt{\lambda/2}$。一方 $V''(\phi)=\lambda(3\phi^2-v^2)$ より $m^2=V''(v)=2\lambda v^2$、$m=v\sqrt{2\lambda}=2k$。よって $\phi=v\tanh(mx/2)$。張力（エネルギー）は $\sigma=\frac{2\sqrt2}{3}\sqrt\lambda v^3$ で、$m^3=2\sqrt2\lambda^{3/2}v^3$ を使うと $\sigma=\frac{m^3}{3\lambda}$。弱結合 $\lambda\ll1$ で $\sigma\gg m$ となり、キンクは素粒子より重い古典的な対象である。
+
+(3) 3次元空間では $\phi(x,y,z)=v\tanh(mx/2)$ は $x=0$ の平面に局在した\term{ドメイン・ウォール}{domain wall}であり、単位面積あたりのエネルギーが $\sigma$ である。壁は2つの真空 $\pm v$ の領域を隔て、壁を横切る線分の両端点（$S^0$）が $\mathcal M$ の異なる成分に写ることが位相的安定性の理由である（$\pi_0(\mathcal M)$）。宇宙論では、離散対称性の自発的破れがあると壁が生じ、そのエネルギーが宇宙を支配しうる（ドメイン・ウォール問題）。
+\end{solution}
+
+\begin{problem}[難易度 B]\label{ch03-prob-sun}
+(1) $SU(N)$ は $\C^N$ の単位球面 $S^{2N-1}$ に推移的に作用し、$e_N=(0,\dots,0,1)^{\mathsf T}$ の固定部分群が $SU(N-1)$ であることを示せ（$N\ge2$）。\\
+(2) ファイバー束 $SU(N-1)\to SU(N)\to S^{2N-1}$ の長完全列と $SU(2)\cong S^3$ から、帰納法で $\pi_1(SU(N))=\pi_2(SU(N))=0$、$\pi_3(SU(N))\cong\Z$ を示せ。\\
+(3) 左上の $2\times2$ ブロックへの埋め込み $SU(2)\hookrightarrow SU(N)$ が $\pi_3$ の同型を誘導することを示し、ゲージ理論での意味（$SU(2)$ のインスタントンを $SU(N)$ に埋め込むこと）を述べよ。
+\end{problem}
+
+\begin{solution}
+(1) 単位ベクトル $u$ に対し、$u$ を最後の列とする正規直交基底をグラム・シュミットで作ってユニタリ行列 $U$ とし、第1列に位相を掛けて $\det U=1$ にすれば $Ue_N=u$。よって推移的。$Ue_N=e_N$ なら最後の列は $e_N$、ユニタリ性から最後の行も $e_N^{\mathsf T}$ で $U=\operatorname{diag}(U',1)$、$\det U'=1$。固定部分群は $SU(N-1)$ であり、$SU(N)/SU(N-1)\cong S^{2N-1}$。
+
+(2) 長完全列の一部
+\[
+\pi_{k+1}(S^{2N-1})\to\pi_k(SU(N-1))\xrightarrow{i_*}\pi_k(SU(N))\to\pi_k(S^{2N-1}).
+\]
+$N\ge3$ では $2N-1\ge5$ なので $k\le3$ に対し $\pi_k(S^{2N-1})=\pi_{k+1}(S^{2N-1})=0$（$k+1\le4<5$）。よって $i_*$ は $k\le3$ で同型 $\pi_k(SU(N-1))\cong\pi_k(SU(N))$。$SU(2)\cong S^3$ から $\pi_1=\pi_2=0$、$\pi_3=\Z$ で、帰納法により任意の $N\ge2$ で同じ。
+
+(3) (2) の同型はすべて左上ブロックへの包含 $SU(N-1)\hookrightarrow SU(N)$ が誘導するものなので、合成 $SU(2)\hookrightarrow SU(N)$ も $\pi_3$ の同型を誘導する。また $g$ を左上ブロックに埋め込んでもトレース $\tr(g^{-1}dg)^3$ は変わらない（残りのブロックは単位行列で $g^{-1}dg$ の寄与ゼロ）ので、巻き付き数 $w$ も保たれる。ゲージ理論では、$SU(2)$ のインスタントン数1の配位（BPST インスタントン、第8章）を $SU(N)$ に埋め込むと、$SU(N)$ のインスタントン数1の配位が得られ、それが $\pi_3(SU(N))$ の生成元を実現する。$\pi_3(SU(N))=\Z$ であって $\Z^{N-1}$ などではないので、$SU(N)$ でもインスタントン数は1つの整数であり、$\theta$ パラメータも1つである。
+\end{solution}
+
+\begin{problem}[難易度 C]\label{ch03-prob-so3}
+$p\colon SU(2)\to SO(3)$ を2重被覆（随伴表現）とする。\\
+(1) ファイブレーション $\Z_2\to SU(2)\to SO(3)$ の長完全列から、$n\ge2$ で $p_*\colon\pi_n(SU(2))\to\pi_n(SO(3))$ が同型であることを示せ。特に $\pi_3(SO(3))\cong\Z$ で、$[p]$ が生成元である。また、任意の $f\colon S^3\to SO(3)$ は $f=p\circ g$ と持ち上がることを説明せよ。\\
+(2) $p$ を向きのついた3次元多様体の間の写像 $S^3\to SO(3)\cong\RP^3$ とみると、その写像度は $2$ であることを示せ。「$\pi_3$ の生成元」と「写像度1」が一致しないのはなぜか。\\
+(3) 随伴表現の生成子 $(T^a_{\mathrm{adj}})_{bc}=-i\epsilon_{abc}$ でトレースをとった量 $w_{\mathrm{adj}}(f)=\frac{1}{24\pi^2}\int\tr_{\mathrm{adj}}(f^{-1}df)^3$ について、$w_{\mathrm{adj}}(p\circ g)=4\,w(g)$ を示せ。（ヒント：表現 $R$ について $\tr_R(T^a[T^b,T^c])=if^{bca}T(R)$、$\tr_R(T^aT^b)=T(R)\delta^{ab}$。）
+\end{problem}
+
+\begin{solution}
+(1) 長完全列 $\pi_n(\Z_2)\to\pi_n(SU(2))\xrightarrow{p_*}\pi_n(SO(3))\to\pi_{n-1}(\Z_2)$ で、離散空間 $\Z_2$ の $\pi_k$（$k\ge1$）は自明（連結な $S^k$ からの基点付き写像は定値）。$n\ge2$ なら両端が $0$ で $p_*$ は同型。$\pi_3(SU(2))$ の生成元は $\id$ なので $p_*[\id]=[p]$ が $\pi_3(SO(3))$ の生成元。持ち上げ：$S^3$ は単連結なので、被覆空間の持ち上げ定理（第2章）により $f\colon S^3\to SO(3)$ は $g\colon S^3\to SU(2)$ に持ち上がり $f=p\circ g$。
+
+(2) $SO(3)$ の任意の点 $R$ の逆像は $\{U,-U\}$ の2点。$p$ は局所微分同相で、$p(-U)=p(U)$ より $p=p\circ(-\mathbf 1)$ であり、$U\mapsto-U$ は $\R^4$ の $-\mathbf 1_4$（$\det=+1$）の制限なので $S^3$ の向きを保つ。よって2点での局所的な符号は等しく、$SO(3)$ の向きを $p$ が向きを保つように選べば $\deg p=1+1=2$。$\pi_3$ の同型は群の同型であるが、写像度は $H_3$ への写像（フレヴィッツ写像 $\pi_3(SO(3))\to H_3(SO(3))\cong\Z$）で測った量であり、$SO(3)$ が単連結でないためこれが同型ではなく2倍写像になる。単連結な $S^3$ では両者は一致する。
+
+(3) 1形式 $\alpha=g^{-1}dg=\alpha^aT^a$（$T^a=\sigma^a/2$）は、随伴表現では $p\circ g$ について $(p\circ g)^{-1}d(p\circ g)=\alpha^aT^a_{\mathrm{adj}}$ となる（$p$ は準同型で、微分は随伴表現の生成子への写像）。任意の表現で、$\alpha^a\wedge\alpha^b\wedge\alpha^c$ は $a,b,c$ について完全反対称なので
+\[
+\tr_R(\alpha^3)=\alpha^a\alpha^b\alpha^c\tr_R(T^aT^bT^c)=\tfrac12\alpha^a\alpha^b\alpha^c\tr_R(T^a[T^b,T^c])=\tfrac{i}{2}f^{abc}T(R)\,\alpha^a\alpha^b\alpha^c .
+\]
+（$[T^b,T^c]=if^{bcd}T^d$ と $f^{bca}=f^{abc}$ を用いた。）よって $\tr_R\alpha^3$ は $T(R)$ に比例する。$SU(2)$ では $f^{abc}=\epsilon^{abc}$、基本表現 $T(\text{fund})=\frac12$、随伴表現 $\tr(T^a_{\mathrm{adj}}T^b_{\mathrm{adj}})=\epsilon_{acd}\epsilon_{bcd}=2\delta^{ab}$ より $T(\mathrm{adj})=2$。比は $4$ なので $w_{\mathrm{adj}}(p\circ g)=4w(g)$。\\
+まとめると、同じ写像 $p$ について「$\pi_3$ での番号」は1、「多様体間の写像度」は2、「随伴表現のトレースで規格化した巻き付き数」は4である。$SO(3)$ ゲージ理論のインスタントン数を随伴表現で規格化するときには、この因子に注意しなければならない。
+\end{solution}
+
+\subsection{2次元のソリトン}
+
+\begin{problem}[難易度 B]\label{ch03-prob-bogo}
+2次元空間の $O(3)$ 非線形シグマ模型 $\mathcal L=-\frac12\partial_\mu\bm n\cdot\partial^\mu\bm n$（$\lvert\bm n\rvert=1$）の静的エネルギーは $E=\frac12\int d^2x\,(\partial_i\bm n)\cdot(\partial_i\bm n)$ である。遠方で $\bm n$ は一定値に近づくとし、$Q$ を (\ref{eq:ch03-Q}) で定める。\\
+(1) 恒等式
+\[
+\bigl(\partial_i\bm n\pm\epsilon_{ij}\,\bm n\times\partial_j\bm n\bigr)\cdot\bigl(\partial_i\bm n\pm\epsilon_{ik}\,\bm n\times\partial_k\bm n\bigr)=2(\partial_i\bm n)^2\mp4\,\bm n\cdot(\partial_1\bm n\times\partial_2\bm n)
+\]
+を示し、\term{ボゴモルニ不等式}{Bogomol'nyi bound} $E\ge4\pi\lvert Q\rvert$ を導け。\\
+(2) $Q>0$ で等号が成り立つための条件（BPS 方程式）を書け。\\
+(3) スケール変換 $\bm n(\bm x)\mapsto\bm n(\bm x/\lambda)$ で $E$ と $Q$ はどう変わるか。
+\end{problem}
+
+\begin{solution}
+(1) $\lvert\bm n\rvert=1$ より $\bm n\cdot\partial_j\bm n=0$。\\
+2乗の項：$(\epsilon_{ij}\bm n\times\partial_j\bm n)\cdot(\epsilon_{ik}\bm n\times\partial_k\bm n)=\delta_{jk}(\bm n\times\partial_j\bm n)\cdot(\bm n\times\partial_k\bm n)=\sum_j\lvert\bm n\times\partial_j\bm n\rvert^2=\sum_j\lvert\partial_j\bm n\rvert^2$（$\bm n\perp\partial_j\bm n$、$\lvert\bm n\rvert=1$）。ここで2次元の $\epsilon_{ij}\epsilon_{ik}=\delta_{jk}$ を用いた。\\
+交差項：$2\epsilon_{ij}\,\partial_i\bm n\cdot(\bm n\times\partial_j\bm n)=2\epsilon_{ij}\,\bm n\cdot(\partial_j\bm n\times\partial_i\bm n)=-2\epsilon_{ij}\,\bm n\cdot(\partial_i\bm n\times\partial_j\bm n)=-4\,\bm n\cdot(\partial_1\bm n\times\partial_2\bm n)$。\\
+よって左辺は $(\partial\bm n)^2+(\partial\bm n)^2\mp4q$（$q=\bm n\cdot(\partial_1\bm n\times\partial_2\bm n)$）。これが非負なので $(\partial_i\bm n)^2\ge\pm2q$。積分すると
+\[
+E=\frac12\int(\partial_i\bm n)^2\ge\pm\int q\,d^2x=\pm4\pi Q .
+\]
+両方の符号で成り立つので $E\ge4\pi\lvert Q\rvert$。
+
+(2) $Q>0$ では上の符号で等号：$\partial_i\bm n=-\epsilon_{ij}\,\bm n\times\partial_j\bm n$、すなわち
+\[
+\partial_1\bm n=-\bm n\times\partial_2\bm n,\qquad\partial_2\bm n=\bm n\times\partial_1\bm n .
+\]
+（第2式は第1式に $\bm n\times$ を作用させたものと同値。）$Q<0$ では符号が逆。この1階の方程式の解は自動的に2階の運動方程式をみたし、各位相セクターでエネルギー最小である。
+
+(3) $\bm n_\lambda(\bm x)=\bm n(\bm x/\lambda)$ とすると $\partial_i\bm n_\lambda=\lambda^{-1}(\partial_i\bm n)(\bm x/\lambda)$、$d^2x=\lambda^2d^2y$ なので $E[\bm n_\lambda]=E[\bm n]$。$Q$ も不変（写像度だから）。2次元の $O(3)$ 模型はスケール不変であり、デリックの議論（問題 \ref{ch03-prob-skyrmion}）による崩壊は起こらないが、解の大きさは任意（零モード）になる。なお同じ式は2次元ユークリッドの作用 $S=\frac12\int d^2x(\partial_\mu\bm n)^2$ にも当てはまり、この場合 BPS 解は2次元の\textbf{インスタントン}である。
+\end{solution}
+
+\begin{problem}[難易度 C]\label{ch03-prob-lump}
+問題 \ref{ch03-prob-bogo} の模型を、南極からの立体射影座標
+\[
+w=\frac{n^1+in^2}{1+n^3},\qquad\bm n=\frac{\bigl(2\,\mathrm{Re}\,w,\ 2\,\mathrm{Im}\,w,\ 1-\lvert w\rvert^2\bigr)}{1+\lvert w\rvert^2}
+\]
+で書く。$z=x^1+ix^2$、$\partial_z=\frac12(\partial_1-i\partial_2)$、$\partial_{\bar z}=\frac12(\partial_1+i\partial_2)$ とする。\\
+(1) $w$ は $S^2$ の向きを保つ座標であり、球面の計量が $ds^2=\dfrac{4\lvert dw\rvert^2}{(1+\lvert w\rvert^2)^2}$ であることを認めて、
+\[
+(\partial_i\bm n)^2=\frac{8\bigl(\lvert\partial_zw\rvert^2+\lvert\partial_{\bar z}w\rvert^2\bigr)}{(1+\lvert w\rvert^2)^2},\qquad q=\bm n\cdot(\partial_1\bm n\times\partial_2\bm n)=\frac{4\bigl(\lvert\partial_zw\rvert^2-\lvert\partial_{\bar z}w\rvert^2\bigr)}{(1+\lvert w\rvert^2)^2}
+\]
+を示し、$E=4\pi Q+8\int d^2x\,\lvert\partial_{\bar z}w\rvert^2/(1+\lvert w\rvert^2)^2$ を導け。$Q>0$ の BPS 解は正則関数 $w(z)$ で与えられる。\\
+(2) $w(z)=(z-a)/\lambda$（$a\in\C$、$\lambda\in\C^\times$）のエネルギー密度を求め、$E=4\pi$、$Q=1$ を確かめよ。この解（\term{ランプ}{lump}）の4つの実パラメータの意味を述べよ。\\
+(3) 有理関数 $w=P(z)/R(z)$（$P,R$ は共通根のない多項式、$\deg P>\deg R$）の位相的電荷が $Q=\deg P$ であることを示せ。
+\end{problem}
+
+\begin{solution}
+(1) $w(\bm n)$ が向きを保つことは、$w=z$ に対応する $\bm n$ が原点で $\partial_1\bm n=(2,0,0)$、$\partial_2\bm n=(0,2,0)$、$\bm n=(0,0,1)$ をみたし $q=4>0$ となることから確かめられる。\\
+$(\partial_i\bm n)^2$ は球面の計量の引き戻しのトレースなので
+\[
+(\partial_i\bm n)^2=\frac{4(\lvert\partial_1w\rvert^2+\lvert\partial_2w\rvert^2)}{(1+\lvert w\rvert^2)^2}.
+\]
+$\partial_1=\partial_z+\partial_{\bar z}$、$\partial_2=i(\partial_z-\partial_{\bar z})$ より $\lvert\partial_1w\rvert^2+\lvert\partial_2w\rvert^2=\lvert a+b\rvert^2+\lvert a-b\rvert^2=2(\lvert a\rvert^2+\lvert b\rvert^2)$（$a=\partial_zw$、$b=\partial_{\bar z}w$）。これで第1式を得る。\\
+$q\,dx^1\wedge dx^2$ は面積形式の引き戻しである。座標 $w=u+iv$ での面積形式は（計量から）$\frac{4}{(1+\lvert w\rvert^2)^2}du\wedge dv$（向きを保つ座標なので正符号）。$du\wedge dv=\frac{i}{2}dw\wedge d\bar w$ で、$dw=a\,dz+b\,d\bar z$、$d\bar w=\bar b\,dz+\bar a\,d\bar z$ より $dw\wedge d\bar w=(\lvert a\rvert^2-\lvert b\rvert^2)dz\wedge d\bar z$。$\frac i2dz\wedge d\bar z=dx^1\wedge dx^2$ なので $du\wedge dv=(\lvert a\rvert^2-\lvert b\rvert^2)dx^1\wedge dx^2$。これで第2式を得る。\\
+差をとると $(\partial_i\bm n)^2-2q=\frac{16\lvert\partial_{\bar z}w\rvert^2}{(1+\lvert w\rvert^2)^2}$ なので
+\[
+E=\frac12\int(\partial_i\bm n)^2=\int q+8\int\frac{\lvert\partial_{\bar z}w\rvert^2}{(1+\lvert w\rvert^2)^2}=4\pi Q+8\int\frac{\lvert\partial_{\bar z}w\rvert^2}{(1+\lvert w\rvert^2)^2}\ge4\pi Q .
+\]
+等号は $\partial_{\bar z}w=0$、すなわち $w$ が正則（コーシー・リーマン方程式）のとき。これは問題 \ref{ch03-prob-bogo} の BPS 方程式を複素座標で書いたものである。
+
+(2) $\partial_zw=1/\lambda$、$\partial_{\bar z}w=0$。$\rho=\lvert z-a\rvert$ として
+\[
+\mathcal E=\frac12(\partial_i\bm n)^2=\frac{4/\lvert\lambda\rvert^2}{(1+\rho^2/\lvert\lambda\rvert^2)^2}=\frac{4\lvert\lambda\rvert^2}{(\lvert\lambda\rvert^2+\rho^2)^2},
+\]
+\[
+E=\int_0^\infty2\pi\rho\,d\rho\,\frac{4\lvert\lambda\rvert^2}{(\lvert\lambda\rvert^2+\rho^2)^2}=4\pi\lvert\lambda\rvert^2\Bigl[-\frac{1}{\lvert\lambda\rvert^2+\rho^2}\Bigr]_0^\infty=4\pi .
+\]
+BPS なので $Q=E/4\pi=1$。（あるいは $w$ は $\C\cup\{\infty\}$ の1対1正則写像で、向きを保つので写像度1。）パラメータ：$a$（2実数）はランプの位置、$\lvert\lambda\rvert$ は大きさ、$\arg\lambda$ は内部空間の $n^3$ 軸まわりの回転角。$\bm n$ は $z=a$ で北極 $(0,0,1)$、遠方で南極 $(0,0,-1)$ をとる。大きさ $\lvert\lambda\rvert$ が任意であることはスケール不変性（問題 \ref{ch03-prob-bogo} (3)）の現れである。
+
+(3) $\deg P=N>\deg R$ なので $w(\infty)=\infty$ で、$w$ は $\C\cup\{\infty\}=S^2$ からそれ自身への正則写像に拡張される。一般の値 $c$ に対し $w(z)=c$ は $P(z)-cR(z)=0$ という $N$ 次方程式で、一般の $c$ では相異なる $N$ 個の解をもつ。正則写像は各点で $\lvert\partial_zw\rvert^2>0$（臨界点以外）であり向きを保つので、どの逆像も $+1$ を寄与し $Q=\deg w=N$。（$w$ の座標の向きは (1) で確かめた。）したがって正則な有理関数は任意の $Q>0$ の BPS 解を与え、それらは $Q$ 個のランプの重ね合わせとみなせる。
+\end{solution}
+
+\begin{problem}[難易度 C]\label{ch03-prob-cpn}
+$\CP^{N-1}$ 模型は $z\in\C^N$、$z^\dagger z=1$ と補助的な $U(1)$ ゲージ場で書かれる。$A=-i\,z^\dagger dz$、$D_\mu z=\partial_\mu z-iA_\mu z$、2次元ユークリッドの作用を $S=\int d^2x\,(D_\mu z)^\dagger(D_\mu z)$ とする。\\
+(1) ファイバー束 $S^1\to S^{2N-1}\to\CP^{N-1}$ の長完全列から $\pi_1(\CP^{N-1})=0$、$\pi_2(\CP^{N-1})\cong\Z$ を示せ。\\
+(2) $A$ が実の1形式であること、$z\to e^{i\lambda(x)}z$ のもとで $A\to A+d\lambda$、$D_\mu z\to e^{i\lambda}D_\mu z$ と変換することを示せ。\\
+(3) $(D_1z)^\dagger D_2z-(D_2z)^\dagger D_1z=iF_{12}$（$F=dA$）を示し、$S\ge2\pi\lvert Q\rvert$、$Q=\frac1{2\pi}\int F$ を導け。等号条件は何か。\\
+(4) $N=2$、$z=(1,x^1+ix^2)^{\mathsf T}/\sqrt{1+\lvert x\rvert^2}$ について $A=\frac{r^2}{1+r^2}d\varphi$、$Q=1$ を示し、$Q$ が遠方の円周上の $U(1)$ の巻き数 $\frac1{2\pi}\oint A$ に等しいことを、(1) の境界写像 $\partial\colon\pi_2(\CP^{N-1})\to\pi_1(S^1)$ と関連づけて説明せよ。
+\end{problem}
+
+\begin{solution}
+(1) 完全列 $\pi_2(S^{2N-1})\to\pi_2(\CP^{N-1})\xrightarrow{\partial}\pi_1(S^1)\to\pi_1(S^{2N-1})\to\pi_1(\CP^{N-1})\to\pi_0(S^1)$。$N\ge2$ では $2N-1\ge3$ なので $\pi_1(S^{2N-1})=\pi_2(S^{2N-1})=0$、$\pi_0(S^1)$ は1点。よって $\pi_2(\CP^{N-1})\cong\pi_1(S^1)=\Z$、$\pi_1(\CP^{N-1})=0$。
+
+(2) $z^\dagger z=1$ を微分すると $dz^\dagger z+z^\dagger dz=0$、すなわち $z^\dagger dz=-\overline{z^\dagger dz}$ は純虚数で、$A=-iz^\dagger dz$ は実。$z\to e^{i\lambda}z$ では $z^\dagger dz\to z^\dagger(dz+i\,d\lambda\,z)=z^\dagger dz+i\,d\lambda$ なので $A\to A+d\lambda$。$Dz\to e^{i\lambda}(dz+i\,d\lambda\,z)-i(A+d\lambda)e^{i\lambda}z=e^{i\lambda}Dz$。本書の規約 $D=d-iA$、$A\to A+d\lambda$（電荷1）と一致する。
+
+(3) $z^\dagger\partial_iz=iA_i$、$(\partial_iz)^\dagger z=-iA_i$ を用いると
+\[
+(D_1z)^\dagger D_2z=(\partial_1z)^\dagger\partial_2z-iA_2(\partial_1z)^\dagger z+iA_1z^\dagger\partial_2z+A_1A_2=(\partial_1z)^\dagger\partial_2z-A_1A_2 .
+\]
+$1\leftrightarrow2$ との差をとると $A_1A_2$ が消え、$(D_1z)^\dagger D_2z-(D_2z)^\dagger D_1z=(\partial_1z)^\dagger\partial_2z-(\partial_2z)^\dagger\partial_1z$。一方 $F_{12}=\partial_1A_2-\partial_2A_1=-i\bigl(\partial_1(z^\dagger\partial_2z)-\partial_2(z^\dagger\partial_1z)\bigr)=-i\bigl((\partial_1z)^\dagger\partial_2z-(\partial_2z)^\dagger\partial_1z\bigr)$。よって差は $iF_{12}$。\\
+次に
+\[
+\lvert D_1z\pm iD_2z\rvert^2=\lvert D_1z\rvert^2+\lvert D_2z\rvert^2\pm i\bigl((D_1z)^\dagger D_2z-(D_2z)^\dagger D_1z\bigr)=\lvert D_\mu z\rvert^2\mp F_{12}\ge0 .
+\]
+積分して $S\ge\pm\int F_{12}d^2x=\pm2\pi Q$、よって $S\ge2\pi\lvert Q\rvert$。$Q>0$ の等号条件は $D_1z+iD_2z=0$。実際、$D_iz=(\mathbf 1-zz^\dagger)\partial_iz$ と書け、$z=u/\lvert u\rvert$（$u$ は $x^1+ix^2$ の正則関数を成分とするベクトル）とすると $\partial_iz$ の $z$ 方向の成分は射影で消えるので $(D_1+iD_2)z=(\mathbf 1-zz^\dagger)(\partial_1+i\partial_2)u/\lvert u\rvert=0$。正則な $u$ が BPS インスタントンを与える。
+
+(4) $w=x^1+ix^2=re^{i\varphi}$、$\rho=1+r^2$、$z=(1,w)^{\mathsf T}\rho^{-1/2}$ とすると
+\[
+z^\dagger dz=\frac{\bar w\,dw}{\rho}+\rho^{1/2}d(\rho^{-1/2})=\frac{\bar w\,dw}{\rho}-\frac{d\rho}{2\rho}=\frac{\bar w\,dw-w\,d\bar w}{2\rho}
+\]
+（$d\rho=\bar w\,dw+w\,d\bar w$）。$\bar w\,dw-w\,d\bar w=2ir^2d\varphi$ なので $A=\frac{r^2}{1+r^2}d\varphi$。$F=dA=\frac{2r}{(1+r^2)^2}dr\wedge d\varphi$ で、$r\,dr\wedge d\varphi=dx^1\wedge dx^2$ だから
+\[
+Q=\frac{1}{2\pi}\int F=\int_0^\infty\frac{2r\,dr}{(1+r^2)^2}=1 .
+\]
+（$n^a=z^\dagger\sigma^az$ とすると $n^1+in^2=2\bar z_1z_2=2w/(1+r^2)$、$n^3=(1-r^2)/(1+r^2)$ で、これは問題 \ref{ch03-prob-lump} の $w=z$ の解そのもの。$\CP^1$ 模型と $O(3)$ 模型は同じであり、$Q$ は $\bm n$ の写像度に一致する。）\\
+ストークスの定理より $\int_{D_R}F=\oint_{\lvert x\rvert=R}A\to\oint d\varphi=2\pi$。遠方で $Dz\to0$ なので $A$ は純ゲージで、$z\to e^{i\varphi}z_\infty$（$z_\infty$ は定ベクトル）の形になる。つまり遠方の円周上で $z$ は1点 $[z_\infty]\in\CP^1$ のファイバー $S^1$ を1周している。これは境界写像 $\partial$ の構成そのものである：$\R^2\cup\{\infty\}\to\CP^{N-1}$ を $S^{2N-1}$ に持ち上げると（$z$ がその持ち上げ）、遠方の円周上でファイバーに沿ったループが残り、その巻き数 $\frac1{2\pi}\oint A=Q$ が $\partial[\,\cdot\,]\in\pi_1(S^1)=\Z$ である。
+\end{solution}
+
+\subsection{$\pi_3$ と巻き付き数：インスタントンとスカーミオン}
+
+\begin{problem}[難易度 A]\label{ch03-prob-wid}
+$SU(2)$ の点を $g=a_0+i\bm a\cdot\bm\sigma$（$a_0^2+\lvert\bm a\rvert^2=1$）と書く。\\
+(1) 単位元の近くで $g^{-1}dg=i\sigma^k\,da^k$ であることから、単位元で $\tr(g^{-1}dg)^3=12\,da^1\wedge da^2\wedge da^3$ を示せ。\\
+(2) $\tr(g^{-1}dg)^3$ が左移動 $g\mapsto hg$ で不変であることを用いて、$\tr(g^{-1}dg)^3=12\,\mathrm{vol}_{S^3}$ を示せ（$\mathrm{vol}_{S^3}$ は単位 $S^3$ の体積形式で、単位元での向きを $da^1\wedge da^2\wedge da^3$ とする）。$\mathrm{Vol}(S^3)=2\pi^2$ を用いて、恒等写像 $S^3\to SU(2)$ の巻き付き数が $w=1$ であることを確かめよ。\\
+(3) $g\mapsto g^{-1}$ の巻き付き数を求めよ。
+\end{problem}
+
+\begin{solution}
+(1) 単位元 $a_0=1$, $\bm a=0$ では $da_0=0$（$a_0=\sqrt{1-\lvert\bm a\rvert^2}$ の微分は $\bm a=0$ で消える）なので $dg=i\sigma^kda^k$、$g^{-1}=\mathbf 1$。
+\[
+\tr(g^{-1}dg)^3=i^3\tr(\sigma^i\sigma^j\sigma^k)\,da^i\wedge da^j\wedge da^k=-i\cdot2i\,\epsilon_{ijk}\,da^i\wedge da^j\wedge da^k=2\cdot6\,da^1\wedge da^2\wedge da^3 .
+\]
+ここで $\tr(\sigma^i\sigma^j\sigma^k)=2i\epsilon_{ijk}$（反対称部分のみ寄与）と $\epsilon_{ijk}da^i\wedge da^j\wedge da^k=6\,da^1\wedge da^2\wedge da^3$ を用いた。
+
+(2) $(hg)^{-1}d(hg)=g^{-1}h^{-1}h\,dg=g^{-1}dg$ なので $\tr(g^{-1}dg)^3$ は左不変。同様に $\tr$ の巡回性から右移動 $g\mapsto gh$ でも不変（$h^{-1}(g^{-1}dg)h$ になるだけ）。$S^3$ の回転群 $SO(4)$ の単位成分は左右の移動 $g\mapsto h_1gh_2^{-1}$ で尽くされ、単位元の体積形式 $da^1\wedge da^2\wedge da^3$ を各点に運んだものが $\mathrm{vol}_{S^3}$ なので、$\tr(g^{-1}dg)^3=12\,\mathrm{vol}_{S^3}$。よって
+\[
+w(\id)=\frac{1}{24\pi^2}\cdot12\cdot2\pi^2=1 .
+\]
+本書の規約（恒等写像で $w=1$）は、$S^3$ の向きを単位元で $da^1\wedge da^2\wedge da^3$ ととることに相当する。
+
+(3) $\iota(g)=g^{-1}$ では $\iota^{-1}d\iota=g\,d(g^{-1})=-dg\,g^{-1}$。$\tr(-dg\,g^{-1})^3=-\tr(g\,(g^{-1}dg)^3g^{-1})=-\tr(g^{-1}dg)^3$ なので $w(\iota)=-1$。（$g^{-1}=a_0-i\bm a\cdot\bm\sigma$ は $\bm a\to-\bm a$ という $\R^3$ の向き反転であることからもわかる。）一般に $w(g^{-1})=-w(g)$（各点ごとの逆元）。
+\end{solution}
+
+\begin{problem}[難易度 B]\label{ch03-prob-wadd}
+$g,h\colon S^3\to SU(N)$ とし、各点ごとの積 $(gh)(x)=g(x)h(x)$ を考える。\\
+(1) $\alpha=g^{-1}dg$、$\beta=dh\,h^{-1}$ とおくと $(gh)^{-1}d(gh)=h^{-1}(\alpha+\beta)h$、$d\alpha=-\alpha\wedge\alpha$、$d\beta=\beta\wedge\beta$ であることを示せ。\\
+(2) $\tr(\alpha+\beta)^3=\tr\alpha^3+\tr\beta^3-3\,d\tr(\alpha\wedge\beta)$ を示し、$w(gh)=w(g)+w(h)$ を導け。\\
+(3) 各点ごとの $n$ 乗 $g^n$ について $w(g^n)=n\,w(g)$ を示し、任意の整数 $n$ に対し $w=n$ の写像 $S^3\to SU(2)$ を構成せよ。
+\end{problem}
+
+\begin{solution}
+(1) $(gh)^{-1}d(gh)=h^{-1}g^{-1}(dg\,h+g\,dh)=h^{-1}\alpha h+h^{-1}dh=h^{-1}(\alpha+dh\,h^{-1})h$。$d(g^{-1})=-g^{-1}dg\,g^{-1}$ より $d\alpha=d(g^{-1})\wedge dg=-g^{-1}dg\wedge g^{-1}dg=-\alpha\wedge\alpha$。$d\beta=-dh\wedge d(h^{-1})=dh\wedge h^{-1}dh\,h^{-1}=\beta\wedge\beta$。
+
+(2) 行列値の $p$ 形式 $\mu$ と $q$ 形式 $\nu$ について $\tr(\mu\wedge\nu)=(-1)^{pq}\tr(\nu\wedge\mu)$。これより $\tr(\alpha\beta\alpha)=\tr(\beta\alpha\alpha)=\tr(\alpha\alpha\beta)$（1形式を2形式の反対側へ移すと符号 $(-1)^2=1$）、同様に $\beta$ が2つの項も等しい。よって
+\[
+\tr(\alpha+\beta)^3=\tr\alpha^3+3\tr(\alpha^2\beta)+3\tr(\alpha\beta^2)+\tr\beta^3 .
+\]
+一方 $d\tr(\alpha\beta)=\tr(d\alpha\,\beta)-\tr(\alpha\,d\beta)=-\tr(\alpha^2\beta)-\tr(\alpha\beta^2)$。したがって $\tr(\alpha+\beta)^3=\tr\alpha^3+\tr\beta^3-3d\tr(\alpha\beta)$。また $\tr\beta^3=\tr(h\,(h^{-1}dh)^3h^{-1})=\tr(h^{-1}dh)^3$、共役 $h^{-1}(\cdot)h$ はトレースを変えない。$S^3$ は閉多様体なので完全形式の積分は $0$ で、
+\[
+w(gh)=\frac{1}{24\pi^2}\int\bigl[\tr\alpha^3+\tr(h^{-1}dh)^3\bigr]=w(g)+w(h).
+\]
+これは $w$ が群準同型 $\pi_3(SU(N))\to\Z$ を与えることを示す（各点ごとの積は $\pi_3$ の和とホモトピックである）。
+
+(3) 帰納法で $w(g^n)=w(g^{n-1})+w(g)=nw(g)$（$n\ge1$）。$w(g^0)=w(\text{定値})=0$、$w(g^{-n})=-w(g^n)$（問題 \ref{ch03-prob-wid} (3)）。恒等写像 $\id\colon S^3\to SU(2)$ をとれば、$x\mapsto x^n$（四元数の $n$ 乗）が $w=n$ の写像である。物理的には、巻き付き数 $n$ のゲージ変換やスカーミオン数 $n$ の配位の具体的な代表元を与える。
+\end{solution}
+
+\begin{problem}[難易度 D]\label{ch03-prob-skyrmion}
+$SU(2)$ カイラル場 $U\colon\R^3\to SU(2)$、$U\to\mathbf 1$（$\lvert\bm x\rvert\to\infty$）を考える。$\R^3\cup\{\infty\}\cong S^3$（$\R^3$ の向きは $dx^1\wedge dx^2\wedge dx^3$）とみて、\term{バリオン数}{baryon number}を $B=-w(U)=-\frac{1}{24\pi^2}\int_{\R^3}\tr(U^{-1}dU)^3$ で定める。\\
+(1) \term{ハリネズミ仮定}{hedgehog ansatz} $U=\exp\bigl(if(r)\hat{\bm x}\cdot\bm\sigma\bigr)=\cos f+i\sin f\,\hat{\bm x}\cdot\bm\sigma$（$f(0)\in\pi\Z$、$f(\infty)=0$）について $B=\bigl(f(0)-f(\infty)\bigr)/\pi$ を示せ。特に $f(0)=\pi$ なら $B=1$。（ヒント：$S^3$ の点を $\cos\chi+i\sin\chi\,\hat{\bm m}\cdot\bm\sigma$ と書くと、正規化された体積形式は $\frac{1}{2\pi^2}\sin^2\chi\,d\chi\wedge d\Omega_{\hat{\bm m}}$。ただし向きは $\chi\to0$ で $da^1\wedge da^2\wedge da^3$ と一致するようにとる。）\\
+(2) バリオン数カレント $B^\mu\propto\epsilon^{\mu\nu\rho\sigma}\tr(L_\nu L_\rho L_\sigma)$（$L_\mu=U^{-1}\partial_\mu U$）が運動方程式を使わずに保存することを、微分形式 $d\tr(U^{-1}dU)^3=0$ として示せ。\\
+(3) スキルム模型の静的エネルギー（スキルム単位）
+\[
+E=E_2+E_4,\qquad E_2=-\frac12\int d^3x\,\tr(L_iL_i),\qquad E_4=-\frac1{16}\int d^3x\,\tr\bigl([L_i,L_j]^2\bigr)
+\]
+について、$E_2,E_4\ge0$ を示し、スケール変換 $U_\lambda(\bm x)=U(\bm x/\lambda)$ のもとでの振る舞いから、静的解では $E_2=E_4$ であることを導け。$E_4$ がないと何が起こるか（\term{デリックの定理}{Derrick's theorem}）。
+\end{problem}
+
+\begin{solution}
+(1) $U$ は写像 $\bm x\mapsto(\chi,\hat{\bm m})=(f(r),\hat{\bm x})$ である。$w(U)$ は正規化体積形式の引き戻しの積分なので
+\[
+w(U)=\frac{1}{2\pi^2}\int\sin^2f(r)\,f'(r)\,dr\wedge d\Omega_{\hat{\bm x}} .
+\]
+$\chi\to0$ では $a^k\approx\chi\,\hat m^k$ で、極座標 $(\chi,\hat{\bm m})$ に対する $d\chi\wedge d\Omega$ は $da^1\wedge da^2\wedge da^3$ と同じ向き（$\R^3$ の通常の極座標）なので、ヒントの体積形式の符号は正しい。$\R^3$ でも $dr\wedge d\Omega$ は $dx^1\wedge dx^2\wedge dx^3$ と同じ向きなので、
+\[
+w(U)=\frac{4\pi}{2\pi^2}\int_0^\infty\sin^2f\,f'\,dr=\frac2\pi\Bigl[\frac{f-\sin f\cos f}{2}\Bigr]_{r=0}^{r=\infty}=\frac{f(\infty)-f(0)}{\pi}
+\]
+（$f(0),f(\infty)\in\pi\Z$ で $\sin f\cos f$ の項は消える）。よって $B=-w(U)=(f(0)-f(\infty))/\pi$、$f(0)=\pi$、$f(\infty)=0$ で $B=1$。\\
+符号の解釈：$r\to\infty$ では $U\approx\mathbf 1+if(r)\hat{\bm x}\cdot\bm\sigma$、$f$ は減少関数なので、写像 $\bm x\mapsto f(r)\hat{\bm x}$ は動径方向を反転し向きを逆にする（ヤコビアン $f'(f/r)^2<0$）。$f$ が単調なら任意の正則値の逆像は1点で符号は負なので、写像度（$=w$）は $-1$ である。$B=-w$ という符号の約束は、この標準的なスカーミオンが $B=+1$ となるように選んだものである（スキルム模型の文献の標準的な定義と一致する）。
+
+(2) $L=U^{-1}dU$ は $dL=-L\wedge L$ をみたす（問題 \ref{ch03-prob-wadd}）。
+\[
+d\tr L^3=\tr(dL\,L^2)-\tr(L\,dL\,L)+\tr(L^2dL)=-3\tr L^4 ,
+\]
+（各項は巡回性で $-\tr L^4$ に等しい。）一方、奇数次形式 $L$ と3形式 $L^3$ について $\tr(L\wedge L^3)=(-1)^{1\cdot3}\tr(L^3\wedge L)=-\tr L^4$ なので $\tr L^4=0$。よって $d\tr L^3=0$。4次元で $B^\mu$ に対応する3形式 $\tr L^3$ が閉形式であることは $\partial_\mu B^\mu=0$ と同値であり、これは運動方程式によらない（\textbf{位相的カレント}）。$B$ が整数であることと合わせ、バリオン数は厳密に保存される（古典論の範囲で）。
+
+(3) $L_i$ は反エルミート（$U^{-1}\partial_iU$ で $U$ はユニタリ）なので $L_i=iX_i$、$X_i$ エルミートとして $-\tr(L_iL_i)=\tr(X_iX_i)\ge0$。$[L_i,L_j]$ も反エルミートなので $-\tr([L_i,L_j]^2)\ge0$。よって $E_2,E_4\ge0$。\\
+$U_\lambda(\bm x)=U(\bm x/\lambda)$ では $L_i\to\lambda^{-1}L_i$、$d^3x\to\lambda^3d^3y$ なので
+\[
+E(\lambda)=\lambda E_2+\lambda^{-1}E_4 .
+\]
+静的解はエネルギーの停留点なので、特にこの1パラメータ変形について $\frac{dE}{d\lambda}\big|_{\lambda=1}=E_2-E_4=0$。$E_4=0$（シグマ模型項だけ）だと $E(\lambda)=\lambda E_2$ は $\lambda\to0$ で減少し、配位は縮んで消えてしまう：位相的に $B\neq0$ でも有限サイズの静的解は存在しない（デリックの定理）。スキルム項 $E_4$ が縮みを妨げ、$E_2=E_4$ でつり合う。なお、スキルム模型では $E\ge12\pi^2\lvert B\rvert$（ファデーエフ・ボゴモルニ不等式）が成り立ち、ハリネズミの $B=1$ 解は数値的に $E\approx1.23\times12\pi^2$ である（ここでは証明しない）。
+\end{solution}
+
+\begin{problem}[難易度 B]\label{ch03-prob-theta}
+4次元ユークリッド空間の $SU(N)$ ゲージ場で、遠方の3次元球面 $S^3_\infty$（$\R^4$ の外向き法線で向きづける）上で $A\to i\,g\,dg^{-1}$ となるものを考える。$CS(A)$、$k$ は記法と規約のとおりとする。\\
+(1) 純ゲージ $A=i\,g\,dg^{-1}$ について $CS(A)=-\frac{1}{24\pi^2}\tr(g^{-1}dg)^3$ を示せ。\\
+(2) $dCS=\frac{1}{8\pi^2}\tr F\wedge F$ とストークスの定理から $k=-w(g)=w(g^{-1})$ を導け。特に $k$ は整数である。\\
+(3) 3次元空間 $\R^3\cup\{\infty\}\cong S^3$ 上の古典的真空 $A=i\,g\,dg^{-1}$（$g\to\mathbf 1$ at $\infty$）に $N_{\mathrm{CS}}=\int_{\R^3}CS(A)=-w(g)$ を対応させる。巻き付き数 $w(h)=-1$ のゲージ変換 $h$ で真空を移すと $N_{\mathrm{CS}}$ が1増えることを示せ。この操作の量子論での演算子を $T$ とし、$N_{\mathrm{CS}}=n$ の状態を $\ket{n}$ とすれば $T\ket n=\ket{n+1}$ である。\\
+(4) $\ket\theta=\sum_ne^{in\theta}\ket n$ が $T$ の固有状態であることを示し、ハミルトニアンが $T$ と可換なら $\bra{\theta'}H\ket\theta=0$（$\theta\neq\theta'$）であることを示せ。
+\end{problem}
+
+\begin{solution}
+(1) $F=dA-iA\wedge A=0$（純ゲージ）なので $dA=iA^2$。よって $\tr(A\,dA-\frac{2i}{3}A^3)=\tr(iA^3-\frac{2i}3A^3)=\frac i3\tr A^3$。$d(g^{-1})=-g^{-1}dg\,g^{-1}$ より $A=i\,g\,dg^{-1}=-i\,dg\,g^{-1}$ で、$A^3=(-i)^3(dg\,g^{-1})^3=i(dg\,g^{-1})^3$。$\tr(dg\,g^{-1})^3=\tr(g(g^{-1}dg)^3g^{-1})=\tr(g^{-1}dg)^3$ なので
+\[
+CS(A)=\frac{1}{8\pi^2}\cdot\frac i3\cdot i\,\tr(g^{-1}dg)^3=-\frac{1}{24\pi^2}\tr(g^{-1}dg)^3 .
+\]
+
+(2) $A$ は $\R^4$ 全体で滑らかなので $CS(A)$ は大域的な3形式で、半径 $R$ の球 $B_R$ でストークスの定理（境界は外向き法線で向きづける）を用いると
+\[
+k=\lim_{R\to\infty}\frac{1}{8\pi^2}\int_{B_R}\tr F\wedge F=\lim_{R\to\infty}\int_{S^3_R}CS(A)=-\frac{1}{24\pi^2}\int_{S^3_\infty}\tr(g^{-1}dg)^3=-w(g).
+\]
+$w(g^{-1})=-w(g)$（問題 \ref{ch03-prob-wid}）なので $k=w(g^{-1})$。$w$ は整数なので $k\in\Z$。つまりインスタントン数は、遠方の純ゲージを与える写像 $S^3_\infty\to G$ のホモトピー類（$\pi_3(G)=\Z$）で決まる。符号は規約 $A\to i\,g\,dg^{-1}$ と向きの選び方による。BPST 解の具体形は第8章で扱う。
+
+(3) ゲージ変換 $h$ で $A\mapsto hAh^{-1}+i\,h\,dh^{-1}$。$A=i\,g\,dg^{-1}$ なら
+\[
+hAh^{-1}+i\,h\,dh^{-1}=i\,h g\,dg^{-1}h^{-1}+i\,h\,dh^{-1}=i\,(hg)\,d\bigl(g^{-1}h^{-1}\bigr)=i\,(hg)\,d(hg)^{-1}.
+\]
+よって $g\mapsto hg$ で、問題 \ref{ch03-prob-wadd} より $N_{\mathrm{CS}}=-w(hg)=-w(h)-w(g)=N_{\mathrm{CS}}+1$。（$w(h)=-1$ の例は問題 \ref{ch03-prob-skyrmion} のハリネズミ $h=e^{if(r)\hat{\bm x}\cdot\bm\sigma}$、$f(0)=\pi$。）古典的真空は $\pi_3(G)=\Z$ で番号づけられる無限個の位相的に異なる真空に分かれ、$T$ はそれらを1つずつずらす「大きなゲージ変換」である。インスタントンはこれらの間のトンネル効果を表し、$N_{\mathrm{CS}}$ を $\lvert k\rvert$ だけ変える（向きの規約を含めた詳細は第8章）。
+
+(4) $T\ket\theta=\sum_ne^{in\theta}\ket{n+1}=\sum_me^{i(m-1)\theta}\ket m=e^{-i\theta}\ket\theta$。$T$ はユニタリで $[H,T]=0$ なら
+\[
+\bra{\theta'}H\ket\theta=\bra{\theta'}T^\dagger HT\ket\theta=e^{i\theta'}e^{-i\theta}\bra{\theta'}H\ket\theta ,
+\]
+よって $\theta\neq\theta'$（mod $2\pi$）なら $\bra{\theta'}H\ket\theta=0$。$\theta$ は時間発展で保存され、異なる $\theta$ の真空は別々の理論（超選択セクター）とみなせる。経路積分では $\theta$ 真空の間の振幅にインスタントン数 $k$ のセクターが位相 $e^{\pm ik\theta}$ で寄与し、これがラグランジアンの $\theta$ 項 $\frac{\theta}{8\pi^2}\tr F\wedge F$ と同等になる（符号の規約を含め第8章）。
+\end{solution}
+
+\subsection{ホップ写像と $\pi_4$}
+
+\begin{problem}[難易度 D]\label{ch03-prob-hopf}
+$S^3=\{(z_1,z_2)\in\C^2:\lvert z_1\rvert^2+\lvert z_2\rvert^2=1\}$、$z_1=x_1+ix_2$、$z_2=x_3+ix_4$ とし、$S^3$ には単位球体 $B^4\subset\R^4$（向き $dx_1\wedge dx_2\wedge dx_3\wedge dx_4$）の境界としての向きを入れる。ホップ写像を $h(z)^a=z^\dagger\sigma^az$ とする。\\
+(1) $h^{-1}(0,0,1)$ と $h^{-1}(0,0,-1)$ を求め、点 $(0,0,0,1)$ からの立体射影 $S^3\setminus\{(0,0,0,1)\}\to\R^3$、$x\mapsto(x_1,x_2,x_3)/(1-x_4)$ による像が、それぞれ単位円周と $x_3$ 軸（と無限遠点）になり、互いに1回絡むことを示せ。\\
+(2) $S^2$ の面積形式を $\omega$ とし、$\mathcal A=x_1dx_2-x_2dx_1+x_3dx_4-x_4dx_3$ とおく。$h^*\omega=2\,d\mathcal A$ が点 $(1,0,0,0)$ で成り立つことを確かめよ（$h$ と $\mathcal A$ の $SU(2)$ 不変性により全体で成り立つ）。\\
+(3) $\bm n\colon S^3\to S^2$ に対し $F=\bm n^*\omega$ は $S^3$ 上の完全形式 $F=dA$ であり、\term{ホップ不変量}{Hopf invariant} $H(\bm n)=\frac{1}{16\pi^2}\int_{S^3}A\wedge F$ は $A$ の選び方によらないことを示せ。$H(h)=1$ を計算せよ。\\
+(4) ホップ・ファイブレーションの長完全列から $\pi_3(S^2)\cong\Z$ を導き、3次元のファデーエフ・ニーミ模型（$\bm n\colon\R^3\to S^2$、遠方で一定）の位相的ソリトン（ホップ粒子）がホップ不変量で分類されることを説明せよ。
+\end{problem}
+
+\begin{center}
+\begin{tikzpicture}[scale=1.0]
+  % left panel: circle and axis
+  \draw[thick,blue!70!black] (2,0) arc (0:180:2 and 0.6);
+  \draw[thick,red!70!black,preaction={draw,white,line width=4pt}] (0,-2.3) -- (0,2.3);
+  \draw[thick,blue!70!black,preaction={draw,white,line width=4pt}] (-2,0) arc (180:360:2 and 0.6);
+  \draw[-{Stealth[length=2mm]},red!70!black,thick] (0,1.9) -- (0,2.35);
+  \node[blue!70!black] at (2.35,-0.5) {\footnotesize $h^{-1}(N)$};
+  \node[red!70!black,right] at (0.05,2.2) {\footnotesize $h^{-1}(S)$（$x_3$ 軸 $\cup\{\infty\}$）};
+  % right panel: Hopf link
+  \begin{scope}[xshift=6.6cm]
+    \draw[very thick,blue!70!black] (0,0) circle (1);
+    \draw[very thick,green!50!black] (1.2,0) circle (1);
+    \draw[very thick,blue!70!black,preaction={draw,white,line width=4pt}] (40:1) arc (40:66:1);
+    \node at (0.6,-1.55) {\footnotesize 任意の2本のファイバー（絡み数 1）};
+  \end{scope}
+\end{tikzpicture}
+\zucap{ホップ・ファイブレーションのファイバーを立体射影で $\R^3$ に写したもの。左：北極と南極の上のファイバーは単位円周と $x_3$ 軸になり、1回絡んでいる。右：任意の2点の上のファイバーも同様に1回絡む（ホップ・リンク）。}
+\end{center}
+
+\begin{solution}
+(1) $h(z)=(2\,\mathrm{Re}(\bar z_1z_2),2\,\mathrm{Im}(\bar z_1z_2),\lvert z_1\rvert^2-\lvert z_2\rvert^2)$。$h=(0,0,1)$ は $\lvert z_1\rvert=1$、$z_2=0$、すなわち $\{(e^{i\alpha},0)\}$：$x_3=x_4=0$、$x_1^2+x_2^2=1$。立体射影の像は $(x_1,x_2,0)$ で、$x_1x_2$ 平面の単位円周。$h=(0,0,-1)$ は $z_1=0$、$\lvert z_2\rvert=1$：$x_1=x_2=0$、$x_3^2+x_4^2=1$。像は $(0,0,x_3/(1-x_4))$ で、$x_4\to1$ のとき無限遠へ行き、$x_3/(1-x_4)$ は $\R$ 全体をとる。つまり $x_3$ 軸 $\cup\{\infty\}$。$x_3$ 軸は単位円周が張る円板をちょうど1回（原点で）貫くので、2つの閉曲線は1回絡む（絡み数 $\pm1$。符号は向きの約束による。絡み数は第6章で扱う）。
+
+(2) 点 $p=(1,0,0,0)$、すなわち $z=(1,0)$ で $h(p)=(0,0,1)$。接空間は $\partial_{x_2},\partial_{x_3},\partial_{x_4}$ で張られる。$\partial_{x_2}$ はファイバー方向（$e^{i\alpha}z$ の微分 $(i,0)$）で $h$ は一定、よって $h_*\partial_{x_2}=0$。$z_1=1$、$z_2=x_3+ix_4$ の1次で $h\approx(2x_3,2x_4,1)$ なので $h_*\partial_{x_3}=(2,0,0)$、$h_*\partial_{x_4}=(0,2,0)$。北極での $\omega$ は $\omega(u,v)=\bm n\cdot(u\times v)$ なので
+\[
+h^*\omega(\partial_{x_3},\partial_{x_4})=(0,0,1)\cdot\bigl((2,0,0)\times(0,2,0)\bigr)=4,\quad h^*\omega(\partial_{x_2},\cdot)=0 .
+\]
+一方 $d\mathcal A=2(dx_1\wedge dx_2+dx_3\wedge dx_4)$ なので $2d\mathcal A(\partial_{x_3},\partial_{x_4})=4$、$2d\mathcal A(\partial_{x_2},\partial_{x_j})=4\,dx_1\wedge dx_2(\partial_{x_2},\partial_{x_j})=0$（$j=3,4$；$\partial_{x_1}$ 成分がないため）。よって $p$ で $h^*\omega=2d\mathcal A$。（$\mathcal A=-iz^\dagger dz$ を $S^3$ に制限したものであり、問題 \ref{ch03-prob-cpn} の $A$ に等しい。$z\mapsto Uz$, $U\in SU(2)$ で $\mathcal A$ は不変、$h$ は $SO(3)$ 回転を受けるだけなので $\omega$ の引き戻しも不変。$SU(2)$ は $S^3$ に推移的なので1点で確かめれば十分。）
+
+(3) $F=\bm n^*\omega$ は閉形式（$S^2$ 上の2形式の引き戻しで、$d\omega=0$）。$S^3$ の2次ド・ラーム・コホモロジーは $0$（第5章）なので $F=dA$ と書ける。$A'=A+\lambda$（$d\lambda=0$）とすると、$H^1(S^3)=0$ より $\lambda=d\mu$ で、
+\[
+\int\lambda\wedge F=\int d\mu\wedge F=\int d(\mu F)=0 \qquad(dF=0)
+\]
+なので $H$ は $A$ によらない。$h$ については (2) より $A=2\mathcal A$、$F=2d\mathcal A$ とでき、
+\[
+H(h)=\frac{4}{16\pi^2}\int_{S^3}\mathcal A\wedge d\mathcal A=\frac{1}{4\pi^2}\int_{B^4}d\mathcal A\wedge d\mathcal A .
+\]
+$d\mathcal A\wedge d\mathcal A=4(dx_1dx_2+dx_3dx_4)^2=8\,dx_1\wedge dx_2\wedge dx_3\wedge dx_4$ で、$\mathrm{Vol}(B^4)=\pi^2/2$ より $\int_{B^4}=4\pi^2$。よって $H(h)=1$。\\
+（解釈：$F/4\pi$ は「$S^2$ の点の逆像」の双対であり、$H$ は2つの点の逆像の絡み数に等しい。(1) と整合する。）
+
+(4) $S^1\to S^3\to S^2$ の長完全列 $\pi_3(S^1)=0\to\pi_3(S^3)\xrightarrow{h_*}\pi_3(S^2)\to\pi_2(S^1)=0$ より $h_*$ は同型、$\pi_3(S^2)\cong\Z$ で生成元は $[h]$（$h_*[\id]=[h]$）。$H$ はホモトピー不変で（連続変形での変化は完全形式の積分になる）、$H(h)=1$ なので、$H$ はこの同型 $\pi_3(S^2)\to\Z$ を与える。\\
+ファデーエフ・ニーミ模型では、遠方で一定の $\bm n\colon\R^3\to S^2$ は $S^3\to S^2$ を定め、そのホモトピー類 $\pi_3(S^2)=\Z$ がホップ電荷 $H$ である。$\pi_2$ による分類（点を囲む球面）とは異なり、これは空間全体の結び目構造であり、$\bm n^{-1}(\bm p_1)$ と $\bm n^{-1}(\bm p_2)$ という2本の閉曲線の絡み数が $H$ になる。ホップ粒子は閉じたひも状（結び目状）の配位であり、スキルム項に似た4階の項によりデリックの崩壊が防がれ、エネルギーは $E\ge c\lvert H\rvert^{3/4}$（ヴァクレンコ・カピタンスキー不等式）で下から押さえられる。
+\end{solution}
+
+\begin{problem}[難易度 C]\label{ch03-prob-pi4}
+$\pi_4(S^3)=\Z_2$ を認める。\\
+(1) $\pi_4(SU(2))$、$\pi_4(SO(3))$ を求めよ。\\
+(2) $Sp(N)$ は $\HH^N$ の単位球面 $S^{4N-1}$ に推移的に作用し、固定部分群は $Sp(N-1)$ である（認めてよい）。$Sp(1)\cong SU(2)$ を用いて、$N\ge2$ で $\pi_4(Sp(N))\cong\Z_2$ を示せ。\\
+(3) $\pi_4(SU(3))=0$ を認めて、$SU(2)\to SU(3)\to S^5$ の長完全列から、境界写像 $\partial\colon\pi_5(S^5)\to\pi_4(SU(2))$ が全射であることを示せ。\\
+(4) 4次元時空を $S^4$ にコンパクト化すると、ゲージ変換 $g\colon S^4\to G$ は $\pi_4(G)$ で分類される。$SU(2)$ と $SU(3)$ ではどう違うか。第9章で扱うウィッテンの $SU(2)$ アノマリーとの関係を述べよ。
+\end{problem}
+
+\begin{solution}
+(1) $SU(2)\cong S^3$ なので $\pi_4(SU(2))\cong\Z_2$。2重被覆 $SU(2)\to SO(3)$ は $n\ge2$ で $\pi_n$ の同型を誘導するので（問題 \ref{ch03-prob-so3}）$\pi_4(SO(3))\cong\Z_2$。
+
+(2) ファイバー束 $Sp(N-1)\to Sp(N)\to S^{4N-1}$ の長完全列
+\[
+\pi_5(S^{4N-1})\to\pi_4(Sp(N-1))\to\pi_4(Sp(N))\to\pi_4(S^{4N-1}).
+\]
+$N\ge2$ では $4N-1\ge7$ なので $\pi_5(S^{4N-1})=\pi_4(S^{4N-1})=0$ で、$\pi_4(Sp(N-1))\cong\pi_4(Sp(N))$。帰納法で $\pi_4(Sp(N))\cong\pi_4(Sp(1))=\pi_4(S^3)=\Z_2$。
+
+(3) 完全列
+\[
+\pi_5(S^5)\xrightarrow{\partial}\pi_4(SU(2))\xrightarrow{i_*}\pi_4(SU(3))\to\pi_4(S^5)
+\]
+で $\pi_4(SU(3))=0$ なので $i_*=0$、完全性より $\operatorname{im}\partial=\ker i_*=\pi_4(SU(2))$、すなわち $\partial\colon\Z\to\Z_2$ は全射（奇数を非自明な元に写す）。言い換えると、$SU(2)$ の非自明な写像 $S^4\to SU(2)$ は $SU(3)$ に埋め込むと自明になる。
+
+(4) $SU(2)$ では $\pi_4=\Z_2$ なので、時空 $S^4$ 上に「連続変形で恒等変換に戻せない」ゲージ変換が存在する。$SU(3)$（一般に $SU(N)$、$N\ge3$）では $\pi_4=0$ でそのようなものはない。ウィッテンは、$SU(2)$ の2重項のワイル・フェルミオンが奇数個あると、フェルミオンの経路積分（の符号）がこの非自明なゲージ変換で $-1$ 倍になり、理論がゲージ不変でなくなることを示した（\term{ウィッテンの $SU(2)$ アノマリー}{Witten's SU(2) anomaly}、大域的アノマリー）。$\pi_4$ が自明でないことはこのアノマリーの存在の必要条件である。(3) の結果は、$SU(2)\subset SU(3)$ に埋め込むと $\Z_2$ の情報が摂動的な（三角形の）アノマリーに吸収されることと関係する（第9章）。同様に $Sp(N)$ のゲージ理論でも $\pi_4=\Z_2$ により大域的アノマリーが起こりうる。
+\end{solution}

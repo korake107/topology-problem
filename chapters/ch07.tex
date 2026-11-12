@@ -1,0 +1,904 @@
+%================================================
+\chapter{ファイバー束と主束}\label{ch:07}
+% 18問
+%================================================
+
+\section{物理からの動機}
+
+\subsection*{ディラック・モノポールのベクトル・ポテンシャル}
+原点に磁荷をもつ静的な磁場を考える。第5章の規約では、原点を囲む球面 $S^2$ 上で
+\[
+\int_{S^2}F=2\pi n\qquad(n\in\Z)
+\]
+である（ディラックの量子化条件）。$n\neq0$ ならば、$S^2$ 全体で滑らかなベクトル・ポテンシャル $A$（$F=dA$）は存在しない。存在すればストークスの定理により $\int_{S^2}dA=\int_{\partial S^2}A=0$ となるからである。ディラックは、ポテンシャルが特異になる半直線（\term{ディラック・ストリング}{Dirac string}）を許すことでこの困難を回避した。
+
+ウー（T.~T.~Wu）とヤン（C.~N.~Yang）は、より明快な描像を与えた。$S^2$ を2つの開集合
+\[
+U_N=S^2\setminus\{\text{南極}\},\qquad U_S=S^2\setminus\{\text{北極}\}
+\]
+で覆い、それぞれの上で滑らかなポテンシャル
+\[
+A_N=\frac n2(1-\cos\theta)\,d\varphi,\qquad A_S=-\frac n2(1+\cos\theta)\,d\varphi
+\]
+を用いる。重なり $U_N\cap U_S$（赤道を含む帯）では
+\[
+A_N-A_S=n\,d\varphi=i\,g\,dg^{-1},\qquad g=e^{in\varphi}
+\]
+であり、2つの記述は\textbf{ゲージ変換} $g_{NS}=e^{in\varphi}$ で結ばれている。荷電粒子の波動関数も $\psi_N=e^{in\varphi}\psi_S$ と貼り合わされる。ここで $e^{in\varphi}$ が赤道上で1価であるためには $n\in\Z$ が必要であり、ディラックの量子化条件は「貼り合わせのゲージ変換が well-defined であること」として現れる。
+\begin{center}
+\begin{tikzpicture}[scale=1.15]
+  \shade[ball color=blue!8] (0,0) circle (1.5);
+  \draw[thick] (0,0) circle (1.5);
+  \fill[orange!25,opacity=0.7] (-1.5,0) arc (180:360:1.5 and 0.38) -- (1.5,0.25) arc (0:-180:1.5 and 0.38) -- cycle;
+  \draw[gray,dashed] (1.5,0) arc (0:180:1.5 and 0.38);
+  \draw[very thick,orange!80!black] (-1.5,0) arc (180:360:1.5 and 0.38);
+  \node[vtx] at (0,1.5) {}; \node[vtx] at (0,-1.5) {};
+  \node[above left] at (0,1.5) {\footnotesize 北極};
+  \node[below left] at (0,-1.5) {\footnotesize 南極};
+  \draw[very thick,red!70!black,densely dashed] (0,-1.55) -- (0,-2.6);
+  \node[red!70!black,right] at (0.05,-2.35) {\footnotesize $A_N$ のストリング};
+  \draw[very thick,blue!60!black,densely dashed] (0,1.55) -- (0,2.6);
+  \node[blue!60!black,right] at (0.05,2.35) {\footnotesize $A_S$ のストリング};
+  \node at (-0.45,0.75) {\footnotesize $U_N$：$A_N$};
+  \node at (-0.45,-0.8) {\footnotesize $U_S$：$A_S$};
+  \draw[-{Stealth[length=2mm]}] (2.6,0.1) -- (1.55,-0.2);
+  \node[right,align=left] at (2.6,0.15) {\footnotesize 重なり（赤道付近）\\[-1pt]\footnotesize $A_N=A_S+i\,g\,dg^{-1}$,\ $g=e^{in\varphi}$};
+\end{tikzpicture}
+\zucap{ウー・ヤンの2枚の地図。$A_N$ は南極（を通る半直線）で、$A_S$ は北極で特異になる（波線：ディラック・ストリング）。ストリングは各地図を全球に延長しようとしたときにだけ現れる見かけのものである。}
+\end{center}
+
+\subsection*{ゲージ理論は「貼り合わせ」で定義される}
+一般に、時空（あるいは空間）$M$ 上のゲージ理論は次のように記述される。
+\begin{itemize}
+\item $M$ を開集合 $\{U_i\}$ で覆い、各 $U_i$ 上でゲージ場 $A_i$ と物質場 $\psi_i$ を与える。
+\item 重なり $U_i\cap U_j$ では、ゲージ変換 $g_{ij}\colon U_i\cap U_j\to G$ によって $\psi_i=g_{ij}\psi_j$、$A_i=g_{ij}A_jg_{ij}^{-1}+i\,g_{ij}\,dg_{ij}^{-1}$。
+\item 3つの重なり $U_i\cap U_j\cap U_k$ で矛盾しないために $g_{ij}g_{jk}=g_{ik}$。
+\end{itemize}
+これが\term{ファイバー束}{fibre bundle}（より正確には\term{主束}{principal bundle}とその\term{同伴ベクトル束}{associated vector bundle}）の定義そのものである。$g_{ij}$ を連続的に変形しても（局所的なゲージ変換で）移り合わないとき、束は位相的に異なり、その違いが磁荷やインスタントン数のような\textbf{位相的量子数}になる。例えば $S^4$ 上の $SU(2)$ 束は、赤道 $S^3$ 上の貼り合わせ $g\colon S^3\to SU(2)$ の巻き付き数で分類され、これがインスタントン数である。
+
+フェルミオンを扱うには、さらに\term{スピン構造}{spin structure}が必要である。円周上のフェルミオンには周期的（ラモン，R）と反周期的（ヌヴー・シュワルツ，NS）の2つの境界条件があるが、これは $S^1$ 上の2つのスピン構造にほかならない。弦理論の世界面の分配関数はスピン構造についての和をとり、そのモジュラー不変性から GSO 射影が導かれる。また、$SU(N)$ ゲージ理論をトーラス上で考えると、周期境界条件を中心 $\Z_N$ だけ「ねじる」ことができ（'t Hooft のねじれた境界条件）、これは $SU(N)/\Z_N$ 束の位相的な類として理解される。
+
+\begin{physbox}[：本章の辞書]
+\begin{center}
+\small
+\begin{tabular}{p{0.46\linewidth}p{0.44\linewidth}}
+物理 & 数学\\ \hline
+ゲージ群 $G$ & 構造群 $G$、主 $G$ 束 $P\to M$\\
+局所的なゲージの選択 & 局所切断 $s_i\colon U_i\to P$（局所自明化）\\
+重なりでのゲージ変換 $\psi_i=g_{ij}\psi_j$ & 推移関数 $g_{ij}$、コサイクル条件\\
+ゲージ変換（場の再定義） & 推移関数の取り換え $h_ig_{ij}h_j^{-1}$\\
+表現 $V$ に属する物質場 & 同伴ベクトル束 $P\times_GV$ の切断\\
+ヒッグス場 & 同伴束の切断（零点が位相欠陥）\\
+磁荷、インスタントン数、't Hooft フラックス & 束の同型類（貼り合わせ写像のホモトピー類）\\
+ディラック・ストリング & 1枚の地図で済ませようとした痕跡\\
+フェルミオンの境界条件（R/NS） & スピン構造\\
+ゲージ場（接続）、場の強さ（曲率） & 第8章
+\end{tabular}
+\end{center}
+\end{physbox}
+
+\section{基本事項のまとめ}
+
+\subsection{ファイバー束と推移関数}
+
+\begin{mydef}{ファイバー束}{ch07-bundle}
+空間 $E$, $M$, $F$ と連続な全射 $\pi\colon E\to M$ について、$M$ の開被覆 $\{U_i\}$ と同相写像
+\[
+\Phi_i\colon U_i\times F\xrightarrow{\ \cong\ }\pi^{-1}(U_i),\qquad \pi\circ\Phi_i(x,f)=x
+\]
+（\term{局所自明化}{local trivialization}）が存在するとき、$\pi\colon E\to M$ をファイバー $F$ の\textbf{ファイバー束}という。$E$ を\term{全空間}{total space}、$M$ を\term{底空間}{base space}、$E_x=\pi^{-1}(x)\cong F$ を $x$ 上の\term{ファイバー}{fibre}という。$E\cong M\times F$（ファイバーを保つ同相）のとき\term{自明束}{trivial bundle}という。
+
+群 $G$ が $F$ に忠実に作用し、重なりで
+\[
+\Phi_i^{-1}\circ\Phi_j(x,f)=(x,\ g_{ij}(x)f),\qquad g_{ij}\colon U_i\cap U_j\to G\ \text{（連続）}
+\]
+となるとき、$G$ を\term{構造群}{structure group}、$g_{ij}$ を\term{推移関数}{transition function}という。
+\end{mydef}
+
+点 $e\in\pi^{-1}(U_i\cap U_j)$ の「$i$ 番目の地図での座標」を $f_i$ と書くと $f_i=g_{ij}f_j$ である。本書ではこれを物理の記法に合わせて
+\[
+\psi_i=g_{ij}\,\psi_j\qquad\text{（$U_i\cap U_j$ 上）}
+\]
+と書く。定義から直ちに次が従う（問題 \ref{ch07-prob-cocycle}）。
+
+\begin{myprop}{コサイクル条件と束の同値}{ch07-cocycle}
+\begin{enumerate}
+\item $g_{ii}=1$、$g_{ji}=g_{ij}^{-1}$、そして $U_i\cap U_j\cap U_k$ 上で
+\[
+g_{ij}\,g_{jk}\,g_{ki}=1\qquad(\text{\term{コサイクル条件}{cocycle condition}}).
+\]
+\item 局所自明化を $\psi_i'=h_i\psi_i$（$h_i\colon U_i\to G$）と取り換えると、推移関数は
+\[
+g_{ij}'=h_i\,g_{ij}\,h_j^{-1}
+\]
+に変わる。これは物理でいう\textbf{ゲージ変換}である。
+\item 逆に、コサイクル条件をみたす $\{g_{ij}\}$ が与えられれば、$\bigsqcup_iU_i\times F$ を $(x,f)_j\sim(x,g_{ij}(x)f)_i$ で貼り合わせて束が作れる。2組の推移関数が同じ束を定めるのは、ある $h_i$ により $g'_{ij}=h_ig_{ij}h_j^{-1}$ となるとき、かつそのときに限る（共通の細分をとった上で）。
+\end{enumerate}
+\end{myprop}
+
+\begin{mydef}{引き戻し}{ch07-pullback}
+束 $\pi\colon E\to M$ と連続写像 $f\colon N\to M$ に対し
+\[
+f^*E=\{(y,e)\in N\times E:\ f(y)=\pi(e)\}\longrightarrow N,\qquad (y,e)\mapsto y
+\]
+を\term{引き戻し束}{pullback bundle}という。推移関数は $g_{ij}\circ f$（被覆 $\{f^{-1}(U_i)\}$ 上）である。$f\simeq f'$ ならば $f^*E\cong f'^*E$（底空間がコンパクトなど、適当な条件の下で）。特に可縮な空間上の束は自明である。
+\end{mydef}
+
+\subsection{主束と同伴束}
+
+\begin{mydef}{主束}{ch07-principal}
+リー群 $G$ が空間 $P$ に右から自由に作用し（$p\mapsto pg$）、$\pi\colon P\to M=P/G$ が、$G$ 同変な局所自明化 $U_i\times G\cong\pi^{-1}(U_i)$、$(x,g)\mapsto s_i(x)g$ をもつとき、$P$ を\textbf{主 $G$ 束}という。ここで $s_i\colon U_i\to P$ は\term{局所切断}{local section}である。重なりでは、$G$ の作用がファイバー上で単純推移的なので
+\[
+s_j(x)=s_i(x)\,g_{ij}(x)
+\]
+となる $g_{ij}(x)\in G$ が一意に決まり、これが推移関数である（ファイバー $G$ に左からかけ算で作用）。
+\end{mydef}
+
+\begin{mydef}{同伴ベクトル束}{ch07-assoc}
+主 $G$ 束 $P$ と表現 $\rho\colon G\to GL(V)$ に対し
+\[
+P\times_GV=(P\times V)/\bigl((pg,v)\sim(p,\rho(g)v)\bigr)
+\]
+を\textbf{同伴ベクトル束}という。$U_i$ 上の点を $[s_i(x),\psi_i]$ と表すと、$s_j=s_ig_{ij}$ から $[s_j,\psi_j]=[s_i,\rho(g_{ij})\psi_j]$、すなわち
+\[
+\psi_i=\rho(g_{ij})\,\psi_j .
+\]
+物質場（表現 $V$ に属する場）は $P\times_GV$ の\term{切断}{section}であり、局所的には $V$ 値関数の組 $\{\psi_i\}$ で、重なりで上の関係をみたすものである。局所切断を $s_i'=s_ih_i^{-1}$ に取り換えると $\psi_i'=\rho(h_i)\psi_i$ となる（ゲージ変換 $\psi\mapsto g\psi$）。
+\end{mydef}
+
+\begin{mythm}{主束の自明性}{ch07-trivsec}
+主 $G$ 束 $P\to M$ が自明であるための必要十分条件は、大域的な切断 $s\colon M\to P$ が存在することである（問題 \ref{ch07-prob-trivsec}）。物理的にいえば、「全空間で1つのゲージ（地図）を選べる」ことと「束が自明」であることは同値である。
+\end{mythm}
+
+ベクトル束は零切断を必ずもつので、自明性は「至る所1次独立な $k$ 個の切断（大域的な枠）が存在すること」と同値になる。直和 $E\oplus E'$、テンソル積 $E\otimes E'$、双対 $E^*$、行列式束 $\det E=\Lambda^{\mathrm{top}}E$ は、推移関数をそれぞれ $g\oplus g'$, $g\otimes g'$, $(g^{T})^{-1}$, $\det g$ として作る。
+
+\begin{myex}{代表的なベクトル束}{ch07-vbex}
+\begin{itemize}
+\item \textbf{接束} $TM$：座標 $x_i^\mu$ を地図とすると、ベクトルの成分は $v_i^\mu=\dfrac{\partial x_i^\mu}{\partial x_j^\nu}v_j^\nu$ と変換し、推移関数はヤコビ行列 $g_{ij}=\partial x_i/\partial x_j\in GL(n,\R)$。\textbf{余接束} $T^*M$ は $(g_{ij}^T)^{-1}$。
+\item \textbf{枠束} $F(M)$：各点の接空間の基底全体からなる主 $GL(n,\R)$ 束。計量を入れて正規直交枠に制限すると主 $O(n)$ 束、向きも込めると主 $SO(n)$ 束。$TM=F(M)\times_{GL(n)}\R^n$。
+\item \textbf{トートロジカル直線束}：$\CP^n$ の点 $[z]$ に直線 $\C z\subset\C^{n+1}$ を対応させる複素直線束 $L=\mathcal O(-1)=\{([z],v):v\in\C z\}$。その双対を $\mathcal O(1)$、$\mathcal O(m)=\mathcal O(1)^{\otimes m}$（$m<0$ は $\mathcal O(-1)^{\otimes\lvert m\rvert}$）とする。
+\item \textbf{メビウス束}：$E=[0,1]\times\R/\bigl((0,t)\sim(1,-t)\bigr)\to S^1$。構造群 $O(1)=\{\pm1\}$ の実直線束で、自明でない（例 \ref{ex:ch07-mobius}、問題 \ref{ch07-prob-mobius}）。
+\end{itemize}
+\end{myex}
+
+\begin{myex}{メビウス束}{ch07-mobius}
+$S^1=[0,1]/(0\sim1)$ を $U_1=S^1\setminus\{s=0\}$、$U_2=S^1\setminus\{s=\tfrac12\}$ で覆うと、$U_1\cap U_2$ は2つの弧 $(0,\tfrac12)$, $(\tfrac12,1)$ からなり、推移関数は一方で $+1$、他方で $-1$ である。
+\begin{center}
+\begin{tikzpicture}[scale=1.1]
+  \fill[blue!6] (0,-1) rectangle (4,1);
+  \draw[very thick,green!50!black] (0,1) -- (4,1);
+  \draw[very thick,orange!90!black] (0,-1) -- (4,-1);
+  \draw[thick,red!70!black,mid arrow] (0,-1) -- (0,1);
+  \draw[thick,red!70!black,mid arrow] (4,1) -- (4,-1);
+  \draw[thick,gray] (1.3,-1) -- (1.3,1) node[above] {\footnotesize $\pi^{-1}(s)$};
+  \draw[dashed] (0,0) -- (4,0) node[right] {\footnotesize 零切断};
+  \node[hvtx,inner sep=1.8pt] at (4,1) {}; \node[hvtx,inner sep=1.8pt] at (0,-1) {};
+  \node[vtx,inner sep=1.6pt] at (4,-1) {}; \node[vtx,inner sep=1.6pt] at (0,1) {};
+  \draw[-{Stealth[length=2.2mm]}] (2,-1.35) -- (2,-1.95) node[midway,right] {$\pi$};
+  \draw[thick] (0,-2.3) -- (4,-2.3);
+  \node[vtx] at (0,-2.3) {}; \node[vtx] at (4,-2.3) {};
+  \node[below] at (0,-2.3) {\footnotesize $0$}; \node[below] at (4,-2.3) {\footnotesize $1$};
+  \node[right] at (4.1,-2.3) {$[0,1]/(0\sim1)\cong S^1$};
+\end{tikzpicture}
+\zucap{メビウス束（ファイバー $\R$ を $[-1,1]$ に切り詰めて描いた）。左右の辺を矢印の向きがそろうように、すなわち $(0,t)\sim(1,-t)$ で貼る。切断は $t(0)=-t(1)$ をみたす関数 $t(s)$ なので、中間値の定理により必ず零点をもつ。}
+\end{center}
+\end{myex}
+
+\begin{physbox}[：ゲージ理論と主束]
+\begin{itemize}
+\item ゲージ群 $G$ のゲージ理論の「場の配位空間」は、主 $G$ 束 $P$ の選択と、その上の接続（ゲージ場、第8章）および同伴束の切断（物質場）からなる。異なる位相型の $P$ は互いに連続変形で移れない\textbf{位相的セクター}を与える。
+\item 局所的には $A_i$ はエルミート行列値1形式で、重なりで $A_i=g_{ij}A_jg_{ij}^{-1}+i\,g_{ij}\,dg_{ij}^{-1}$。このとき $D_i\psi_i=g_{ij}D_j\psi_j$、$F_i=g_{ij}F_jg_{ij}^{-1}$ となり（問題 \ref{ch07-prob-cocycle}）、$\tr F^k$ のようなゲージ不変量は大域的な微分形式になる。
+\item $SU(N)$ ゲージ理論で全ての場が随伴表現（$SU(N)$ の中心 $\Z_N$ が自明に作用）ならば、実際の構造群は $SU(N)/\Z_N$ であり、$SU(N)$ 束にならない束も許される（問題 \ref{ch07-prob-thooft}）。
+\end{itemize}
+\end{physbox}
+
+\subsection{球面上の束：貼り合わせによる分類}
+$S^n$ を北半球と南半球をすこし広げた開集合 $U_N$, $U_S$ で覆う。どちらも可縮なので束は各半球上で自明であり、束の情報は赤道付近の推移関数 $g_{NS}$ だけにある。赤道付近は $S^{n-1}$ にホモトピー同値なので、$g_{NS}$ は写像 $S^{n-1}\to G$ とみなせる（\term{貼り合わせ写像}{clutching function}）。
+
+\begin{center}
+\begin{tikzpicture}[scale=1]
+  \fill[blue!8] (0,0) circle (1.1); \draw[thick] (0,0) circle (1.1);
+  \node at (0,0) {$U_N\simeq D^n$};
+  \fill[red!8] (5,0) circle (1.1); \draw[thick] (5,0) circle (1.1);
+  \node at (5,0) {$U_S\simeq D^n$};
+  \draw[-{Stealth[length=2.2mm]},thick,orange!80!black] (1.2,0.25) to[bend left=20] node[midway,above] {\footnotesize $g_{NS}\colon S^{n-1}\to G$} (3.8,0.25);
+  \node[below] at (0,-1.15) {\footnotesize $\partial U_N\cong S^{n-1}$};
+  \node[below] at (5,-1.15) {\footnotesize $\partial U_S\cong S^{n-1}$};
+  \draw[-{Stealth[length=2.2mm]},thick] (6.4,0) -- (7.4,0);
+  \shade[ball color=gray!10] (8.7,0) circle (1.1); \draw[thick] (8.7,0) circle (1.1);
+  \draw[very thick,orange!80!black] (7.6,0) arc (180:360:1.1 and 0.3);
+  \draw[orange!80!black,dashed] (9.8,0) arc (0:180:1.1 and 0.3);
+  \node at (8.7,0.55) {\footnotesize $D^n\times G$};
+  \node at (8.7,-0.6) {\footnotesize $D^n\times G$};
+  \node[below] at (8.7,-1.15) {\footnotesize $S^n$ 上の束};
+\end{tikzpicture}
+\zucap{貼り合わせによる構成。2つの自明束 $D^n\times G$ を、境界 $S^{n-1}$ の各点 $x$ で $g_{NS}(x)\in G$ によって貼り合わせると、$S^n$ 上の主 $G$ 束が得られる。}
+\end{center}
+
+\begin{mythm}{貼り合わせによる分類}{ch07-clutch}
+$G$ を弧状連結なリー群、$n\ge1$ とする。$S^n$ 上の主 $G$ 束の同型類は、貼り合わせ写像 $g_{NS}\colon S^{n-1}\to G$ のホモトピー類と1対1に対応する：
+\[
+\{S^n\text{ 上の主 }G\text{ 束}\}/{\cong}\ \longleftrightarrow\ [S^{n-1},G]\cong\pi_{n-1}(G).
+\]
+$G$ が連結でないとき（$O(1)$ など）は $[S^{n-1},G]$ を $\pi_0(G)$ の共役作用で割ったものになる。
+\end{mythm}
+\begin{note}
+証明の要点：局所自明化を取り換えると $g_{NS}'=h_Ng_{NS}h_S^{-1}$。$h_N$, $h_S$ は円板（可縮）上の写像なので定値写像とホモトピックであり、$G$ が弧状連結なのでさらに定数 $1$ とホモトピック。したがって $g'_{NS}\simeq g_{NS}$。逆に $g_{NS}\simeq g_{NS}'$ ならホモトピーを赤道の近傍の「首」に埋め込んで束の同型が作れる。最後に、$G$ は群なので基点を $1$ に移すことができ、自由ホモトピー類と基点付きホモトピー類は一致する（$\pi_1(G)$ の $\pi_{n-1}(G)$ への作用は自明）。
+\end{note}
+
+\begin{center}
+\renewcommand{\arraystretch}{1.25}\small
+\begin{tabular}{llll}
+底空間 & 構造群 $G$ & 分類 $\pi_{n-1}(G)$ & 物理\\ \hline
+$S^1$ & 連結な $G$ & $\pi_0(G)=0$ & 束は自明（ホロノミーは残る）\\
+$S^1$ & $O(1)=\Z_2$ & $\Z_2$ & 自明束とメビウス束\\
+$S^2$ & $U(1)$ & $\pi_1(U(1))=\Z$ & ディラック・モノポール\\
+$S^2$ & $SU(N)$ & $0$ & 自明\\
+$S^2$ & $U(N)$ & $\Z$（$\det$ で検出） & GNO モノポール（問題 \ref{ch07-prob-s2bundles}）\\
+$S^2$ & $SO(3)$ & $\Z_2$ & $SU(2)$ に持ち上がらない束\\
+$S^3$ & コンパクト連結 $G$ & $\pi_2(G)=0$ & 自明\\
+$S^4$ & $SU(N)$ ($N\ge2$) & $\pi_3(SU(N))=\Z$ & インスタントン数\\
+$S^4$ & $U(1)$ & $\pi_3(U(1))=0$ & 自明
+\end{tabular}
+\end{center}
+
+\begin{myex}{モノポール束}{ch07-monopole}
+$S^2$ を極座標 $(\theta,\varphi)$ で表し、向きは $d\theta\wedge d\varphi$（外向き法線に関する通常の向き）とする。$U_N\ni$ 北極、$U_S\ni$ 南極とし、
+\[
+g_{NS}=e^{in\varphi}\qquad(\psi_N=e^{in\varphi}\psi_S)
+\]
+で貼り合わせた主 $U(1)$ 束を $P_n$ と書く。整数 $n$ は、赤道を $\varphi$ が増える向き（北半球の境界としての向き）に1周したときの $g_{NS}$ の巻き付き数であり、本書ではこれを束の\term{モノポール荷}{monopole charge}と呼ぶ。動機の節の $A_N$, $A_S$ はこの束の上のゲージ場で、$\dfrac1{2\pi}\int_{S^2}F=n$ となる（問題 \ref{ch07-prob-monopole}）。一般に「$g_{NS}$ の巻き付き数 $=$ 第1チャーン数 $\dfrac1{2\pi}\int F$」が成り立つ（第8章）。
+\end{myex}
+
+\begin{myex}{ホップ束}{ch07-hopf}
+$S^3=\{(z_1,z_2)\in\C^2:\lvert z_1\rvert^2+\lvert z_2\rvert^2=1\}$ に $U(1)$ を $z\mapsto z\lambda$ で作用させ、ホップ写像（第1章）
+\[
+h\colon S^3\to S^2,\qquad h(z)=z^\dagger\bm\sigma z=\bigl(2\operatorname{Re}(\bar z_1z_2),\ 2\operatorname{Im}(\bar z_1z_2),\ \lvert z_1\rvert^2-\lvert z_2\rvert^2\bigr)
+\]
+を射影とすると主 $U(1)$ 束になる（\term{ホップ束}{Hopf bundle}）。$z=\bigl(\cos\tfrac\theta2\,e^{i\alpha},\ \sin\tfrac\theta2\,e^{i(\alpha+\varphi)}\bigr)$ とおくと $h(z)$ は極座標 $(\theta,\varphi)$ の点である。局所切断
+\[
+s_N=\bigl(\cos\tfrac\theta2,\ \sin\tfrac\theta2\,e^{i\varphi}\bigr),\qquad s_S=\bigl(\cos\tfrac\theta2\,e^{-i\varphi},\ \sin\tfrac\theta2\bigr)
+\]
+は $s_S=s_N\,e^{-i\varphi}$ をみたすので $g_{NS}=e^{-i\varphi}$、すなわち\textbf{ホップ束はモノポール荷 $n=-1$ の束 $P_{-1}$} である。電荷1の同伴直線束 $S^3\times_{U(1)}\C$ はトートロジカル直線束 $\mathcal O(-1)$ と同型であり、その双対 $\mathcal O(1)$（電荷 $-1$ の場）がモノポール荷 $+1$ をもつ（問題 \ref{ch07-prob-hopf}）。
+\begin{center}
+\begin{tikzpicture}[scale=1]
+  \draw[thick,red!70!black] (1.5,0) arc (0:180:1.5 and 0.45);
+  \draw[white,line width=4pt] (0,-2) -- (0,2);
+  \draw[thick,blue!70!black,-{Stealth[length=2mm]}] (0,-2) -- (0,2.1);
+  \draw[white,line width=4pt] (-1.5,0) arc (180:360:1.5 and 0.45);
+  \draw[thick,red!70!black] (-1.5,0) arc (180:360:1.5 and 0.45);
+  \node[blue!70!black,right] at (0.05,1.9) {\footnotesize $h^{-1}(\text{南極})$（$\infty$ を通る）};
+  \node[red!70!black,right] at (1.5,-0.25) {\footnotesize $h^{-1}(\text{北極})$};
+  \begin{scope}[xshift=6.2cm]
+    \draw[thick,green!50!black] (1.6,0) arc (0:180:0.8 and 0.32);
+    \draw[white,line width=4pt] (0,0) circle (0.8);
+    \draw[thick,violet] (0,0) circle (0.8);
+    \draw[white,line width=4pt] (0,0) arc (180:360:0.8 and 0.32);
+    \draw[thick,green!50!black] (0,0) arc (180:360:0.8 and 0.32);
+    \node[violet] at (-1.15,0.6) {\footnotesize $h^{-1}(x)$};
+    \node[green!50!black] at (2.2,0.55) {\footnotesize $h^{-1}(y)$};
+  \end{scope}
+\end{tikzpicture}
+\zucap{ホップ束のファイバー（立体射影で $S^3\setminus\{\text{1点}\}\cong\R^3$ に描いた模式図）。各ファイバーは円周で、異なる2本のファイバーは必ず1回絡み合う。$S^3$ は互いに絡み合う円周で埋め尽くされている。}
+\end{center}
+\end{myex}
+
+\begin{myex}{$S^4$ 上の $SU(2)$ 束}{ch07-s4}
+$S^4=\R^4\cup\{\infty\}$ を $U_N=\{\lvert x\rvert<R+\epsilon\}$ と $U_S=\{\lvert x\rvert>R-\epsilon\}\cup\{\infty\}$ で覆う。$SU(2)$ 束は $\pi_3(SU(2))=\Z$ で分類され、代表的な貼り合わせ写像は
+\[
+g_{NS}(x)=\frac{x_4+i\,\bm x\cdot\bm\sigma}{\lvert x\rvert}\qquad(x=(\bm x,x_4)),
+\]
+その巻き付き数は記法と規約の $w(g)=\frac{1}{24\pi^2}\int_{S^3}\tr(g^{-1}dg)^3$ で $w=1$ である。束のインスタントン数は $k=w(g_{NS})$ となる（問題 \ref{ch07-prob-s4}；第8章で再び扱う）。
+\end{myex}
+
+\subsection{ファイバー束のホモトピー完全列}
+第3章で道具として用いた次の定理は、ファイバー束の\term{ホモトピー持ち上げ性質}{homotopy lifting property}から従う。
+
+\begin{mythm}{ホモトピー長完全列}{ch07-les}
+$F\to E\xrightarrow{\pi}M$ をファイバー束（$M$ は弧状連結、$e_0\in F=\pi^{-1}(x_0)$）とすると、完全列
+\[
+\begin{gathered}\cdots\to\pi_n(F)\xrightarrow{i_*}\pi_n(E)\xrightarrow{\pi_*}\pi_n(M)\xrightarrow{\partial}\pi_{n-1}(F)\to\cdots\\ \cdots\to\pi_1(M)\to\pi_0(F)\to\pi_0(E)\to0\end{gathered}
+\]
+がある。
+\end{mythm}
+\begin{note}
+$\partial$ の作り方：$[f]\in\pi_n(M)$ を $f\colon(D^n,S^{n-1})\to(M,x_0)$ で表し、持ち上げ性質で $\tilde f\colon D^n\to E$（$\pi\circ\tilde f=f$）を作る。$\tilde f(S^{n-1})\subset F$ なので $\partial[f]=[\tilde f|_{S^{n-1}}]$。完全性の確認は定義を追うだけである。主 $U(1)$ 束 $P_n\to S^2$ では、$\partial\colon\pi_2(S^2)=\Z\to\pi_1(U(1))=\Z$ は $\pm n$ 倍である（貼り合わせ写像そのものが $\partial$ の像を与える）。
+\end{note}
+
+代表的な例は、ホップ束 $S^1\to S^3\to S^2$、$SU(N-1)\to SU(N)\to S^{2N-1}$、$SO(n-1)\to SO(n)\to S^{n-1}$、$SU(N)\to U(N)\xrightarrow{\det}U(1)$、そして被覆空間（離散ファイバー）である。
+
+\subsection{向きとスピン構造}
+
+\begin{mydef}{向き付け可能性}{ch07-orient}
+$n$ 次元多様体 $M$ が\term{向き付け可能}{orientable}であるとは、接束の推移関数（ヤコビ行列）を $\det g_{ij}>0$ となるように選べることをいう。リーマン計量を入れて $g_{ij}\in O(n)$ とすると、$\det g_{ij}\in\{\pm1\}$ は $\Z_2$ に値をとるコサイクルであり、その類
+\[
+w_1(M)\in H^1(M;\Z_2)
+\]
+（\term{第1シュティーフェル・ホイットニー類}{first Stiefel--Whitney class}）が $0$ であることが向き付け可能性と同値である。
+\end{mydef}
+例えば $\RP^n$ は $n$ が奇数のとき、かつそのときに限り向き付け可能である（対蹠写像 $x\mapsto-x$ が $S^n$ の向きを保つのは $n$ が奇数のとき）。$\RP^2$ はメビウスの帯を含むので向き付け不可能である。
+
+\begin{mydef}{スピン群とスピン構造}{ch07-spin}
+$n\ge3$ のとき $SO(n)$ の普遍被覆を $\Spin(n)$ と書き、2対1の準同型 $\rho\colon\Spin(n)\to SO(n)$（核 $\{\pm1\}$）をもつ。$\Spin(3)=SU(2)$、$\Spin(4)=SU(2)\times SU(2)$。低次元では $\Spin(2)=U(1)\to SO(2)=U(1)$、$\lambda\mapsto\lambda^2$、$\Spin(1)=\{\pm1\}\to SO(1)=1$ と定める。
+
+向きと計量をもつ $M$ の正規直交枠束（主 $SO(n)$ 束）を $P_{SO}$ とする。主 $\Spin(n)$ 束 $\tilde P$ と2対1の写像 $\tilde P\to P_{SO}$ で $\rho$ と両立するものを\textbf{スピン構造}という。推移関数でいえば、$g_{ij}\in SO(n)$ の持ち上げ $\tilde g_{ij}\in\Spin(n)$（$\rho(\tilde g_{ij})=g_{ij}$）で、コサイクル条件 $\tilde g_{ij}\tilde g_{jk}\tilde g_{ki}=1$ をみたすものを選ぶことである。
+\end{mydef}
+
+\begin{mythm}{スピン構造の存在と分類}{ch07-spinclass}
+持ち上げは常に $\tilde g_{ij}\tilde g_{jk}\tilde g_{ki}=\epsilon_{ijk}\in\{\pm1\}$ をみたし、$\{\epsilon_{ijk}\}$ は $\Z_2$ 係数の2-コサイクルを定める。その類
+\[
+w_2(M)\in H^2(M;\Z_2)
+\]
+（\term{第2シュティーフェル・ホイットニー類}{second Stiefel--Whitney class}）が $0$ であることがスピン構造の存在と同値である。存在するとき、2つのスピン構造は $\tilde g_{ij}'=\eta_{ij}\tilde g_{ij}$（$\eta_{ij}\in\{\pm1\}$ は1-コサイクル）で移り合い、連結な $M$ のスピン構造は $H^1(M;\Z_2)$ と1対1に対応する。特に、その個数は $\lvert H^1(M;\Z_2)\rvert$ である。
+\end{mythm}
+
+\begin{center}
+\renewcommand{\arraystretch}{1.2}\small
+\begin{tabular}{lll}
+$M$ & スピン構造の数 & 備考\\ \hline
+$S^1$ & $2$ & R（周期的）と NS（反周期的）\\
+$T^2$ & $4$ & (NS,NS), (NS,R), (R,NS), (R,R)\\
+$\Sigma_g$ & $2^{2g}$ & 偶 $2^{g-1}(2^g+1)$ 個、奇 $2^{g-1}(2^g-1)$ 個（問題 \ref{ch07-prob-arf}）\\
+$S^n$ ($n\ge2$) & $1$ & $H^1=0$ かつ $w_2=0$\\
+$T^n$ & $2^n$ & \\
+$\CP^2$ & $0$ & $w_2\neq0$：スピン多様体でない
+\end{tabular}
+\end{center}
+$\CP^2$ がスピンでないことは、交叉形式 $(1)$ が奇であること（第6章）と、ウーの公式「$x\cdot x\equiv x\cdot w_2\pmod2$」から従う（ここでは証明しない）。このような多様体上でもフェルミオンを $U(1)$ ゲージ場と結合させれば定義できる（$\Spin^c$ 構造）。
+
+\begin{physbox}[：スピン構造とフェルミオンの境界条件]
+\begin{itemize}
+\item 円周 $S^1$ 上で、接ベクトルに沿った枠を用いるとスピノルは $\psi(\sigma+2\pi)=\pm\psi(\sigma)$。$+$ が R（ラモン）、$-$ が NS（ヌヴー・シュワルツ）である。円板の境界として延長できる（\term{バウンディング}{bounding}な）のは NS である（問題 \ref{ch07-prob-spins1}）。円筒から平面への写像 $z=e^{w}$ で NS セクターが平面上の1価な場に対応するのはこのためである。
+\item 有限温度の場の理論でフェルミオンが虚時間方向に反周期的なのは、$\Tr e^{-\beta H}$ が時間方向 NS のスピン構造に対応するからであり、$\Tr(-1)^Fe^{-\beta H}$ は時間方向 R に対応する。
+\item 弦の世界面（種数 $g$）の経路積分はスピン構造について和をとる。その整合性（モジュラー不変性）が GSO 射影を導く（問題 \ref{ch07-prob-gso}）。
+\end{itemize}
+\end{physbox}
+
+\section{問題}
+
+\subsection{束・推移関数・切断}
+
+\begin{problem}[難易度 A]\label{ch07-prob-cocycle}
+$G$ を行列リー群とし、開被覆 $\{U_i\}$ の上で、$G$ の表現 $V$ に属する場 $\psi_i\colon U_i\to V$ とゲージ場 $A_i$（$\mathfrak g$ 値1形式）が、重なりで
+\[
+\psi_i=g_{ij}\psi_j,\qquad A_i=g_{ij}A_jg_{ij}^{-1}+i\,g_{ij}\,dg_{ij}^{-1}
+\]
+と貼り合わされているとする。ただし $\psi_j$ は任意の値をとりうるものとする。\\
+(1) $g_{ii}=1$、$g_{ji}=g_{ij}^{-1}$、$g_{ij}g_{jk}g_{ki}=1$ を示せ。\\
+(2) $g\ast A:=gAg^{-1}+i\,g\,dg^{-1}$ とおくとき $(gh)\ast A=g\ast(h\ast A)$ を示し、$A$ の貼り合わせ規則が3つの重なりで矛盾しないことを確かめよ。\\
+(3) $D_i=d-iA_i$ とするとき $D_i\psi_i=g_{ij}D_j\psi_j$ を示せ。\\
+(4) 各 $U_i$ でゲージ変換 $\psi_i'=h_i\psi_i$ を行うと、推移関数が $g_{ij}'=h_ig_{ij}h_j^{-1}$ に変わることを示せ。
+\end{problem}
+
+\begin{solution}
+(1) $U_i$ 上で $\psi_i=g_{ii}\psi_i$ が任意の $\psi_i$ で成り立つので $g_{ii}=1$。$\psi_i=g_{ij}\psi_j=g_{ij}g_{ji}\psi_i$ より $g_{ij}g_{ji}=1$。$U_i\cap U_j\cap U_k$ 上で $\psi_i=g_{ij}\psi_j=g_{ij}g_{jk}\psi_k$ かつ $\psi_i=g_{ik}\psi_k=g_{ki}^{-1}\psi_k$ なので $g_{ij}g_{jk}=g_{ki}^{-1}$、すなわち $g_{ij}g_{jk}g_{ki}=1$。（$\rho$ が忠実でなければ $g$ の代わりに $\rho(g)$ についての等式になる。）
+
+(2) $d(h^{-1}g^{-1})=(dh^{-1})g^{-1}+h^{-1}dg^{-1}$ を用いて
+\[
+i\,(gh)\,d(gh)^{-1}=i\,g\,h\,(dh^{-1})\,g^{-1}+i\,g\,dg^{-1}.
+\]
+一方
+\[
+g\ast(h\ast A)=g\bigl(hAh^{-1}+i\,h\,dh^{-1}\bigr)g^{-1}+i\,g\,dg^{-1}=(gh)A(gh)^{-1}+i\,gh\,(dh^{-1})\,g^{-1}+i\,g\,dg^{-1}
+\]
+であり、両者は一致する。よって $A_i=g_{ij}\ast A_j=g_{ij}\ast(g_{jk}\ast A_k)=(g_{ij}g_{jk})\ast A_k=g_{ik}\ast A_k$ となり、$U_i\cap U_k$ での規則 $A_i=g_{ik}\ast A_k$ と矛盾しない。ここでコサイクル条件を使った。
+
+(3) $g=g_{ij}$ と書く。$g\,dg^{-1}\,g=-dg\,g^{-1}g=-dg$（$d(gg^{-1})=0$ より $dg^{-1}=-g^{-1}dg\,g^{-1}$）を用いると
+\begin{align*}
+D_i\psi_i&=d(g\psi_j)-i\bigl(gA_jg^{-1}+i\,g\,dg^{-1}\bigr)g\psi_j\\
+&=dg\,\psi_j+g\,d\psi_j-i\,gA_j\psi_j+g\,dg^{-1}g\,\psi_j\\
+&=dg\,\psi_j+g\,d\psi_j-i\,gA_j\psi_j-dg\,\psi_j=g(d-iA_j)\psi_j .
+\end{align*}
+共変微分は物質場と同じ規則で貼り合わされ、$D\psi$ も同伴束の（1形式値の）切断になる。
+
+(4) $\psi_i'=h_i\psi_i=h_ig_{ij}\psi_j=h_ig_{ij}h_j^{-1}\psi_j'$。よって $g_{ij}'=h_ig_{ij}h_j^{-1}$。このとき $g'$ もコサイクル条件をみたす：$g'_{ij}g'_{jk}g'_{ki}=h_ig_{ij}g_{jk}g_{ki}h_i^{-1}=1$。
+\end{solution}
+
+\begin{problem}[難易度 A]\label{ch07-prob-trivsec}
+(1) 主 $G$ 束 $\pi\colon P\to M$ が自明（$P\cong M\times G$、$G$ 同変かつファイバーを保つ）であるための必要十分条件は、大域切断 $s\colon M\to P$ が存在することであることを示せ。\\
+(2) ランク $k$ の実ベクトル束 $E$ が自明であるための必要十分条件は、各点で1次独立な $k$ 個の大域切断が存在することであることを、枠束に (1) を適用して示せ。\\
+(3) 「ゲージ固定」を局所切断の選択と解釈し、ディラック・モノポール（$n\neq0$）の背景では、全空間で特異点のないゲージを選ぶことができない理由を述べよ。束 $P_n$（$n\neq0$）が自明でないことは認めてよい。
+\end{problem}
+
+\begin{solution}
+(1) 自明化 $\Phi\colon M\times G\to P$ があれば $s(x)=\Phi(x,1)$ が大域切断である。逆に大域切断 $s$ があるとき $\Phi(x,g)=s(x)g$ とおく。$\pi(\Phi(x,g))=x$ で、$\Phi(x,g)g'=\Phi(x,gg')$（同変）。各ファイバー上で $G$ は自由かつ推移的に作用するので $\Phi$ は全単射である。逆写像は $p\mapsto(\pi(p),\gamma(p))$、ただし $p=s(\pi(p))\gamma(p)$ で $\gamma(p)\in G$ を定める。$\gamma$ の連続性：$U_i$ 上の局所切断 $s_i$ を用いて $s(x)=s_i(x)a_i(x)$、$p=s_i(\pi(p))b_i(p)$ と書くと、$a_i$, $b_i$ は局所自明化から決まる連続関数で、$\gamma(p)=a_i(\pi(p))^{-1}b_i(p)$ は連続。よって $\Phi$ は同相で $P$ は自明。
+
+(2) $E$ の枠束 $F(E)$（各ファイバーの基底全体、主 $GL(k,\R)$ 束）の切断は、各点で1次独立な $k$ 個の切断 $(e_1,\dots,e_k)$ にほかならない。$E\cong F(E)\times_{GL(k)}\R^k$ であり、$F(E)$ が自明なら $E$ も自明、逆に $E\cong M\times\R^k$ なら標準基底が大域的な枠を与える。(1) より主張が従う。
+
+(3) $U$ 上のゲージの選択（各点で「位相の基準」を選ぶこと）は、主 $U(1)$ 束の $U$ 上の切断 $s$ を選ぶことである。そのとき場は $\psi=[s,\psi_U]$ によって通常の関数 $\psi_U$ で表され、ゲージ場も通常の1形式 $A_U$ になる。$S^2$ 全体で特異点のないゲージがあれば、それは大域切断であり (1) から $P_n$ は自明になる。$n\neq0$ ではこれは矛盾なので、少なくとも2枚の地図（ウー・ヤン）か、特異点（ディラック・ストリング）を許したゲージが必要である。ストリングの位置は切断の零点・特異点の位置であり、別のゲージに移れば動かせるが、消すことはできない。
+\end{solution}
+
+\begin{problem}[難易度 B]\label{ch07-prob-mobius}
+例 \ref{ex:ch07-mobius} のメビウス束 $E=[0,1]\times\R/\bigl((0,t)\sim(1,-t)\bigr)\to S^1$ を考える。\\
+(1) $U_1=\{0<s<1\}$、$U_2=\{s\neq\tfrac12\}$ 上の局所自明化を具体的に書き、推移関数を求めよ。\\
+(2) $E$ の任意の切断は零点をもつことを示し、$E$ が自明束でないことを結論せよ。また、推移関数の取り換え $h_2g_{21}h_1^{-1}$（$h_i\colon U_i\to\R^\times$）で $g_{21}\equiv1$ にできないことを直接示せ。\\
+(3) $E\oplus E$ は自明であることを示せ。\\
+(4) 円周 $\sigma\sim\sigma+2\pi$ 上の場で反周期的境界条件 $\phi(\sigma+2\pi)=-\phi(\sigma)$ をみたすものを考える。実スカラー場1つではこれを周期的な場に「場の再定義」で直すことはできないが、複素スカラー場では $\phi=e^{i\sigma/2}\tilde\phi$ により周期的な $\tilde\phi$ に直せることを示せ。後者で、ねじれがどこに移るかを述べよ（自由場の運動項 $\lvert\partial_\sigma\phi\rvert^2$ を $\tilde\phi$ で書け）。
+\end{problem}
+
+\begin{solution}
+(1) $U_1$ 上は $\Phi_1^{-1}([s,t])=(s,t)$、$0<s<1$。$U_2$ 上は
+\[
+\Phi_2^{-1}([s,t])=\begin{cases}(s,\ t)&(0\le s<\tfrac12)\\ (s,\ -t)&(\tfrac12<s\le1)\end{cases}
+\]
+とおく。同一視 $[0,t]=[1,-t]$ の両辺で第2成分はともに $t$ になるので well-defined。重なり $U_1\cap U_2$ は2つの弧 $(0,\tfrac12)$, $(\tfrac12,1)$ で、ファイバー座標の関係は $t_2=t_1$（前者）、$t_2=-t_1$（後者）。よって $\psi_2=g_{21}\psi_1$ の推移関数は
+\[
+g_{21}=+1\ \ \text{on }(0,\tfrac12),\qquad g_{21}=-1\ \ \text{on }(\tfrac12,1).
+\]
+
+(2) 切断は連続関数 $t\colon[0,1]\to\R$ で $t(1)=-t(0)$ をみたすもの（$[0,t(0)]=[1,t(1)]$ のため）と同じである。$t(0)\neq0$ なら $t(0)$ と $t(1)$ は異符号なので、中間値の定理により $t(s_0)=0$ となる $s_0$ がある。$t(0)=0$ なら $s=0$ が零点。自明束 $S^1\times\R$ には零点のない切断（定数 $1$）があるので、$E$ は自明でない。
+
+推移関数による議論：$U_1$, $U_2$ はともに連結（弧）なので、連続な $h_i\colon U_i\to\R^\times$ の符号は一定である。すると $g'_{21}=h_2g_{21}h_1^{-1}$ の符号は、2つの弧の上で $\operatorname{sgn}(h_2h_1^{-1})\cdot(\pm1)$ となり、必ず一方で正、他方で負になる。よって $g'_{21}\equiv1$ にはできない。（これは $w_1(E)\neq0$ の最も簡単な例である。）
+
+(3) $E\oplus E$ の推移関数は $g_{21}\mathbf 1_2$ で、$(\tfrac12,1)$ 上で $-\mathbf 1_2$ である。$-\mathbf 1_2$ は $SO(2)$ の角度 $\pi$ の回転なので、符号の議論は使えない。実際 $\R^2\cong\C$ と同一視すると $E\oplus E$ は推移関数 $\pm1\in U(1)$ の複素直線束であり、その切断は $\tau(1)=-\tau(0)$ をみたす連続関数 $\tau\colon[0,1]\to\C$ である。$\tau(s)=e^{i\pi s}$ はこれをみたし、どこでも零にならない。直線束（ランク1）で零点のない切断は大域的な枠なので、問題 \ref{ch07-prob-trivsec} (2) より $E\oplus E$ は自明である。（貼り合わせによる分類でいえば、$S^1$ 上の束は $\pi_0$ で分類され、$U(1)$ は連結なので複素直線束はすべて自明。）
+
+(4) 実の反周期的な場は $E$ の切断であり、場の再定義（$\phi\mapsto h\phi$, $h$ は $\R^\times$ 値の周期関数）は推移関数を $h_2g_{21}h_1^{-1}$ に変えるだけなので、(2) によりねじれは除けない。複素場では $\tilde\phi(\sigma)=e^{-i\sigma/2}\phi(\sigma)$ とおくと
+\[
+\tilde\phi(\sigma+2\pi)=e^{-i\sigma/2}e^{-i\pi}\bigl(-\phi(\sigma)\bigr)=\tilde\phi(\sigma)
+\]
+で周期的になる。運動項は $\partial_\sigma\phi=e^{i\sigma/2}(\partial_\sigma+\tfrac i2)\tilde\phi$ より
+\[
+\lvert\partial_\sigma\phi\rvert^2=\bigl\lvert(\partial_\sigma-iA_\sigma)\tilde\phi\bigr\rvert^2,\qquad A=-\tfrac12\,d\sigma .
+\]
+すなわち束は自明になるが、ねじれは平坦な背景ゲージ場 $A$（$F=0$）に移り、そのホロノミー $e^{i\oint A}=e^{-i\pi}=-1$（ウィルソン・ライン）として残る。位相的に自明な束の上でも、平坦接続のホロノミーは物理的に意味をもつ（AB 効果と同じ構造；第2, 8章）。
+\end{solution}
+
+\begin{problem}[難易度 C]\label{ch07-prob-higgssplit}
+$E\to M$ をエルミート計量をもつランク $k$ の複素ベクトル束とする。\\
+(1) 零点をもたない切断 $\Phi$ が存在すれば、$E\cong\underline{\C}\oplus\Phi^\perp$（$\underline{\C}=M\times\C$、$\Phi^\perp$ は各点で $\Phi$ に直交する部分空間のなす束）であることを示せ。$\Phi^\perp$ が局所自明であることも確かめよ。\\
+(2) $k=2$ で、$E$ が主 $SU(2)$ 束の基本表現の同伴束である（したがって $\det E=\Lambda^2E$ が自明）とする。零点のない切断があれば $E$ は自明であることを示せ。\\
+(3) $S^4$ 上の $SU(2)$ ゲージ理論に、基本表現のヒッグス場（2重項）$\Phi$ を加える。インスタントン数 $k\neq0$ の束の上では、$\Phi$ は必ずどこかで零になることを示せ。ただし $k\neq0$ の束が自明でないことは認めてよい。
+\end{problem}
+
+\begin{solution}
+(1) $U_i$ 上の局所的な枠 $(e_1,\dots,e_k)$ をとり、$\Phi$ が零にならないので（必要なら $U_i$ を小さくして並べ替え）$(\Phi,e_2,\dots,e_k)$ が各点で1次独立になるようにできる。これにグラム・シュミットの直交化を施すと、正規直交枠 $(\hat\Phi,f_2,\dots,f_k)$、$\hat\Phi=\Phi/\lvert\Phi\rvert$ が得られ、係数は計量と枠の連続関数である。$(f_2,\dots,f_k)$ は $\Phi^\perp$ の $U_i$ 上の枠なので $\Phi^\perp$ はランク $k-1$ のベクトル束になる。写像
+\[
+\underline{\C}\oplus\Phi^\perp\to E,\qquad (x,c)\oplus v\mapsto c\,\hat\Phi(x)+v
+\]
+は各ファイバーで線形同型で連続（局所的に枠で書けば行列が単位行列）なので、束の同型である。
+
+(2) (1) より $E\cong\underline{\C}\oplus L$、$L=\Phi^\perp$ は直線束。写像
+\[
+L\to\Lambda^2E,\qquad v\mapsto\hat\Phi\wedge v
+\]
+は各ファイバーで線形かつ単射（$v\neq0$ は $\hat\Phi$ と1次独立なので $\hat\Phi\wedge v\neq0$）、1次元同士なので同型であり、$L\cong\Lambda^2E$。$\Lambda^2E$ の推移関数は $\det g_{ij}=1$ なので $\Lambda^2E$ は自明。よって $E\cong\underline{\C}\oplus\underline{\C}$ は自明。
+
+さらに主 $SU(2)$ 束 $P$ も自明である：$\hat\Phi$ と $\hat\Phi^\perp$ の生成元 $\hat\Phi'$（$\det(\hat\Phi,\hat\Phi')=1$ となるように正規化）を並べた $(\hat\Phi,\hat\Phi')$ は各点で $SU(2)$ 枠、すなわち $P$ の大域切断を与える。
+
+(3) 零点のない $\Phi$ があれば (2) により束は自明になり、$k\neq0$ に反する。したがって $\Phi$ は零点をもつ。物理的には、インスタントン背景でヒッグス2重項は（電弱理論の真空 $\lvert\Phi\rvert=v$ に一様に留まることができず）どこかで零になり、そこでエネルギー（作用）のコストが生じる。これは電弱理論のインスタントンが「束縛されたインスタントン」として大きさが固定されることや、スファレロンの構成とつながる。逆に、ヒッグス場が至る所で零でない配位では、束を自明化する（ユニタリ・ゲージを大域的にとる）ことができる。
+\end{solution}
+
+\subsection{球面上の束：モノポール、ホップ束、接束}
+
+\begin{problem}[難易度 B]\label{ch07-prob-monopole}
+$S^2$（向き $d\theta\wedge d\varphi$）上で
+\[
+A_N=\frac n2(1-\cos\theta)\,d\varphi\quad(\theta\neq\pi),\qquad A_S=-\frac n2(1+\cos\theta)\,d\varphi\quad(\theta\neq0)
+\]
+とする。\\
+(1) $A_N$ が北極の近傍で滑らかな1形式であることを、直交座標 $x=\sin\theta\cos\varphi$, $y=\sin\theta\sin\varphi$ を用いて示せ（$A_S$ も南極で同様）。\\
+(2) $F=dA_N=dA_S$ を求め、$\int_{S^2}F=2\pi n$ を示せ。\\
+(3) 重なりで $A_N=A_S+i\,g\,dg^{-1}$ となる $g$ を求め、$g$ が1価であるために $n\in\Z$ が必要であることを示せ。\\
+(4) $A_N$ を $\R^3\setminus\{\text{負の }z\text{ 軸}\}$ の1形式とみなすと、負の $z$ 軸を小さく囲む円周に沿った積分が半径 $\to0$ で $2\pi n$ に近づくことを示し、これが「ストリング」であることを説明せよ。また単位電荷の粒子にとってこのストリングが観測できない理由を述べよ。\\
+(5) 推移関数を $g'_{NS}=h_Ng_{NS}h_S^{-1}$（$h_N\colon U_N\to U(1)$, $h_S\colon U_S\to U(1)$）に取り換えても、赤道に沿った巻き付き数 $n$ は変わらないことを示せ。
+\end{problem}
+
+\begin{solution}
+(1) 北極付近では $\rho^2=x^2+y^2=\sin^2\theta$、$x\,dy-y\,dx=\rho^2d\varphi$。$1-\cos\theta=\dfrac{\sin^2\theta}{1+\cos\theta}$ なので
+\[
+A_N=\frac n2\,\frac{x\,dy-y\,dx}{1+\cos\theta},\qquad \cos\theta=\sqrt{1-x^2-y^2},
+\]
+は $(x,y)=(0,0)$ の近傍で滑らかである。一方 $\theta\to\pi$ では $\frac n2(1-\cos\theta)\to n\neq0$ の係数が $d\varphi$（極で特異）にかかるので特異になる。$A_S$ も $1+\cos\theta=\dfrac{\sin^2\theta}{1-\cos\theta}$ により南極で滑らか。
+
+(2) $dA_N=\frac n2\sin\theta\,d\theta\wedge d\varphi=dA_S$。よって $F$ は $S^2$ 全体で定義された2形式で
+\[
+\int_{S^2}F=\frac n2\int_0^\pi\sin\theta\,d\theta\int_0^{2\pi}d\varphi=\frac n2\cdot2\cdot2\pi=2\pi n .
+\]
+（半径 $r$ の球面上の磁場 $\bm B=\frac{n}{2}\frac{\hat{\bm r}}{r^2}$ で、全磁束 $2\pi n$。）
+
+(3) $A_N-A_S=\frac n2\bigl[(1-\cos\theta)+(1+\cos\theta)\bigr]d\varphi=n\,d\varphi$。$U(1)$ では $g=e^{i\alpha}$ に対し $i\,g\,dg^{-1}=i\,e^{i\alpha}(-i\,d\alpha)e^{-i\alpha}=d\alpha$ なので、$\alpha=n\varphi$、$g=e^{in\varphi}$ と選べる（定数倍の自由度を除く）。$\varphi\to\varphi+2\pi$ で $g$ が1価であるには $e^{2\pi in}=1$、すなわち $n\in\Z$。ゲージ場だけを見れば $A_N-A_S=n\,d\varphi$ は任意の実数 $n$ で成り立つが、電荷1の物質場 $\psi_N=g\psi_S$ を矛盾なく貼り合わせるには $g$ が1価でなければならない。これがディラックの量子化条件である。
+
+(4) 負の $z$ 軸の近く（$\theta=\pi-\delta$）で $\varphi$ を一周する円周 $C_\delta$ をとると
+\[
+\oint_{C_\delta}A_N=\frac n2\bigl(1-\cos(\pi-\delta)\bigr)\cdot2\pi=\pi n(1+\cos\delta)\xrightarrow{\delta\to0}2\pi n .
+\]
+一方 $C_\delta$ が囲む小円板を通る $F$ の磁束は $\to0$ である。ストークスの定理と矛盾しないためには、$A_N$ が負の $z$ 軸上で特異で、そこに磁束 $2\pi n$ の無限に細いソレノイド（ストリング）があるとみなさなければならない。これは $U_N$ の地図を南極まで延長しようとしたことの痕跡である。単位電荷の粒子がストリングを一周するときの AB 位相は $e^{i\oint A}=e^{2\pi in}=1$ なので、どんな干渉実験でも観測されない。ストリングの位置は $A_S$ に移る（ゲージ変換）ことで北極側へ動かせ、物理的意味をもたない。
+
+(5) 赤道付近の帯の写像 $S^1\to U(1)$ の巻き付き数を $\deg$ と書くと、積について $\deg(f_1f_2)=\deg f_1+\deg f_2$（偏角の増分が足し合わされる）。$h_N$ は円板 $U_N$ 全体で定義された連続写像なので、その赤道への制限は定値写像とホモトピックであり $\deg h_N|_{\text{赤道}}=0$（第1, 2章）。同様に $\deg h_S=0$。よって
+\[
+\deg g'_{NS}=\deg h_N+\deg g_{NS}-\deg h_S=n .
+\]
+$n$ は局所的なゲージ変換で変わらない、束の位相不変量である。
+\end{solution}
+
+\begin{problem}[難易度 B]\label{ch07-prob-section}
+問題 \ref{ch07-prob-monopole} のモノポール背景（$g_{NS}=e^{in\varphi}$）での電荷1の粒子の波動関数は、$U_N$, $U_S$ 上の連続関数の組 $(\psi_N,\psi_S)$ で $\psi_N=e^{in\varphi}\psi_S$ をみたすもの、すなわち同伴直線束 $L_n$ の切断である。\\
+(1) 確率密度 $\lvert\psi\rvert^2$ は $S^2$ 上の通常の関数であることを示せ。\\
+(2) 零点 $p$ の\textbf{指数}を、$p$ を正の向きに回る小さな円周に沿った（$p$ を含む地図での）$\psi_i$ の巻き付き数と定める。零点が有限個で赤道上にないとき、指数の総和は $n$ に等しいことを示せ。特に $n\neq0$ なら、零点をもたない波動関数は存在しない。\\
+(3) $n=1$ のとき
+\[
+\psi^{(1)}:\ (\psi_N,\psi_S)=\bigl(e^{i\varphi}\sin\tfrac\theta2,\ \sin\tfrac\theta2\bigr),\qquad \psi^{(2)}:\ (\psi_N,\psi_S)=\bigl(\cos\tfrac\theta2,\ e^{-i\varphi}\cos\tfrac\theta2\bigr)
+\]
+が切断であることを確かめ、それぞれの零点とその指数を求めよ。
+\end{problem}
+
+\begin{solution}
+(1) 重なりで $\lvert\psi_N\rvert=\lvert e^{in\varphi}\rvert\lvert\psi_S\rvert=\lvert\psi_S\rvert$ なので、$\lvert\psi\rvert^2$ は $U_N$ と $U_S$ で一致し、$S^2$ 上の関数として well-defined。ゲージ不変な量だけが観測量であることの反映である。
+
+(2) 必要なら赤道をわずかに動かして（$g_{NS}$ のホモトピー類は変わらない）、零点が赤道上にないとする。北半球 $D_N$ 内の零点の指数の和を $\Sigma_N$、南半球 $D_S$ 内の和を $\Sigma_S$ とする。$\psi_N$ は $D_N$ から零点のまわりの小円板を除いた領域で零にならないので、偏角の原理（各零点を囲む小円周の巻き付き数の和が外周の巻き付き数に等しい）により、赤道を $\varphi$ が増す向き（$D_N$ の境界の向き）に回ったときの $\psi_N$ の巻き付き数は $\Sigma_N$。同様に $D_S$ の境界の向きは $\varphi$ が減る向きなので、$\varphi$ が増す向きでの $\psi_S$ の巻き付き数は $-\Sigma_S$。赤道上で $\psi_N=e^{in\varphi}\psi_S$ なので巻き付き数を比べて
+\[
+\Sigma_N=n+(-\Sigma_S),\qquad\text{すなわち}\qquad\Sigma_N+\Sigma_S=n .
+\]
+$n\neq0$ なら少なくとも1つ零点がある。（零点がなければ $\psi/\lvert\psi\rvert$ が主束の大域切断になり、問題 \ref{ch07-prob-trivsec} とも整合する。）
+
+(3) $\psi^{(1)}$：重なりで $e^{i\varphi}\sin\frac\theta2=e^{i\varphi}\cdot\psi_S$ なので関係式をみたす。$\psi_S=\sin\frac\theta2$ は南極で $1$ に近づき、南極の近くで $\theta'=\pi-\theta$ の偶関数 $\cos\frac{\theta'}2$ なので滑らか。$\psi_N=e^{i\varphi}\sin\frac\theta2\approx\frac\theta2e^{i\varphi}\approx\frac12(x+iy)$ は北極で滑らか。零点は北極のみで、北極のまわりを正の向き（$\varphi$ 増加）に回ると $\psi_N$ の巻き付き数は $+1$。指数の和 $=1=n$。
+
+$\psi^{(2)}$：$\cos\frac\theta2=e^{i\varphi}\cdot e^{-i\varphi}\cos\frac\theta2$ で関係式をみたす。零点は南極のみ。南極のまわりの正の向き（南極での外向き法線に関する向き）は $\varphi$ が減る向きであり、$\psi_S\approx\frac{\theta'}2e^{-i\varphi}$ の巻き付き数はこの向きで $+1$。指数の和 $=1=n$。
+
+なお $\psi^{(1)}$, $\psi^{(2)}$ はスピン $\tfrac12$ のコヒーレント状態の成分 $(\bar z_2,\bar z_1)$ に相当し、モノポール背景の最低ランダウ準位（$n+1=2$ 重縮退）をなす。縮退度が $n+1$ となることは指数定理で理解される（第9章）。
+\end{solution}
+
+\begin{problem}[難易度 B]\label{ch07-prob-hopf}
+例 \ref{ex:ch07-hopf} の記号を用いる。\\
+(1) $z=\bigl(\cos\tfrac\theta2e^{i\alpha},\ \sin\tfrac\theta2e^{i(\alpha+\varphi)}\bigr)$ に対し $h(z)=(\sin\theta\cos\varphi,\sin\theta\sin\varphi,\cos\theta)$ を示せ。\\
+(2) $s_N$ が南極以外で、$s_S$ が北極以外で連続な切断であることを示し、$\Phi_N(x,\lambda)=s_N(x)\lambda$ が局所自明化 $U_N\times U(1)\cong h^{-1}(U_N)$ を与えることを示せ。\\
+(3) $s_S=s_Ng_{NS}$ となる $g_{NS}$ を求め、ホップ束のモノポール荷が $-1$ であることを示せ。\\
+(4) 電荷1の同伴直線束 $S^3\times_{U(1)}\C$（$[z\lambda,c]=[z,\lambda c]$）がトートロジカル直線束 $\mathcal O(-1)=\{(x,v):v\in\C z,\ h(z)=x\}$ と同型であることを示せ。\\
+(5) $s_N$ を用いて $A_N=i\,s_N^\dagger ds_N$ を計算し、問題 \ref{ch07-prob-monopole} の $A_N$ で $n=-1$ としたものに一致することを確かめよ（これは量子力学のベリー接続であり、第8章で扱う）。
+\end{problem}
+
+\begin{solution}
+(1) $\bar z_1z_2=\cos\frac\theta2\sin\frac\theta2\,e^{i\varphi}=\frac12\sin\theta\,e^{i\varphi}$ なので $2\operatorname{Re}(\bar z_1z_2)=\sin\theta\cos\varphi$、$2\operatorname{Im}(\bar z_1z_2)=\sin\theta\sin\varphi$。$\lvert z_1\rvert^2-\lvert z_2\rvert^2=\cos^2\frac\theta2-\sin^2\frac\theta2=\cos\theta$。
+
+(2) $s_N=(\cos\frac\theta2,\sin\frac\theta2e^{i\varphi})$ は $\alpha=0$ の点なので $h(s_N)=(\theta,\varphi)$ の点。第1成分 $\cos\frac\theta2=\sqrt{(1+\cos\theta)/2}$ は $\theta<\pi$ で滑らか、第2成分は $\sin\frac\theta2e^{i\varphi}=\dfrac{x+iy}{2\cos(\theta/2)}$ と書け（$\sin\theta=2\sin\frac\theta2\cos\frac\theta2$）、$\theta<\pi$ で連続。$\theta\to\pi$ では第2成分が $e^{i\varphi}$ に近づき方向に依存するので連続に延長できない。$s_S$ も同様に北極以外で連続。
+
+$\Phi_N(x,\lambda)=s_N(x)\lambda$ は連続で $h\circ\Phi_N(x,\lambda)=x$。逆写像は $z\mapsto\bigl(h(z),\ z_1/\lvert z_1\rvert\bigr)$：実際 $h(z)\in U_N$ は $z_1\neq0$ と同値で、$z=s_N(h(z))\cdot(z_1/\lvert z_1\rvert)$（第1成分の偏角が $\lambda$、ファイバーは $U(1)$ 軌道）。よって局所自明化である。
+
+(3) $s_Ne^{-i\varphi}=(\cos\frac\theta2e^{-i\varphi},\sin\frac\theta2)=s_S$。よって $g_{NS}=e^{-i\varphi}$。赤道を $\varphi$ 増加の向きに回ると巻き付き数は $-1$ なので、定義（例 \ref{ex:ch07-monopole}）によりモノポール荷は $-1$。すなわちホップ束は $P_{-1}$ であり、特に自明でない（全空間 $S^3$ は $S^2\times S^1$ と同相でない：$\pi_1(S^3)=0\neq\Z$ からもわかる）。
+
+(4) $F\colon S^3\times_{U(1)}\C\to\mathcal O(-1)$、$[z,c]\mapsto(h(z),\,c\,z)$ と定める。$[z\lambda,c]\mapsto(h(z),c\lambda z)$、$[z,\lambda c]\mapsto(h(z),\lambda c z)$ で一致するので well-defined。各ファイバーで線形同型（$c\mapsto cz$ は $\C\to\C z$ の同型）で、局所的には連続なので束の同型。
+
+(5) $s_N^\dagger ds_N=\cos\frac\theta2\,d\cos\frac\theta2+\sin\frac\theta2e^{-i\varphi}\,d\bigl(\sin\frac\theta2e^{i\varphi}\bigr)=\tfrac12d\bigl(\cos^2\tfrac\theta2+\sin^2\tfrac\theta2\bigr)+i\sin^2\tfrac\theta2\,d\varphi=i\sin^2\tfrac\theta2\,d\varphi$。よって
+\[
+A_N=i\cdot i\sin^2\tfrac\theta2\,d\varphi=-\tfrac12(1-\cos\theta)\,d\varphi,
+\]
+これは $n=-1$ の $A_N$ である。$s_S$ についても同様に $A_S=i\,s_S^\dagger ds_S=i\cdot(-i\cos^2\frac\theta2)d\varphi=\frac12(1+\cos\theta)d\varphi$（$n=-1$ の $A_S$）で、$A_N-A_S=-d\varphi=i\,g_{NS}\,dg_{NS}^{-1}$ と整合する。
+\end{solution}
+
+\begin{problem}[難易度 B]\label{ch07-prob-adjhiggs}
+$SU(2)$ ジョージ・グラショウ模型の 't Hooft--Polyakov モノポールでは、遠方の球面 $S^2_\infty$ 上でヒッグス場が $\Phi=v\,\hat\Phi\cdot\tfrac{\bm\sigma}2$、$\hat\Phi(\hat{\bm x})=\hat{\bm x}$（ヘッジホッグ）となる。$S^2_\infty$ 上の $SU(2)$ 束は自明（問題 \ref{ch07-prob-s2bundles}）なので、基本表現の束は $S^2\times\C^2$ とみなせる。\\
+(1) 各点 $\hat{\bm x}$ で $\hat{\bm x}\cdot\bm\sigma$ の固有値 $\pm1$ の固有空間を $L_\pm$ とすると、$S^2\times\C^2=L_+\oplus L_-$ と直線束に分解することを示せ。\\
+(2) $L_+$ がホップ束の電荷1の同伴束（$\mathcal O(-1)$）と同型であることを示し、$L_+$, $L_-$ のモノポール荷（推移関数の巻き付き数）を求めよ。\\
+(3) 非破れの $U(1)$ は $T=\hat\Phi\cdot\frac{\bm\sigma}2$ で生成される。随伴表現 $\C^2\otimes(\C^2)^*$ から $T$ の電荷 $q=0,\pm1$ の成分（$W^\pm$ ボソンなど）を取り出し、それぞれの直線束のモノポール荷が $-2q$ であることを示せ。2重項の成分（$q=\pm\frac12$）についても同じ関係が成り立つことを確かめよ。
+\end{problem}
+
+\begin{solution}
+(1) $\hat{\bm x}\cdot\bm\sigma$ はエルミートで $(\hat{\bm x}\cdot\bm\sigma)^2=1$、跡が $0$ なので、固有値 $\pm1$ をそれぞれ1つずつもつ。射影 $P_\pm=\frac12(1\pm\hat{\bm x}\cdot\bm\sigma)$ は $\hat{\bm x}$ について連続でランク1なので、$L_\pm=\operatorname{Im}P_\pm$ は直線束（局所的に、$P_\pm$ をある固定ベクトルに作用させたものが枠を与える）。$P_++P_-=1$、$P_+P_-=0$ より $\C^2=L_+\oplus L_-$（直交分解）。
+
+(2) $h(z)=z^\dagger\bm\sigma z$ に対し $(h(z)\cdot\bm\sigma)z=z$ を示す。$\sum_a\sigma^a_{ij}\sigma^a_{kl}=2\delta_{il}\delta_{jk}-\delta_{ij}\delta_{kl}$ を用いると
+\[
+\bigl((h\cdot\bm\sigma)z\bigr)_i=\sum_a\bar z_k\sigma^a_{kl}z_l\,\sigma^a_{ij}z_j=2z_i\,\bar z_kz_k-z_i\,\bar z_kz_k=z_i\quad(\lvert z\rvert=1).
+\]
+よって $L_+$ の $\hat{\bm x}$ 上のファイバーは $\C z$（$h(z)=\hat{\bm x}$）であり、$L_+=\mathcal O(-1)$。問題 \ref{ch07-prob-hopf} の局所枠 $s_N$, $s_S$ を用いると $s_S=s_Ne^{-i\varphi}$ なので、成分の関係は $\psi_N=e^{-i\varphi}\psi_S$、モノポール荷は $-1$。
+
+$L_-=L_+^\perp$ の局所枠として $s_N^\perp=(-\sin\frac\theta2e^{-i\varphi},\cos\frac\theta2)$（北極で滑らか）、$s_S^\perp=(-\sin\frac\theta2,\cos\frac\theta2e^{i\varphi})$（南極で滑らか）をとると $s_S^\perp=s_N^\perp e^{i\varphi}$。よって $L_-$ のモノポール荷は $+1$。これは $L_+\otimes L_-\cong\Lambda^2\C^2$（自明）とも整合する（テンソル積の推移関数は積なので巻き付き数は和、$-1+1=0$）。
+
+(3) $\C^2=L_+\oplus L_-$ で、$T$ は $L_\pm$ に $\pm\frac12$ で作用するので、2重項成分の電荷は $q=\pm\frac12$、モノポール荷は $\mp1=-2q$。随伴表現（$\mathfrak{sl}(2,\C)\cong\End_0(\C^2)$、$T$ は交換子で作用）は
+\[
+\End(\C^2)=\C^2\otimes(\C^2)^*=(L_+\otimes L_+^*)\oplus(L_-\otimes L_-^*)\oplus(L_+\otimes L_-^*)\oplus(L_-\otimes L_+^*)
+\]
+と分解し、跡のない部分は $\C\,T\oplus(L_+\otimes L_-^*)\oplus(L_-\otimes L_+^*)$。$L_+\otimes L_-^*$ への $[T,\cdot\,]$ の固有値は $\frac12-(-\frac12)=1$（$W^+$）、$L_-\otimes L_+^*$ は $-1$（$W^-$）、$T$ 方向は $0$（光子と、ヒッグスの動径方向）。双対の推移関数は逆数なので巻き付き数は符号が反転し、
+\[
+L_+\otimes L_-^*:\ -1-(+1)=-2,\qquad L_-\otimes L_+^*:\ +2,\qquad L_\pm\otimes L_\pm^*:\ 0 .
+\]
+よっていずれも「モノポール荷 $=-2q$」が成り立つ。すなわち対称性の破れ $SU(2)\to U(1)$ によって構造群が $U(1)$ に\textbf{縮小}し、ヘッジホッグの位相（写像 $S^2\to S^2$ の次数 $1$）が非破れ $U(1)$ 束の磁荷になる。$q=\frac12$ の場が最小のディラック磁荷を感じるので、't Hooft--Polyakov モノポールの磁荷は、$W$ ボソンの電荷を単位としたディラック量子化の最小単位の2倍にあたる（第3, 8章）。次数 $m$ の $\hat\Phi$ では $L_+=\hat\Phi^*\mathcal O(-1)$ となり、推移関数が $g_{NS}\circ\hat\Phi$ になるのでモノポール荷は $-m$ 倍になる。
+\end{solution}
+
+\begin{problem}[難易度 B]\label{ch07-prob-ts2}
+$S^2$ 上の複素座標 $w=\tan\frac\theta2\,e^{i\varphi}$（北極の近傍の地図、$S^2$ の向きと整合）と $w'=1/w$（南極の近傍）を用いる。$S^2$ の接ベクトルを複素成分 $v^w$（$v=v^w\partial_w+\overline{v^w}\partial_{\bar w}$）で表し、$TS^2$ を複素直線束とみなす。\\
+(1) 重なりで $v^w=-w^2\,v^{w'}$ を示し、赤道上での推移関数 $g_{NS}$ の巻き付き数が $2$ であることを示せ。\\
+(2) $TS^2$ は自明でないことを結論し、「$S^2$ 上の連続な接ベクトル場は必ず零点をもつ」（毛玉の定理）を導け。地球上の風速場について何がいえるか。\\
+(3) $\mathcal O(-1)$ の推移関数が $w^{-1}$ であることを用いて $TS^2\cong\mathcal O(2)$ を示せ。
+\end{problem}
+
+\begin{solution}
+(1) 正則な座標変換 $w'=1/w$ に対し、ベクトルの成分は $v^{w'}=\dfrac{\partial w'}{\partial w}v^w=-w^{-2}v^w$ と変換する（$\bar w$ 成分はその複素共役）。よって $v^w=-w^2v^{w'}$、すなわち $\psi_N=v^w$、$\psi_S=v^{w'}$ として $g_{NS}=-w^2$。赤道 $\theta=\frac\pi2$ では $w=e^{i\varphi}$ で $g_{NS}=-e^{2i\varphi}$、$\varphi$ が $0\to2\pi$ と動くとき偏角は $4\pi$ 増加するので巻き付き数 $2$（構造群は $GL(1,\C)\simeq U(1)$ だが、$g/\lvert g\rvert$ を考えればよい）。
+
+(2) 巻き付き数 $2\neq0$ なので、問題 \ref{ch07-prob-monopole} (5) と同じ議論で $TS^2$ は自明束と同型でない（自明束は $g_{NS}=1$、巻き付き数 $0$）。零点のない接ベクトル場 $v$ があれば、複素直線束 $TS^2$ の至る所零でない切断であり、問題 \ref{ch07-prob-trivsec} (2) により $TS^2$ は自明になってしまう。よって任意の接ベクトル場は零点をもつ。地表の水平風速場は $S^2$ 上の接ベクトル場なので、どの瞬間にも少なくとも1か所、水平風速が $0$ の点（台風の目のような点）が存在する。より詳しく、零点の指数の和は $2=\chi(S^2)$ である（問題 \ref{ch07-prob-section} (2) と同じ議論；ポアンカレ・ホップの定理、第8章のガウス・ボンネ）。
+
+(3) 例の通り $\mathcal O(-1)$ は $g_{NS}=w^{-1}$（問題 \ref{ch07-prob-hopf} で赤道上 $e^{-i\varphi}$）。$\mathcal O(2)=\mathcal O(-1)^{*\otimes2}$ の推移関数は $(w^{-1})^{-2}=w^2$。$TS^2$ の推移関数 $-w^2$ とは定数 $-1$ だけ異なるが、$h_N=-1$ で取り換えれば一致するので $TS^2\cong\mathcal O(2)$。巻き付き数は $c_1(TS^2)=2=\chi(S^2)$（第8章）。
+\end{solution}
+
+\begin{problem}[難易度 A]\label{ch07-prob-parallel}
+接束が自明な多様体を\term{平行化可能}{parallelizable}という。\\
+(1) $S^1\subset\C$ と $S^3\subset\HH$（単位四元数）について、$v(x)=ix$（$S^1$）、$v_1(x)=xi$, $v_2(x)=xj$, $v_3(x)=xk$（$S^3$）が各点で接空間の正規直交基底を与えることを示し、$S^1$, $S^3$ が平行化可能であることを示せ。\\
+(2) 任意のリー群 $G$ は平行化可能であることを示せ。\\
+(3) $S^n$ が平行化可能となるのは $n=0,1,3,7$ に限る（$S^7$ は八元数による；アダムスの定理）。$n$ が偶数の場合に平行化不可能であることを、毛玉の定理の一般化（$S^{2m}$ 上の接ベクトル場は零点をもつ）から説明せよ。
+\end{problem}
+
+\begin{solution}
+(1) $\HH=\R^4$ の内積は $\langle a,b\rangle=\operatorname{Re}(a\bar b)$ で、$\lvert ab\rvert=\lvert a\rvert\lvert b\rvert$。$x\in S^3$ の接空間は $\{v:\langle x,v\rangle=0\}$。$u$ が純虚四元数（$\bar u=-u$）なら
+\[
+\langle x,xu\rangle=\operatorname{Re}(x\bar u\bar x)=-\operatorname{Re}(xu\bar x)=0,
+\]
+なぜなら $xu\bar x=xux^{-1}$ は純虚四元数 $u$ の共役で、実部が $0$ だから。よって $xi,xj,xk$ は接ベクトル。さらに $\langle xu,xu'\rangle=\operatorname{Re}(xu\bar u'\bar x)=\operatorname{Re}(u\bar u')\lvert x\rvert^2=\langle u,u'\rangle$（実部は共役で不変）なので、$i,j,k$ の正規直交性が保たれ、$xi,xj,xk$ は正規直交基底。これらは $x$ について滑らかなので、$TS^3\cong S^3\times\R^3$。$S^1$ では $\langle x,ix\rangle=\operatorname{Re}(x\,\overline{ix})=\operatorname{Re}(-i\lvert x\rvert^2)=0$、$\lvert ix\rvert=1$ で同様。
+
+(2) リー代数 $\mathfrak g=T_1G$ の基底 $X_1,\dots,X_n$ をとり、左移動 $L_g(h)=gh$ の微分で $X_a(g)=(dL_g)_1X_a$ と定める（左不変ベクトル場）。$dL_g$ は線形同型なので、各点で基底になり、$TG\cong G\times\mathfrak g$。行列群なら $X_a(g)=gX_a$ で、(1) はこの特別な場合（$S^3=SU(2)$、$S^1=U(1)$）である。物理では、$SU(2)$ 上の左不変形式 $g^{-1}dg$（マウラー・カルタン形式）が至る所で使われる。
+
+(3) $S^{2m}$ が平行化可能なら、その枠の1本目は零点のない接ベクトル場であり、一般化された毛玉の定理に反する。（$S^{2m}$ の接ベクトル場の零点の指数の和は $\chi(S^{2m})=2\neq0$。）奇数次元球面 $S^{2m-1}\subset\C^m$ には零点のないベクトル場 $v(x)=ix$ が常にあるが、$2m-1$ 本の独立な場が存在するのは $2m-1=1,3,7$ のときだけである。
+\end{solution}
+
+\begin{problem}[難易度 C]\label{ch07-prob-frame}
+(1) $S^2$ の向きの付いた正規直交枠束 $F(S^2)=\{(x,e_1,e_2)\}$（$x\in S^2$, $e_1,e_2\in T_xS^2$ 正規直交、$e_1\times e_2=x$）が $SO(3)$ と同相であり、射影が $R\mapsto Re_3$、構造群 $SO(2)$ の作用が右からのかけ算 $R\mapsto R\begin{pmatrix}r(\alpha)&0\\0&1\end{pmatrix}$ で与えられることを示せ（$r(\alpha)$ は角度 $\alpha$ の2次元回転）。\\
+(2) ファイバー束 $SO(2)\to SO(3)\to S^2$ のホモトピー完全列と $\pi_1(SO(3))=\Z_2$（第2章）、$\pi_2(SO(3))=0$ を用いて、境界写像 $\partial\colon\pi_2(S^2)\to\pi_1(SO(2))$ が $\pm2$ 倍であることを示し、問題 \ref{ch07-prob-ts2} の巻き付き数 $2$ と比べよ。\\
+(3) 主 $U(1)$ 束 $P_n\to S^2$（モノポール荷 $n$）について $\partial$ が $\pm n$ 倍であることを認めて、$n\neq0$ のとき $\pi_1(P_n)\cong\Z_{\lvert n\rvert}$、$n=0$ のとき $\pi_1(P_0)\cong\Z$ を示せ。ホップ束 $P_{-1}=S^3$、$F(S^2)\cong SO(3)$ と整合することを確かめよ。
+\end{problem}
+
+\begin{solution}
+(1) $(x,e_1,e_2)$ に列ベクトルを並べた行列 $R=(e_1\ e_2\ x)$ を対応させる。列が正規直交なので $R\in O(3)$、$\det R=(e_1\times e_2)\cdot x=1$ なので $R\in SO(3)$。逆に $R\in SO(3)$ の列 $(e_1,e_2,x)$ は $x\in S^2$、$e_1,e_2\perp x$ で $e_1\times e_2=x$（$\det=1$ の正規直交基底）。この対応は連続な全単射で逆も連続（コンパクト・ハウスドルフ）なので $F(S^2)\cong SO(3)$。射影は $R\mapsto x=Re_3$。枠の回転 $(e_1,e_2)\mapsto(\cos\alpha\,e_1+\sin\alpha\,e_2,\ -\sin\alpha\,e_1+\cos\alpha\,e_2)$ は $R\mapsto R\operatorname{diag}(r(\alpha),1)$ であり、$SO(2)$ はファイバー（$x$ を固定する枠全体）上で自由かつ推移的に作用する。よって $SO(3)\to SO(3)/SO(2)=S^2$ は $S^2$ の枠束そのもので、$F(S^2)\cong SO(3)\cong\RP^3$（第1章）。$e_1$ が $e_2$ を決めるので、単位接ベクトル束とも同じである。
+
+(2) 長完全列の一部
+\[
+\pi_2(SO(3))\to\pi_2(S^2)\xrightarrow{\partial}\pi_1(SO(2))\to\pi_1(SO(3))\to\pi_1(S^2)
+\]
+は $0\to\Z\xrightarrow{\partial}\Z\to\Z_2\to0$ となる（$\pi_2(SO(3))\cong\pi_2(S^3)=0$ は2重被覆 $S^3\to SO(3)$ による）。よって $\partial$ は単射で、その余核が $\Z_2$。$\Z\to\Z$ の単射準同型は $m$ 倍（$m\neq0$）で余核は $\Z_{\lvert m\rvert}$ なので $m=\pm2$。一方 $F(S^2)$ は $TS^2$（$U(1)=SO(2)$ 構造の複素直線束）の単位円束なので、推移関数は $TS^2$ と同じく巻き付き数 $2$ をもつ。$\partial$ の値が貼り合わせ写像の巻き付き数（符号を除く）と一致することが確かめられた。
+
+(3) 長完全列
+\[
+\pi_2(S^1)=0\to\pi_2(P_n)\to\pi_2(S^2)\xrightarrow{\partial=\pm n}\pi_1(S^1)\to\pi_1(P_n)\to\pi_1(S^2)=0
+\]
+より $\pi_1(P_n)\cong\coker(\pm n\colon\Z\to\Z)=\Z/n\Z$。$n\neq0$ なら $\Z_{\lvert n\rvert}$（このとき $\partial$ は単射なので $\pi_2(P_n)=0$）。$n=0$ なら $\Z$ で、実際 $P_0=S^2\times S^1$。ホップ束 $n=-1$：$\pi_1=0$ で $S^3$ と整合。$F(S^2)$ は $n=\pm2$（向きの取り方による）：$\pi_1=\Z_2$ で $SO(3)\cong\RP^3$ と整合。一般に $P_{-m}\cong S^3/\Z_m$（$\Z_m\subset U(1)$ をホップのファイバーに沿って作用させたレンズ空間）であり、$U(1)/\Z_m\cong U(1)$（$\lambda\mapsto\lambda^m$）によって推移関数 $e^{-i\varphi}$ が $e^{-im\varphi}$ になることからも確かめられる。
+\end{solution}
+
+\begin{problem}[難易度 C]\label{ch07-prob-s2bundles}
+定理 \ref{thm:ch07-clutch} を用いて $S^2$ 上の主束を分類する。$\pi_1(SU(N))=0$（$N\ge2$）、$\pi_2(G)=0$（コンパクト・リー群）は認めてよい。\\
+(1) $S^2$ と $S^3$ 上の主 $SU(N)$ 束はすべて自明であることを示せ。\\
+(2) $\det\colon U(N)\to U(1)$ が同型 $\pi_1(U(N))\cong\Z$ を誘導することを示し、$S^2$ 上の $U(N)$ 束は整数 $\deg(\det g_{NS})$ で分類されることを示せ。\\
+(3) $U(N)$ ゲージ理論の GNO 型モノポールで $g_{NS}=\operatorname{diag}(e^{in_1\varphi},\dots,e^{in_N\varphi})$ とする。束の位相型は $\sum_kn_k$ だけで決まることを示し、$N=2$、$(n_1,n_2)=(1,-1)$ の場合に $g_{NS}$ の自明化（定値写像へのホモトピー）を具体的に作れ。\\
+(4) $S^2$ 上の $SO(3)$ 束は2種類あることを示せ。$U(1)$ の電荷 $n$ のモノポール束を $U(1)\cong SO(2)\subset SO(3)$ で $SO(3)$ 束とみたとき、その類は $n\bmod2$ であることを示し、$n$ が奇数のとき $SU(2)$ 束に持ち上がらない（2重項を含む理論では許されない）ことを説明せよ。
+\end{problem}
+
+\begin{solution}
+(1) $S^2$ 上：$\pi_1(SU(N))=0$ より束は1種類、すなわち自明束のみ。$S^3$ 上：$\pi_2(SU(N))=0$ より同様。物理的には、$SU(N)$ ゲージ理論では3次元空間の遠方球面 $S^2_\infty$ 上の束に位相的な制約がなく、磁荷はゲージ群が $U(1)$ に破れて初めて現れる（問題 \ref{ch07-prob-adjhiggs}）。
+
+(2) $SU(N)\to U(N)\xrightarrow{\det}U(1)$ はファイバー束（$U(N)\cong SU(N)\times U(1)$、第1章）。完全列 $\pi_1(SU(N))=0\to\pi_1(U(N))\xrightarrow{\det_*}\pi_1(U(1))\to\pi_0(SU(N))=0$ より $\det_*$ は同型。よって $S^2$ 上の $U(N)$ 束は $[g_{NS}]\in\pi_1(U(N))\cong\Z$、すなわち $\deg(\det g_{NS})$ で分類される。これは行列式束 $\det E$ のモノポール荷である。
+
+(3) $\det g_{NS}=e^{i(\sum_kn_k)\varphi}$ なので $\deg=\sum_kn_k$。(2) より束の型はこれだけで決まり、例えば $(n_1,\dots,n_N)$ は $(\sum n_k,0,\dots,0)$ と同じ束を与える。個々の $n_k$（GNO 電荷）は位相的には保存されず、安定性は力学で決まる。
+
+$N=2$、$g(\varphi)=\operatorname{diag}(e^{i\varphi},e^{-i\varphi})=\cos\varphi+i\sin\varphi\,\sigma_3\in SU(2)$。$SU(2)\cong S^3$ の点 $a_0+i\bm a\cdot\bm\sigma$ を $(a_0,\bm a)\in\R^4$ と同一視すると $g$ は大円 $(\cos\varphi,0,0,\sin\varphi)$。
+\[
+H(\varphi,t)=\frac{(1-t)(\cos\varphi,0,0,\sin\varphi)+t\,(0,1,0,0)}{\bigl\lvert(1-t)(\cos\varphi,0,0,\sin\varphi)+t\,(0,1,0,0)\bigr\rvert}
+\]
+とおくと、分子の第2成分は $t$、他の成分の2乗和は $(1-t)^2$ なので分母は $\sqrt{(1-t)^2+t^2}>0$。$H$ は $S^1\times I\to S^3$ の連続写像で、$H(\cdot,0)=g$、$H(\cdot,1)=i\sigma_1$（定値）。よって $g\simeq$ 定値で、束は自明。
+
+(4) $\pi_1(SO(3))=\Z_2$（第2章）なので2種類。$e^{i\alpha}\mapsto R_3(\alpha)$（第3軸まわりの回転）で $g_{NS}=e^{in\varphi}$ は $R_3(n\varphi)$ になる。$R_3(\varphi)$、$\varphi\in[0,2\pi]$ は $\pi_1(SO(3))$ の生成元である：$SU(2)$ への持ち上げ $\tilde R(\varphi)=e^{-i\varphi\sigma_3/2}$ は $\tilde R(2\pi)=-1$ に終わる閉じない道だからである（第2章）。よって $R_3(n\varphi)$ の類は $n\bmod2$。$n$ が奇数のとき、$g_{NS}$ を $SU(2)$ に連続に持ち上げると赤道を一周して $-1$ が掛かり、1価な $\tilde g_{NS}\colon S^1\to SU(2)$ は作れない。すなわちこの $SO(3)$ 束は $SU(2)$ 束に持ち上がらず、2重項の場（$-1\in SU(2)$ が $-1$ で作用）はこの背景では定義できない。随伴表現の場だけの理論では許され、そのモノポールの磁荷は2重項が存在する場合に許される最小値の半分になる。持ち上げの障害は $w_2\in H^2(S^2;\Z_2)=\Z_2$ であり、スピン構造の障害と同じ構造である。
+\end{solution}
+
+\begin{problem}[難易度 C]\label{ch07-prob-s4}
+例 \ref{ex:ch07-s4} の状況を考える。$x=(\bm x,x_4)\in\R^4$、$\R^4$ の向きは $dx^1\wedge dx^2\wedge dx^3\wedge dx^4$ とする。\\
+(1) $g_1(x)=x_4+i\,\bm x\cdot\bm\sigma$（$\lvert x\rvert=1$）について、点 $p=(0,0,0,1)$ で $\tr(g_1^{-1}dg_1)^3=12\,dx^1\wedge dx^2\wedge dx^3$ を示せ。さらに、この3形式が左不変であることを用いて、$S^3$ を $p$ で $dx^1\wedge dx^2\wedge dx^3$ が正となる向きにすれば $w(g_1)=1$ であることを示せ（$\mathrm{Vol}(S^3)=2\pi^2$）。\\
+(2) 球 $B=\{\lvert x\rvert\le R\}$ の境界としての $S^3$ の向き（外向き法線を先頭に置く）は、(1) の向きと逆であることを示せ。\\
+(3) $U_S$ 上でゲージ場が $A_S=0$（赤道付近）であり、$U_N$ 上のゲージ場が赤道付近で $A_N=i\,g\,dg^{-1}$、$g=g_{NS}$ であるとする。記法と規約の $CS(A)$ を用いて、インスタントン数 $k=\frac1{8\pi^2}\int\tr F\wedge F$ が $k=w(g_{NS})$ となることを示せ。\\
+(4) $w(gh)=w(g)+w(h)$ を認めて、任意の $m\in\Z$ に対しインスタントン数 $m$ の $SU(2)$ 束が存在することを示せ。
+\end{problem}
+
+\begin{solution}
+(1) $p$ で $g_1=1$、また $T_pS^3$ 上で $dx^4=0$ なので $g_1^{-1}dg_1=i\,\sigma_a\,dx^a$（$a=1,2,3$）。
+\[
+(g_1^{-1}dg_1)^3=i^3\sigma_a\sigma_b\sigma_c\,dx^a\wedge dx^b\wedge dx^c=-i\,\epsilon_{abc}\sigma_a\sigma_b\sigma_c\,dx^1\wedge dx^2\wedge dx^3 .
+\]
+\begin{note}
+$\sigma_a\sigma_b=\delta_{ab}+i\epsilon_{abd}\sigma_d$ より $\epsilon_{abc}\sigma_a\sigma_b=i\epsilon_{abc}\epsilon_{abd}\sigma_d=2i\sigma_c$、よって $\epsilon_{abc}\sigma_a\sigma_b\sigma_c=2i\sigma_c\sigma_c=6i\cdot\mathbf 1$、跡は $12i$。
+\end{note}
+したがって $\tr(g_1^{-1}dg_1)^3=-i\cdot12i\,dx^{123}=12\,dx^1\wedge dx^2\wedge dx^3$。
+
+$g\mapsto g_0g$（$g_0\in SU(2)$）で $g^{-1}dg$ は不変なので、$\omega=\tr(g^{-1}dg)^3$ は $S^3=SU(2)$ 上の左不変3形式である。左移動 $x\mapsto g_0x$ は $\R^4$ の線形写像で $\det(g_0g)=\det g$ よりノルム $\lvert x\rvert^2=\det(x_4+i\bm x\cdot\bm\sigma)$ を保ち、恒等写像と連結なので $SO(4)$ の元、すなわち $S^3$ の向きを保つ等長写像である。よって体積形式 $\mathrm{vol}$（$p$ で $dx^{123}$）も左不変で、$\omega$ と $\mathrm{vol}$ は $p$ で比 $12$ なので至る所 $\omega=12\,\mathrm{vol}$。
+\[
+w(g_1)=\frac{1}{24\pi^2}\cdot12\cdot2\pi^2=1 .
+\]
+これは記法と規約の「恒等写像 $S^3\cong SU(2)$ が $w=1$」という向きの約束を、座標で表したものである。
+
+(2) $p$ での外向き法線は $\partial_4$。境界の向きでは $(v_1,v_2,v_3)$ が正 $\iff$ $(\partial_4,v_1,v_2,v_3)$ が $\R^4$ で正。$dx^{1234}(\partial_4,\partial_1,\partial_2,\partial_3)$ は置換 $(4,1,2,3)$ の符号（互換3回）で $-1$。よって境界の向きは $p$ で $-dx^1\wedge dx^2\wedge dx^3$、(1) の向きと逆である。
+
+(3) 平坦 $F=dA-iA\wedge A=0$ のとき $dA=iA\wedge A$ なので
+\[
+\tr\Bigl(A\wedge dA-\frac{2i}3A^3\Bigr)=\Bigl(i-\frac{2i}3\Bigr)\tr A^3=\frac i3\tr A^3 .
+\]
+$A=i\,g\,dg^{-1}=-i\,dg\,g^{-1}$ なので $A^3=(-i)^3(dg\,g^{-1})^3=i\,(dg\,g^{-1})^3$、跡の巡回性より $\tr(dg\,g^{-1})^3=\tr(g^{-1}dg)^3$。よって
+\[
+CS(A_N)=\frac1{8\pi^2}\cdot\frac i3\cdot i\,\tr(g^{-1}dg)^3=-\frac{1}{24\pi^2}\tr(g^{-1}dg)^3 .
+\]
+$U_S$ 側（球の外）では $A_S=0$ として $F=0$ なので寄与がなく、
+\[
+k=\frac1{8\pi^2}\int_B\tr F\wedge F=\int_BdCS(A_N)=\int_{\partial B}CS(A_N)=-\frac1{24\pi^2}\int_{\partial B}\tr(g^{-1}dg)^3 .
+\]
+(2) により $\partial B$ の向きは (1) の向きの逆なので、$\int_{\partial B}=-\int_{S^3}$ となり $k=w(g_{NS})$。特に $g_{NS}=g_1$ の束はインスタントン数 $k=1$ をもつ。（$A_S=0$ でない一般の場合も、$CS(A_N)-CS(A_S)$ が $-\frac1{24\pi^2}\tr(g^{-1}dg)^3$ と完全形式の差しかないことから同じ結論になる。第8章。）
+
+(4) $g_1^m$（$m<0$ では $(g_1^{-1})^{\lvert m\rvert}$）は $w(g_1^m)=mw(g_1)=m$（$w(g^{-1})=-w(g)$ は $w(gg^{-1})=w(1)=0$ から）。$g_{NS}=g_1^m$ で貼り合わせた束はインスタントン数 $m$ をもつ。定理 \ref{thm:ch07-clutch} と $\pi_3(SU(2))=\Z$ により、これで $S^4$ 上の $SU(2)$ 束はすべて尽くされる。ユークリッド時空 $\R^4\cup\{\infty\}$ の作用有限な配位はこれらの束のどれかの上の接続であり、インスタントン数の異なる配位は連続変形で移り合えない。
+\end{solution}
+
+\begin{problem}[難易度 B]\label{ch07-prob-les}
+定理 \ref{thm:ch07-les} を用いる。$i<k$ で $\pi_i(S^k)=0$、$\pi_k(S^k)=\Z$、$k\ge2$ で $\pi_k(S^1)=0$ は認めてよい。\\
+(1) ホップ束 $S^1\to S^3\to S^2$ から $\pi_2(S^2)\cong\Z$ と、$n\ge3$ で $\pi_n(S^3)\cong\pi_n(S^2)$ を示せ。特に $\pi_3(S^2)\cong\Z$ の生成元は何か。\\
+(2) (1) の結果を、$O(3)$ 非線形シグマ模型（標的 $S^2$）の位相的ソリトンに関連づけて述べよ（2次元空間のベラヴィン・ポリャコフ・インスタントンと、3次元空間のホップフィオン）。\\
+(3) $SU(N-1)\to SU(N)\to S^{2N-1}$（$SU(N)/SU(N-1)\cong S^{2N-1}$、第1章）を用いて、$N\ge2$ で $\pi_3(SU(N))\cong\Z$ を示せ（$SU(2)\cong S^3$ から始めよ）。また、$SU(2)\subset SU(N)$ の左上への埋め込みが $\pi_3$ の同型を誘導することを示せ。
+\end{problem}
+
+\begin{solution}
+(1) 完全列
+\[
+\pi_n(S^1)\to\pi_n(S^3)\xrightarrow{h_*}\pi_n(S^2)\xrightarrow{\partial}\pi_{n-1}(S^1)\to\pi_{n-1}(S^3)
+\]
+で $n=2$ とすると $0=\pi_2(S^3)\to\pi_2(S^2)\to\pi_1(S^1)=\Z\to\pi_1(S^3)=0$ なので $\pi_2(S^2)\cong\Z$。$n\ge3$ では $\pi_n(S^1)=0=\pi_{n-1}(S^1)$ なので $h_*$ は同型。$n=3$ で $\pi_3(S^2)\cong\pi_3(S^3)=\Z$ であり、生成元 $[\id_{S^3}]$ の像 $h_*[\id]=[h]$、すなわちホップ写像自身が $\pi_3(S^2)$ の生成元である。
+
+(2) 2次元ユークリッド空間（$\R^2\cup\{\infty\}=S^2$）上の $O(3)$ 模型の作用有限な配位 $\bm n\colon S^2\to S^2$ は $\pi_2(S^2)=\Z$ の整数（位相的電荷、スカーミオン数の2次元版）で分類され、ベラヴィン・ポリャコフ・インスタントンはその最小作用配位である。3次元空間（$\R^3\cup\{\infty\}=S^3$）の静的な配位 $\bm n\colon S^3\to S^2$ は $\pi_3(S^2)=\Z$ のホップ不変量で分類され、ファデーエフ模型ではこれが結び目状のソリトン（ホップフィオン）を安定化させる。ホップ不変量は2つの点の逆像（閉曲線）の絡み数として理解できる（第3, 6章）。
+
+(3) 完全列
+\[
+\pi_4(S^{2N-1})\to\pi_3(SU(N-1))\xrightarrow{i_*}\pi_3(SU(N))\to\pi_3(S^{2N-1})
+\]
+で $N\ge3$ なら $2N-1\ge5>4$ なので両端が $0$ で、$i_*$ は同型。$\pi_3(SU(2))=\pi_3(S^3)=\Z$ から帰納的に $\pi_3(SU(N))\cong\Z$、しかも同型は包含 $SU(2)\subset SU(3)\subset\cdots\subset SU(N)$（左上に埋め込む）で誘導される。したがって $SU(N)$ インスタントンも整数 $k$ で分類され、$k=1$ の配位は $SU(2)$ の BPST インスタントンを $SU(N)$ に埋め込んで得られる（第8章）。
+\end{solution}
+
+\subsection{ねじれた境界条件}
+
+\begin{problem}[難易度 D]\label{ch07-prob-thooft}
+2次元トーラス $T^2=\R^2/(L\Z)^2$ 上の $SU(N)$ ゲージ理論を、$\R^2$ 上の場に「ゲージ変換を除いて周期的」という境界条件を課して記述する：$\mu=1,2$ について、$\Omega_\mu\colon\R^2\to SU(N)$ が与えられ
+\[
+A(x+Le_\mu)=\Omega_\mu(x)\ast A(x),\qquad \phi(x+Le_\mu)=\Omega_\mu(x)\,\phi(x)\,\Omega_\mu(x)^{-1}
+\]
+（$\ast$ は問題 \ref{ch07-prob-cocycle} の記号、$\phi$ は随伴表現の場）。
+\begin{center}
+\begin{tikzpicture}[scale=1]
+  \draw[thick,fill=blue!5] (0,0) rectangle (2.4,2.4);
+  \node[left] at (0,1.2) {\footnotesize $x$};
+  \node[right] at (2.4,1.2) {\footnotesize $x+Le_1$：$\Omega_1$};
+  \node[below] at (1.2,0) {\footnotesize $x$};
+  \node[above] at (1.2,2.4) {\footnotesize $x+Le_2$：$\Omega_2$};
+  \node[vtx] at (2.4,2.4) {};
+  \node[above right] at (2.4,2.4) {\footnotesize $x+L(e_1+e_2)$};
+\end{tikzpicture}
+\zucap{基本領域。右の辺と上の辺の値は、左・下の辺の値から $\Omega_1$, $\Omega_2$ で決まる。右上の角には2通りの経路で到達する。}
+\end{center}
+(1) 点 $x+L(e_1+e_2)$ の値を2通りに計算し、随伴表現の場が任意の値をとりうるための条件が
+\[
+\Omega_1(x+Le_2)\,\Omega_2(x)=z\,\Omega_2(x+Le_1)\,\Omega_1(x),\qquad z=e^{2\pi im/N}\in\Z_N
+\]
+（$m\in\Z_N$ は $x$ によらない）であることを示せ。\\
+(2) $\R^2$ 上のゲージ変換 $h(x)$ で場を $A\mapsto h\ast A$ と変換すると、境界条件は $\Omega_\mu'(x)=h(x+Le_\mu)\Omega_\mu(x)h(x)^{-1}$ に変わる。$m$ がこの下で不変であることを示せ。\\
+(3) $N\times N$ の時計行列 $P=\operatorname{diag}(1,\omega,\dots,\omega^{N-1})$（$\omega=e^{2\pi i/N}$）とシフト行列 $Q$（$Qe_k=e_{k+1}$、添字は $\bmod N$）について $PQ=\omega QP$ を示し、定数の $\Omega_1$, $\Omega_2$ で $m=1$ となるものを作れ（$SU(N)$ に入るよう位相を調整せよ）。$N=2$ では $\Omega_1=i\sigma_3$, $\Omega_2=i\sigma_1$ でよいことを確かめよ。\\
+(4) 基本表現の場 $\psi(x+Le_\mu)=\Omega_\mu(x)\psi(x)$ が存在すれば $z=1$ でなければならないことを示せ。$m$ が $SU(N)/\Z_N$ 束の位相的な類（$\pi_1(SU(N)/\Z_N)=\Z_N$）であることを説明せよ。
+\end{problem}
+
+\begin{solution}
+(1) $A(x+L(e_1+e_2))$ を、まず $e_2$ 方向、次に $e_1$ 方向にずらして計算すると、問題 \ref{ch07-prob-cocycle} (2) の合成則より
+\[
+A(x+Le_2+Le_1)=\Omega_1(x+Le_2)\ast\bigl(\Omega_2(x)\ast A(x)\bigr)=\bigl(\Omega_1(x+Le_2)\Omega_2(x)\bigr)\ast A(x).
+\]
+逆の順では $\bigl(\Omega_2(x+Le_1)\Omega_1(x)\bigr)\ast A(x)$。随伴場についても同様に $\phi\mapsto U\phi U^{-1}$ で $U=\Omega_1(x+Le_2)\Omega_2(x)$ と $U'=\Omega_2(x+Le_1)\Omega_1(x)$ が現れる。任意の $\phi(x)\in\mathfrak{su}(N)$ に対し $U\phi U^{-1}=U'\phi U'^{-1}$ となるには、$c=U'^{-1}U$ が全ての $\mathfrak{su}(N)$ の元と可換、すなわち（シューアの補題より）スカラー行列でなければならない。$c\in SU(N)$ のスカラー行列は $\det c=1$ より $c=z\mathbf 1$、$z^N=1$。このとき $z\ast A=A$（$z$ は定数で中心）なので $A$ についても矛盾しない。$c(x)$ は連続で離散集合 $\Z_N$ に値をとるので定数。よって $U=z\,U'$、すなわち与式（$U'$ と $U$ の順序から $z$ の位置が決まる）。
+
+(2) 新しい境界条件で $U$ を作ると
+\[
+\begin{aligned}\Omega_1'(x+Le_2)\Omega_2'(x)&=h(x+Le_1+Le_2)\,\Omega_1(x+Le_2)\,h(x+Le_2)^{-1}\,h(x+Le_2)\,\Omega_2(x)\,h(x)^{-1}\\&=h(x+L(e_1+e_2))\,U\,h(x)^{-1}.\end{aligned}
+\]
+同様に $U'_{\rm new}=h(x+L(e_1+e_2))\,U'\,h(x)^{-1}$。$U=zU'$ で $z$ は中心なので $U_{\rm new}=zU'_{\rm new}$、$z$ は不変。したがって $m$ は「周期的なゲージ変換」はもちろん、周期的でない（境界条件を変える）ゲージ変換でも変わらない、位相的な量（'t Hooft フラックス）である。
+
+(3) $P e_k=\omega^{k-1}e_k$ とすると、$PQe_k=Pe_{k+1}=\omega^ke_{k+1}$、$QPe_k=\omega^{k-1}e_{k+1}$。よって $PQ=\omega QP$（$k=N$ でも $\omega^N=1$ により成立）。$\det P=\omega^{N(N-1)/2}=e^{i\pi(N-1)}=(-1)^{N-1}$、$\det Q=(-1)^{N-1}$（長さ $N$ の巡回置換）。$\zeta=e^{i\pi(N-1)/N}$ とおくと $\zeta^N=(-1)^{N-1}$ なので、$\Omega_1=\zeta^{-1}Q$, $\Omega_2=\zeta^{-1}P$ は $SU(N)$ の定数行列である。定数なので
+\[
+\Omega_1\Omega_2=\zeta^{-2}QP,\qquad \Omega_2\Omega_1=\zeta^{-2}PQ=\omega\,\zeta^{-2}QP,
+\]
+すなわち $\Omega_1\Omega_2=\omega^{-1}\cdot\Omega_2\Omega_1$。(1) の式 $\Omega_1\Omega_2=z\,\Omega_2\Omega_1$ と比べて $z=\omega^{-1}$、$m=-1$。$\Omega_1$ と $\Omega_2$ を入れ替える（$\Omega_1=\zeta^{-1}P$, $\Omega_2=\zeta^{-1}Q$）と $\Omega_1\Omega_2=\zeta^{-2}PQ=\omega\,\Omega_2\Omega_1$ で $m=1$。一般の $m$ には $\Omega_1=\zeta^{-m}P^m$ とすればよい。
+
+$N=2$：$\Omega_1\Omega_2=(i\sigma_3)(i\sigma_1)=-\sigma_3\sigma_1=-i\sigma_2$、$\Omega_2\Omega_1=-\sigma_1\sigma_3=i\sigma_2$。よって $\Omega_1\Omega_2=-\Omega_2\Omega_1$、$z=-1=e^{2\pi i\cdot1/2}$、$m=1$。このとき $A=0$ は境界条件をみたす（定数の $\Omega$ では $\Omega\ast0=0$）ので、ねじれたセクターにも平坦な配位が存在する。
+
+(4) 基本表現では $\psi(x+L(e_1+e_2))=U\psi(x)=U'\psi(x)$ が必要だが、$U=zU'$ なので $(z-1)U'\psi(x)=0$。$z\neq1$ なら $\psi\equiv0$ しか許されない。つまり $m\neq0$ のセクターは、中心 $\Z_N$ が自明に作用する場だけからなる理論（純粋ヤン・ミルズや随伴物質）でのみ存在する。
+
+このとき真の構造群は $PSU(N)=SU(N)/\Z_N$ であり、$\Omega_\mu$ を $PSU(N)$ に射影したものはコサイクル条件をみたす（$z$ が消える）ので $T^2$ 上の $PSU(N)$ 束を定める。その $SU(N)$ への持ち上げのコサイクル条件が $z$ だけずれていることが、$PSU(N)$ 束が $SU(N)$ 束に持ち上がらない障害であり、その値 $m\in\Z_N=\pi_1(PSU(N))\cong H^2(T^2;\Z_N)$ が束の類である（問題 \ref{ch07-prob-s2bundles} (4) の $SO(3)=SU(2)/\Z_2$ と同じ構造）。$T^4$ 上では各平面 $(\mu\nu)$ ごとにねじれ $n_{\mu\nu}\in\Z_N$ を入れられ、インスタントン数が一般に $1/N$ の整数倍となる（分数インスタントン；第8章）。これは閉じ込めの議論（'t Hooft ループ、中心対称性）で重要である。
+\end{solution}
+
+\subsection{スピン構造}
+
+\begin{problem}[難易度 B]\label{ch07-prob-spins1}
+(1) $S^1$ のスピン構造は、正規直交枠束（接ベクトルに沿った枠による自明化 $P_{SO}\cong S^1$）の2重被覆であることを用いて、ちょうど2つあることを示せ。それぞれに対しスピノル $\psi(\sigma)$（$\sigma\sim\sigma+2\pi$）の境界条件を述べよ。\\
+(2) $S^1$ 上のディラック作用素 $-i\,d/d\sigma$ の固有値を、R（周期的）と NS（反周期的）それぞれで求め、ゼロモードが存在するのはどちらか答えよ。弦理論の R セクターと NS セクターの基底状態の違いと関連づけよ。\\
+(3) 円板 $D^2$ の境界 $S^1$ に誘導されるスピン構造は NS であることを、$\Spin(2)=U(1)\to SO(2)$, $\lambda\mapsto\lambda^2$ を用いて示せ。\\
+(4) $T^2$ のスピン構造の数を求め、平坦な $T^2$ でディラック作用素のゼロモードをもつのはどれか答えよ。
+\end{problem}
+
+\begin{solution}
+(1) $S^1$ では $SO(1)=1$、$\Spin(1)=\{\pm1\}$ で、枠束は $S^1$ 自身（各点で単位接ベクトル $\partial_\sigma$ が唯一の正の枠）。スピン構造は $S^1$ の2重被覆（主 $\Z_2$ 束）であり、それは $\pi_1(S^1)=\Z\to\Z_2$ の準同型（第2章の被覆の分類）、すなわち $\Z_2$ の2元に対応する：自明な2重被覆 $S^1\sqcup S^1$ と、連結な2重被覆 $z\mapsto z^2$。これは $\lvert H^1(S^1;\Z_2)\rvert=2$ と一致する。スピノルは2重被覆上の関数で、被覆変換で符号を変えるものなので、自明な被覆では $\psi(\sigma+2\pi)=\psi(\sigma)$（R）、連結な被覆では一周すると他方のシートに移るので $\psi(\sigma+2\pi)=-\psi(\sigma)$（NS）。
+
+(2) $-i\psi'=\lambda\psi$ の解は $e^{i\lambda\sigma}$。R では $e^{2\pi i\lambda}=1$ より $\lambda\in\Z$、NS では $e^{2\pi i\lambda}=-1$ より $\lambda\in\Z+\tfrac12$。ゼロモード（$\lambda=0$）は R にのみ存在する。弦の世界面フェルミオン $\psi^\mu$ のモード展開は R で $\psi^\mu_n$（$n\in\Z$）、NS で $\psi^\mu_r$（$r\in\Z+\frac12$）となり、R セクターのゼロモード $\psi^\mu_0$ はクリフォード代数 $\{\psi_0^\mu,\psi_0^\nu\}=\eta^{\mu\nu}$ をなすので基底状態は時空のスピノル（時空フェルミオン）になる。NS セクターにはゼロモードがなく基底状態は一意（時空ボソン；GSO 射影前はタキオン）。
+
+(3) $D^2$ は可縮なので、枠束は定数枠 $(\partial_x,\partial_y)$ で自明化され、スピン構造は自明なもの1つだけである（$H^1(D^2;\Z_2)=0$）。その上のスピノルは定数枠に関して1価な関数である。境界 $\sigma=\varphi$ 上の接ベクトル枠 $t(\varphi)=(-\sin\varphi,\cos\varphi)$ は定数枠を角度 $\varphi+\frac\pi2$ 回転したもので、$\varphi$ が $0\to2\pi$ と動くとき回転角は $2\pi$ 増える。$\Spin(2)\to SO(2)$ は $\lambda\mapsto\lambda^2$ なので、角度 $\beta$ の回転の持ち上げは $e^{i\beta/2}$ であり、スピノル成分を定数枠から接ベクトル枠に書き直すと因子 $e^{-i(\varphi+\pi/2)/2}$ が掛かる。これは一周で $e^{-i\pi}=-1$ を生むので、接ベクトル枠に関して反周期的、すなわち NS である。R は円板の境界として延長できない（バウンディングでない）。共形場理論で円筒 $w=\tau+i\sigma$ を平面 $z=e^w$ に写すと、重み $\frac12$ の場は $\psi_{\rm cyl}=(dz/dw)^{1/2}\psi_{\rm pl}=e^{w/2}\psi_{\rm pl}$ と変換し、平面上で1価な場が円筒上で反周期的（NS）になるのは同じ事実の表れである。
+
+(4) $\lvert H^1(T^2;\Z_2)\rvert=\lvert\Z_2^2\rvert=4$。平坦な $T^2$ では接束が定数枠で自明化されるので、2つの基本周期の方向それぞれについて独立に周期的（R）・反周期的（NS）を選べ、(NS,NS), (NS,R), (R,NS), (R,R) の4つ。ディラック作用素の固有値は運動量 $\bm k\in(\Z+\epsilon_1)\times(\Z+\epsilon_2)$（を基本格子で読み替えたもの、$\epsilon=0$ が R、$\frac12$ が NS）の大きさに比例するので、ゼロモード（$\bm k=0$）があるのは (R,R) だけで、それは定数スピノルである。
+\end{solution}
+
+\begin{center}
+\begin{tikzpicture}[scale=0.95]
+  \foreach \i/\sa/\sb/\lab/\col in {0/-/-/{(NS,NS)}/blue!6, 1/-/+/{(NS,R)}/blue!6, 2/+/-/{(R,NS)}/blue!6, 3/+/+/{(R,R)}/red!10}{
+    \begin{scope}[xshift=\i*3.3cm]
+      \fill[\col] (0,0) rectangle (2,2);
+      \draw[thick,mid arrow] (0,0) -- (2,0);
+      \draw[thick,mid arrow] (0,2) -- (2,2);
+      \draw[thick,mid arrows] (0,0) -- (0,2);
+      \draw[thick,mid arrows] (2,0) -- (2,2);
+      \node[below] at (1,-0.05) {\footnotesize $a$：$\sa$};
+      \node[right] at (2.02,1) {\footnotesize $b$：$\sb$};
+      \node at (1,1) {\small \lab};
+    \end{scope}}
+  \node[red!60!black] at (10.9,-0.75) {\footnotesize 奇（ゼロモードあり）};
+  \node at (3.3,-0.75) {\footnotesize 偶（モジュラー変換で互いに移る）};
+\end{tikzpicture}
+\zucap{$T^2$ の4つのスピン構造。$a$ 方向（空間 $\sigma$）と $b$ 方向（虚時間）それぞれについて、スピノルが周期的（$+$，R）か反周期的（$-$，NS）かを指定する。(R,R) のみが奇スピン構造で、定数スピノルのゼロモードをもつ。}
+\end{center}
+
+\begin{problem}[難易度 C]\label{ch07-prob-gso}
+平坦なトーラス $T^2=\C/(\Z+\tau\Z)$ の4つのスピン構造を、$a$ サイクル（$z\to z+1$）と $b$ サイクル（$z\to z+\tau$）に沿った符号 $(\epsilon_a,\epsilon_b)\in\{\pm1\}^2$ で表す（$+1$ が R、$-1$ が NS；定数枠に関する周期性）。\\
+(1) 原始的なサイクル $pa+qb$（$\gcd(p,q)=1$）に沿った直線上の符号は $\epsilon_a^p\epsilon_b^q$ であることを説明せよ。\\
+(2) モジュラー変換 $T\colon\tau\mapsto\tau+1$（新しい基底 $a'=a$, $b'=a+b$）と $S\colon\tau\mapsto-1/\tau$（$a'=b$, $b'=-a$）によるスピン構造の移り方を求め、$SL(2,\Z)$ の作用の軌道が $\{(\text{NS,NS}),(\text{NS,R}),(\text{R,NS})\}$ と $\{(\text{R,R})\}$ であることを示せ。\\
+(3) $a$ を空間、$b$ を虚時間の方向とすると、自由フェルミオンの分配関数で $\Tr_{\rm NS}q^{H}$, $\Tr_{\rm NS}(-1)^Fq^{H}$, $\Tr_{\rm R}q^H$, $\Tr_{\rm R}(-1)^Fq^H$ はそれぞれどのスピン構造に対応するか。各スピン構造の分配関数 $Z_{(\epsilon_a,\epsilon_b)}$ がモジュラー変換で（位相を除き）スピン構造の移り方どおりに置換されるとして、NS セクターだけからなる理論はモジュラー不変になりえず、R セクターと $(-1)^F$ の挿入（GSO 射影）が必要であることを説明せよ。
+\end{problem}
+
+\begin{solution}
+(1) 平坦なトーラスでは接束が定数枠で大域的に自明化され、スピン構造はこの枠に関して、格子のベクトル $\gamma\in\Z+\tau\Z$ だけ平行移動したときにスピノルに掛かる符号 $\epsilon(\gamma)$ で決まる。2回続けて移動すれば符号は掛け算されるので $\epsilon(\gamma+\gamma')=\epsilon(\gamma)\epsilon(\gamma')$（準同型）。よって $\epsilon(pa+qb)=\epsilon_a^p\epsilon_b^q$。サイクル $pa+qb$ を表す直線の接ベクトルは定数なので、これはそのサイクル自身の接ベクトル枠に関する周期性（R/NS）でもある。
+
+(2) $SL(2,\Z)$ の元は線形写像として定数枠を定数枠に写すので、新しい基底に沿った符号を読めばよい。$T$：$\epsilon_{a'}=\epsilon_a$、$\epsilon_{b'}=\epsilon_a\epsilon_b$。
+\begin{gather*}
+(\text{NS,NS})=(-,-)\mapsto(-,+)=(\text{NS,R}),\\ (\text{NS,R})\mapsto(\text{NS,NS}),\quad(\text{R,NS})\mapsto(\text{R,NS}),\quad(\text{R,R})\mapsto(\text{R,R}).
+\end{gather*}
+$S$：$\epsilon_{a'}=\epsilon_b$、$\epsilon_{b'}=\epsilon_a^{-1}=\epsilon_a$ なので成分の入れ替え：$(\text{NS,R})\leftrightarrow(\text{R,NS})$、$(\text{NS,NS})$, $(\text{R,R})$ は不変。$T$, $S$ は $SL(2,\Z)$ を生成するので、軌道は $T$ と $S$ で移り合うものの集まりで、$\{(\text{NS,NS}),(\text{NS,R}),(\text{R,NS})\}$（$T$ で前2者、$S$ で後2者が結ばれる）と $\{(\text{R,R})\}$。(R,R) は $\epsilon(\gamma)=+1$（全ての $\gamma$）で明らかに不変である。
+
+(3) 虚時間方向の境界条件は、$\Tr\,q^H$ ではフェルミオンに対して反周期的（経路積分でのフェルミオンのトレースの標準的な性質）、$\Tr(-1)^Fq^H$ では周期的。したがって
+\begin{gather*}
+\Tr_{\rm NS}q^H\leftrightarrow(\text{NS,NS}),\quad\Tr_{\rm NS}(-1)^Fq^H\leftrightarrow(\text{NS,R}),\\ \Tr_{\rm R}q^H\leftrightarrow(\text{R,NS}),\quad\Tr_{\rm R}(-1)^Fq^H\leftrightarrow(\text{R,R}).
+\end{gather*}
+トーラス上の理論の分配関数は、世界面の座標の取り方（$\tau$ の $SL(2,\Z)$ による取り換え）によらない量でなければならない。$Z_{(\text{NS,NS})}$ だけでは $T$ によって $Z_{(\text{NS,R})}$ に、さらに $S$ によって $Z_{(\text{R,NS})}$ に移るので不変にならない。不変な組合せを作るには偶の軌道の3つを（位相を除いて）等しい重みで足す必要がある：
+\[
+Z\propto\Tr_{\rm NS}\frac{1\pm(-1)^F}{2}q^H-\Tr_{\rm R}\frac{1\pm(-1)^F}{2}q^H
+\]
+の形（符号は位相因子とスピン統計で決まる）。すなわち NS セクターに $(-1)^F$ による射影を施し、R セクターを加えることが必要で、これが GSO 射影である。(R,R) は単独で不変なので、その係数の符号は自由に選べ、型 IIA と IIB（あるいは R セクターの時空カイラリティ）の選択に対応する。高種数の世界面でも同様に、$2^{2g}$ 個のスピン構造の和をとる（問題 \ref{ch07-prob-arf}）。
+\end{solution}
+
+\begin{problem}[難易度 D]\label{ch07-prob-arf}
+種数 $g$ の閉曲面 $\Sigma_g$ のスピン構造は、二次形式
+\[
+q\colon H_1(\Sigma_g;\Z_2)\to\Z_2,\qquad q(x+y)=q(x)+q(y)+x\cdot y
+\]
+（$x\cdot y$ は $\bmod2$ の交叉数、第6章）と1対1に対応することが知られている：埋め込まれた円周 $\gamma$ に沿ってスピノルが（$\gamma$ の接ベクトル枠に関して）NS なら $q([\gamma])=0$、R なら $1$。これを認めて以下に答えよ。$a_i,b_i$（$i=1,\dots,g$）を $a_i\cdot b_j=\delta_{ij}$, $a_i\cdot a_j=b_i\cdot b_j=0$ をみたす $H_1(\Sigma_g;\Z_2)$ の基底とする。\\
+(1) $q$ は $(q(a_i),q(b_i))\in\Z_2^{2g}$ で決まり、任意の値をとりうることを示し、スピン構造の数 $2^{2g}=\lvert H^1(\Sigma_g;\Z_2)\rvert$ を確かめよ。$g=1$ のとき、問題 \ref{ch07-prob-gso} の乗法的な記述 $\epsilon(\gamma)$ と $q$ の関係 $\epsilon=-(-1)^q$ が二次形式の性質と整合することを確かめよ。\\
+(2) $\displaystyle\sum_{x\in H_1}(-1)^{q(x)}=2^g(-1)^{\mathrm{Arf}(q)}$、$\mathrm{Arf}(q)=\sum_iq(a_i)q(b_i)\bmod2$ を示せ。これより $\mathrm{Arf}(q)$ が基底の取り方によらないこと、および $q$ が多数派としてとる値が $\mathrm{Arf}(q)$ であることを示せ。\\
+(3) $\mathrm{Arf}(q)=0$（偶）のスピン構造は $2^{g-1}(2^g+1)$ 個、$\mathrm{Arf}(q)=1$（奇）は $2^{g-1}(2^g-1)$ 個であることを示せ。$g=1,2$ で具体的な数を答えよ。
+\end{problem}
+
+\begin{solution}
+(1) $x=\sum_i(u_ia_i+v_ib_i)$ に対し、二次形式の性質を繰り返し用いると
+\[
+q(x)=\sum_i\bigl(u_iq(a_i)+v_iq(b_i)\bigr)+\sum_{\text{ペア}}(\text{交叉数})=\sum_i\bigl(u_iq(a_i)+v_iq(b_i)+u_iv_i\bigr),
+\]
+ここで交叉数で生き残るのは $a_i\cdot b_i=1$ の項だけである（$u_i^2=u_i$ にも注意）。よって $q$ は $2g$ 個の値 $(q(a_i),q(b_i))$ で決まる。逆に任意の値 $(x_i,y_i)$ に対して右辺の式で $q$ を定義すると、$q(x+x')-q(x)-q(x')=\sum_i(u_iv_i'+u_i'v_i)=x\cdot x'$ なので二次形式になる。したがって $2^{2g}$ 個で、$H^1(\Sigma_g;\Z_2)\cong\Z_2^{2g}$ の位数と一致する（2つの二次形式の差 $q-q'$ は線形形式、すなわち $H^1$ の元であり、定理 \ref{thm:ch07-spinclass} の「$H^1$ による移り合い」に対応する）。
+
+$g=1$：問題 \ref{ch07-prob-gso} では $\epsilon(\gamma+\gamma')=\epsilon(\gamma)\epsilon(\gamma')$。$\epsilon=-(-1)^q$ を代入すると $(-1)^{q(\gamma+\gamma')+1}=(-1)^{q(\gamma)+q(\gamma')}$、すなわち $q(\gamma+\gamma')=q(\gamma)+q(\gamma')+1$ となり、$a\cdot b=1$ のときの二次形式の性質と一致する。例えば (R,R) は $q(a)=q(b)=1$、$q(a+b)=1+1+1=1$（R）で、$a+b$ 方向の直線でも周期的であることと整合する。
+
+(2) $x_i=q(a_i)$, $y_i=q(b_i)$ とおくと、(1) の式より $(-1)^{q(x)}=\prod_i(-1)^{u_ix_i+v_iy_i+u_iv_i}$ で、和は各 $i$ について独立に分解する：
+\[
+\sum_{x}(-1)^{q(x)}=\prod_{i=1}^g\ \sum_{u,v\in\Z_2}(-1)^{ux_i+vy_i+uv}.
+\]
+\begin{note}
+1つのハンドルの和 $s(x_i,y_i)=\sum_{u,v}(-1)^{ux_i+vy_i+uv}$：$(0,0)$ では $1+1+1-1=2$。$(1,0)$ では $(u,v)=(0,0),(1,0),(0,1),(1,1)$ の指数が $0,1,0,1+1=0$ で $1-1+1+1=2$。$(0,1)$ も対称に $2$。$(1,1)$ では指数が $0,1,1,1+1+1=1$ で $1-1-1-1=-2$。まとめて $s=2(-1)^{x_iy_i}$。
+\end{note}
+よって $\sum_x(-1)^{q(x)}=2^g(-1)^{\sum_ix_iy_i}=2^g(-1)^{\mathrm{Arf}(q)}$。左辺は基底によらない量なので $\mathrm{Arf}(q)$ も基底によらない。また $q(x)=0$ となる $x$ の個数を $N_0$、$=1$ を $N_1$ とすると $N_0+N_1=4^g$、$N_0-N_1=2^g(-1)^{\mathrm{Arf}}$ なので
+\[
+N_{\mathrm{Arf}(q)}=\frac{4^g+2^g}{2}>\frac{4^g-2^g}{2}=N_{1-\mathrm{Arf}(q)},
+\]
+すなわち $q$ は多数派として値 $\mathrm{Arf}(q)$ をとる。
+
+(3) スピン構造は $(x,y)\in\Z_2^g\times\Z_2^g$ と1対1で、$\mathrm{Arf}=\sum_ix_iy_i$。偶の個数を $E_g$、奇を $O_g$ とすると、(2) と全く同じ計算で
+\[
+E_g-O_g=\sum_{x,y}(-1)^{\sum_ix_iy_i}=\prod_{i=1}^g\sum_{x_i,y_i}(-1)^{x_iy_i}=2^g,\qquad E_g+O_g=4^g .
+\]
+よって $E_g=\frac{4^g+2^g}2=2^{g-1}(2^g+1)$、$O_g=2^{g-1}(2^g-1)$。$g=1$：偶3個、奇1個（(R,R) のみ、問題 \ref{ch07-prob-gso} と一致）。$g=2$：偶10個、奇6個。
+
+物理的には、奇スピン構造の上では（カイラルな）ディラック作用素のゼロモードの数が奇数になる（アティヤの mod 2 指数：$\dim\ker\equiv\mathrm{Arf}(q)\pmod2$）。超弦理論の種数 $g$ の振幅はスピン構造の和をとり、偶スピン構造と奇スピン構造の寄与は性質が異なる（奇スピン構造ではゼロモードの吸収が必要で、パリティを破る項 $\epsilon^{\mu\nu\cdots}$ を生む）。$g=1$ の (R,R) が単独のモジュラー軌道をなしたことは、偶・奇がモジュラー群（写像類群）で保たれることの最も簡単な例である。
+\end{solution}

@@ -1,0 +1,153 @@
+% ==================================================================
+%  preamble.tex : 『素粒子論のための代数トポロジー演習』共通プリアンブル
+%  ビルド：upLaTeX (jsbook) + dvipdfmx。本体は test.tex。
+% ==================================================================
+\documentclass[uplatex, dvipdfmx, 11pt]{jsbook}
+
+\usepackage[utf8]{inputenc}
+\usepackage[margin=30truemm]{geometry}
+% --- 数学 ---
+\usepackage{amsmath,amssymb,amsthm,amsfonts}
+\usepackage{mathtools}
+\usepackage{physics}      % \tr, \Tr, \dd, \pdv など
+\usepackage{bm}
+\usepackage{tikz-cd}      % 可換図式
+\usepackage{slashed}      % ディラック作用素 \slashed{D}
+\numberwithin{equation}{chapter}
+% --- 図・色 ---
+\usepackage{graphicx, color}
+\usepackage{tikz}
+\usetikzlibrary{intersections,calc,arrows.meta,decorations.markings,decorations.pathreplacing,patterns,3d}
+\usepackage{float}
+\usepackage{ascmac}
+\usepackage{environ}
+\usepackage{showkeys}
+\parindent = 0pt
+
+% ------------------------------------------------------------------
+% 図用のスタイル（辺の同一視の矢印など）
+% ------------------------------------------------------------------
+\tikzset{
+  mid arrow/.style={postaction={decorate},decoration={markings,
+      mark=at position .55 with {\arrow{Stealth[length=2.2mm]}}}},
+  mid arrows/.style={postaction={decorate},decoration={markings,
+      mark=at position .48 with {\arrow{Stealth[length=2.2mm]}},
+      mark=at position .60 with {\arrow{Stealth[length=2.2mm]}}}},
+  vtx/.style={circle,fill,inner sep=1.1pt},
+  hvtx/.style={circle,draw,fill=white,inner sep=1.3pt},
+}
+% 図の下に付ける説明（solution 環境の中でも使えるよう float は使わない）
+\newcommand{\zucap}[1]{\par\nopagebreak{\centering\footnotesize #1\par}\medskip}
+
+% ------------------------------------------------------------------
+% 用語（将来の英語化に備えて英語を併記する）
+% ------------------------------------------------------------------
+\newcommand{\term}[2]{\textbf{#1}（#2）}   % 初出の用語：太字＋（English）
+\newcommand{\en}[1]{（#1）}                % 補足の英語
+
+% 計算過程などを書く注釈
+\newenvironment{note}{\vspace{1ex}\par\footnotesize\noindent\textbf{【注】}}{\par\vspace{1ex}}
+
+% ------------------------------------------------------------------
+% 記号
+% ------------------------------------------------------------------
+\newcommand{\id}{\mathrm{id}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\HH}{\mathbb{H}}               % 四元数
+\newcommand{\RP}{\mathbb{RP}}
+\newcommand{\CP}{\mathbb{CP}}
+\DeclareMathOperator{\Hom}{Hom}
+\DeclareMathOperator{\Ext}{Ext}
+\DeclareMathOperator{\Tor}{Tor}
+\DeclareMathOperator{\coker}{coker}
+\DeclareMathOperator{\ind}{ind}
+\DeclareMathOperator{\sign}{sign}
+\DeclareMathOperator{\ch}{ch}
+\DeclareMathOperator{\Td}{Td}
+\DeclareMathOperator{\Pf}{Pf}
+\DeclareMathOperator{\Aut}{Aut}
+\DeclareMathOperator{\End}{End}
+\DeclareMathOperator{\Ad}{Ad}
+\DeclareMathOperator{\ad}{ad}
+\DeclareMathOperator{\Spin}{Spin}
+\DeclareMathOperator{\Pin}{Pin}
+\newcommand{\Ahat}{\hat{A}}
+
+% ------------------------------------------------------------------
+% ハイパーリンク
+% ------------------------------------------------------------------
+\usepackage[dvipdfmx,bookmarks=true,bookmarksnumbered=true,bookmarkstype=toc,
+  colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
+\usepackage{pxjahyper}
+
+% ------------------------------------------------------------------
+% 定理系の囲み（tcolorbox）
+%   使い方： \begin{mythm}{タイトル}{ラベル} ... \end{mythm}
+%   ラベルは thm:ラベル, def:ラベル, ... として参照できる
+% ------------------------------------------------------------------
+\usepackage[many]{tcolorbox}
+\tcbset{
+  myboxstyle/.style={
+    enhanced, breakable,
+    colback=white, coltitle=white, fonttitle=\bfseries,
+    boxrule=0.8pt, arc=1.5mm,
+    attach boxed title to top left={xshift=3mm, yshift=-2mm},
+    top=3mm, before skip=3mm, after skip=3mm,
+    description font=\normalfont\bfseries, separator sign={：}
+  }
+}
+\newtcbtheorem[number within=chapter]{mythm}{定理}{myboxstyle,
+  colframe=red!75!black,
+  boxed title style={colback=red!50,colframe=red!75!black,boxrule=0.8pt,arc=1.5mm}}{thm}
+\newtcbtheorem[use counter from=mythm]{mydef}{定義}{myboxstyle,
+  colframe=blue!70!black,
+  boxed title style={colback=blue!60!gray!80,colframe=blue!70!black,boxrule=0.8pt,arc=1.5mm}}{def}
+\newtcbtheorem[use counter from=mythm]{mylem}{補題}{myboxstyle,
+  colframe=green!50!black,
+  boxed title style={colback=green!50!gray,colframe=green!50!black,boxrule=0.8pt,arc=1.5mm}}{lem}
+\newtcbtheorem[use counter from=mythm]{myprop}{命題}{myboxstyle,
+  colframe=orange!80!black,
+  boxed title style={colback=orange!80!black,colframe=orange!80!black,boxrule=0.8pt,arc=1.5mm}}{prop}
+\newtcbtheorem[use counter from=mythm]{myex}{例}{myboxstyle,
+  colframe=gray!70!black,
+  boxed title style={colback=gray!70!black,colframe=gray!70!black,boxrule=0.8pt,arc=1.5mm}}{ex}
+% 物理との対応をまとめる囲み（番号なし）
+\newtcolorbox{physbox}[1][]{enhanced, breakable, colback=yellow!4, colframe=orange!60!black,
+  boxrule=0.6pt, arc=1.5mm, fonttitle=\bfseries, title={物理との対応#1}}
+% 旧版互換：章冒頭の「この章で用いる事項」
+\newtcolorbox{summary}{breakable, enhanced, colback=gray!5, colframe=gray!60!black,
+  boxrule=0.6pt, arc=1.5mm, fonttitle=\bfseries, title=この章で用いる事項}
+
+% ------------------------------------------------------------------
+% 問題と解答
+%   problem 環境は本文に置き、solution 環境の中身は \printsolutions で巻末にまとめて出力する
+%   注意：solution の中では # と verbatim を使わない（中身をマクロに蓄えるため）
+% ------------------------------------------------------------------
+\theoremstyle{definition}
+\newtheorem{problem}{問題}[chapter]
+\renewcommand{\proofname}{証明}
+\newcommand{\allsolutions}{}
+\newcommand{\currentchaptertitle}{}
+\let\origchaptermark\chaptermark
+\renewcommand{\chaptermark}[1]{\gdef\currentchaptertitle{#1}\origchaptermark{#1}}
+\newcounter{solchapter}
+\NewEnviron{solution}{%
+  \ifnum\value{chapter}>\value{solchapter}%
+    \setcounter{solchapter}{\value{chapter}}%
+    \xdef\allsolutions{\unexpanded\expandafter{\allsolutions}%
+      \noexpand\solutionchapter{\thechapter}{\unexpanded\expandafter{\currentchaptertitle}}}%
+  \fi
+  \xdef\allsolutions{\unexpanded\expandafter{\allsolutions}%
+    \noexpand\solutionitem{\theproblem}{\unexpanded\expandafter{\BODY}}}%
+}
+\newcommand{\solutionchapter}[2]{\section*{第#1章\quad #2}}
+\newcommand{\solutionitem}[2]{\par\medskip\noindent\textbf{問題 #1 の解答}\par\nopagebreak #2\qed\par}
+\newcommand{\printsolutions}{%
+  \chapter*{解答}
+  \addcontentsline{toc}{chapter}{解答}
+  \markboth{解答}{解答}
+  \allsolutions
+}

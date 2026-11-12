@@ -1,0 +1,973 @@
+%================================================
+\chapter{ホモロジー}\label{ch:04}
+% 20問
+%================================================
+
+\section{物理からの動機}
+
+\subsection*{境界の境界はゼロ}
+3次元空間の領域 $V$ を考える。その境界 $\partial V$ は閉曲面であり、閉曲面には境界がない：
+\[
+\partial(\partial V)=\emptyset .
+\]
+この自明に見える事実が、電磁気学の基本法則の背後にある。ストークスの定理 $\oint_{\partial S}\bm A\cdot d\bm l=\int_S\bm B\cdot d\bm S$（$\bm B=\nabla\times\bm A$）を $S=\partial V$ に適用すると
+\[
+\int_{\partial V}\bm B\cdot d\bm S=\oint_{\partial\partial V}\bm A\cdot d\bm l=0
+\]
+となり、ベクトルポテンシャルで書ける磁場は湧き出しをもたない（$\nabla\cdot\bm B=0$）。微分形式の言葉では $d^2=0$、すなわちビアンキ恒等式 $dF=d(dA)=0$ である（第5章）。同様に、マクスウェル方程式 $\partial_\mu F^{\mu\nu}=J^\nu$ から $\partial_\nu J^\nu=\partial_\nu\partial_\mu F^{\mu\nu}=0$（電荷の保存）が従うのも、「2回微分すると消える」という同じ構造である。
+
+本章では、この「$\partial\partial=0$」を代数的な出発点として、空間の\textbf{ホモロジー}を定義する。$\partial\partial=0$ なので境界はつねに「閉じたもの」（\term{サイクル}{cycle}）であるが、逆に閉じたものが何かの境界になっているとは限らない。境界にならないサイクルを数えるのがホモロジー群
+\[
+H_k=\frac{\{\text{$k$ 次元の閉じたもの}\}}{\{\text{$k+1$ 次元のものの境界}\}}
+\]
+である。たとえばトーラスの上で、トーラスを一周する輪はどんな面の境界にもならない。トーラス上の平坦なゲージ場のウィルソン・ループ $\exp(i\oint_\gamma A)$ は、輪 $\gamma$ を面の境界の分だけずらしても変わらないので、$\gamma$ のホモロジー類だけで決まる。独立なウィルソン・ループの数はホモロジーで数えられる。
+
+\subsection*{ガウスの法則と全電荷}
+閉じた空間（例えば周期境界条件の箱 $T^3$）ではガウスの法則 $\nabla\cdot\bm E=\rho$ を全空間で積分すると、表面項がないので全電荷が $0$ になる：
+\[
+Q=\int_{T^3}\rho\,d^3x=\int_{T^3}\nabla\cdot\bm E\,d^3x=0 .
+\]
+格子上でこれを書くと、電荷分布（各サイトの数）が電場（各リンクの数）の境界になっているという主張になり、$H_0$ が「各連結成分の全電荷」という保存量を与える（問題で扱う）。
+
+\subsection*{格子ゲージ理論}
+ウィルソンの格子ゲージ理論では、ゲージ場は格子の\textbf{リンク}（向き付けられた辺）上の群の元 $U_\ell$（平行移動）、場の強さは\textbf{プラケット}（最小の正方形）の縁をまわるホロノミー $U_p$ である。$U(1)$ の場合 $U_\ell=e^{i\theta_\ell}$ と書くと
+\[
+\theta_p=\theta_1(x)+\theta_2(x+\hat1)-\theta_1(x+\hat2)-\theta_2(x)
+\]
+はプラケット $p$ の\textbf{境界} $\partial p$ に沿った $\theta$ の和であり、連続極限で $\theta_p\approx a^2F_{12}$（$a$ は格子間隔）となる。サイト・リンク・プラケット・キューブはそれぞれ 0, 1, 2, 3 次元の胞体であり、格子ゲージ理論は\textbf{胞体複体の上の鎖と余鎖}の理論にほかならない。キューブの境界の境界がゼロであることが格子上のビアンキ恒等式になる。
+\begin{center}
+\begin{tikzpicture}[scale=1.25]
+  \draw[gray!50] (-0.6,-0.6) grid (3.6,2.6);
+  \fill[blue!10] (1,1) rectangle (2,2);
+  \draw[very thick,red!70!black,mid arrow] (1,1) -- (2,1);
+  \draw[very thick,red!70!black,mid arrow] (2,1) -- (2,2);
+  \draw[very thick,red!70!black,mid arrow] (2,2) -- (1,2);
+  \draw[very thick,red!70!black,mid arrow] (1,2) -- (1,1);
+  \foreach \x in {0,...,3} \foreach \y in {0,...,2} \node[vtx,gray] at (\x,\y) {};
+  \node[vtx] at (1,1) {}; \node[below left] at (1,1) {$x$};
+  \node[below] at (1.5,0.95) {\footnotesize $\theta_1(x)$};
+  \node[right] at (2.02,1.5) {\footnotesize $\theta_2(x+\hat1)$};
+  \node[above] at (1.5,2.02) {\footnotesize $-\theta_1(x+\hat2)$};
+  \node[left] at (0.98,1.5) {\footnotesize $-\theta_2(x)$};
+  \node at (1.5,1.5) {$p$};
+  \draw[-{Stealth[length=2mm]}] (4.1,0) -- (4.8,0) node[right] {$1$};
+  \draw[-{Stealth[length=2mm]}] (4.1,0) -- (4.1,0.7) node[above] {$2$};
+\end{tikzpicture}
+\zucap{2次元正方格子のプラケット $p$ とその境界 $\partial p$（赤）。リンク変数 $\theta_\ell$ を縁に沿って（向きの符号つきで）足したものがプラケット変数 $\theta_p=\theta(\partial p)$ で、$p$ を貫く磁束 $a^2F_{12}$ にあたる。}
+\end{center}
+
+\subsection*{ファインマン図のループ数とオイラー標数}
+ファインマン図はグラフであり、独立なループ運動量の数 $L=I-V+1$（$I$：内線の数、$V$：頂点の数）は、グラフの1次元ホモロジーの階数（第1ベッチ数）$b_1$ にほかならない。$\hbar$ 展開の次数はこの $L$ で決まる。
+
+より一般に、空間を胞体に分けたとき
+\[
+\chi=(\text{頂点の数})-(\text{辺の数})+(\text{面の数})-\cdots
+\]
+は分け方によらない\term{オイラー標数}{Euler characteristic}になる。$\chi$ は曲率の積分（ガウス・ボンネの定理、第8章）、弦の世界面の種数展開 $g_s^{-\chi}$（第10章）、ラージ $N$ 展開の $N^{\chi}$ などに現れる。本章でこれらの計算の基礎を準備する。
+
+\begin{physbox}[：本章の辞書]
+\begin{center}
+\small
+\renewcommand{\arraystretch}{1.15}
+\begin{tabular}{p{0.46\linewidth}p{0.40\linewidth}}
+物理 & 数学\\ \hline
+ビアンキ恒等式 $dF=0$、電荷保存 $\partial_\mu J^\mu=0$ & $\partial\partial=0$（双対的に $d^2=0$）\\
+格子のサイト・リンク・プラケット・キューブ & 0, 1, 2, 3 胞体\\
+電流の流線、ウィルソン・ループの経路 & 1 鎖、1 サイクル\\
+平坦な場でのループの変形（ストークス） & ホモロジー類（境界の分の差は効かない）\\
+閉じた空間の全電荷 $=0$ & $H_0$ と $\varepsilon\circ\partial=0$\\
+独立なポリヤコフ・ループ、ループ運動量 & 第1ベッチ数 $b_1$\\
+離散的なウィルソン・ライン（$W^p=1$） & ホモロジーのねじれ（torsion）\\
+種数展開・ラージ $N$ 展開の次数 & オイラー標数 $\chi$\\
+ヘッジホッグ・バビー・スキルミオンの電荷 & 写像度
+\end{tabular}
+\end{center}
+\end{physbox}
+
+\section{基本事項のまとめ}
+
+\subsection{鎖複体とホモロジー}
+
+\begin{mydef}{鎖複体・ホモロジー}{ch04-chain}
+アーベル群 $C_k$（$k\in\Z$、$k<0$ では $0$）と準同型 $\partial_k\colon C_k\to C_{k-1}$ の列で $\partial_{k}\circ\partial_{k+1}=0$ をみたすものを\term{鎖複体}{chain complex}という。$\partial$ を\term{境界作用素}{boundary operator}と呼び、
+\[
+Z_k=\ker\partial_k,\qquad B_k=\operatorname{im}\partial_{k+1},\qquad H_k=Z_k/B_k
+\]
+とおき、$Z_k$ の元を\term{サイクル}{cycle}、$B_k$ の元を\term{バウンダリー}{boundary}、$H_k$ を $k$ 次の\term{ホモロジー群}{homology group}という。$\partial\partial=0$ より $B_k\subset Z_k$ である。$z,z'\in Z_k$ が $z-z'\in B_k$ のとき\term{ホモローグ}{homologous}であるという。
+\end{mydef}
+
+鎖複体の間の準同型の族 $f_k\colon C_k\to C'_k$ が $\partial'f_k=f_{k-1}\partial$ をみたすとき\term{鎖写像}{chain map}といい、$f_*[z]=[f(z)]$ によってホモロジーの準同型を誘導する。
+
+本書で現れるホモロジー群はすべて\textbf{有限生成アーベル群}であり、次の構造定理により
+\[
+H_k\cong\Z^{b_k}\oplus\Z_{m_1}\oplus\cdots\oplus\Z_{m_r}
+\]
+と書ける（$\Z_m=\Z/m\Z$）。$b_k=\operatorname{rank}H_k$ を\term{ベッチ数}{Betti number}、有限位数の元のなす部分 $\Z_{m_1}\oplus\cdots$ を\term{ねじれ部分}{torsion}という。ねじれは「$z$ 自身は境界でないが $mz$ は境界である」サイクルを表す。係数を $\R$ や $\Q$ にとると（$C_k\otimes\R$ を使うと）ねじれは消え、$\dim H_k(\,\cdot\,;\R)=b_k$ となる（普遍係数定理、第6章）。
+
+\begin{mydef}{完全列}{ch04-exact}
+準同型の列 $\cdots\to A\xrightarrow{f}B\xrightarrow{g}C\to\cdots$ が $B$ で\term{完全}{exact}であるとは $\operatorname{im}f=\ker g$ であることをいう。$0\to A\to B\to C\to0$ が完全（\term{短完全列}{short exact sequence}）であることは、$A\to B$ が単射、$B\to C$ が全射、$B/A\cong C$ を意味する。$C$ が自由アーベル群なら短完全列は分裂し $B\cong A\oplus C$。有限生成アーベル群の短完全列では階数が加法的：$\operatorname{rank}B=\operatorname{rank}A+\operatorname{rank}C$。
+\end{mydef}
+
+\subsection{単体的ホモロジー}
+
+\begin{mydef}{単体複体と向き}{ch04-simp}
+$\R^N$ の中で一般の位置にある $k+1$ 点 $v_0,\dots,v_k$ の凸包を $k$ \term{単体}{simplex} という（0 単体＝点、1 単体＝線分、2 単体＝三角形、3 単体＝四面体）。その頂点の部分集合の凸包を\textbf{面}という。単体の集まりで、各単体の面を含み、2つの単体の共通部分が（空であるか）共通の面であるものを\term{単体複体}{simplicial complex} $K$ という。
+
+頂点の並べ方を偶置換で移り合うものを同じとみなした同値類を単体の\textbf{向き}という。向きの付いた単体を $[v_0,\dots,v_k]$ と書き、
+\[
+[v_{\pi(0)},\dots,v_{\pi(k)}]=\operatorname{sgn}(\pi)\,[v_0,\dots,v_k]
+\]
+と約束する。$k$ \term{鎖}{chain} の群 $C_k(K)$ は、向き付けた $k$ 単体（各単体について一方の向きを選ぶ）を基底とする自由アーベル群である。
+\end{mydef}
+
+\begin{mydef}{単体的境界作用素}{ch04-bdry}
+\[
+\partial[v_0,\dots,v_k]=\sum_{i=0}^k(-1)^i[v_0,\dots,\widehat{v_i},\dots,v_k]
+\]
+（$\widehat{v_i}$ は $v_i$ を除くこと）。例：$\partial[v_0,v_1]=v_1-v_0$、$\partial[v_0,v_1,v_2]=[v_1,v_2]-[v_0,v_2]+[v_0,v_1]$。
+\end{mydef}
+
+\begin{mylem}{$\partial\partial=0$}{ch04-dd}
+$\partial_{k-1}\circ\partial_k=0$。したがって $(C_*(K),\partial)$ は鎖複体であり、\term{単体的ホモロジー}{simplicial homology} $H_k(K)$ が定まる。
+\end{mylem}
+証明は問題で行う。三角形の境界 $\partial[v_0,v_1,v_2]$ は $v_0\to v_1\to v_2\to v_0$ と一周する閉じた道であり、その境界 $(v_1-v_0)+(v_2-v_1)+(v_0-v_2)$ は $0$ になる。
+
+\begin{myex}{円周}{ch04-circle}
+$K=\partial\Delta^2$（三角形の3辺と3頂点）では $C_1=\Z^3$、$C_0=\Z^3$、$C_2=0$。$z=[v_0,v_1]+[v_1,v_2]+[v_2,v_0]$ は $\partial z=0$ をみたし、$Z_1=\Z z$。境界になるものはないので $H_1(\partial\Delta^2)=\Z z\cong\Z$：円周を一周する輪は境界にならない。$\Delta^2$（内部の2単体も含む）では $z=\partial[v_0,v_1,v_2]$ となり $H_1=0$ である（問題）。
+\end{myex}
+
+\term{$\Delta$ 複体}{$\Delta$-complex} では、単体の辺どうしの同一視を許す（例：正方形を対角線で2つの三角形に分け、向かい合う辺を貼るとトーラス）。境界作用素は同じ式で定義され、少ない単体で計算できる。
+
+\subsection{特異ホモロジーと基本性質}
+
+任意の位相空間 $X$ に対しては、標準 $k$ 単体 $\Delta^k$ からの連続写像 $\sigma\colon\Delta^k\to X$（\term{特異単体}{singular simplex}）全体を基底とする自由アーベル群 $C_k(X)$ と、同じ形の境界作用素 $\partial\sigma=\sum_i(-1)^i\sigma|_{[e_0,\dots,\widehat{e_i},\dots,e_k]}$ から\term{特異ホモロジー}{singular homology} $H_k(X)$ を定める。具体的な計算には使わないが、次の性質を保証する役割をもつ。
+
+\begin{mythm}{ホモロジーの基本性質}{ch04-basic}
+\begin{enumerate}
+\item（関手性）連続写像 $f\colon X\to Y$ は準同型 $f_*\colon H_k(X)\to H_k(Y)$ を誘導し、$(g\circ f)_*=g_*\circ f_*$、$\id_*=\id$。
+\item（ホモトピー不変性）$f\simeq g$ なら $f_*=g_*$。特に $X\simeq Y$ なら $H_k(X)\cong H_k(Y)$。可縮な空間では $H_0=\Z$、$H_k=0$（$k\ge1$）。
+\item（$H_0$）$H_0(X)\cong\Z^{(\text{弧状連結成分の数})}$。各成分の点が生成元で、同じ成分の2点はホモローグ（道 $\gamma$ を1単体とみなすと $\partial\gamma=$ 終点 $-$ 始点）。
+\item（次元）$n$ 次元の胞体複体では $k>n$ で $H_k=0$。
+\item（一致）単体複体（$\Delta$ 複体）$K$ の単体的ホモロジーは、その実現 $\lvert K\rvert$ の特異ホモロジーと自然に同型。したがって単体的ホモロジーは単体分割の取り方によらない。
+\end{enumerate}
+\end{mythm}
+
+\begin{mydef}{被約ホモロジー}{ch04-reduced}
+\term{添加写像}{augmentation} $\varepsilon\colon C_0\to\Z$、$\varepsilon(\sum n_iv_i)=\sum n_i$ は $\varepsilon\circ\partial_1=0$ をみたす。$\tilde H_0=\ker\varepsilon/\operatorname{im}\partial_1$、$\tilde H_k=H_k$（$k\ge1$）を\term{被約ホモロジー}{reduced homology}という。$H_0\cong\tilde H_0\oplus\Z$（$X\ne\emptyset$）であり、可縮な空間ではすべての $\tilde H_k$ が $0$。
+\end{mydef}
+
+\subsection{完全列・切除・マイヤー・ヴィートリス}
+
+部分空間 $A\subset X$ に対し $C_k(X,A)=C_k(X)/C_k(A)$ は鎖複体になり、\term{相対ホモロジー}{relative homology} $H_k(X,A)$ が定まる。相対サイクルとは「境界が $A$ の中にある鎖」である。
+
+\begin{mythm}{対の長完全列}{ch04-les}
+次の列は完全である：
+\[
+\cdots\to H_k(A)\xrightarrow{i_*}H_k(X)\xrightarrow{j_*}H_k(X,A)\xrightarrow{\ \delta\ }H_{k-1}(A)\to\cdots\to H_0(X,A)\to0 .
+\]
+連結準同型 $\delta$ は、相対サイクル $c$ に $[\partial c]$（$A$ の中のサイクル）を対応させる。
+\end{mythm}
+
+\begin{mythm}{切除定理（認める）}{ch04-excision}
+$\bar Z\subset\operatorname{int}A$ なら $H_k(X\setminus Z,A\setminus Z)\cong H_k(X,A)$。とくに $A$ が $X$ の閉部分複体（よい対）なら $H_k(X,A)\cong\tilde H_k(X/A)$。例：$H_k(D^n,S^{n-1})\cong\tilde H_k(S^n)$。
+\end{mythm}
+
+\begin{mythm}{マイヤー・ヴィートリス完全列}{ch04-mv}
+$X=U\cup V$（$U,V$ は開集合、あるいは $X$ の内部が $X$ を覆う部分複体）のとき、完全列
+\[
+\cdots\to H_k(U\cap V)\xrightarrow{\ \Phi\ }H_k(U)\oplus H_k(V)\xrightarrow{\ \Psi\ }H_k(X)\xrightarrow{\ \delta\ }H_{k-1}(U\cap V)\to\cdots
+\]
+がある。ここで $\Phi(c)=(c,-c)$、$\Psi(a,b)=a+b$（包含写像による像）。$\delta$ は、$X$ のサイクル $z=u+v$（$u$ は $U$ の鎖、$v$ は $V$ の鎖）に $[\partial u]=[-\partial v]$（$U\cap V$ のサイクル）を対応させる。$U\cap V\ne\emptyset$ なら被約ホモロジーでも完全。
+\end{mythm}
+ゲージ理論で空間を2つの座標近傍（パッチ）で覆い、それぞれで場を記述する（ディラック・モノポールのウー・ヤン構成、第5, 7章）のと同じ発想で、ホモロジーを「部品」から組み立てる道具である。
+
+\subsection{胞体ホモロジー}
+
+CW 複体（第1章）$X$ の $k$ 骨格を $X^k$ とする。
+
+\begin{mythm}{胞体ホモロジー}{ch04-cellular}
+$C_k^{\mathrm{CW}}=\Z^{(\text{$k$ 胞体の数})}$（各胞体に向きを1つ選んで基底とする）と
+\[
+d_k(e^k_\alpha)=\sum_\beta d_{\alpha\beta}\,e^{k-1}_\beta
+\]
+は鎖複体をなし、そのホモロジーは $H_k(X)$ と同型である。係数 $d_{\alpha\beta}$ は、$e^k_\alpha$ の接着写像 $S^{k-1}\to X^{k-1}$ と、$X^{k-1}$ から $e^{k-1}_\beta$ 以外をつぶす写像 $X^{k-1}\to X^{k-1}/(X^{k-1}\setminus e^{k-1}_\beta)\cong S^{k-1}$ の合成の写像度である。
+\end{mythm}
+
+実際の計算でよく使うのは次の2つである。
+\begin{itemize}
+\item $d_1(e^1)=(\text{終点})-(\text{始点})$。
+\item 2胞体 $e$ を、辺のラベルの語（例：$aba^{-1}b^{-1}$）で表される多角形として貼るとき、$d_2(e)$ における $1$ 胞体 $a$ の係数は、語に現れる $a$ の\textbf{指数の和}である。
+\end{itemize}
+
+\begin{center}
+\begin{tikzpicture}[scale=1.15]
+  \fill[blue!6] (0,0) rectangle (2,2);
+  \draw[thick,mid arrow] (0,0) -- (2,0); \node[below] at (1,0) {$a$};
+  \draw[thick,mid arrows] (2,0) -- (2,2); \node[right] at (2,1) {$b$};
+  \draw[thick,mid arrow] (0,2) -- (2,2); \node[above] at (1,2) {$a$};
+  \draw[thick,mid arrows] (0,0) -- (0,2); \node[left] at (0,1) {$b$};
+  \foreach \p in {(0,0),(2,0),(2,2),(0,2)} \node[vtx] at \p {};
+  \node at (1,1) {$e$};
+  \node at (1,-0.8) {$T^2$：$aba^{-1}b^{-1}$};
+  \begin{scope}[xshift=4cm]
+  \fill[blue!6] (0,0) rectangle (2,2);
+  \draw[thick,mid arrow] (0,0) -- (2,0); \node[below] at (1,0) {$a$};
+  \draw[thick,mid arrows] (2,0) -- (2,2); \node[right] at (2,1) {$b$};
+  \draw[thick,mid arrow] (2,2) -- (0,2); \node[above] at (1,2) {$a$};
+  \draw[thick,mid arrows] (0,0) -- (0,2); \node[left] at (0,1) {$b$};
+  \foreach \p in {(0,0),(2,0),(2,2),(0,2)} \node[vtx] at \p {};
+  \node at (1,1) {$e$};
+  \node at (1,-0.8) {クラインの壺 $K$：$abab^{-1}$};
+  \end{scope}
+  \begin{scope}[xshift=8cm]
+  \fill[blue!6] (0,0) rectangle (2,2);
+  \draw[thick,mid arrow] (0,0) -- (2,0); \node[below] at (1,0) {$a$};
+  \draw[thick,mid arrows] (2,0) -- (2,2); \node[right] at (2,1) {$b$};
+  \draw[thick,mid arrow] (2,2) -- (0,2); \node[above] at (1,2) {$a$};
+  \draw[thick,mid arrows] (0,2) -- (0,0); \node[left] at (0,1) {$b$};
+  \node[vtx] at (0,0) {}; \node[vtx] at (2,2) {};
+  \node[hvtx] at (2,0) {}; \node[hvtx] at (0,2) {};
+  \node at (1,1) {$e$};
+  \node at (1,-0.8) {$\RP^2$：$abab$};
+  \end{scope}
+\end{tikzpicture}
+\zucap{正方形の辺を矢印の向きがそろうように貼り合わせる。語は左下の頂点から反時計回りに読む。$T^2$ と $K$ では4頂点がすべて1点になり、$\RP^2$ では2点（黒・白）になる。$d_2e$ は順に $a+b-a-b=0$、$a+b+a-b=2a$、$2a+2b$。}
+\end{center}
+
+\begin{myex}{胞体ホモロジーの例}{ch04-cellex}
+\begin{itemize}
+\item $S^n=e^0\cup e^n$（$n\ge1$）：$d=0$ なので $H_0=H_n=\Z$、他は $0$。
+\item $T^2$：$C_2=\Z e$、$C_1=\Z a\oplus\Z b$、$C_0=\Z v$、$d_2e=0$、$d_1=0$。$H_*=(\Z,\Z^2,\Z)$。
+\item クラインの壺 $K$：$d_2e=2a$、$d_1=0$ から $H_0=\Z$、$H_1=\Z\oplus\Z_2$、$H_2=0$（問題）。
+\item $\CP^n=e^0\cup e^2\cup\dots\cup e^{2n}$：奇数次元の胞体がないので $d=0$、$H_{2k}=\Z$（$0\le k\le n$）。
+\end{itemize}
+\end{myex}
+
+\begin{center}
+\small
+\renewcommand{\arraystretch}{1.25}
+\begin{tabular}{p{0.36\linewidth}|p{0.42\linewidth}|c}
+空間 & $H_k$（$k=0,1,2,\dots$） & $\chi$\\ \hline
+$S^n$（$n\ge1$） & $\Z$（$k=0,n$）、他は $0$ & $1+(-1)^n$\\
+$T^n$ & $\Z^{\binom nk}$ & $0$\\
+$\Sigma_g$（種数 $g$ の向き付け可能な閉曲面） & $\Z,\ \Z^{2g},\ \Z$ & $2-2g$\\
+$N_h$（$h$ 個の $\RP^2$ の連結和） & $\Z,\ \Z^{h-1}\oplus\Z_2,\ 0$ & $2-h$\\
+クラインの壺 $K=N_2$ & $\Z,\ \Z\oplus\Z_2,\ 0$ & $0$\\
+$\RP^n$ & $\Z$（$k=0$ と $k=n$ 奇数）、$\Z_2$（$k$ 奇数 $<n$）、他は $0$ & $\frac{1+(-1)^n}{2}$\\
+$\CP^n$ & $\Z$（$k=0,2,\dots,2n$）、他は $0$ & $n+1$\\
+レンズ空間 $L(p,q)$ & $\Z,\ \Z_p,\ 0,\ \Z$ & $0$
+\end{tabular}
+\end{center}
+$T^n$ の結果はキュネットの公式（第6章）から従う。本章では $T^2$ と、$H_1(T^d)\cong\Z^d$（各座標方向に一周する輪が基底）を用いる。
+
+\subsection{オイラー標数}
+
+\begin{mythm}{オイラー・ポアンカレの公式}{ch04-euler}
+有限 CW 複体 $X$ の $k$ 胞体の数を $c_k$ とすると
+\[
+\chi(X):=\sum_k(-1)^kc_k=\sum_k(-1)^kb_k .
+\]
+右辺はホモロジーだけで決まるので、$\chi$ は胞体分割によらないホモトピー不変量である。
+\end{mythm}
+\begin{note}
+$Z_k=\ker d_k$、$B_{k-1}=\operatorname{im}d_k$ とすると短完全列 $0\to Z_k\to C_k\to B_{k-1}\to0$、$0\to B_k\to Z_k\to H_k\to0$ から $c_k=\operatorname{rank}Z_k+\operatorname{rank}B_{k-1}=b_k+\operatorname{rank}B_k+\operatorname{rank}B_{k-1}$。$(-1)^k$ をかけて足すと $\operatorname{rank}B_k$ の項が打ち消し合う。
+\end{note}
+性質：$\chi(X\times Y)=\chi(X)\chi(Y)$、$\chi(X\cup Y)=\chi(X)+\chi(Y)-\chi(X\cap Y)$（部分複体のとき）、$n$ 重被覆 $\tilde X\to X$ では $\chi(\tilde X)=n\chi(X)$。
+
+閉曲面 $\Sigma$ 上のリーマン計量のガウス曲率 $K$ について $\int_\Sigma K\,dA=2\pi\chi(\Sigma)$（ガウス・ボンネの定理、第8章）、閉多様体 $M$ 上の孤立零点をもつベクトル場の零点の指数の和は $\chi(M)$（ポアンカレ・ホップの定理）である。どちらも本章では結果のみを用いる。
+
+\subsection{フレヴィッチの定理・写像度・レフシェッツの定理}
+
+\begin{mythm}{フレヴィッチの定理（1次）}{ch04-hurewicz}
+$X$ が弧状連結なら、ループ $\gamma$ をその1サイクルとしてのクラスに写す写像 $h\colon\pi_1(X,x_0)\to H_1(X)$ は全射準同型で、核は交換子部分群 $[\pi_1,\pi_1]$ である。すなわち $H_1(X)\cong\pi_1(X)^{\mathrm{ab}}=\pi_1/[\pi_1,\pi_1]$。
+\end{mythm}
+例：$\pi_1(S^1\vee S^1)=F_2$（自由群）に対し $H_1=\Z^2$。$\pi_1(\Sigma_g)=\langle a_i,b_i\mid\prod[a_i,b_i]=1\rangle$ に対し $H_1=\Z^{2g}$。$\pi_1$ が可換なら $H_1\cong\pi_1$（例：$\pi_1(SO(3))=\Z_2=H_1(SO(3))$）。
+
+\begin{mydef}{写像度}{ch04-degree}
+$n\ge1$ とし、$f\colon S^n\to S^n$ に対し $f_*\colon H_n(S^n)\cong\Z\to\Z$ はある整数 $\deg f$ 倍である。これを $f$ の\term{写像度}{degree}という。
+\end{mydef}
+
+\begin{myprop}{写像度の性質}{ch04-degprop}
+\begin{enumerate}
+\item $\deg(g\circ f)=\deg g\cdot\deg f$、$\deg\id=1$。$f\simeq g$ なら $\deg f=\deg g$。
+\item 1つの座標の符号を反転する鏡映は $\deg=-1$。対蹠写像 $x\mapsto-x$ は $n+1$ 個の鏡映の合成なので $\deg=(-1)^{n+1}$。
+\item（局所写像度）$f$ が滑らかで $y$ が正則値（$f^{-1}(y)$ の各点で $\det Df\ne0$）なら $\deg f=\sum_{x\in f^{-1}(y)}\operatorname{sign}\det Df_x$。
+\item $n=1$ では $\deg f$ は巻き付き数（第2章）に、$n=2$ の $O(3)$ シグマ模型では $\deg\bm n=\frac1{4\pi}\int\bm n\cdot(\partial_1\bm n\times\partial_2\bm n)\,d^2x$ に等しい（第3章）。
+\end{enumerate}
+\end{myprop}
+
+\begin{mythm}{レフシェッツの不動点定理（認める）}{ch04-lefschetz}
+$X$ を有限 CW 複体（コンパクトな多様体など）、$f\colon X\to X$ を連続写像とし、
+\[
+L(f)=\sum_k(-1)^k\tr\bigl(f_*\colon H_k(X;\Q)\to H_k(X;\Q)\bigr)
+\]
+を\term{レフシェッツ数}{Lefschetz number}とする（$H_k(X;\Q)\cong\Q^{b_k}$ でのトレース）。$L(f)\ne0$ なら $f$ は不動点をもつ。また $L(\id)=\chi(X)$ であり、$f\simeq\id$ なら $L(f)=\chi(X)$。不動点がすべて孤立していれば、その指数の和は $L(f)$ に等しい（レフシェッツ・ホップ）。
+\end{mythm}
+
+\section{問題}
+
+\subsection{鎖複体・グラフ・ファインマン図}
+
+\begin{problem}[難易度 A]\label{ch04-prob-dd}
+(1) 単体的境界作用素について $\partial\circ\partial=0$ を示せ。\\
+(2) 四面体 $\sigma=[0,1,2,3]$ について $\partial\sigma$ と $\partial\partial\sigma$ を具体的に計算せよ。\\
+(3) $\R^3$ の領域 $V$ に対し、ベクトルポテンシャル $\bm A$ で書ける磁場 $\bm B=\nabla\times\bm A$ の $\partial V$ を貫く全磁束が $0$ になることが、(1) の「連続版」であることを説明せよ。
+\end{problem}
+
+\begin{solution}
+(1) $\sigma=[v_0,\dots,v_k]$ とする。
+\[
+\begin{aligned}
+\partial\partial\sigma&=\sum_{i}(-1)^i\,\partial[v_0,\dots,\widehat{v_i},\dots,v_k]\\
+&=\sum_{j<i}(-1)^i(-1)^j[\dots\widehat{v_j}\dots\widehat{v_i}\dots]+\sum_{j>i}(-1)^i(-1)^{j-1}[\dots\widehat{v_i}\dots\widehat{v_j}\dots].
+\end{aligned}
+\]
+第2の和で $v_j$（$j>i$）は $v_i$ を除いた列の $j-1$ 番目にあるので符号が $(-1)^{j-1}$ になる。第2の和で $i$ と $j$ の名前を入れかえると $\sum_{i<j}$ が $\sum_{j<i}$ になり、各項は $-(-1)^{i+j}[\dots\widehat{v_j}\dots\widehat{v_i}\dots]$ となって第1の和と打ち消し合う。よって $\partial\partial\sigma=0$ で、線形性から $\partial\partial=0$。
+
+(2)
+\[
+\partial[0,1,2,3]=[1,2,3]-[0,2,3]+[0,1,3]-[0,1,2].
+\]
+各項の境界は
+\begin{align*}
+\partial[1,2,3]&=[2,3]-[1,3]+[1,2],&\partial[0,2,3]&=[2,3]-[0,3]+[0,2],\\
+\partial[0,1,3]&=[1,3]-[0,3]+[0,1],&\partial[0,1,2]&=[1,2]-[0,2]+[0,1].
+\end{align*}
+符号つきで足すと
+\[
+\begin{aligned}
+\partial\partial\sigma&=\bigl([2,3]-[1,3]+[1,2]\bigr)-\bigl([2,3]-[0,3]+[0,2]\bigr)\\
+&\quad+\bigl([1,3]-[0,3]+[0,1]\bigr)-\bigl([1,2]-[0,2]+[0,1]\bigr)=0 .
+\end{aligned}
+\]
+6本の辺がそれぞれちょうど2回、逆符号で現れる。$\partial\sigma$ は四面体の表面（4つの三角形）を外向きに一貫して向き付けたもので、閉曲面だから境界をもたない。
+
+(3) ストークスの定理 $\int_S(\nabla\times\bm A)\cdot d\bm S=\oint_{\partial S}\bm A\cdot d\bm l$ と、ガウスの定理 $\int_V\nabla\cdot\bm B\,d^3x=\int_{\partial V}\bm B\cdot d\bm S$ は、どちらも「積分領域の境界 $\partial$」と「微分 $d$」が互いに随伴であること $\int_{\partial c}\omega=\int_c d\omega$ の例である。$S=\partial V$ とすると
+\[
+\int_{\partial V}\bm B\cdot d\bm S=\oint_{\partial\partial V}\bm A\cdot d\bm l=0
+\]
+（$\partial\partial V=\emptyset$）。同じことを微分の側で言えば $\nabla\cdot(\nabla\times\bm A)=0$、すなわち $d^2=0$ である。磁気単極子があれば $\bm A$ は大域的には存在せず、この議論は破れる（ディラック・モノポール、第5章）。
+\end{solution}
+
+\begin{problem}[難易度 A]\label{ch04-prob-simplex}
+$\Delta^2$ を三角形 $[v_0,v_1,v_2]$（すべての面を含む単体複体）、$\partial\Delta^2$ をその3辺と3頂点からなる部分複体とする。$H_k(\Delta^2)$ と $H_k(\partial\Delta^2)$ を、鎖群と境界作用素を書き下して計算せよ。被約ホモロジーではどうなるか。
+\end{problem}
+
+\begin{solution}
+辺を $e_0=[v_1,v_2]$、$e_1=[v_0,v_2]$、$e_2=[v_0,v_1]$ とおく。
+\[
+\partial e_0=v_2-v_1,\quad\partial e_1=v_2-v_0,\quad\partial e_2=v_1-v_0,\qquad\partial[v_0,v_1,v_2]=e_0-e_1+e_2 .
+\]
+
+$\partial_1$：$\partial_1(xe_0+ye_1+ze_2)=-(y+z)v_0+(z-x)v_1+(x+y)v_2$。これが $0$ となるのは $z=x$、$y=-x$ のときで、$Z_1=\Z(e_0-e_1+e_2)$。$\operatorname{im}\partial_1$ は $v_1-v_0$、$v_2-v_0$ で生成され、$\operatorname{im}\partial_1=\ker\varepsilon=\{\sum n_iv_i:\sum n_i=0\}$。よって $H_0=C_0/\operatorname{im}\partial_1\cong\Z$（$\varepsilon$ による同型）。
+
+$\partial\Delta^2$：$C_2=0$ なので $H_2=0$、$H_1=Z_1=\Z(e_0-e_1+e_2)\cong\Z$、$H_0\cong\Z$。生成元 $e_0-e_1+e_2=[v_0,v_1]+[v_1,v_2]+[v_2,v_0]$ は三角形の縁を一周するサイクルである。
+
+$\Delta^2$：$\partial_2\colon\Z\to C_1$ は $[v_0,v_1,v_2]\mapsto e_0-e_1+e_2\ne0$ で単射なので $H_2=\ker\partial_2=0$。$B_1=\operatorname{im}\partial_2=\Z(e_0-e_1+e_2)=Z_1$ なので $H_1=0$。$H_0\cong\Z$。
+
+被約ホモロジー：両方とも $\tilde H_0=\ker\varepsilon/\operatorname{im}\partial_1=0$。$\tilde H_*(\Delta^2)=0$（可縮だから当然）、$\tilde H_1(\partial\Delta^2)=\Z$、他は $0$。$\partial\Delta^2$ は円周と同相なので、$\tilde H_k(S^1)=\Z$（$k=1$）、$0$（それ以外）が得られた。縁を一周する輪は、内部の三角形があれば境界になり（「穴がふさがっている」）、なければ境界にならない。
+\end{solution}
+
+\begin{problem}[難易度 B]\label{ch04-prob-graph}
+有限グラフ $\Gamma$（頂点 $V$ 個、辺 $E$ 個、連結成分 $b_0$ 個、2単体はない）を1次元の単体複体（またはループや多重辺を許す $\Delta$ 複体）とみなす。\\
+(1) $H_0(\Gamma)\cong\Z^{b_0}$、$H_1(\Gamma)$ は階数 $E-V+b_0$ の自由アーベル群であることを示せ。\\
+(2) $\Gamma$ が連結で、$T\subset\Gamma$ をその全域木（すべての頂点を含む木、辺は $V-1$ 本；木は $H_1=0$ をみたすことを認めてよい）とする。$T$ に含まれない辺 $e$ ごとに、$e$ と $T$ の中の道でできる閉路 $z_e$ を考える。$\{z_e\}$ が $H_1(\Gamma)$ の基底であることを示せ。
+\end{problem}
+
+\begin{solution}
+(1) $H_0$：同じ連結成分の2頂点 $u,w$ は辺の列で結ばれ、その辺を向きに応じて符号をつけて足した1鎖 $c$ は $\partial c=w-u$ をみたすので $u$ と $w$ はホモローグ。よって $H_0$ は各成分の代表頂点 $u_1,\dots,u_{b_0}$ で生成される。一方、成分ごとの添加写像 $\varepsilon_\alpha(\sum n_vv)=\sum_{v\in\Gamma_\alpha}n_v$ は各辺の境界（同じ成分の頂点の差）で $0$ になるので、$(\varepsilon_1,\dots,\varepsilon_{b_0})\colon H_0\to\Z^{b_0}$ が定まり、$u_\alpha$ を標準基底に写す。したがって $H_0\cong\Z^{b_0}$。
+
+$H_1$：$C_2=0$ なので $H_1=\ker\partial_1$ は自由アーベル群 $C_1$ の部分群であり、自由である。$H_0=C_0/\operatorname{im}\partial_1\cong\Z^{b_0}$ から $\operatorname{rank}\operatorname{im}\partial_1=V-b_0$。完全列 $0\to\ker\partial_1\to C_1\to\operatorname{im}\partial_1\to0$ で階数は加法的なので
+\[
+b_1=\operatorname{rank}H_1=E-(V-b_0)=E-V+b_0 .
+\]
+連結なら $b_1=E-V+1$。とくに $\chi(\Gamma)=V-E=b_0-b_1$。
+
+(2) $T$ の外の辺は $E-(V-1)=b_1$ 本ある。$e$ の端点を $T$ の中の（一意な）道で結んで閉路 $z_e$ を作ると、$z_e$ は $e$ の係数が $1$、$T$ の外の他の辺の係数が $0$ のサイクルである。
+
+一次独立性：$\sum_en_ez_e=0$ なら、辺 $e$ の係数を見て $n_e=0$。
+
+生成：任意のサイクル $z$ に対し、$z$ における辺 $e\notin T$ の係数を $n_e$ として $z'=z-\sum_en_ez_e$ とおくと、$z'$ は $T$ の辺だけでできたサイクルである。$H_1(T)=0$ かつ $T$ には2単体がないので $z'=0$。よって $z=\sum n_ez_e$。
+
+物理では、全域木の外の各辺 $e$ が「独立なループ運動量」1つに対応し、$z_e$ に沿ってその運動量が流れる。
+\end{solution}
+
+\begin{problem}[難易度 B]\label{ch04-prob-feynman}
+連結なファインマン図を、頂点 $V$ 個、内線 $I$ 本、外線 $E$ 本のグラフ $\Gamma$ とみなす（外線は無視するか、外線の先に1価の頂点を付けても $b_1$ は変わらない）。内線 $\ell$ に向きを付け、4元運動量 $k_\ell\in\R^4$ を割り当てる。頂点 $v$ に外から流れ込む外線運動量の和を $p_v$ とする。\\
+(1) 各頂点での運動量保存（流入 $=$ 流出）が $\partial k+p=0$ と書けることを示せ。ただし $k=\sum_\ell k_\ell\,\ell\in C_1(\Gamma)\otimes\R^4$、$p=\sum_vp_v\,v\in C_0(\Gamma)\otimes\R^4$。\\
+(2) 解 $k$ が存在するための必要十分条件は $\sum_vp_v=0$（全運動量保存）であり、解全体は $4L$ 次元のアフィン空間で $L=I-V+1=b_1(\Gamma)$ となることを示せ（$L$ をループ数という）。\\
+(3) 作用を $S/\hbar$ の形で書くと、伝播関数（内線・外線とも）は $\hbar$ に比例し、頂点は $\hbar^{-1}$ に比例する。この規格化で、連結図の寄与が $\hbar^{E+L-1}$ に比例することを示せ。\\
+(4) $\phi^4$ 理論で $4V=2I+E$、$\phi^3$ 理論で $3V=2I+E$ を示し、$L$ を $V$ と $E$ で表せ。下図の (a)(b)(c) について $V,I,E,L$ を求めよ。
+\begin{center}
+\begin{tikzpicture}[scale=0.9]
+  % (a) fish
+  \node[vtx] (a1) at (0,0) {}; \node[vtx] (a2) at (1.6,0) {};
+  \draw[thick] (a1) to[out=60,in=120] (a2);
+  \draw[thick] (a1) to[out=-60,in=-120] (a2);
+  \draw[thick] (a1) -- ++(150:0.9); \draw[thick] (a1) -- ++(210:0.9);
+  \draw[thick] (a2) -- ++(30:0.9); \draw[thick] (a2) -- ++(-30:0.9);
+  \node at (0.8,-1.3) {(a) $\phi^4$, 4点1ループ};
+  % (b) sunset
+  \begin{scope}[xshift=4.6cm]
+  \node[vtx] (b1) at (0,0) {}; \node[vtx] (b2) at (1.6,0) {};
+  \draw[thick] (b1) to[out=70,in=110] (b2);
+  \draw[thick] (b1) -- (b2);
+  \draw[thick] (b1) to[out=-70,in=-110] (b2);
+  \draw[thick] (b1) -- ++(180:0.9); \draw[thick] (b2) -- ++(0:0.9);
+  \node at (0.8,-1.3) {(b) $\phi^4$, サンセット};
+  \end{scope}
+  % (c) triangle
+  \begin{scope}[xshift=9.2cm]
+  \node[vtx] (c1) at (0,-0.5) {}; \node[vtx] (c2) at (1.4,-0.5) {}; \node[vtx] (c3) at (0.7,0.7) {};
+  \draw[thick] (c1) -- (c2) -- (c3) -- (c1);
+  \draw[thick] (c1) -- ++(210:0.8); \draw[thick] (c2) -- ++(-30:0.8); \draw[thick] (c3) -- ++(90:0.7);
+  \node at (0.7,-1.3) {(c) $\phi^3$, 三角形};
+  \end{scope}
+\end{tikzpicture}
+\zucap{ファインマン図をグラフとみなす。黒丸が相互作用頂点、太線が伝播関数。ループ数は内線と頂点が作るグラフの第1ベッチ数。}
+\end{center}
+\end{problem}
+
+\begin{solution}
+(1) $\partial\ell=(\text{終点})-(\text{始点})$ なので、$\partial k$ の頂点 $v$ の係数は
+\[
+(\partial k)_v=\sum_{\ell\text{ が }v\text{ に入る}}k_\ell-\sum_{\ell\text{ が }v\text{ から出る}}k_\ell .
+\]
+運動量保存「流入の和 $=$ 流出の和」は $(\partial k)_v+p_v=0$ にほかならない。
+
+(2) $\R^4$ の各成分ごとに考えればよい（$C_*\otimes\R^4=(C_*\otimes\R)^{\oplus4}$）。グラフが連結なので、前問より $H_0(\Gamma;\R)=C_0\otimes\R/\operatorname{im}\partial\cong\R$ で、同型は添加写像 $\varepsilon$ で与えられる。すなわち $\operatorname{im}\partial=\ker\varepsilon$。よって $-p\in\operatorname{im}\partial$ となる条件は $\varepsilon(p)=\sum_vp_v=0$。解が1つ $k_0$ あれば、解全体は $k_0+\ker\partial=k_0+Z_1(\Gamma;\R)\otimes\R^4$ であり、$C_2=0$ なので $Z_1=H_1$、その次元は（前問より）$4(I-V+1)=4b_1$。したがって独立な積分変数（ループ運動量）は $L=b_1=I-V+1$ 個である。
+
+(3) 図の値は $\hbar^{I+E}\cdot\hbar^{-V}$ に比例し、
+\[
+I+E-V=E+(I-V+1)-1=E+L-1 .
+\]
+外線の数 $E$ を固定すると、$\hbar$ の次数はループ数で決まる：木図（$L=0$）が古典的寄与、$L$ ループが $\hbar^L$ の量子補正である。
+
+(4) 線の端点を数える。$\phi^4$ では各頂点から4本の線の端が出る。内線は両端とも頂点につくので2回、外線は1回数えられ、$4V=2I+E$。$\phi^3$ では $3V=2I+E$。よって
+\[
+\phi^4:\ L=\frac{4V-E}{2}-V+1=V-\frac E2+1,\qquad\phi^3:\ L=\frac{3V-E}{2}-V+1=\frac{V-E}{2}+1 .
+\]
+(a) $V=2$、$I=2$、$E=4$：$L=2-2+1=1$。(b) $V=2$、$I=3$、$E=2$：$L=3-2+1=2$（公式でも $2-1+1=2$）。(c) $V=3$、$I=3$、$E=3$：$L=3-3+1=1$（公式でも $(3-3)/2+1=1$）。(b) のサンセット図は3本の内線が2つの独立な閉路を作り、2ループの自己エネルギーである。
+\end{solution}
+
+\begin{problem}[難易度 A]\label{ch04-prob-c60}
+凸多面体の表面は $S^2$ と同相で、頂点・辺・面が CW 構造を与える。$\chi(S^2)=2$ を用いよ。\\
+(1) すべての頂点に辺がちょうど3本集まる多面体で、$n$ 角形の面の数を $f_n$ とする。$\sum_n(6-n)f_n=6\chi=12$ を示せ。\\
+(2) 面が五角形と六角形だけなら、五角形はちょうど12個であることを示せ。フラーレン $\mathrm{C}_{60}$（サッカーボール、六角形20個）の頂点・辺・面の数を求めよ。\\
+(3) 同じ条件（3価、五角形と六角形のみ）でトーラス $T^2$ を分割するとき、五角形は現れないことを示せ（カーボン・ナノチューブを閉じたトーラスは六角形だけでできる）。
+\end{problem}
+
+\begin{solution}
+(1) $F=\sum_nf_n$。各辺は2つの面に属するので $\sum_nnf_n=2E$。各頂点に3本の辺が集まり、各辺は2頂点をもつので $3V=2E$。よって
+\[
+6\chi=6V-6E+6F=4E-6E+6F=6F-2E=\sum_n(6-n)f_n .
+\]
+$S^2$ では $\chi=2$ なので右辺は $12$。
+
+(2) $f_5$ と $f_6$ だけなら $(6-5)f_5+0\cdot f_6=12$、すなわち $f_5=12$（$f_6$ は任意）。$\mathrm{C}_{60}$ では $F=12+20=32$、$2E=5\cdot12+6\cdot20=180$ より $E=90$、$V=2E/3=60$（炭素原子60個）。確かに $60-90+32=2$。
+
+(3) $\chi(T^2)=0$ なので $f_5=6\chi=0$。六角形だけの3価分割（グラフェンの蜂の巣格子を周期的に閉じたもの）はトーラス上で可能だが、球面上では不可能である。一般に $n=7$ の面（七角形）は曲率の負の欠陥で、$\sum(6-n)f_n=6\chi$ は「曲率欠陥の総和は位相で決まる」というガウス・ボンネの定理（第8章）の離散版である。
+\end{solution}
+
+\subsection{格子ゲージ理論と鎖}
+
+以下の3問では、$d$ 次元の周期的な立方格子（各方向に $N\ge3$ サイト）を、サイト（0胞体）、リンク（1胞体）、プラケット（2胞体）、キューブ（3胞体）、…からなる $T^d$ の胞体分割とみなす。$\hat\mu$ は $\mu$ 方向の単位ベクトル、$\ell_\mu(x)$ は $x$ から $x+\hat\mu$ へのリンク、$p_{\mu\nu}(x)$ は $x,x+\hat\mu,x+\hat\mu+\hat\nu,x+\hat\nu$ を頂点とするプラケットで $\partial p_{\mu\nu}(x)=\ell_\mu(x)+\ell_\nu(x+\hat\mu)-\ell_\mu(x+\hat\nu)-\ell_\nu(x)$ となる向きをもつ（$p_{\nu\mu}=-p_{\mu\nu}$）。$U(1)$ リンク変数 $U_\ell=e^{i\theta_\ell}$ は $\ell$ に沿った平行移動（$\theta_\ell\approx\int_\ell A$）とし、$\theta$ を1鎖上の線形関数 $\theta(\sum n_\ell\ell)=\sum n_\ell\theta_\ell$ に拡張する。ゲージ変換 $g(x)=e^{i\alpha(x)}$ は $\theta_\ell\mapsto\theta_\ell+\alpha(\partial\ell)$、すなわち $\theta_{\ell}\mapsto\theta_\ell+\alpha(\text{終点})-\alpha(\text{始点})$ と作用する（$A\mapsto A+d\alpha$ に対応）。
+
+\begin{problem}[難易度 B]\label{ch04-prob-gauss}
+有限連結グラフ $\Gamma$（例えば上の格子のサイトとリンク）上の静電場を考える。電場は各リンクの値 $E_\ell\in\R$ で、1鎖 $\mathcal E=\sum_\ell E_\ell\,\ell$ とみなす（リンクの向きを逆にすると符号が変わる）。電荷分布は0鎖 $\rho=\sum_x\rho_x\,x$。ガウスの法則を
+\[
+\sum_{\ell:\ x\text{ から出る}}E_\ell-\sum_{\ell:\ x\text{ に入る}}E_\ell=\rho_x
+\]
+とする。\\
+(1) ガウスの法則が $\partial\mathcal E=-\rho$ と書けることを示し、全電荷 $Q=\sum_x\rho_x=0$ を導け。\\
+(2) 逆に $Q=0$ なら、ガウスの法則をみたす $\mathcal E$ が存在することを示せ。解の不定性は何か。\\
+(3) $\Gamma$ を周期的立方格子 $T^d$ とし、$\rho=0$ とする。$\mu$ 方向のリンクのうち $x_\mu=s$ から $x_\mu=s+1$ へ向かうものすべてについての和 $\Phi_\mu(s)=\sum E_{\ell_\mu(x)}$（$x_\mu=s$）は $s$ によらないことを示せ。これは「$T^d$ を一周する電束」で、ガウスの法則だけでは決まらない量である。
+\end{problem}
+
+\begin{solution}
+(1) $\partial\ell=(\text{終点})-(\text{始点})$ なので $\partial\mathcal E$ の $x$ の係数は（入る $E_\ell$ の和）$-$（出る $E_\ell$ の和）、すなわち $-(\nabla\cdot E)_x$ である。よってガウスの法則は $\partial\mathcal E=-\rho$。$\varepsilon\circ\partial=0$ より
+\[
+Q=\varepsilon(\rho)=-\varepsilon(\partial\mathcal E)=0 .
+\]
+これは連続理論で $\int_M\nabla\cdot\bm E=\int_{\partial M}\bm E\cdot d\bm S=0$（$M$ が閉じた空間）としたことの格子版である。
+
+(2) $\Gamma$ が連結なので $H_0(\Gamma;\R)\cong\R$ で、$\operatorname{im}\partial_1=\ker\varepsilon$（問題 \ref{ch04-prob-graph}）。$Q=\varepsilon(\rho)=0$ なら $-\rho\in\operatorname{im}\partial_1$、すなわち $\partial\mathcal E=-\rho$ となる $\mathcal E$ が存在する。電荷が整数で $E_\ell$ も整数（コンパクトな $U(1)$ の電束）としても、$\Z$ 係数で同じ議論が成り立つ。解の不定性は $\ker\partial_1=Z_1(\Gamma)$、すなわち電荷を生まない「閉じた電束」である。連結でない場合は各成分ごとに全電荷が $0$ であることが条件になる。
+
+$Z_1$ はプラケットの境界（局所的な「渦」をもつ電場、光子の横波の自由度）と、空間を一周する電束に分かれる。前者は $B_1=\partial(\text{プラケットの2鎖})$、後者は商 $Z_1/B_1=H_1(T^d)\cong\Z^d$ で数えられる。次の (3) はこの後者の部分を取り出す。
+
+(3) $x_\mu=s+1$ をみたすすべてのサイトについてガウスの法則（$\rho=0$）を足す。$\mu$ 以外の方向のリンクは両端がこの「層」に含まれるので、出る分と入る分で1回ずつ現れて打ち消す。$\mu$ 方向のリンクのうち、層から出るものは $x_\mu=s+1\to s+2$、層に入るものは $x_\mu=s\to s+1$ である。よって
+\[
+0=\Phi_\mu(s+1)-\Phi_\mu(s),
+\]
+すなわち $\Phi_\mu$ は $s$ によらない。$\Phi_\mu$ は $\mathcal E$ の $\mu$ 方向の「巻き付き」を測る量で、たとえば $\mu$ 方向に一周する閉路 $P_\mu$ 上に $E=1$ を置いた配位は $\rho=0$ で $\Phi_\mu=1$ をもつ。$\Phi_\mu$ はプラケットの境界を加えても変わらない（$p_{\mu\nu}$ の境界は $\mu$ 方向のリンクを同じ層の中に $+\ell_\mu(x)$、$-\ell_\mu(x+\hat\nu)$ と1本ずつ含み、$\mu$ を含まないプラケットの境界は $\mu$ 方向のリンクを含まない）ので、ホモロジー類 $[\mathcal E]\in H_1(T^d;\R)\cong\R^d$ の成分を与える。
+\end{solution}
+
+\begin{problem}[難易度 B]\label{ch04-prob-bianchi}
+3次元の周期的立方格子 $T^3$ を考え、$x$ を最も原点側の頂点とするキューブ $c(x)$ に、$\R^3$ の標準的な向き（右手系）を与える。
+\begin{center}
+\begin{tikzpicture}[scale=1.5]
+  \coordinate (A) at (0,0); \coordinate (B) at (2,0); \coordinate (C) at (2,2); \coordinate (D) at (0,2);
+  \coordinate (E) at (0.9,0.7); \coordinate (F) at (2.9,0.7); \coordinate (G) at (2.9,2.7); \coordinate (H) at (0.9,2.7);
+  \fill[red!12] (D) -- (C) -- (G) -- (H) -- cycle;
+  \fill[blue!10] (B) -- (F) -- (G) -- (C) -- cycle;
+  \draw[thick] (A) -- (B) -- (C) -- (D) -- cycle;
+  \draw[thick] (B) -- (F) -- (G) -- (C);
+  \draw[thick] (D) -- (H) -- (G);
+  \draw[dashed] (A) -- (E) -- (F); \draw[dashed] (E) -- (H);
+  \node[vtx] at (A) {}; \node[below left] at (A) {$x$};
+  \draw[-{Stealth[length=2mm]},thick,red!70!black] (1.45,2.35) -- (1.45,3.1) node[above] {\footnotesize $+p_{12}(x+\hat3)$};
+  \draw[-{Stealth[length=2mm]},thick,blue!70!black] (2.45,1.35) -- (3.25,1.35) node[right] {\footnotesize $+p_{23}(x+\hat1)$};
+  \node[gray] at (1.0,1.0) {\footnotesize $-p_{31}(x)$（手前）};
+  \draw[-{Stealth[length=2mm]}] (-1.3,0) -- (-0.6,0) node[right] {\footnotesize $1$};
+  \draw[-{Stealth[length=2mm]}] (-1.3,0) -- (-0.85,0.35) node[above right] {\footnotesize $2$};
+  \draw[-{Stealth[length=2mm]}] (-1.3,0) -- (-1.3,0.7) node[above] {\footnotesize $3$};
+\end{tikzpicture}
+\zucap{キューブ $c(x)$。各面は外向きの法線が右手系を与えるように向き付けられる（上面 $x_3=1$ は $+p_{12}$、右面 $x_1=1$ は $+p_{23}$、手前の面 $x_2=0$ は $-p_{31}(x)=p_{13}(x)$）。}
+\end{center}
+(1) $\partial c(x)=\sum_{\mu}\bigl[p_{\nu\lambda}(x+\hat\mu)-p_{\nu\lambda}(x)\bigr]$（$(\mu,\nu,\lambda)$ は $(1,2,3)$ の巡回置換を走る）とする。リンク $\ell_1(x)$ の係数を調べて $\partial\partial c(x)$ でそれが $0$ になることを確かめよ（他のリンクも同様である）。\\
+(2) リンク変数の代表 $\theta_\ell\in\R$ を選び、プラケット変数 $\theta_p=\theta(\partial p)$ とする。$\theta(\partial\partial c)=0$ を、格子上の「$\nabla\cdot\bm B=0$」として解釈せよ。\\
+(3) $\theta_p=\bar\theta_p+2\pi n_p$（$\bar\theta_p\in(-\pi,\pi]$、$n_p\in\Z$）と分け、キューブの\textbf{モノポール数} $m_c=\frac1{2\pi}\bar\theta(\partial c)$ を定める（ドグラン・トゥサンの定義）。$m_c\in\Z$ であり、$m_c$ はリンク変数の代表の選び方によらないこと、さらに全モノポール数 $\sum_cm_c$ が $0$ であることを示せ。
+\end{problem}
+
+\begin{solution}
+(1) $\ell_1(x)$ を含むプラケットは $p_{12}(x)$ と $p_{13}(x)$ で、それぞれの境界に係数 $+1$ で現れる（$\partial p_{\mu\nu}(x)$ の第1項 $\ell_\mu(x)$）。$\partial c(x)$ にはこれらが $-p_{12}(x)$（$\mu=3$ の項）と $-p_{31}(x)=+p_{13}(x)$（$\mu=2$ の項）として現れる。よって $\partial\partial c(x)$ における $\ell_1(x)$ の係数は $-1+1=0$。キューブの12本の辺はそれぞれちょうど2つの面に属し、外向きに向き付けた面の境界では逆向きにたどられるので、すべて打ち消し合う（キューブの表面は閉曲面）。
+
+(2) $\theta$ は線形なので $\theta(\partial\partial c)=0$ は、6つのプラケット変数について
+\[
+\sum_{p\subset\partial c}[\partial c:p]\,\theta_p=0\qquad(\text{実数として厳密に})
+\]
+を意味する（$[\partial c:p]=\pm1$ は $\partial c$ における $p$ の係数）。$\theta_p\approx a^2F_{\nu\lambda}$、すなわち $p_{\nu\lambda}$ を貫く磁束 $a^2B_\mu$ なので、これは
+\[
+\sum_\mu\bigl[B_\mu(x+\hat\mu)-B_\mu(x)\bigr]a^2=0
+\]
+という差分版の $\nabla\cdot\bm B=0$ である。すなわち「キューブの表面を出る全磁束は $0$」で、$dF=0$（ビアンキ恒等式）の格子版である。$\theta$ が1鎖上の関数、$\theta_p$ がその「$d$」であることから、これは $\partial\partial=0$ の双対 $d^2=0$ にほかならない。
+
+(3) $\theta(\partial c)$ の定義から $\sum_p[\partial c:p]\theta_p=0$ なので
+\[
+m_c=\frac1{2\pi}\sum_p[\partial c:p]\bar\theta_p=\frac1{2\pi}\sum_p[\partial c:p](\theta_p-2\pi n_p)=-\sum_p[\partial c:p]\,n_p\in\Z .
+\]
+代表の取りかえ $\theta_\ell\to\theta_\ell+2\pi k_\ell$ では $\theta_p$ が $2\pi$ の整数倍だけ変わるだけなので $\bar\theta_p$ は不変、よって $m_c$ も不変。ゲージ変換でも $\theta_p$ は不変（$\alpha(\partial\partial p)=0$）である。$\bar\theta_p$ は物理的な磁束（$(-\pi,\pi]$ に入る）、$2\pi n_p$ は $p$ を貫く「見えないディラック弦」と解釈され、$m_c\neq0$ のキューブにはディラック弦の端点、すなわち磁気単極子がある。
+
+全モノポール数：周期的格子では各プラケット $p_{\nu\lambda}(y)$ はちょうど2つのキューブ $c(y)$ と $c(y-\hat\mu)$ の面であり、前者では $-p_{\nu\lambda}(y)$、後者では $+p_{\nu\lambda}(y)$ として現れる。したがって $\sum_c\partial c=0$（$T^3$ の基本サイクル $\sum_cc$ はサイクル）であり
+\[
+\sum_cm_c=\frac1{2\pi}\bar\theta\Bigl(\sum_c\partial c\Bigr)=0 .
+\]
+閉じた空間では磁気単極子と反単極子が必ず同数ある。これは問題 \ref{ch04-prob-gauss} の全電荷 $0$ と同じ構造である。
+\end{solution}
+
+\begin{problem}[難易度 C]\label{ch04-prob-polyakov}
+$d$ 次元の周期的立方格子 $T^d$ 上の $U(1)$ 格子ゲージ理論を考える。1サイクル $\gamma$ に対しウィルソン・ループを $W(\gamma)=e^{i\theta(\gamma)}$ とし、$P_\mu$ を原点を通り $\mu$ 方向に一周する閉路（ポリヤコフ・ループ）とする。$H_1(T^d)\cong\Z^d$ で、$[P_1],\dots,[P_d]$ が基底であることは認めてよい。\\
+(1) $W(\gamma)$ はゲージ不変であることを示せ。\\
+(2) 配位が\textbf{平坦}（すべてのプラケットで $U_p=e^{i\theta_p}=1$）なら、$W(\gamma)$ は $\gamma$ のホモロジー類だけで決まることを示せ。したがって平坦な配位のゲージ不変な情報は $(W(P_1),\dots,W(P_d))\in U(1)^d$ に含まれる。\\
+(3) 任意の $(e^{i\varphi_1},\dots,e^{i\varphi_d})\in U(1)^d$ が平坦な配位のポリヤコフ・ループとして実現されることを示せ。\\
+(4) ポリヤコフ・ループがすべて等しい2つの平坦な配位は、ゲージ変換で移り合うことを示せ。以上から、平坦な $U(1)$ 配位のゲージ同値類の空間は $U(1)^d=\Hom(H_1(T^d),U(1))$ であり、その次元は $b_1(T^d)=d$ である。
+\end{problem}
+
+\begin{solution}
+(1) ゲージ変換で $\theta(\gamma)\mapsto\theta(\gamma)+\alpha(\partial\gamma)$。$\gamma$ はサイクルなので $\partial\gamma=0$、よって $\theta(\gamma)$ は不変で $W(\gamma)$ も不変。
+
+(2) $\gamma-\gamma'=\partial c$、$c=\sum_pc_pp$（$c_p\in\Z$）とすると
+\[
+\theta(\gamma)-\theta(\gamma')=\theta(\partial c)=\sum_pc_p\theta_p\in2\pi\Z
+\]
+（平坦なので各 $\theta_p\in2\pi\Z$）。よって $W(\gamma)=W(\gamma')$。$H_1(T^d)$ は $[P_\mu]$ で生成されるので、任意のサイクル $\gamma$ は $\gamma\sim\sum_\mu n_\mu P_\mu$ と書け、$W(\gamma)=\prod_\mu W(P_\mu)^{n_\mu}$。すなわち平坦な配位のすべてのウィルソン・ループは $d$ 個のポリヤコフ・ループで決まる。
+
+(3) すべての $\mu$ 方向リンクに $\theta_{\ell_\mu(x)}=\varphi_\mu/N$ を置く。プラケット変数は $\theta_{p_{\mu\nu}(x)}=\varphi_\mu/N+\varphi_\nu/N-\varphi_\mu/N-\varphi_\nu/N=0$ なので平坦であり、$P_\mu$ は $\mu$ 方向リンク $N$ 本からなるので $\theta(P_\mu)=\varphi_\mu$、$W(P_\mu)=e^{i\varphi_\mu}$。これは連続理論の定数ゲージ場 $A_\mu=\varphi_\mu/L_\mu$（$L_\mu$ は周期）の格子版で、局所的には純ゲージだが大域的には自明でない。
+
+(4) 2つの配位 $\theta,\theta'$ の差 $\eta=\theta-\theta'$ を考える（$U(1)$ は可換なので差も配位であり、平坦性とウィルソン・ループは乗法的にふるまう）。$\eta$ は平坦で $e^{i\eta(P_\mu)}=1$。(2) より任意のサイクル $\gamma$ で $e^{i\eta(\gamma)}=1$。
+
+原点 $0$ から各サイト $x$ への道（1鎖 $c_x$ で $\partial c_x=x-0$）を選び、$\alpha(x)=\eta(c_x)$（$\bmod 2\pi$）とおく。別の道 $c'_x$ をとっても $c_x-c'_x$ はサイクルなので $\eta(c_x)-\eta(c'_x)\in2\pi\Z$ で、$e^{i\alpha(x)}$ は道によらない。リンク $\ell$（始点 $y$、終点 $x$）について $c_y+\ell$ は $0$ から $x$ への道だから
+\[
+\alpha(x)\equiv\eta(c_y)+\eta_\ell=\alpha(y)+\eta_\ell\pmod{2\pi},
+\]
+すなわち $\eta_\ell\equiv\alpha(\partial\ell)$。よって $\theta_\ell\equiv\theta'_\ell+\alpha(\partial\ell)$ であり、$\theta$ は $\theta'$ をゲージ変換 $e^{i\alpha}$ で移したものである。
+
+以上から、平坦な配位のゲージ同値類は $(W(P_\mu))_\mu$ と1対1に対応し、空間 $U(1)^d$ をなす。これは $\Hom(H_1(T^d),U(1))$（$H_1$ の基底の行き先を自由に指定する）であり、コホモロジー $H^1(T^d;U(1))$ とも書ける（第5, 6章）。有限温度の格子QCDでは時間方向のポリヤコフ・ループが閉じ込めの秩序変数になり、トーラス・コンパクト化ではこれらがゼロモード（ウィルソン・ライン）として低エネルギー理論に残る（第10章）。
+\end{solution}
+
+\subsection{胞体ホモロジーと閉曲面}
+
+\begin{problem}[難易度 B]\label{ch04-prob-torus}
+(1) 正方形の語 $aba^{-1}b^{-1}$ による $T^2$ の胞体構造（頂点1つ、辺2つ、面1つ）から $H_*(T^2)$ を計算せよ。\\
+(2) 下図の $3\times3$ の格子を対角線で分けた三角形分割（周期的に同一視）について、頂点・辺・三角形の数を求め、$\chi(T^2)=0$ を確かめよ。（これが単体複体であることは認めてよい。）\\
+(3) (2) で、すべての三角形を反時計回りに向き付けた和 $\Sigma=\sum\sigma$ がサイクルであることを示し、$H_2(T^2)=\Z\Sigma$ であることを示せ。さらに (2) とオイラー・ポアンカレの公式から $b_1=2$ を再確認せよ。
+\begin{center}
+\begin{tikzpicture}[scale=1.0]
+  \fill[blue!6] (0,0) rectangle (3,3);
+  \foreach \i in {0,...,3} { \draw (\i,0) -- (\i,3); \draw (0,\i) -- (3,\i); }
+  \foreach \i in {0,1,2} \foreach \j in {0,1,2} \draw (\i,\j) -- (\i+1,\j+1);
+  \foreach \i in {0,...,3} \foreach \j in {0,...,3} {
+    \pgfmathtruncatemacro\lab{mod(\i,3)+3*mod(\j,3)}
+    \node[vtx] at (\i,\j) {};
+    \node[font=\scriptsize,fill=white,inner sep=0.5pt] at (\i-0.15,\j+0.18) {$\lab$};
+  }
+  \draw[very thick,red!70!black,mid arrow] (0,0) -- (3,0);
+  \draw[very thick,red!70!black,mid arrow] (0,3) -- (3,3);
+  \draw[very thick,green!50!black,mid arrows] (0,0) -- (0,3);
+  \draw[very thick,green!50!black,mid arrows] (3,0) -- (3,3);
+  \draw[-{Stealth[length=2mm]},thick] (4.0,1.2) arc (-60:240:0.35);
+  \node at (4.0,0.6) {\footnotesize 向き};
+\end{tikzpicture}
+\zucap{トーラスの9頂点の三角形分割。同じ番号の頂点、同じ色の縁は同一視される。各正方形を対角線で2つの三角形に分ける。}
+\end{center}
+\end{problem}
+
+\begin{solution}
+(1) 頂点：語 $aba^{-1}b^{-1}$ の正方形の4頂点はすべて同一視される（要約の図）。よって $C_0=\Z v$、$C_1=\Z a\oplus\Z b$、$C_2=\Z e$。$d_1a=v-v=0$、$d_1b=0$。$d_2e$ は語の指数和で $a+b-a-b=0$。すべての $d$ が $0$ なので
+\[
+H_0=\Z,\qquad H_1=\Z a\oplus\Z b\cong\Z^2,\qquad H_2=\Z e\cong\Z .
+\]
+
+(2) 頂点は $3\times3=9$ 個。辺は各頂点から「右」「上」「右上」に1本ずつ出るので $27$ 本。三角形は各正方形に2つで $18$ 個。$\chi=9-27+18=0$。
+
+(3) 下の三角形を $[(i,j),(i+1,j),(i+1,j+1)]$、上の三角形を $[(i,j),(i+1,j+1),(i,j+1)]$（どちらも反時計回り）とする。各辺はちょうど2つの三角形の辺であり、平面上で反時計回りに向き付けた隣り合う2つの三角形は共通の辺を逆向きにたどる。周期的な同一視は平行移動なので向きを保ち、外周の辺についても同じことが成り立つ（例えば下端の辺 $(i,0)\to(i+1,0)$ は下の段の三角形で $+$、上端 $(i,3)\to(i+1,3)$ として上の段の三角形で $-$ に現れる）。よって $\partial\Sigma=0$。
+
+逆に $c=\sum n_\sigma\sigma$ がサイクルなら、辺 $e$ を共有する2つの三角形 $\sigma,\sigma'$ について $\partial c$ の $e$ の係数は $\pm(n_\sigma-n_{\sigma'})$ なので $n_\sigma=n_{\sigma'}$。三角形は辺を通じてすべてつながっているので、全係数が等しく $c=n\Sigma$。$C_3=0$ なので $H_2=Z_2=\Z\Sigma$。
+
+$b_0=1$、$b_2=1$、$\chi=0$ から $b_1=b_0+b_2-\chi=2$ で (1) と一致する。$\Sigma$ はトーラス全体を表す\term{基本類}{fundamental class}で、周期境界条件の格子上での積分 $\int_{T^2}$ はこの2サイクル上の和にあたる。
+\end{solution}
+
+\begin{problem}[難易度 B]\label{ch04-prob-klein}
+(1) 正方形の語 $abab^{-1}$ によるクラインの壺 $K$ の胞体構造について、頂点がすべて1点に同一視されることを確かめ、$H_*(K)$ と $\chi(K)$ を求めよ。\\
+(2) $H_1(K)$ のねじれ元を幾何学的に説明せよ。\\
+(3) $K$ の胞体構造上の $U(1)$ 格子ゲージ場（各1胞体に角度 $\theta_a,\theta_b$）で、2胞体のホロノミーが自明（$e^{i\theta(d_2e)}=1$）なものを平坦という。平坦な配位のウィルソン・ループ $W(a)=e^{i\theta_a}$、$W(b)=e^{i\theta_b}$ の取りうる値を求めよ。
+\end{problem}
+
+\begin{solution}
+(1) 正方形の頂点を左下から反時計回りに $P_0,P_1,P_2,P_3$ とする。語の各文字は辺 $P_0P_1$、$P_1P_2$、$P_2P_3$、$P_3P_0$ に対応し、指数 $+1$ なら $P_k\to P_{k+1}$、$-1$ なら逆向きが文字の向き。$a$：$P_0\to P_1$ と $P_2\to P_3$ より $P_0\sim P_2$、$P_1\sim P_3$。$b$：$P_1\to P_2$ と $P_0\to P_3$（$b^{-1}$ が $P_3\to P_0$）より $P_1\sim P_0$、$P_2\sim P_3$。よって4頂点はすべて同一視され、頂点は1つ $v$。
+
+胞体鎖複体は $C_2=\Z e\to C_1=\Z a\oplus\Z b\to C_0=\Z v$ で、$d_1=0$、$d_2e=a+b+a-b=2a$。$d_2$ は単射なので $H_2=0$。
+\[
+H_1=\frac{\Z a\oplus\Z b}{\Z\,2a}\cong\Z_2\oplus\Z,\qquad H_0=\Z .
+\]
+$\chi=1-2+1=0$（$=1-1+0$）。$H_2=0$ は、$K$ が向き付け不可能で基本類をもたないことを表す（トーラスでは $d_2e=0$ だった）。
+
+(2) $a$ は境界ではないサイクルだが、$2a=\partial e$ は2胞体全体の境界である。正方形を貼り合わせたとき、$e$ の縁は $a$ を同じ向きに2回たどり、$b$ は逆向きに1回ずつたどって打ち消す。したがって「$a$ を2周した輪」は曲面全体を張る膜の縁になるが、$a$ を1周した輪はどんな膜の縁にもならない。実係数では $a$ は $0$ になり $b_1=1$ であり、ねじれは実数の（微分形式の）手法では見えない（第5, 6章）。
+
+(3) 平坦条件は $\theta(d_2e)=2\theta_a\in2\pi\Z$、すなわち $W(a)^2=1$、$W(a)=\pm1$。$\theta_b$ は制限されない。よって平坦な配位のウィルソン・ループは $(W(a),W(b))\in\{\pm1\}\times U(1)$。ゲージ変換は頂点が1つなので $\theta(\partial\ell)=0$ で自明に作用し、平坦な配位の同値類の空間は $\Z_2\times U(1)=\Hom(H_1(K),U(1))$ である。ねじれ $\Z_2$ に対応する $W(a)=-1$ は、場の強さが至るところ $0$ なのに物理的に観測できる離散的なウィルソン・ラインであり、連続的に $W(a)=1$ へ変形できない。
+\end{solution}
+
+\begin{problem}[難易度 C]\label{ch04-prob-hexagon}
+正六角形の辺に、反時計回りに語を読んでラベルと向きを付け、同じラベルの辺を矢印の向きがそろうように貼り合わせて得られる閉曲面を考える。
+\begin{center}
+\begin{tikzpicture}[scale=1.0]
+  \foreach \xs/\word in {0/{0/a/1,1/b/1,2/c/1,3/a/-1,4/b/-1,5/c/-1}, 5.5/{0/a/1,1/b/1,2/c/1,3/a/1,4/b/1,5/c/1}}{
+    \begin{scope}[xshift=\xs cm]
+      \fill[blue!6] (240:1.5) \foreach \k in {1,...,5} { -- ({240+60*\k}:1.5) } -- cycle;
+      \foreach \k/\lab/\s in \word {
+        \pgfmathsetmacro\angA{240+60*\k}
+        \pgfmathsetmacro\angB{240+60*(\k+1)}
+        \ifnum\s=1
+          \draw[thick,mid arrow] (\angA:1.5) -- (\angB:1.5);
+        \else
+          \draw[thick,mid arrow] (\angB:1.5) -- (\angA:1.5);
+        \fi
+        \node at ({(\angA+\angB)/2}:1.62) [anchor={(\angA+\angB)/2+180}] {$\lab$};
+      }
+      \node[left] at (240:1.6) {\footnotesize $P_0$};
+      \node[right] at (300:1.6) {\footnotesize $P_1$};
+    \end{scope}
+  }
+  \node at (0,-2.2) {(1) $abca^{-1}b^{-1}c^{-1}$};
+  \node at (5.5,-2.2) {(2) $abcabc$};
+\end{tikzpicture}
+\zucap{六角形の頂点を左下から反時計回りに $P_0,\dots,P_5$ とし、$k$ 番目の辺を $P_kP_{k+1}$（$P_6=P_0$）とする。}
+\end{center}
+それぞれについて、頂点の同値類を求めて胞体ホモロジー $H_*$ とオイラー標数を計算し、閉曲面の分類定理（連結な閉曲面は $\Sigma_g$ か $N_h$ のいずれかに同相で、$H_2\cong\Z$ なら $\Sigma_g$、$H_2=0$ なら $N_h$）を用いて、どの曲面かを決定せよ。
+\end{problem}
+
+\begin{solution}
+ラベル $x$ の辺が指数 $+1$ ならその辺の $x$ は $P_k\to P_{k+1}$ 向き、$-1$ なら $P_{k+1}\to P_k$ 向きである。同じラベルの辺を貼ると、始点どうし・終点どうしが同一視される。
+
+(1) $a$：$P_0\to P_1$ と $P_4\to P_3$ より $P_0\sim P_4$、$P_1\sim P_3$。$b$：$P_1\to P_2$ と $P_5\to P_4$ より $P_1\sim P_5$、$P_2\sim P_4$。$c$：$P_2\to P_3$ と $P_0\to P_5$ より $P_2\sim P_0$、$P_3\sim P_5$。よって頂点は
+\[
+v=\{P_0,P_2,P_4\},\qquad w=\{P_1,P_3,P_5\}
+\]
+の2つである。$a$ は $v\to w$、$b$ は $w\to v$、$c$ は $v\to w$ なので
+\[
+d_1a=w-v,\qquad d_1b=v-w,\qquad d_1c=w-v,\qquad d_2e=a+b+c-a-b-c=0 .
+\]
+$H_2=\Z e\cong\Z$。$\operatorname{im}d_1=\Z(w-v)$ なので $H_0\cong\Z$。$d_1(xa+yb+zc)=(x-y+z)(w-v)$ より $\ker d_1$ は階数2で基底 $a+b$、$b+c$。$\operatorname{im}d_2=0$ なので $H_1\cong\Z^2$。$\chi=2-3+1=0$。$H_2\cong\Z$ より向き付け可能で $2-2g=0$、$g=1$：\textbf{トーラス}である。
+
+(2) $a$：$P_0\to P_1$ と $P_3\to P_4$ より $P_0\sim P_3$、$P_1\sim P_4$。$b$：$P_1\to P_2$ と $P_4\to P_5$ より $P_2\sim P_5$。$c$：$P_2\to P_3$ と $P_5\to P_0$ で新しい同一視はない。頂点は $u_0=\{P_0,P_3\}$、$u_1=\{P_1,P_4\}$、$u_2=\{P_2,P_5\}$ の3つで
+\[
+d_1a=u_1-u_0,\quad d_1b=u_2-u_1,\quad d_1c=u_0-u_2,\qquad d_2e=2a+2b+2c .
+\]
+$d_2$ は単射なので $H_2=0$。$d_1(xa+yb+zc)=(z-x)u_0+(x-y)u_1+(y-z)u_2$ が $0$ となるのは $x=y=z$ のときで $\ker d_1=\Z(a+b+c)$。よって
+\[
+H_1=\Z(a+b+c)/\Z\,2(a+b+c)\cong\Z_2 .
+\]
+$\operatorname{im}d_1$ は階数2なので $H_0\cong\Z$。$\chi=3-3+1=1$。$H_2=0$ より向き付け不可能で $2-h=1$、$h=1$：\textbf{実射影平面} $\RP^2$ である。
+
+\begin{note}
+(2) は六角形の中心に関する対蹠点を同一視しているので、$\RP^2=D^2/(x\sim-x,\ x\in\partial D^2)$ の構成そのものである。頂点の同一視は「ある頂点から出発し、隣の辺の貼り合わせ先へ移る」ことを繰り返して追跡するとよい。
+\end{note}
+\end{solution}
+
+\begin{problem}[難易度 B]\label{ch04-prob-genus}
+(1) 種数 $g\ge1$ の向き付け可能閉曲面 $\Sigma_g$ は、$4g$ 角形を語 $a_1b_1a_1^{-1}b_1^{-1}\cdots a_gb_ga_g^{-1}b_g^{-1}$ で貼り合わせて得られ、頂点はすべて1点に同一視される（認めてよい）。$H_*(\Sigma_g)$ と $\chi(\Sigma_g)$ を求めよ。\\
+(2) $N_h$（$h\ge1$）は $2h$ 角形を語 $a_1a_1a_2a_2\cdots a_ha_h$ で貼り合わせたもので、頂点は1点になる（認めてよい）。$H_*(N_h)$ と $\chi(N_h)$ を求めよ。\\
+(3) 閉じた弦の摂動論で、種数 $g$ の世界面の寄与は弦の結合定数 $g_s$ の $g_s^{-\chi(\Sigma_g)}$ 倍に比例する。$g=0,1,2$ の次数を書き、なぜ $\chi$ が現れるかを、ポリヤコフ作用に付け加える項 $\lambda\cdot\frac1{4\pi}\int\sqrt{h}\,R\,d^2\sigma=\lambda\chi$（ガウス・ボンネ、第8章）から説明せよ（$g_s=e^\lambda$）。向き付け不可能な世界面（$N_h$）をもつ弦理論ではどうなるか。
+\end{problem}
+
+\begin{solution}
+(1) $C_0=\Z v$、$C_1=\bigoplus_i(\Z a_i\oplus\Z b_i)$、$C_2=\Z e$。頂点が1つなので $d_1=0$。各 $a_i$, $b_i$ は語の中に指数 $+1$ と $-1$ で1回ずつ現れるので $d_2e=0$。よって
+\[
+H_0=\Z,\qquad H_1=\Z^{2g},\qquad H_2=\Z,\qquad\chi(\Sigma_g)=1-2g+1=2-2g .
+\]
+$g=0$（$S^2$）でも $\chi=2$ で公式は正しい。
+
+(2) $C_0=\Z v$、$C_1=\Z^h$、$C_2=\Z e$、$d_1=0$、$d_2e=2(a_1+\dots+a_h)$。$d_2$ は単射なので $H_2=0$。$C_1$ の基底を $s=a_1+\dots+a_h,\ a_2,\dots,a_h$ にとりかえると（変換行列は行列式 $1$ の整数行列）
+\[
+H_1=\frac{\Z s\oplus\Z a_2\oplus\dots\oplus\Z a_h}{\Z\,2s}\cong\Z_2\oplus\Z^{h-1},\qquad H_0=\Z,\qquad\chi(N_h)=1-h+1=2-h .
+\]
+$h=1$ で $\RP^2$（$H_1=\Z_2$）、$h=2$ でクラインの壺（$H_1=\Z\oplus\Z_2$）となり、問題 \ref{ch04-prob-hexagon}, \ref{ch04-prob-klein} と一致する。
+
+(3) $g=0$：$g_s^{-2}$（球面、樹木レベル）、$g=1$：$g_s^{0}$（トーラス、1ループ）、$g=2$：$g_s^{2}$（2ループ）。一般に $g_s^{2g-2}$。
+
+経路積分の重み $e^{-S}$ に $\lambda\chi$ が加わると、各世界面は $e^{-\lambda\chi}=g_s^{-\chi}$ 倍される。ガウス・ボンネの定理により $\frac1{4\pi}\int\sqrt hR=\chi$ は計量によらない位相不変量なので、この項は世界面の局所的な力学に影響せず、トポロジーに応じた重みだけを与える。$\chi=2-2g$ は取っ手を1つ増やすごとに $2$ 減り、「弦が1回分かれて再びつながる」（相互作用頂点2つ）ごとに $g_s^2$ が付くことと整合する。
+
+向き付け不可能な世界面を許す理論（I 型弦理論など）では、$N_h$ の寄与 $g_s^{-\chi(N_h)}=g_s^{h-2}$ も現れる。例えば $\RP^2$（クロスキャップ1つ）は $g_s^{-1}$ で、球面と（境界のある）円板 $\chi=1$ の間の次数になる。クロスキャップ2つ（クラインの壺）はトーラスと同じ $g_s^0$ である。
+\end{solution}
+
+\begin{problem}[難易度 C]\label{ch04-prob-rpn}
+$\RP^n$ は各次元 $0\le k\le n$ に1つずつ胞体 $e^k$ をもち、$e^k$ の接着写像は二重被覆 $q\colon S^{k-1}\to\RP^{k-1}$ である。\\
+(1) 胞体境界の係数 $d_k$ は、合成 $S^{k-1}\xrightarrow{q}\RP^{k-1}\to\RP^{k-1}/\RP^{k-2}\cong S^{k-1}$ の写像度である。この合成は、赤道 $S^{k-2}$ をつぶすと上半球と下半球それぞれの上で同相写像になり、下半球上のものは上半球上のものに対蹠写像 $A$ を合成したものになる。これから $d_k=\pm(1+\deg A)=\pm(1+(-1)^k)$ を導け（$k\ge1$、$S^{k-1}$ 上の対蹠写像の写像度は $(-1)^k$）。\\
+(2) $H_k(\RP^n)$ を求めよ。\\
+(3) $SO(3)\cong\RP^3$ のホモロジーを書き、$H_1(SO(3))=\Z_2$ がスピノルの存在（$\pi_1(SO(3))=\Z_2$、第2章）とフレヴィッチの定理で整合することを確かめよ。また、ネマティック液晶の秩序変数空間 $\RP^2$ は $\pi_2(\RP^2)=\Z$（ヘッジホッグ欠陥、第3章）をもつが $H_2(\RP^2)$ はどうか。
+\end{problem}
+
+\begin{solution}
+(1) 合成 $\psi\colon S^{k-1}\to S^{k-1}$ は、赤道を1点（基点）につぶした $S^{k-1}/S^{k-2}\cong S^{k-1}\vee S^{k-1}$ を経由する。上半球 $D_+$ 上の写像を $h$（$D_+/\partial D_+\cong S^{k-1}$ への同相、写像度 $\pm1$。向きを選んで $+1$ とする）とすると、下半球の点 $x$ は $q(x)=q(-x)$ なので $\psi(x)=h(-x)$、すなわち下半球上では $h\circ A$。写像度は各半球からの寄与の和であり（局所写像度の和、あるいは $S^{k-1}\vee S^{k-1}$ のホモロジー）
+\[
+\deg\psi=\deg h+\deg(h\circ A)=1+\deg A=1+(-1)^k .
+\]
+（$A$ は $\R^k$ の $k$ 個の座標の符号反転なので $\deg A=(-1)^k$。）よって $d_k=0$（$k$ 奇数）、$d_k=\pm2$（$k$ 偶数、$k\ge2$）。
+
+(2) 胞体鎖複体は
+\[
+0\to\Z\xrightarrow{d_n}\cdots\to\Z\xrightarrow{\ 2\ }\Z\xrightarrow{\ 0\ }\Z\xrightarrow{\ 2\ }\Z\xrightarrow{\ 0\ }\Z\to0
+\]
+（右端から $C_0,C_1,C_2,\dots$。$d_1=0$、$d_2=2$、$d_3=0$、…）。
+\begin{itemize}
+\item $k=0$：$H_0=\Z/\operatorname{im}d_1=\Z$。
+\item $0<k<n$、$k$ 奇数：$\ker d_k=\Z$（$d_k=0$）、$\operatorname{im}d_{k+1}=2\Z$ なので $H_k=\Z_2$。
+\item $0<k<n$、$k$ 偶数：$d_k=2$ は単射なので $H_k=0$。
+\item $k=n$：$n$ 奇数なら $d_n=0$ で $H_n=\Z$、$n$ 偶数なら $d_n=2$ で $H_n=0$。
+\end{itemize}
+$\chi(\RP^n)=\sum_{k=0}^n(-1)^k$ は $n$ 偶数で $1$、奇数で $0$。
+
+(3) $H_*(SO(3))=H_*(\RP^3)=(\Z,\Z_2,0,\Z)$。$\pi_1(SO(3))=\Z_2$ は可換なのでフレヴィッチの定理より $H_1=\pi_1=\Z_2$ で一致する。$2\pi$ 回転のループは $H_1$ の生成元で、$4\pi$ 回転は境界（ホモロジー的に自明）である。$H_3=\Z$ は $SO(3)$ が向き付け可能な3次元多様体であることを表す。
+
+$\RP^2$ では $H_2=0$ である。ヘッジホッグを囲む球面からの写像 $f\colon S^2\to\RP^2$ は、$\RP^2$ の $H_2$ が $0$ なのでホモロジーでは自明に見える。$\pi_2$ の情報はホモロジーでは失われうる（$f$ は被覆 $S^2\to\RP^2$ を通して持ち上がり、$S^2\to S^2$ の写像度としては見える）。ホモトピー群とホモロジー群は一般に異なる。
+\end{solution}
+
+\begin{problem}[難易度 A]\label{ch04-prob-cpn}
+(1) $\CP^n=e^0\cup e^2\cup\dots\cup e^{2n}$ を用いて $H_*(\CP^n)$ と $\chi(\CP^n)$ を求めよ。\\
+(2) $\lambda_0=1,\lambda_1,\dots,\lambda_n$ を相異なる絶対値1の複素数とし、$f[z_0:\dots:z_n]=[\lambda_0z_0:\dots:\lambda_nz_n]$ とする（$\CP^{N-1}$ 模型の大域的 $U(1)^{N-1}$ 変換）。$f$ の不動点をすべて求め、その数が $\chi(\CP^n)$ と一致することを確かめよ（$f\simeq\id$ であること、および各不動点の指数が $+1$ であることを認めて、レフシェッツ・ホップの定理と比べよ）。
+\end{problem}
+
+\begin{solution}
+(1) 胞体は偶数次元にしかないので、$d_k\colon C_k\to C_{k-1}$ は $C_k$ か $C_{k-1}$ のどちらかが $0$ で、すべて $0$。よって $H_{2k}(\CP^n)=\Z$（$0\le k\le n$）、奇数次は $0$。$\chi=n+1$。
+
+(2) $[z]$ が不動点 $\iff$ ある $c\in\C^\times$ で $\lambda_jz_j=cz_j$（すべての $j$）。$z_j\ne0$ となる $j$ では $\lambda_j=c$ であり、$\lambda_j$ は相異なるので $z_j\ne0$ となる $j$ はただ1つ。よって不動点は座標点
+\[
+[1:0:\dots:0],\ [0:1:0:\dots:0],\ \dots,\ [0:\dots:0:1]
+\]
+の $n+1$ 個で、$\chi(\CP^n)=n+1$ と一致する。$\lambda_j=e^{i\alpha_j}$ として $\alpha_j\to0$ と連続に動かせば $f\simeq\id$、よって $L(f)=L(\id)=\chi=n+1$ であり、指数 $+1$ の不動点が $n+1$ 個あることと整合する。物理的には、$\CP^{N-1}$ 模型の真空多様体上で、大域的対称性の一般の元で不変な真空はちょうど $N=\chi(\CP^{N-1})$ 個ある（局所化の考え方、第11章）。
+\end{solution}
+
+\begin{problem}[難易度 B]\label{ch04-prob-lens}
+$p\ge2$、$q$ を $p$ と互いに素な整数とし、$\zeta=e^{2\pi i/p}$ とする。レンズ空間 $L(p,q)$ は $S^3\subset\C^2$ を $(z,w)\mapsto(\zeta z,\zeta^qw)$ で生成される $\Z_p$ の作用（自由な作用）で割った空間である。$L(p,q)$ は各次元 $0\le k\le3$ に1つずつ胞体 $e^k$ をもち、$d_2(e^2)=p\,e^1$ であることを認める。\\
+(1) $H_*(L(p,q))$ と $\chi$ を求めよ。$L(2,1)=\RP^3$ の場合と比べよ。\\
+(2) フレヴィッチの定理と $\pi_1(L(p,q))=\Z_p$ が整合することを確かめよ。\\
+(3) $L(p,q)$ 上の平坦な $U(1)$ ゲージ場のウィルソン・ラインの取りうる値を求めよ（胞体構造上の格子ゲージ場として考えてよい）。
+\end{problem}
+
+\begin{solution}
+(1) $C_k=\Z e^k$（$0\le k\le3$）。0胞体が1つなので $d_1=0$。$d_2=p$。$d_2\circ d_3=0$ で $d_2$ は単射なので $d_3=0$。胞体鎖複体は
+\[
+0\to\Z\xrightarrow{\ 0\ }\Z\xrightarrow{\ p\ }\Z\xrightarrow{\ 0\ }\Z\to0
+\]
+で
+\[
+H_0=\Z,\qquad H_1=\Z/p\Z=\Z_p,\qquad H_2=\ker(p)=0,\qquad H_3=\Z .
+\]
+$\chi=1-1+1-1=0$（自由な $\Z_p$ 作用による $p$ 重被覆 $S^3\to L(p,q)$ から $\chi(S^3)=p\,\chi(L)$、$0=p\cdot0$ とも整合）。$p=2$、$q=1$ では作用は $(z,w)\mapsto(-z,-w)$、すなわち対蹠写像で $L(2,1)=\RP^3$、前問の $(\Z,\Z_2,0,\Z)$ と一致する。$H_3=\Z$ はレンズ空間が向き付け可能な閉3次元多様体であることを表す。
+
+(2) $S^3$ は単連結で $\Z_p$ は自由に作用するので $S^3\to L(p,q)$ は普遍被覆、$\pi_1=\Z_p$（第2章）。$\Z_p$ は可換なので $H_1=\pi_1^{\mathrm{ab}}=\Z_p$ で一致する。
+
+(3) ゲージ場は1胞体 $e^1$ に角度 $\theta$ を置いたもの、平坦条件は $\theta(d_2e^2)=p\theta\in2\pi\Z$。よってウィルソン・ライン $W=e^{i\theta}$ は $W^p=1$、すなわち $W\in\{1,\zeta,\dots,\zeta^{p-1}\}$。ゲージ変換は（頂点が1つなので）自明に作用し、平坦な $U(1)$ 場の同値類は $\Hom(H_1,U(1))=\Hom(\Z_p,U(1))\cong\Z_p$ の $p$ 個である。連続的なモジュライはなく、ねじれから来る離散的なウィルソン・ラインだけがある。このような離散ウィルソン・ラインは、$\Z_p$ による商をとるコンパクト化でゲージ対称性を破る道具になる（第10章）。
+\end{solution}
+
+\subsection{完全列とマイヤー・ヴィートリス}
+
+\begin{problem}[難易度 B]\label{ch04-prob-mvsphere}
+$n\ge1$ とし、$S^n$ を $U=S^n\setminus\{S\}$（南極を除く）、$V=S^n\setminus\{N\}$（北極を除く）で覆う。\\
+(1) $U,V$ は可縮で、$U\cap V\simeq S^{n-1}$ であることを説明せよ。\\
+(2) 被約ホモロジーのマイヤー・ヴィートリス完全列から $\tilde H_k(S^n)\cong\tilde H_{k-1}(S^{n-1})$ を導き、$\tilde H_k(S^0)$ から出発して $\tilde H_k(S^n)$ を求めよ。\\
+(3) この被覆は、ディラック・モノポールのゲージ場を北半球・南半球で別々に書く構成（第5, 7章）と同じである。$H_2(S^2)\cong\Z$ の生成元を、モノポールを囲む閉曲面の言葉で説明せよ。
+\end{problem}
+
+\begin{solution}
+(1) 立体射影で $U\cong\R^n$、$V\cong\R^n$ で可縮。$U\cap V=S^n\setminus\{N,S\}\cong\R^n\setminus\{0\}\simeq S^{n-1}$（立体射影で $S\mapsto0$、$N\mapsto\infty$、第1章）。
+
+(2) $U\cap V\ne\emptyset$ なので被約ホモロジーの完全列
+\[
+\tilde H_k(U)\oplus\tilde H_k(V)\to\tilde H_k(S^n)\xrightarrow{\ \delta\ }\tilde H_{k-1}(U\cap V)\to\tilde H_{k-1}(U)\oplus\tilde H_{k-1}(V)
+\]
+で両端が $0$ なので、$\delta$ は同型 $\tilde H_k(S^n)\cong\tilde H_{k-1}(S^{n-1})$。$S^0$ は2点なので $H_0(S^0)=\Z^2$、$\tilde H_0(S^0)=\Z$、他は $0$。これを $n$ 回くり返すと
+\[
+\tilde H_k(S^n)\cong\tilde H_{k-n}(S^0)=\begin{cases}\Z&k=n\\0&k\neq n\end{cases}
+\]
+特に $\tilde H_0(S^n)=0$（$n\ge1$、連結）であり、$H_k(S^n)$ は $k=0,n$ で $\Z$、他は $0$。
+
+(3) $\delta$ の構成を逆にたどると、$H_2(S^2)$ の生成元（基本類 $[S^2]$）は、北半球の鎖 $u$ と南半球の鎖 $v$ の和 $u+v$ で、共通部分（赤道の近く）で $\partial u=-\partial v$ が赤道の円周 $S^1$ を表すものである。モノポールを囲む閉曲面上の磁束 $\int_{S^2}F$ は、北と南のパッチの寄与 $\int_uF+\int_vF=\oint_{\partial u}A_N+\oint_{\partial v}A_S=\oint_{\text{赤道}}(A_N-A_S)$ に分かれ、赤道上の遷移関数（ゲージ変換）の巻き付き数で決まる。ホモロジーの $\delta\colon H_2(S^2)\cong H_1(S^1)$ は、この「2次元の磁束を赤道上の1次元の量に帰着させる」構造の位相的な骨組みである。ディラックの量子化条件 $\int F\in2\pi\Z$ は第5, 7章で扱う。
+\end{solution}
+
+\begin{problem}[難易度 C]\label{ch04-prob-mvtorus}
+$T^2=S^1\times S^1$（座標 $(\phi_1,\phi_2)$）を、$U=\{\phi_1\ne0\}$、$V=\{\phi_1\ne\pi\}$ で覆う。\\
+(1) $U$, $V$ は円筒 $(\text{開区間})\times S^1\simeq S^1$、$U\cap V$ は2つの円筒の非交和 $\simeq S^1\sqcup S^1$ であることを確かめよ。\\
+(2) マイヤー・ヴィートリス完全列を書き、写像 $\Phi\colon H_k(U\cap V)\to H_k(U)\oplus H_k(V)$ を $k=0,1$ について具体的に求め、$H_*(T^2)$ を計算せよ。\\
+(3) $H_1(T^2)\cong\Z^2$ の2つの生成元がそれぞれ完全列のどこから来るかを説明せよ。
+\end{problem}
+
+\begin{solution}
+(1) $U=(0,2\pi)\times S^1$、$V=(-\pi,\pi)\times S^1$ はどちらも円筒で、$\phi_2$ 方向の円周 $\beta$ に変位レトラクトする。$U\cap V=\bigl((0,\pi)\sqcup(\pi,2\pi)\bigr)\times S^1$ は2つの円筒 $W_1\sqcup W_2$ で、それぞれ円周 $\beta_1,\beta_2$ に変位レトラクトする。
+
+(2) $H_1(U\cap V)=\Z\beta_1\oplus\Z\beta_2$、$H_1(U)=\Z\beta_U$、$H_1(V)=\Z\beta_V$、$H_0(U\cap V)=\Z p_1\oplus\Z p_2$、$H_0(U)=\Z$、$H_0(V)=\Z$、$H_2$ はいずれも $0$（円筒・円周の次元）。完全列は
+\[
+0\to H_2(T^2)\xrightarrow{\delta}\Z^2\xrightarrow{\Phi_1}\Z^2\xrightarrow{\Psi_1}H_1(T^2)\xrightarrow{\delta}\Z^2\xrightarrow{\Phi_0}\Z^2\xrightarrow{\Psi_0}H_0(T^2)\to0 .
+\]
+$\beta_i$ は $U$ でも $V$ でも $\phi_2$ 方向の一周なので $\beta_i\mapsto\beta_U$、$\beta_i\mapsto\beta_V$。よって
+\[
+\Phi_1(\beta_1)=\Phi_1(\beta_2)=(\beta_U,-\beta_V),\qquad\Phi_0(p_1)=\Phi_0(p_2)=(1,-1).
+\]
+$\ker\Phi_1=\Z(\beta_1-\beta_2)$、$\operatorname{im}\Phi_1=\Z(\beta_U,-\beta_V)$、$\ker\Phi_0=\Z(p_1-p_2)$、$\operatorname{im}\Phi_0=\Z(1,-1)$。
+\begin{itemize}
+\item $H_2(T^2)\cong\ker\Phi_1=\Z$。
+\item $H_0(T^2)\cong\operatorname{coker}\Phi_0=\Z^2/\Z(1,-1)\cong\Z$。
+\item $H_1$：短完全列 $0\to\operatorname{coker}\Phi_1\to H_1(T^2)\to\ker\Phi_0\to0$ で、$\operatorname{coker}\Phi_1=\Z^2/\Z(\beta_U,-\beta_V)\cong\Z$、$\ker\Phi_0\cong\Z$。右端が自由なので分裂し $H_1(T^2)\cong\Z^2$。
+\end{itemize}
+
+(3) 一方の生成元は $\operatorname{coker}\Phi_1$ から来る $\Psi_1(\beta_U)=[\beta]$、すなわち $\phi_2$ 方向の円周で、$U$ の中にすでにある輪である。もう一方 $[\alpha]$ は $\phi_1$ 方向に一周する輪で、$U$ にも $V$ にも含まれない。$\alpha=u+v$（$u\subset U$、$v\subset V$ の弧）と分けると $\partial u$ は $W_1$ の点と $W_2$ の点の差になり、$\delta[\alpha]=\pm(p_1-p_2)$ が $\ker\Phi_0$ の生成元になる。つまり $\alpha$ は「2つの重なりを両方通って戻ってくる」ことで生まれる輪である。また $\delta\colon H_2(T^2)\to\ker\Phi_1$ は、基本類 $[T^2]$ を2つの重なりにある円周の差 $\beta_1-\beta_2$ に写す。
+\end{solution}
+
+\subsection{フレヴィッチ・写像度・ラージ $N$}
+
+\begin{problem}[難易度 C]\label{ch04-prob-hurewicz}
+平面から $n$ 点 $p_1,\dots,p_n$ を除いた $X=\R^2\setminus\{p_1,\dots,p_n\}$ を考える（$\R^3$ から平行な $n$ 本の直線を除いたものとホモトピー同値で、$n$ 本の細いソレノイドの外側の空間）。$X\simeq\bigvee^nS^1$ で $\pi_1(X)=F_n$（$p_j$ をまわるループ $x_j$ で生成される自由群）であることは認めてよい。\\
+(1) $H_1(X)$ を求めよ。\\
+(2) ソレノイド $j$ の磁束を $\Phi_j$ とする。電荷 $q$ の粒子がループ $\gamma$ に沿って得るアハラノフ・ボーム位相 $\exp(iq\oint_\gamma A)$ が $\gamma$ のホモロジー類だけで決まることを示し、$[\gamma]=\sum_jn_j[x_j]$ のときの値を書け。\\
+(3) 非可換ゲージ群 $G=SU(2)$ の「非可換磁束」（平坦な接続で、$x_j$ に沿ったホロノミーが $g_j\in G$）を考える。ループ $\gamma=x_1x_2x_1^{-1}x_2^{-1}$ は $H_1(X)$ で $0$ であることを示し、$g_1=i\sigma_1$、$g_2=i\sigma_3$ のときそのホロノミーが $-\mathbf 1\ne\mathbf 1$ であることを確かめよ。この例から、ホモロジーとホモトピーの情報の違いについて何が言えるか。
+\end{problem}
+
+\begin{solution}
+(1) フレヴィッチの定理より $H_1(X)\cong F_n^{\mathrm{ab}}=\Z^n$（$[x_1],\dots,[x_n]$ が基底）。直接には、$\bigvee^nS^1$ は頂点1つ・辺 $n$ 本のグラフで $b_1=n-1+1=n$（問題 \ref{ch04-prob-graph}）。
+
+(2) $A$ は $X$ 上で平坦（$F=dA=0$）。ループ $\gamma,\gamma'$ がホモローグで $\gamma-\gamma'=\partial c$（$c$ は $X$ 内の2鎖）なら、ストークスの定理より
+\[
+\oint_\gamma A-\oint_{\gamma'}A=\int_cF=0 .
+\]
+したがって位相は $[\gamma]\in H_1(X)$ だけで決まる。$\oint_{x_j}A=\Phi_j$（$x_j$ は $p_j$ を正の向きに1周）なので、$[\gamma]=\sum n_j[x_j]$ なら
+\[
+\exp\Bigl(iq\oint_\gamma A\Bigr)=\exp\Bigl(iq\sum_jn_j\Phi_j\Bigr).
+\]
+$n_j$ は $\gamma$ が $p_j$ をまわる巻き付き数である。可換なゲージ理論では、平坦な場の観測量はホモロジーで決まる（より正確には $\Hom(H_1(X),U(1))$ の元）。
+
+(3) $\gamma$ を1鎖とみなすと $x_1+x_2-x_1-x_2=0$ なので $[\gamma]=0\in H_1(X)$。一方、非可換の場合、平坦接続のホロノミーは基本群の準同型 $\pi_1(X)\to G$ を定め（基点での共役を除いて）、$\gamma$ のホロノミーは（道の積の順序の規約によらず）$g_1,g_2$ の交換子 $g_1g_2g_1^{-1}g_2^{-1}$ またはその共役・逆元である。
+\[
+g_1g_2=(i\sigma_1)(i\sigma_3)=-\sigma_1\sigma_3=i\sigma_2,\qquad g_2g_1=(i\sigma_3)(i\sigma_1)=-\sigma_3\sigma_1=-i\sigma_2 .
+\]
+よって $g_1g_2g_1^{-1}g_2^{-1}=(g_1g_2)(g_2g_1)^{-1}=(i\sigma_2)(-i\sigma_2)^{-1}$。$(-i\sigma_2)(i\sigma_2)=\sigma_2^2=\mathbf 1$ より $(-i\sigma_2)^{-1}=i\sigma_2$ なので
+\[
+g_1g_2g_1^{-1}g_2^{-1}=(i\sigma_2)(i\sigma_2)=-\sigma_2^2=-\mathbf 1 .
+\]
+$-\mathbf 1$ は $SU(2)$ の中心で共役によらないので、ホロノミーは確かに $-\mathbf 1\ne\mathbf 1$。
+
+結論：ホモロジー $H_1=\pi_1^{\mathrm{ab}}$ は交換子の情報を捨てる。可換ゲージ理論の位相（AB 効果）は $H_1$ で完全に記述されるが、非可換な磁束（アリス弦や離散ゲージ理論の非可換エニオンなど）の物理は $\pi_1$ そのものを必要とする。2つの非可換磁束の周りを交換子の形にまわると、どちらのソレノイドも「正味0回」しかまわっていないのに、粒子の内部状態が変わる。
+\end{solution}
+
+\begin{problem}[難易度 D]\label{ch04-prob-degree}
+(1) $n\ge1$ とする。$S^2=\C\cup\{\infty\}$ 上の写像 $f_n(z)=z^n$（$f_n(\infty)=\infty$）の写像度が $n$ であることを、局所写像度の公式で示せ。$z\mapsto z^{-n}$、$z\mapsto\bar z^n$ の写像度は何か。\\
+(2) $f\colon S^2\to S^2$ のレフシェッツ数が $L(f)=1+\deg f$ であることを示し、$\deg f\ne-1$ なら $f$ は不動点をもつことを導け。不動点をもたない写像の例を挙げよ。\\
+(3)（毛の生えた球の定理）$S^{2m}$ 上に零点のない連続な接ベクトル場 $v$ は存在しないことを、$F(x,t)=\cos(\pi t)\,x+\sin(\pi t)\,v(x)/\lvert v(x)\rvert$ を用いて示せ。$S^{2m+1}$ では零点のないベクトル場の例を挙げよ。\\
+(4) 任意の連続写像 $f\colon\RP^{2m}\to\RP^{2m}$ は不動点をもつことを示せ。一方 $\RP^{2m+1}$ には不動点をもたない写像があることを示せ。
+\end{problem}
+
+\begin{solution}
+(1) $z$ 平面の向きを $dx\wedge dy$（$z=x+iy$）で定める。正則関数 $f$ の実ヤコビ行列は、$f'=s+it$ と書くと（コーシー・リーマンの関係より）$\begin{pmatrix}s&-t\\t&s\end{pmatrix}$ で、$\det=s^2+t^2=\lvert f'\rvert^2\ge0$。$w=1$ は $f_n$ の正則値で、逆像は $1$ の $n$ 乗根 $z_k=e^{2\pi ik/n}$ の $n$ 個、各点で $f_n'(z_k)=nz_k^{n-1}\ne0$、符号は $+1$。よって $\deg f_n=n$。（$\infty$ の近くでも $\zeta=1/z$ 座標で $\zeta\mapsto\zeta^n$ と正則である。）
+
+$z\mapsto z^{-n}$ も $S^2$ 上の正則写像（$0\leftrightarrow\infty$ を入れかえる）で、$w=1$ の逆像は $n$ 個、すべて符号 $+1$ なので写像度は $+n$。$S^1$ 上では $e^{i\theta}\mapsto e^{-in\theta}$ の巻き付き数は $-n$ だが、$S^2$ 上では正則写像は向きを保つので写像度は正である。$z\mapsto\bar z^n$ は $z\mapsto z^n$ と複素共役（鏡映、写像度 $-1$）の合成なので $\deg=-n$。$O(3)$ シグマ模型では $\bm n$ を立体射影した複素場 $w(z)$ が正則なら $\deg>0$（反正則なら $<0$）のバビー・スキルミオン（ベラヴィン・ポリヤコフ解）である。
+
+(2) $H_0(S^2;\Q)=\Q$ 上で $f_*$ は恒等（連結空間の点を点に写す）、$H_2(S^2;\Q)=\Q$ 上で $\deg f$ 倍、他は $0$。よって $L(f)=1+\deg f$。$\deg f\ne-1$ なら $L(f)\ne0$ で、レフシェッツの定理より不動点がある。例：回転（$\deg=1$）は回転軸の2点、$z\mapsto z^n$ は $0,\infty$ などを固定する。不動点のない写像の例は対蹠写像 $x\mapsto-x$（$z\mapsto-1/\bar z$）で、$\deg=(-1)^3=-1$、$L=0$。
+
+(3) $v$ が零点をもたないとし、$u=v/\lvert v\rvert$ とおく。$u(x)\perp x$、$\lvert u\rvert=\lvert x\rvert=1$ なので
+\[
+\lvert F(x,t)\rvert^2=\cos^2(\pi t)+\sin^2(\pi t)=1,
+\]
+$F$ は $S^{2m}\times I\to S^{2m}$ の連続写像で、$F(\cdot,0)=\id$、$F(\cdot,1)=-\id$（対蹠写像）。写像度のホモトピー不変性より $1=\deg(-\id)=(-1)^{2m+1}=-1$、矛盾。よって零点がある。（ポアンカレ・ホップの定理によれば零点の指数の和は $\chi(S^{2m})=2$ である。地球上で風速ゼロの地点が必ずある。）
+
+$S^{2m+1}\subset\C^{m+1}$ では $v(z)=iz$、すなわち $(x_1,y_1,\dots)\mapsto(-y_1,x_1,\dots)$ は $\langle v(z),z\rangle_{\R}=\mathrm{Re}(\bar z\cdot iz)=\mathrm{Re}(i\lvert z\rvert^2)=0$ をみたす接ベクトル場で、$\lvert v\rvert=1$。これは $U(1)$ 作用 $z\mapsto e^{i\alpha}z$ の生成子（ホップ・ファイバーの方向）である。
+
+(4) 問題 \ref{ch04-prob-rpn} より $H_k(\RP^{2m})$ は $k=0$ で $\Z$、$k$ 奇数 $<2m$ で $\Z_2$、他は $0$。$\Q$ 係数では $\Z_2\otimes\Q=0$ なので $H_k(\RP^{2m};\Q)=0$（$k\ge1$）、$H_0=\Q$。よって任意の $f$ について $L(f)=1\ne0$ で、不動点がある。
+
+$\RP^{2m+1}=S^{2m+1}/\pm$ では、$J\colon\R^{2m+2}\to\R^{2m+2}$ を $J^2=-1$ の線形写像（$\C^{m+1}$ の $i$ 倍）とし、$f[x]=[Jx]$ とおく（$J(-x)=-Jx$ なので well-defined）。不動点 $[x]=[Jx]$ は $Jx=\lambda x$（$\lambda=\pm1$）を意味するが、$J^2x=\lambda^2x=x$ と $J^2x=-x$ が矛盾する。よって不動点はない。実際 $f\simeq\id$（$e^{\alpha J}$, $\alpha\in[0,\pi/2]$）で、$L(f)=\chi(\RP^{2m+1})=0$ と整合する。
+\end{solution}
+
+\begin{problem}[難易度 D]\label{ch04-prob-thooft}
+$N\times N$ エルミート行列場 $\Phi$ の理論で、作用を $S=\frac{N}{\lambda}\int\tr\bigl(\frac12(\partial\Phi)^2+\frac13\Phi^3\bigr)$ とする（$\lambda$ はトフーフト結合定数）。伝播関数は $\langle\Phi_{ij}\Phi_{kl}\rangle\propto\frac{\lambda}{N}\delta_{il}\delta_{jk}$ で、行列の添字の流れを2本の線で表す（2重線表示）。このとき、ファインマン図（真空図）は頂点 $V$、伝播関数 $E$、添字の閉じたループ $F$ をもち、頂点ごとに $N/\lambda$、伝播関数ごとに $\lambda/N$、添字ループごとに（添字の和から）$N$ が付く。2重線図は、頂点を円板、伝播関数を帯としたリボン・グラフで、その境界の各円周（添字ループ）に円板を貼ると向き付け可能な閉曲面 $\Sigma$ の胞体分割（頂点 $V$、辺 $E$、面 $F$）が得られる（認めてよい）。\\
+(1) 連結な真空図の $N,\lambda$ 依存性が $N^{\chi(\Sigma)}\lambda^{E-V}=N^{2-2g}\lambda^{L-1}$ となることを示せ（$g$ は $\Sigma$ の種数、$L=E-V+1$）。\\
+(2) 3価の頂点2つを3本の伝播関数で結ぶ「$\theta$ 図」には、頂点での伝播関数の巡回順序の取り方により、2つの2重線図がある。半辺の置換を用いて、それぞれの添字ループの数 $F$ を数え、平面図（$g=0$）と非平面図（$g=1$）であることを確かめよ。\\
+(3) $N\to\infty$ で $\lambda$ を固定すると平面図だけが残ることを説明し、弦の種数展開（問題 \ref{ch04-prob-genus}）との対応 $g_s\sim1/N$ を述べよ。
+\begin{center}
+\begin{tikzpicture}[scale=1.0]
+  \node[vtx] (l) at (-1.4,0) {}; \node[vtx] (r) at (1.4,0) {};
+  \draw[thick] (l) to[out=70,in=110] (r);
+  \draw[thick] (l) -- (r);
+  \draw[thick] (l) to[out=-70,in=-110] (r);
+  \node at (0,-1.4) {$\theta$ 図（1本線）};
+  \begin{scope}[xshift=5.2cm]
+    \fill[blue!8] (0,0) ellipse (2.0 and 1.15);
+    \fill[white] (-1.55,0.12) .. controls (-0.8,0.85) and (0.8,0.85) .. (1.55,0.12) -- cycle;
+    \fill[white] (-1.55,-0.12) .. controls (-0.8,-0.85) and (0.8,-0.85) .. (1.55,-0.12) -- cycle;
+    \draw[thick,red!70!black] (0,0) ellipse (2.0 and 1.15);
+    \draw[thick,green!50!black] (-1.55,0.12) .. controls (-0.8,0.85) and (0.8,0.85) .. (1.55,0.12) -- cycle;
+    \draw[thick,blue!70!black] (-1.55,-0.12) .. controls (-0.8,-0.85) and (0.8,-0.85) .. (1.55,-0.12) -- cycle;
+    \node at (0,1.45) {\footnotesize 添字ループ1（外側）};
+    \node[green!50!black] at (0,0.4) {\footnotesize 2};
+    \node[blue!70!black] at (0,-0.4) {\footnotesize 3};
+    \node at (0,-1.6) {2重線表示（平面的）：$F=3$};
+  \end{scope}
+\end{tikzpicture}
+\zucap{$\theta$ 図とその平面的な2重線表示。色の付いた帯が伝播関数（2本の添字線にはさまれた部分）、3本の閉曲線が添字ループである。$V-E+F=2-3+3=2=\chi(S^2)$。}
+\end{center}
+\end{problem}
+
+\begin{solution}
+(1) 図の因子は
+\[
+\Bigl(\frac N\lambda\Bigr)^V\Bigl(\frac\lambda N\Bigr)^EN^F=N^{V-E+F}\lambda^{E-V}.
+\]
+$V-E+F$ は閉曲面 $\Sigma$ の胞体分割の交代和なので、オイラー・ポアンカレの公式より $\chi(\Sigma)=2-2g$（$\Sigma$ は連結な向き付け可能閉曲面）。また $E-V=L-1$（$L=E-V+1$ はグラフのループ数、問題 \ref{ch04-prob-feynman}）。よって $N^{2-2g}\lambda^{L-1}$。なお $L=E-V+1=F-1+2g$ なので、ループ数は添字ループと種数の両方に分配される。3価頂点では $2E=3V$ なので $\lambda^{E-V}=\lambda^{V/2}$。
+
+(2) 頂点 $A$ の半辺を $a_1,a_2,a_3$、頂点 $B$ の半辺を $b_1,b_2,b_3$ とし、伝播関数 $i$ は $a_i$ と $b_i$ を結ぶとする（対合 $\alpha\colon a_i\leftrightarrow b_i$）。各頂点で半辺を反時計回りに並べた巡回置換を $\sigma$ とすると、リボン・グラフの境界の円周（添字ループ）は置換 $\sigma\circ\alpha$ の巡回に1対1に対応する（帯を渡って反対側の頂点へ行き、そこで次の帯に移る）。
+
+平面図：平面上に描くと、$A$ で $a_1\to a_2\to a_3$ が反時計回りなら $B$ では鏡像の順 $b_1\to b_3\to b_2$。$\sigma\alpha$ を追うと
+\[
+a_1\mapsto b_3,\ b_3\mapsto a_1;\qquad a_2\mapsto b_1,\ b_1\mapsto a_2;\qquad a_3\mapsto b_2,\ b_2\mapsto a_3
+\]
+（例：$a_1\xrightarrow{\alpha}b_1\xrightarrow{\sigma}b_3$、$b_3\xrightarrow{\alpha}a_3\xrightarrow{\sigma}a_1$）。巡回は3つで $F=3$、$\chi=2-3+3=2$、$g=0$。図の3つの添字ループに対応する。
+
+非平面図：$B$ でも $b_1\to b_2\to b_3$ とする。$\sigma\alpha$ を順に追うと（例：$a_1\xrightarrow{\alpha}b_1\xrightarrow{\sigma}b_2$）
+\[
+a_1\mapsto b_2\mapsto a_3\mapsto b_1\mapsto a_2\mapsto b_3\mapsto a_1
+\]
+となり、長さ6の巡回1つで $F=1$。$\chi=2-3+1=0$、$g=1$：この2重線図はトーラス上にしか交差なしに描けない。$N$ 依存性は平面図が $N^2$、非平面図が $N^0$ で、$1/N^2$ だけ抑制される。（向き付け可能なら $V-E+F$ は偶数なので、$F$ は奇数 $1$ か $3$ に限られ、これで尽きている。）
+
+(3) 固定した $\lambda$ で、真空図の和は
+\[
+\log Z=\sum_{g\ge0}N^{2-2g}\mathcal F_g(\lambda)=N^2\mathcal F_0(\lambda)+\mathcal F_1(\lambda)+N^{-2}\mathcal F_2(\lambda)+\cdots
+\]
+と整理され、$N\to\infty$ では種数 $0$、すなわち球面に描ける平面図だけが主要項になる（各 $\mathcal F_g$ はループ数について無限和）。これを閉じた弦の種数展開（問題 \ref{ch04-prob-genus}）$\sum_gg_s^{2g-2}\mathcal F_g^{\mathrm{string}}$ と比べると $g_s\sim1/N$ と同定され、2重線図の曲面 $\Sigma$ が弦の世界面にあたる（トフーフト；AdS/CFT 対応の出発点）。どちらの展開でも次数を決めているのはオイラー標数 $\chi(\Sigma)$ である。
+\end{solution}

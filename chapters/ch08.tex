@@ -1,0 +1,946 @@
+%================================================
+\chapter{接続・曲率・特性類}\label{ch:08}
+% 18問
+%================================================
+
+\section{物理からの動機}
+
+\subsection*{ゲージ場は接続である}
+ゲージ理論の出発点は、場 $\psi(x)$ の「内部の向き」を点ごとに独立に回してよい、という要請であった。異なる点 $x$, $x'$ の $\psi(x)$ と $\psi(x')$ は別々のベクトル空間（ファイバー）に属するので、そのままでは比較できない。比べるには、道に沿って一方を他方の点まで運ぶ規則が要る。それを与えるのがゲージ場 $A$ であり、数学ではファイバー束の\term{接続}{connection}と呼ぶ。共変微分 $D=d-iA$ は「運んでから比べた」微分であり、$D\psi=0$ をみたすように運ぶことを\term{平行移動}{parallel transport}という。
+
+閉じた道に沿って1周運ぶと、一般にはもとに戻らない。そのずれ
+\[
+U(C)=P\exp\Bigl(i\oint_CA\Bigr)
+\]
+が\term{ホロノミー}{holonomy}であり、そのトレース $W(C)=\tr U(C)$ が\term{ウィルソン・ループ}{Wilson loop}である。微小なループのホロノミーのずれが場の強さ $F$、すなわち\term{曲率}{curvature}である。ウィルソン・ループはゲージ不変であり、格子ゲージ理論の基本変数であり、その期待値の面積則がクォークの閉じ込めの判定条件になる（下図）。アハラノフ・ボーム効果（第2, 5章）は、$F=0$ の領域でもホロノミーが自明でない（\textbf{平坦だが自明でない接続}）ことの観測であった。
+
+\begin{center}
+\begin{tikzpicture}[scale=1.05]
+  % 左：平行移動
+  \draw[thick,blue!70!black,mid arrow] (0,0) .. controls (0.8,1.4) and (2.0,-0.4) .. (3,1) node[pos=0.5,below=3pt] {$\gamma$};
+  \node[vtx] at (0,0) {}; \node[below left] at (0,0) {$x_0$};
+  \node[vtx] at (3,1) {}; \node[above right] at (3,1) {$x_1$};
+  \draw[-{Stealth[length=2mm]},thick,red!70!black] (0,0) -- (0.1,0.7) node[left] {\footnotesize $\psi(x_0)$};
+  \draw[-{Stealth[length=2mm]},thick,red!70!black] (3,1) -- (3.55,1.45) node[right] {\footnotesize $U(\gamma)\psi(x_0)$};
+  \node at (1.5,-1.0) {\footnotesize $U(\gamma)=P\exp\bigl(i\int_\gamma A\bigr)$};
+  % 右：ウィルソン・ループ
+  \begin{scope}[xshift=6.3cm,yshift=-0.9cm]
+    \draw[-{Stealth[length=2mm]}] (-0.4,0) -- (3.6,0) node[right] {\footnotesize $x$};
+    \draw[-{Stealth[length=2mm]}] (0,-0.3) -- (0,2.9) node[above] {\footnotesize $t$};
+    \fill[blue!8] (0.62,0.42) rectangle (2.78,2.38);
+    \draw[very thick,blue!70!black,mid arrow] (0.6,0.4) -- (2.8,0.4);
+    \draw[very thick,blue!70!black,mid arrow] (2.8,0.4) -- (2.8,2.4);
+    \draw[very thick,blue!70!black,mid arrow] (2.8,2.4) -- (0.6,2.4);
+    \draw[very thick,blue!70!black,mid arrow] (0.6,2.4) -- (0.6,0.4);
+    \node at (1.7,1.4) {\footnotesize 面積 $RT$};
+    \draw[decorate,decoration={brace,amplitude=4pt,mirror}] (0.6,0.25) -- (2.8,0.25) node[midway,below=4pt] {\footnotesize $R$};
+    \draw[decorate,decoration={brace,amplitude=4pt}] (3.0,2.4) -- (3.0,0.4) node[midway,right=4pt] {\footnotesize $T$};
+    \node[left] at (0.6,1.9) {\footnotesize $q$};
+    \node[right] at (2.8,1.9) {\footnotesize $\bar q$};
+  \end{scope}
+\end{tikzpicture}
+\zucap{左：道 $\gamma$ に沿った平行移動。右：静的なクォーク・反クォーク対の世界線がつくる長方形のウィルソン・ループ。$\langle W\rangle\sim e^{-V(R)T}$ で、面積則 $\langle W\rangle\sim e^{-\sigma RT}$ なら線形ポテンシャル $V(R)=\sigma R$（閉じ込め）。}
+\end{center}
+
+\subsection*{位相的な量は曲率の積分で書ける}
+物理には、場の強さの積分で書かれるのに、場の連続的な変形で変わらない量がいくつも現れる。
+\begin{itemize}
+\item 磁気単極子の磁荷：$\displaystyle\frac{1}{2\pi}\int_{S^2}F\in\Z$（ディラックの量子化、第5, 7章）。
+\item インスタントン数：$\displaystyle k=\frac{1}{8\pi^2}\int_{\R^4}\tr F\wedge F\in\Z$。
+\item 2次元重力：$\displaystyle\frac{1}{4\pi}\int_\Sigma\sqrt h\,R\,d^2\sigma=\chi(\Sigma)$（ガウス・ボンネ）。
+\end{itemize}
+これらが整数になり、計量やゲージ場の局所的な変形で変わらない理由を一般的に説明するのが\term{チャーン・ヴェイユ理論}{Chern--Weil theory}である：曲率の不変多項式は閉形式であり、接続を変えても完全形式しか変わらないので、そのコホモロジー類（\term{特性類}{characteristic class}）は束だけで決まる。整数性はさらに、特性類が整数係数のコホモロジー類であることから来る。
+
+\subsection*{チャーン・サイモンズ形式と θ 真空}
+$\tr F\wedge F$ は局所的には完全形式 $8\pi^2\,dCS(A)$ である。インスタントン数は、ユークリッド時間の過去と未来の真空のチャーン・サイモンズ数の差として書ける。チャーン・サイモンズ数は大きなゲージ変換で整数だけずれるので、ヤン・ミルズ理論の古典的真空は整数でラベルされた無限個の点に分かれ、インスタントンはその間のトンネル効果を表す。ゲージ不変な真空は重ね合わせ（θ 真空）であり、経路積分には重み $e^{i\theta k}$ が現れる。これが強い CP 問題の θ 角である。$k\in\Z$ だから $\theta\sim\theta+2\pi$。3次元では、チャーン・サイモンズ作用 $\tfrac{\kappa}{4\pi}\int\tr(A\,dA-\tfrac{2i}{3}A^3)$ のレベル $\kappa$ が同じ理由で整数に量子化される。
+
+\subsection*{ベリー位相}
+量子力学でハミルトニアン $H(\lambda)$ のパラメータ $\lambda$ をゆっくり1周させると、固有状態は動的位相のほかに幾何学的な位相を獲得する（\term{ベリー位相}{Berry phase}）。これはパラメータ空間上の $U(1)$ 接続（ベリー接続）のホロノミーそのものであり、磁場中のスピン $1/2$ では、パラメータ空間 $\bm B$ の原点（縮退点）に置かれた磁荷 $-1/2$ の単極子の「AB 位相」になる。
+
+\begin{physbox}[：本章の辞書]
+\begin{center}
+\small
+\begin{tabular}{p{0.45\linewidth}p{0.45\linewidth}}
+物理 & 数学\\ \hline
+ゲージ場 $A_\mu$ & 主束（ベクトル束）の接続\\
+場の強さ $F_{\mu\nu}$ & 曲率\\
+ゲージ変換 & 束の局所自明化の取りかえ\\
+ウィルソン線・ウィルソン・ループ & 平行移動・ホロノミー（のトレース）\\
+AB 効果、真空の Wilson line & 平坦接続 $\leftrightarrow\Hom(\pi_1,G)/G$\\
+磁荷・インスタントン数・θ 項 & チャーン類・チャーン指標の積分\\
+重力の曲率 $R^a{}_b$ & レヴィ・チヴィタ接続（スピン接続）の曲率\\
+2次元・4次元のオイラー密度 & オイラー類（ガウス・ボンネ）\\
+ベリー接続・ベリー位相 & パラメータ空間上の $U(1)$ 接続・ホロノミー\\
+大きなゲージ変換によるチャーン・サイモンズ数のずれ & $\pi_3(G)=\Z$ の巻き付き数
+\end{tabular}
+\end{center}
+\end{physbox}
+
+\section{基本事項のまとめ}
+
+本章では記法と規約のゲージ場・特性類の規約を厳密に用いる。特に
+\[
+D=d-iA,\qquad F=dA-iA\wedge A,\qquad A\mapsto gAg^{-1}+i\,g\,dg^{-1}.
+\]
+束の大域的な構成（推移関数、主束、同伴束）は第7章で扱ったものとし、ここでは局所的な記述を中心にまとめる。
+
+\subsection{接続と曲率}
+
+\begin{mydef}{接続（局所表示）}{ch08-conn}
+$G$ をコンパクトなリー群（$U(N)$ の部分群）、$E\to M$ を階数 $N$ の複素ベクトル束（構造群 $G$）とする。開被覆 $\{U_i\}$ と推移関数 $g_{ij}\colon U_i\cap U_j\to G$（$\psi_i=g_{ij}\psi_j$）をとる。各 $U_i$ 上のエルミート行列（$\mathfrak g$ 値）1形式 $A_i$ の族で
+\[
+A_i=g_{ij}A_jg_{ij}^{-1}+i\,g_{ij}\,dg_{ij}^{-1}\qquad(U_i\cap U_j\text{ 上})
+\]
+をみたすものを $E$ 上の\term{接続}{connection}という。共変微分 $D\psi_i=d\psi_i-iA_i\psi_i$ はこの貼り合わせ規則のもとで $D\psi_i=g_{ij}D\psi_j$ をみたし、切断の微分として大域的に意味をもつ。$\mathfrak g$ 値 $p$ 形式 $\eta$（随伴表現に値をとるもの）には $D\eta=d\eta-i[A,\eta]$（$[A,\eta]=A\wedge\eta-(-1)^p\eta\wedge A$）と作用する。
+\end{mydef}
+推移関数は「パッチ間のゲージ変換」であり、1つのパッチの中でのゲージ変換 $g\colon U\to G$ は $A\mapsto A^g=gAg^{-1}+i\,g\,dg^{-1}$ である。無限小 $g=1+i\epsilon$ では $\delta A=d\epsilon-i[A,\epsilon]=D\epsilon$。
+
+\begin{mythm}{曲率の性質}{ch08-curv}
+$F=dA-iA\wedge A$（成分では $F_{\mu\nu}=\partial_\mu A_\nu-\partial_\nu A_\mu-i[A_\mu,A_\nu]$）について次が成り立つ。
+\begin{enumerate}
+\item $F$ は $D^2\psi=-iF\psi$ をみたす。ゲージ変換で $F\mapsto gFg^{-1}$（パッチ間では $F_i=g_{ij}F_jg_{ij}^{-1}$）。
+\item \term{ビアンキ恒等式}{Bianchi identity}：$DF=dF-i[A,F]=0$。
+\item $U(1)$ の場合 $F=dA$ は大域的な閉2形式で、ビアンキ恒等式 $dF=0$ はマクスウェル方程式の斉次部分である。
+\end{enumerate}
+\end{mythm}
+\begin{note}
+$D^2\psi=(d-iA)(d\psi-iA\psi)=-i\,dA\,\psi+iA\wedge d\psi-iA\wedge d\psi-A\wedge A\psi=-i(dA-iA\wedge A)\psi$。1形式 $A$ について $d(A\psi)=dA\,\psi-A\wedge d\psi$ に注意。性質 1 は問題 \ref{ch08-prob-bianchi} で直接確かめる。
+\end{note}
+
+\subsection{平行移動・ホロノミー・平坦接続}
+
+\begin{mydef}{平行移動とホロノミー}{ch08-hol}
+道 $\gamma\colon[0,1]\to M$ に沿って $D\psi/ds=0$、すなわち
+\[
+\frac{d\psi}{ds}=i\,A_\mu(\gamma(s))\dot\gamma^\mu(s)\,\psi
+\]
+を解いて得られる線形写像 $\psi(0)\mapsto\psi(1)$ を
+\[
+U(\gamma)=P\exp\Bigl(i\int_\gamma A\Bigr)=\sum_{n=0}^\infty i^n\!\!\int_{1\ge s_1\ge\cdots\ge s_n\ge0}\!\!\mathcal A(s_1)\cdots\mathcal A(s_n)\,ds_1\cdots ds_n
+\]
+と書く（$\mathcal A(s)=A_\mu\dot\gamma^\mu$。\term{経路順序積}{path ordering}：後の点ほど左）。閉じた道 $C$ に対する $U(C)$ を\term{ホロノミー}{holonomy}、$W(C)=\tr U(C)$ を\term{ウィルソン・ループ}{Wilson loop}という。ゲージ変換で $U(\gamma)\mapsto g(\gamma(1))\,U(\gamma)\,g(\gamma(0))^{-1}$、したがって $W(C)$ はゲージ不変である（問題 \ref{ch08-prob-transport}）。道の積については $U(\gamma_1\cdot\gamma_2)=U(\gamma_2)U(\gamma_1)$。
+\end{mydef}
+
+$U(1)$ では順序は無関係で $U(C)=\exp(iq\oint_CA)$（電荷 $q$）。$C=\partial S$ ならストークスの定理により $U(C)=\exp(iq\int_SF)$ で、ホロノミーは囲んだ磁束で決まる。
+
+\begin{mythm}{平坦接続とホロノミー}{ch08-flat}
+$M$ を連結多様体とする。$F=0$ の接続（\term{平坦接続}{flat connection}）では、ホロノミー $U(C)$ は基点 $x_0$ を固定した閉曲線 $C$ のホモトピー類だけで決まり、準同型 $\rho\colon\pi_1(M,x_0)\to G$ を与える（$\pi_1$ の積 $[\gamma_1][\gamma_2]$ は $\gamma_1$ を先にたどるので、正確には $\rho([\gamma])=U(\gamma)^{-1}$ が準同型である。以下この区別は重要でない）。$x_0$ でのゲージ変換は $\rho$ を共役で変える。逆に任意の準同型から平坦接続（を持つ束）が構成でき、
+\[
+\{\text{平坦 }G\text{ 接続}\}/\text{ゲージ変換}\;\cong\;\Hom(\pi_1(M),G)/G\quad(G\text{ は共役で作用}).
+\]
+特に単連結な $M$ 上の平坦接続は純ゲージ $A=i\,g\,dg^{-1}$ である。
+\end{mythm}
+例えば $M=\R^2\setminus\{0\}$ 上の $U(1)$ 平坦接続は $\Hom(\Z,U(1))=U(1)$ でラベルされ、それが AB 位相 $e^{iq\Phi}$ である（問題 \ref{ch08-prob-ab}）。トーラス上の平坦接続は問題 \ref{ch08-prob-torus} で扱う。
+
+\subsection{ベリー接続}
+
+\begin{mydef}{ベリー接続}{ch08-berry}
+パラメータ $\lambda\in\mathcal P$ に滑らかに依存するハミルトニアン $H(\lambda)$ が、縮退しない固有状態 $\lvert n(\lambda)\rangle$（$\langle n|n\rangle=1$）をもつとする。固有状態の位相の取り方は任意なので、$\{\lvert n(\lambda)\rangle\}$ は $\mathcal P$ 上の複素直線束 $L_n$ を定める。本書では
+\[
+\mathcal A=i\langle n|d n\rangle\quad(\text{実の1形式}),\qquad\mathcal F=d\mathcal A
+\]
+を\term{ベリー接続}{Berry connection}・\term{ベリー曲率}{Berry curvature}と呼ぶ。断熱的に $\lambda$ を閉曲線 $C$ に沿って1周させると、状態は
+\[
+\lvert\psi(T)\rangle=e^{-i\int_0^TE_n\,dt}\,e^{i\gamma_n(C)}\lvert n(\lambda(0))\rangle,\qquad\gamma_n(C)=\oint_C\mathcal A
+\]
+となる。すなわち $e^{i\gamma_n}$ は記法と規約の意味での $U(1)$ 接続 $\mathcal A$ のホロノミーである（問題 \ref{ch08-prob-berry}）。位相の取りかえ $\lvert n\rangle\mapsto e^{i\alpha}\lvert n\rangle$ で $\mathcal A\mapsto\mathcal A-d\alpha$ となり、$\gamma_n$ は $2\pi$ を法としてゲージ不変である。
+\end{mydef}
+
+\begin{center}
+\begin{tikzpicture}[scale=1.25]
+  \shade[ball color=blue!8,opacity=0.5] (0,0) circle (1.6);
+  \fill[orange!30,opacity=0.8] (-1.226,1.028) arc[start angle=140,end angle=40,radius=1.6]
+       arc[start angle=0,end angle=-180,x radius=1.226,y radius=0.25];
+  \draw[thick] (0,0) circle (1.6);
+  \draw[gray,dashed] (1.6,0) arc[start angle=0,end angle=180,x radius=1.6,y radius=0.35];
+  \draw[gray] (-1.6,0) arc[start angle=180,end angle=360,x radius=1.6,y radius=0.35];
+  \draw[red!70!black,dashed] (1.226,1.028) arc[start angle=0,end angle=180,x radius=1.226,y radius=0.25];
+  \draw[red!70!black,very thick,mid arrow] (-1.226,1.028) arc[start angle=180,end angle=360,x radius=1.226,y radius=0.25];
+  \draw[-{Stealth[length=2mm]},thick] (0,0) -- (0.75,0.87) node[right] {\footnotesize $\hat{\bm n}=\bm B/\lvert\bm B\rvert$};
+  \draw[-{Stealth[length=1.6mm]}] (0,0) -- (0,2.1) node[above] {\footnotesize $B_z$};
+  \draw (0,0.45) arc[start angle=90,end angle=49,radius=0.45];
+  \node at (0.2,0.62) {\footnotesize $\theta$};
+  \node at (0,1.35) {\footnotesize $\Omega$};
+  \node[red!70!black] at (1.75,0.55) {\footnotesize $C$};
+  \node[vtx] at (0,0) {};
+  \node[below] at (0,-0.05) {\footnotesize 縮退点 $\bm B=0$};
+\end{tikzpicture}
+\zucap{ブロッホ球（磁場の向きの空間）。磁場の向き $\hat{\bm n}$ が閉曲線 $C$ を1周すると、$\hat{\bm n}$ 方向を向いたスピン $1/2$ の状態は、$C$ が張る立体角 $\Omega$ の半分のベリー位相 $\gamma=-\Omega/2$ を得る（問題 \ref{ch08-prob-berry}）。ベリー曲率は縮退点 $\bm B=0$ に置かれた磁荷 $-1/2$ の単極子の磁場である。}
+\end{center}
+
+\subsection{チャーン・ヴェイユ理論と特性類}
+
+\begin{mydef}{不変多項式}{ch08-invpoly}
+$\mathfrak g$ 上の多項式 $P(X)$ が\term{不変多項式}{invariant polynomial}であるとは、$P(gXg^{-1})=P(X)$（$g\in G$）をみたすことをいう。例：$\tr X^k$、$\det(1+X)$。曲率 $F$ は偶数次の形式で互いに可換なので $P(F)$ は意味をもち、パッチ間で $F_i=g_{ij}F_jg_{ij}^{-1}$ だから $P(F)$ は $M$ 上の大域的な微分形式である。
+\end{mydef}
+
+\begin{mythm}{チャーン・ヴェイユの定理}{ch08-cw}
+$P$ を不変多項式とする。
+\begin{enumerate}
+\item $P(F)$ は閉形式：$dP(F)=0$。
+\item 同じ束上の2つの接続 $A_0$, $A_1$ について、$\eta=A_1-A_0$（大域的な $\mathfrak g$ 値1形式）、$A_t=A_0+t\eta$ とすると、$P$ が $k$ 次斉次のとき
+\[
+P(F_1)-P(F_0)=d\,Q,\qquad Q=k\int_0^1P(\eta,F_t,\dots,F_t)\,dt
+\]
+（$P(\cdot,\dots,\cdot)$ は $P$ の対称多重線形化）。$Q$ を\term{トランスグレッション形式}{transgression form}という。
+\end{enumerate}
+したがってド・ラーム類 $[P(F)]\in H^{2k}_{dR}(M)$ は接続によらず、束だけで決まる。
+\end{mythm}
+\begin{note}
+1 は $dP(F)=kP(DF,F,\dots,F)=0$（ビアンキ）から。2 は $\dot F_t=D_t\eta$ と $P(D_t\eta,F_t,\dots)=dP(\eta,F_t,\dots)$ による。$P=\tr X^2$ の場合を問題 \ref{ch08-prob-transg} で具体的に計算する。
+\end{note}
+
+\begin{mydef}{チャーン類・チャーン指標}{ch08-chern}
+エルミートな曲率 $F$ に対し（記法と規約）
+\[
+c(F)=\det\Bigl(1+\frac{F}{2\pi}\Bigr)=1+c_1+c_2+\cdots,\]\[\ch(F)=\tr\exp\Bigl(\frac{F}{2\pi}\Bigr)=\operatorname{rank}E+\ch_1+\ch_2+\cdots.
+\]
+低次では
+\[
+c_1=\ch_1=\frac{\tr F}{2\pi},\qquad c_2=\frac{1}{8\pi^2}\bigl(\tr F\wedge\tr F-\tr F\wedge F\bigr),\]\[\ch_2=\frac{1}{8\pi^2}\tr F\wedge F=\frac{c_1^2}{2}-c_2 .
+\]
+$SU(N)$ 束では $\tr F=0$ なので $c_1=0$、$c_2=-\ch_2$。$c_k(E)$ を\term{チャーン類}{Chern class}、$\ch(E)$ を\term{チャーン指標}{Chern character}という。
+\end{mydef}
+
+\begin{mythm}{整数性と基本性質}{ch08-int}
+\begin{enumerate}
+\item $c_k(E)$ は整数係数コホモロジー $H^{2k}(M;\Z)$ の元の実像である。特に閉曲面 $\Sigma$ 上 $\displaystyle\int_\Sigma c_1\in\Z$、閉4次元多様体上 $\displaystyle\int_Mc_2\in\Z$。
+\item ホイットニー和公式 $c(E\oplus E')=c(E)c(E')$、$\ch(E\oplus E')=\ch E+\ch E'$、$\ch(E\otimes E')=\ch E\cdot\ch E'$。
+\item 直線束 $L$ では $c(L)=1+c_1(L)$、$\ch L=e^{c_1(L)}$、$c_1(L^*)=-c_1(L)$、$c_1(L\otimes L')=c_1(L)+c_1(L')$。$S^2$ 上の直線束は $\int c_1=n\in\Z$ で完全に分類される（第7章の貼り合わせによる分類）。
+\end{enumerate}
+\end{mythm}
+整数性の直観：$S^2$ 上の $U(1)$ 束を北・南のパッチで書くと、$\int_{S^2}F=\oint_{\text{赤道}}(A_N-A_S)=\oint i\,g\,dg^{-1}$ で、推移関数 $g\colon S^1\to U(1)$ の巻き付き数の $2\pi$ 倍になる（問題 \ref{ch08-prob-monopole}）。同様に $S^4$ 上の $SU(2)$ 束のインスタントン数は、赤道 $S^3$ 上の推移関数の巻き付き数である。
+
+\begin{myex}{代表的な束の特性類}{ch08-exchar}
+\begin{itemize}
+\item 磁荷 $n$ の単極子束（$S^2$ 上）：$\int c_1=n$。
+\item $\CP^1$ 上の\term{トートロジカル直線束}{tautological line bundle} $L=\mathcal O(-1)$（ホップ束に同伴）：$\int c_1=-1$。その双対 $\mathcal O(1)$：$+1$（問題 \ref{ch08-prob-hopf}）。
+\item $\CP^n$ の接束：$c(T\CP^n)=(1+x)^{n+1}$。$x=c_1(\mathcal O(1))$、$\int_{\CP^n}x^n=1$（問題 \ref{ch08-prob-cpn}）。
+\item $\R^4\cup\{\infty\}=S^4$ 上の $k$ インスタントンの $SU(2)$ 束：$\int\ch_2=k$、$\int c_2=-k$。
+\end{itemize}
+\end{myex}
+
+\begin{mydef}{実ベクトル束の特性類}{ch08-pont}
+実ベクトル束 $E$（構造群 $O(n)$）の接続の曲率を実反対称行列値2形式 $R$ とする（$D=d+\omega$、$R=d\omega+\omega\wedge\omega$。エルミート表示では $F=iR$）。
+\begin{itemize}
+\item \term{ポントリャーギン類}{Pontryagin class}：$p(E)=\det\bigl(1+\tfrac{R}{2\pi}\bigr)=1+p_1+p_2+\cdots$、$p_1=-\dfrac{1}{8\pi^2}\tr R\wedge R$。複素化を用いて $p_k(E)=(-1)^kc_{2k}(E\otimes\C)$。
+\item \term{オイラー類}{Euler class}：向きのついた階数 $2m$ の束に対し $e(E)=\Pf\bigl(\tfrac{R}{2\pi}\bigr)$。階数 2 なら $e=\dfrac{R_{12}}{2\pi}$、階数 4 なら $e=\dfrac{1}{32\pi^2}\epsilon_{abcd}R_{ab}\wedge R_{cd}$。$e^2=p_m$。
+\item \term{シュティーフェル・ホイットニー類}{Stiefel--Whitney class} $w_k(E)\in H^k(M;\Z_2)$：$\Z_2$ 係数なので曲率では書けない。$w_1=0$ が向き付け可能性、$w_2=0$ がスピン構造の存在条件である（第7章）。ここでは述べるだけにする。
+\end{itemize}
+向き付けられた階数 2 の実束は複素直線束とみなせ、$e(E)=c_1(E)$ である。
+\end{mydef}
+
+\subsection{リーマン幾何とガウス・ボンネの定理}
+計量 $g$ をもつ $n$ 次元多様体で、正規直交枠 $e^a$（$g=\sum_ae^a\otimes e^a$）をとると、ねじれなしの条件 $de^a+\omega^a{}_b\wedge e^b=0$（$\omega_{ab}=-\omega_{ba}$）が\term{レヴィ・チヴィタ接続}{Levi-Civita connection}（スピン接続）$\omega$ を一意に定める。曲率 $R^a{}_b=d\omega^a{}_b+\omega^a{}_c\wedge\omega^c{}_b$。2次元では $R^1{}_2=K\,e^1\wedge e^2$（$K$ はガウス曲率、スカラー曲率は $R=2K$）。
+
+\begin{mythm}{ガウス・ボンネ・チャーンの定理}{ch08-gb}
+向き付けられた閉多様体 $M^{2m}$ について $\displaystyle\chi(M)=\int_Me(TM)$。特に
+\[
+\chi(\Sigma)=\frac{1}{2\pi}\int_\Sigma K\,dS=\frac{1}{4\pi}\int_\Sigma\sqrt h\,R\,d^2\sigma,\qquad\chi(M^4)=\frac{1}{32\pi^2}\int_M\epsilon_{abcd}R^{ab}\wedge R^{cd}.
+\]
+\end{mythm}
+2次元の\textbf{アインシュタイン・ヒルベルト作用は位相不変量}であり、局所的な力学をもたない。弦理論では世界面の作用にこの項が入り、種数 $g$ の世界面の寄与は $g_s^{-\chi}=g_s^{2g-2}$ で重みづけられる（問題 \ref{ch08-prob-gb}、第10章）。4次元ではオイラー密度は（ガウス・ボンネ項として）作用に加えても運動方程式を変えない。
+
+曲率の幾何学的な意味は、平行移動のずれである。$S^2$ 上で閉曲線に沿って接ベクトルを平行移動すると、囲んだ面積上の $\int K\,dS$ だけ回転する（下図、問題 \ref{ch08-prob-lc}）。
+\begin{center}
+\begin{tikzpicture}[scale=2.0]
+  \shade[ball color=blue!6,opacity=0.5] (0,0) circle (1);
+  \draw[thick] (0,0) circle (1);
+  \draw[gray,dashed] (1,0) arc[start angle=0,end angle=180,x radius=1,y radius=0.342];
+  \draw[gray] (-1,0) arc[start angle=180,end angle=360,x radius=1,y radius=0.342];
+  \fill[orange!25,opacity=0.8] plot[domain=0:90,samples=30] ({-0.707*sin(\x)},{0.94*cos(\x)-0.242*sin(\x)})
+     -- plot[domain=0:90,samples=30] ({-0.707*cos(\x)+0.707*sin(\x)},{-0.242*(cos(\x)+sin(\x))})
+     -- plot[domain=90:0,samples=30] ({0.707*sin(\x)},{0.94*cos(\x)-0.242*sin(\x)}) -- cycle;
+  \draw[very thick,blue!70!black,mid arrow] plot[domain=0:90,samples=30] ({-0.707*sin(\x)},{0.94*cos(\x)-0.242*sin(\x)});
+  \draw[very thick,blue!70!black,mid arrow] plot[domain=0:90,samples=30] ({-0.707*cos(\x)+0.707*sin(\x)},{-0.242*(cos(\x)+sin(\x))});
+  \draw[very thick,blue!70!black,mid arrow] plot[domain=90:0,samples=30] ({0.707*sin(\x)},{0.94*cos(\x)-0.242*sin(\x)});
+  \node[vtx] at (0,0.94) {}; \node[above] at (0,0.97) {\footnotesize $N$};
+  \node[vtx] at (-0.707,-0.242) {}; \node[left] at (-0.72,-0.25) {\footnotesize $A$};
+  \node[vtx] at (0.707,-0.242) {}; \node[right] at (0.72,-0.25) {\footnotesize $B$};
+  \draw[-{Stealth[length=1.8mm]},thick,red!70!black] (0,0.94) -- (-0.32,0.83);
+  \draw[-{Stealth[length=1.8mm]},thick,green!45!black] (0,0.94) -- (0.32,0.83);
+  \draw[-{Stealth[length=1.8mm]},thick,red!70!black] (-0.707,-0.242) -- (-0.707,-0.56);
+  \draw[-{Stealth[length=1.8mm]},thick,red!70!black] (0.707,-0.242) -- (0.707,-0.56);
+  \node[red!70!black] at (-0.45,1.0) {\footnotesize $v_0$};
+  \node[green!45!black] at (0.48,1.0) {\footnotesize $v_1$};
+\end{tikzpicture}
+\zucap{単位球面の8分の1の測地三角形 $N\to A\to B\to N$（3つの角はすべて直角、面積 $\pi/2$）。北極の接ベクトル $v_0$ を辺に沿って平行移動して戻ると $v_1$ になり、$\int K\,dS=\pi/2$ だけ回転している。}
+\end{center}
+
+\subsection{チャーン・サイモンズ形式と大きなゲージ変換}
+
+\begin{mydef}{チャーン・サイモンズ形式}{ch08-cs}
+\[
+CS(A)=\frac{1}{8\pi^2}\tr\Bigl(A\wedge dA-\frac{2i}{3}A\wedge A\wedge A\Bigr),\qquad dCS(A)=\frac{1}{8\pi^2}\tr F\wedge F=\ch_2(F).
+\]
+これは $A_0=0$、$A_1=A$ とした $\tr F^2$ のトランスグレッション形式（を $8\pi^2$ で割ったもの）である（問題 \ref{ch08-prob-transg}）。閉3次元多様体 $M^3$ 上の積分 $N_{CS}[A]=\int_{M^3}CS(A)$ を\term{チャーン・サイモンズ数}{Chern--Simons number}という。
+\end{mydef}
+
+\begin{mythm}{チャーン・サイモンズ形式のゲージ変換}{ch08-csgauge}
+$A^g=gAg^{-1}+i\,g\,dg^{-1}$ に対し
+\[
+CS(A^g)-CS(A)=-\frac{1}{24\pi^2}\tr\bigl(g^{-1}dg\bigr)^3+\frac{i}{8\pi^2}\,d\,\tr\bigl(g^{-1}dg\wedge A\bigr).
+\]
+したがって閉3次元多様体上で
+\[
+\int_{M^3}CS(A^g)=\int_{M^3}CS(A)-w(g),\qquad w(g)=\frac{1}{24\pi^2}\int_{M^3}\tr(g^{-1}dg)^3\in\Z .
+\]
+特に純ゲージ $A=i\,g\,dg^{-1}$ について $\int CS(i\,g\,dg^{-1})=-w(g)$。
+\end{mythm}
+証明は問題 \ref{ch08-prob-csgauge} で行う。符号は規約 $A\mapsto gAg^{-1}+i\,g\,dg^{-1}$ から決まり、「大きなゲージ変換 $w(g)=1$ はチャーン・サイモンズ数を $1$ だけ\textbf{下げる}」。
+
+\paragraph{向きについての注意.}
+$\R^4$ の向きを $d^4x=dx^1\wedge dx^2\wedge dx^3\wedge dx^4$ とし、無限遠の球面 $S^3_\infty$ には境界としての向き（外向き法線を先頭に置いたとき $\R^4$ の向きになるもの）を入れてストークスの定理 $\int_{B}d\alpha=\int_{\partial B}\alpha$ を用いる。写像
+\[
+g(x)=\frac{x^4\mathbf 1+i\,x^a\sigma^a}{\lvert x\rvert}\colon S^3_\infty\to SU(2)
+\]
+はこの向きに関して $w(g)=-1$ である（北極 $x=(0,0,0,1)$ で $\tr(g^{-1}dg)^3=12\,dx^1\wedge dx^2\wedge dx^3$、一方、境界の向きは $-dx^1\wedge dx^2\wedge dx^3$）。記法と規約の「恒等写像 $S^3\cong SU(2)$ が $w=1$」は、この向きの $S^3$ を $x\mapsto x^4-i\,x^a\sigma^a$ で $SU(2)$ と同一視したものと読めばよい。
+
+\begin{myex}{BPST インスタントン（正則ゲージ）}{ch08-bpst}
+$SU(2)$、$T^a=\sigma^a/2$ とし、\term{トフーフト記号}{'t Hooft symbol} $\eta^a_{\mu\nu}$ を
+\[
+\eta^a_{bc}=\epsilon_{abc},\quad\eta^a_{b4}=\delta_{ab},\quad\eta^a_{4b}=-\delta_{ab},\quad\eta^a_{44}=0\qquad(a,b,c=1,2,3)
+\]
+で定める（自己双対：$\tfrac12\epsilon_{\mu\nu\rho\sigma}\eta^a_{\rho\sigma}=\eta^a_{\mu\nu}$、$\epsilon_{1234}=1$）。中心 $0$、大きさ $\rho>0$ の\term{BPST インスタントン}{BPST instanton}は
+\[
+A_\mu=\frac{2\eta^a_{\mu\nu}x^\nu}{x^2+\rho^2}\,T^a=-i\,\frac{\operatorname{Im}(dX\,X^\dagger)_\mu}{x^2+\rho^2},\qquad X=x^4\mathbf 1+i\,x^a\sigma^a,
+\]
+で与えられ、
+\[
+F^a_{\mu\nu}=-\frac{4\rho^2\,\eta^a_{\mu\nu}}{(x^2+\rho^2)^2},\qquad F=*F,\qquad\tr F\wedge F=\frac{48\rho^4}{(x^2+\rho^2)^4}\,d^4x,\qquad k=1
+\]
+である（問題 \ref{ch08-prob-bpst1}, \ref{ch08-prob-bpst2}）。遠方で $A\to i\,g\,dg^{-1}$（$g=X/\lvert x\rvert$、$w(g)=-1$）となり、$k=\int_{S^3_\infty}CS=-w(g)=1$ と整合する。作用は $S_E=8\pi^2/g_{\mathrm{YM}}^2$。
+\end{myex}
+
+\begin{center}
+\begin{tikzpicture}[xscale=1.1,yscale=2.4]
+  \draw[-{Stealth[length=2mm]}] (-3.3,0) -- (3.5,0) node[right] {\footnotesize $x^1$};
+  \draw[-{Stealth[length=2mm]}] (0,-0.05) -- (0,1.25);
+  \draw[very thick,blue!70!black,domain=-3:3,samples=120,smooth] plot (\x,{1/(1+\x*\x)^4});
+  \draw[very thick,red!70!black,dashed,domain=-3:3,samples=120,smooth] plot (\x,{1/(1+\x*\x/2.56)^4});
+  \node[blue!70!black] at (1.3,0.85) {\footnotesize $\rho=1$};
+  \node[red!70!black] at (2.2,0.35) {\footnotesize $\rho=1.6$};
+  \node[left] at (0,1.05) {\footnotesize $\dfrac{\rho^8}{(x^2+\rho^2)^4}$};
+  \draw (1,0.03) -- (1,-0.03) node[below] {\footnotesize $1$};
+  \draw (-1,0.03) -- (-1,-0.03) node[below] {\footnotesize $-1$};
+\end{tikzpicture}
+\zucap{BPST インスタントンの作用密度 $\tr F_{\mu\nu}F_{\mu\nu}\propto\rho^4/(x^2+\rho^2)^4$ を原点での値で規格化したもの。大きさ $\rho$ は任意（古典的なスケール不変性）で、どの $\rho$ でも全作用は $8\pi^2/g_{\mathrm{YM}}^2$。}
+\end{center}
+
+\subsection{θ 真空とチャーン・サイモンズ・レベル}
+ユークリッド時間 $\tau$ をもつ $\R_\tau\times\R^3$ で、テンポラル・ゲージ $A_\tau=0$ をとり、各時刻の空間 $\R^3\cup\{\infty\}\cong S^3$ のチャーン・サイモンズ数を $N_{CS}(\tau)$ とすると（向きは $d\tau\wedge(\R^3\text{ の向き})$ が $\R^4$ の向きになるようにとる）
+\[
+k=\frac{1}{8\pi^2}\int\tr F\wedge F=N_{CS}(+\infty)-N_{CS}(-\infty).
+\]
+古典的真空 $A=i\,g\,dg^{-1}$ は $N_{CS}=-w(g)\in\Z$ をもち、インスタントンは $N_{CS}$ を $k$ だけ変えるトンネル過程である（下図）。大きなゲージ変換 $\mathcal T$（$w=1$）は $\lvert n\rangle\mapsto\lvert n-1\rangle$ と作用するので、その固有状態
+\[
+\lvert\theta\rangle=\sum_{n\in\Z}e^{-in\theta}\lvert n\rangle,\qquad\mathcal T\lvert\theta\rangle=e^{-i\theta}\lvert\theta\rangle
+\]
+が物理的な真空であり（\term{θ 真空}{θ vacuum}）、経路積分では $k$ セクターに重み $e^{i\theta k}$ がつく。これは作用に $\theta$ 項 $-i\theta\,\frac{1}{8\pi^2}\int\tr F\wedge F$ を加えるのと同じで（ユークリッド作用 $S_E$、重み $e^{-S_E}$）、$k\in\Z$ だから $\theta\sim\theta+2\pi$ である（問題 \ref{ch08-prob-theta}）。
+
+\begin{center}
+\begin{tikzpicture}[xscale=1.25,yscale=1.3]
+  \draw[-{Stealth[length=2mm]}] (-2.8,0) -- (2.9,0) node[right] {\footnotesize $N_{CS}$};
+  \draw[-{Stealth[length=2mm]}] (0,-0.1) -- (0,1.6) node[above] {\footnotesize $V$};
+  \draw[very thick,blue!70!black,domain=-2.5:2.5,samples=150,smooth] plot (\x,{sin(180*\x)*sin(180*\x)});
+  \foreach \n in {-2,-1,0,1,2} {\node[vtx] at (\n,0) {}; \node[below] at (\n,-0.05) {\footnotesize $\n$};}
+  \node[hvtx] at (0.5,1) {}; \node[above] at (0.5,1.03) {\footnotesize スファレロン};
+  \draw[-{Stealth[length=2mm]},red!70!black,thick,dashed] (-1,0.12) .. controls (-0.7,0.3) and (-0.3,0.3) .. (0,0.12);
+  \draw[-{Stealth[length=2mm]},red!70!black,thick,dashed] (1,0.12) .. controls (1.3,0.3) and (1.7,0.3) .. (2,0.12);
+  \node[red!70!black] at (-0.5,0.45) {\footnotesize $k=1$};
+  \node[red!70!black] at (1.5,0.45) {\footnotesize $k=1$};
+\end{tikzpicture}
+\zucap{ゲージ場の配位空間を $N_{CS}$ に沿って見た模式図。古典的真空は整数 $N_{CS}=n$ に並び、障壁の頂上（半整数）は電弱理論ではスファレロンに対応する。インスタントン（$k=1$）は障壁の下をくぐって $n\to n+1$ と移るトンネル過程。大きなゲージ変換は真空を互いに移すので、物理的な真空はその重ね合わせ $\lvert\theta\rangle$ である。}
+\end{center}
+
+\begin{myprop}{3次元チャーン・サイモンズ理論のレベル量子化}{ch08-cslevel}
+$SU(N)$ ゲージ場の3次元作用（$\tr$ は基本表現、$\tr T^aT^b=\tfrac12\delta^{ab}$）
+\[
+S_\kappa[A]=\frac{\kappa}{4\pi}\int_{M^3}\tr\Bigl(A\wedge dA-\frac{2i}{3}A\wedge A\wedge A\Bigr)=2\pi\kappa\int_{M^3}CS(A)
+\]
+は、大きなゲージ変換で $S_\kappa\mapsto S_\kappa-2\pi\kappa\,w(g)$ と変わる。$e^{iS_\kappa}$ がゲージ不変であるためには $\kappa\in\Z$ が必要である（問題 \ref{ch08-prob-cslevel}）。
+\end{myprop}
+
+\begin{physbox}[：本章の公式の使いどころ]
+\begin{itemize}
+\item 指数定理（第9章）は、ディラック作用素のゼロモードの数 $n_+-n_-$ を $\int\ch(F)\Ahat(TM)$ で与える。$\R^4$ 上では $\ind\slashed D=k$ で、これが 't Hooft 頂点・$U(1)_A$ 問題の解決につながる。
+\item アノマリー多項式と降下方程式（第9章）は、$\ch_2=dCS$ と本章のチャーン・サイモンズ形式のゲージ変換則を高次元に拡張したものである。
+\item コンパクト化（第10章）では、内部空間の $c_1$ や $\chi$ が世代数やフラックス量子化を決める。
+\end{itemize}
+\end{physbox}
+
+\section{問題}
+
+\subsection{接続・曲率・ホロノミー}
+
+\begin{problem}[難易度 A]\label{ch08-prob-bianchi}
+$A$ をエルミート行列値1形式、$F=dA-iA\wedge A$ とする。\\
+(1) $A^g=gAg^{-1}+i\,g\,dg^{-1}$ に対し $F^g:=dA^g-iA^g\wedge A^g=gFg^{-1}$ を示せ。\\
+(2) ビアンキ恒等式 $DF:=dF-i(A\wedge F-F\wedge A)=0$ を示せ。\\
+(3) 無限小ゲージ変換 $g=1+i\epsilon$ について $\delta A=d\epsilon-i[A,\epsilon]$ を示せ。\\
+(4) $U(1)$ の場合、(2) が $\nabla\cdot\bm B=0$、$\nabla\times\bm E+\partial_t\bm B=0$ を与えることを説明せよ（$F=\tfrac12F_{\mu\nu}dx^\mu\wedge dx^\nu$、$F_{0i}=-E_i$、$F_{ij}=\epsilon_{ijk}B_k$ とする）。
+\end{problem}
+
+\begin{solution}
+$\theta=g^{-1}dg$ とおく。$d(g^{-1})=-g^{-1}dg\,g^{-1}$ より $i\,g\,dg^{-1}=-i\,dg\,g^{-1}=g(-i\theta)g^{-1}$。よって $A^g=gBg^{-1}$、$B=A-i\theta$ と書ける。また $d\theta=d(g^{-1})\wedge dg=-\theta\wedge\theta$。
+
+(1) $dg=g\theta$、$dg^{-1}=-\theta g^{-1}$ を用いると
+\[
+d(gBg^{-1})=dg\wedge Bg^{-1}+g\,dB\,g^{-1}-gB\wedge dg^{-1}=g(\theta\wedge B+dB+B\wedge\theta)g^{-1}.
+\]
+したがって $F^g=g(dB+\theta B+B\theta-iB\wedge B)g^{-1}$（$\wedge$ を省略）。ここで
+\[
+dB=dA+i\theta^2,\qquad -iB^2=-iA^2-(A\theta+\theta A)+i\theta^2,\qquad\theta B+B\theta=\theta A+A\theta-2i\theta^2 .
+\]
+和をとると $\theta$ を含む項はすべて消え、$F^g=g(dA-iA^2)g^{-1}=gFg^{-1}$。
+
+(2) $dA=F+iA^2$ を微分すると $0=d(dA)=dF+i(dA\,A-A\,dA)$。$dA$ に再び $F+iA^2$ を代入すると、$A^3$ の項は打ち消し合い $dF=-i(FA-AF)=i(AF-FA)$。よって $DF=dF-i(AF-FA)=0$。
+
+(3) $g=1+i\epsilon$、$g^{-1}=1-i\epsilon$ として1次まで：$gAg^{-1}=A+i(\epsilon A-A\epsilon)$、$i\,g\,dg^{-1}=i(-i\,d\epsilon)=d\epsilon$。よって $\delta A=d\epsilon+i[\epsilon,A]=d\epsilon-i[A,\epsilon]=D\epsilon$。
+
+(4) $U(1)$ では $A\wedge F-F\wedge A=0$ なので $dF=0$。$F=F_{0i}dt\wedge dx^i+\tfrac12F_{ij}dx^i\wedge dx^j=-E_i\,dt\wedge dx^i+B_1dx^2\wedge dx^3+B_2dx^3\wedge dx^1+B_3dx^1\wedge dx^2$。$dF$ の $dx^1\wedge dx^2\wedge dx^3$ 成分は $\nabla\cdot\bm B$、$dt\wedge dx^j\wedge dx^k$ 成分は $\partial_tB_i+(\nabla\times\bm E)_i$（$(i,j,k)$ は巡回）であり、$dF=0$ はこれらがゼロであることを意味する。$F=dA$ と書けること（局所的なポテンシャルの存在）と同値な条件であり、ゲージ場を接続とみなす立場では斉次マクスウェル方程式は「方程式」ではなく恒等式である。
+\end{solution}
+
+\begin{problem}[難易度 B]\label{ch08-prob-transport}
+道 $\gamma\colon[0,1]\to M$ に沿う平行移動 $U(s)$ を、$D\psi=0$ の解 $\psi(s)=U(s)\psi(0)$ により定める。\\
+(1) $U(s)$ がみたす微分方程式を書き、それが $U(1)=P\exp\bigl(i\int_\gamma A\bigr)$（後の点が左）で解かれることを示せ。$U(1)$ ゲージ群なら $U=\exp(i\int_\gamma A)$ であることを確認せよ。\\
+(2) ゲージ変換 $A\mapsto A^g$ のもとで $U\mapsto g(\gamma(1))\,U\,g(\gamma(0))^{-1}$ を示せ。\\
+(3) ウィルソン・ループ $W(C)=\tr P\exp(i\oint_CA)$ がゲージ不変で、基点の取り方にもよらないことを示せ。また、$\bar\psi(x_1)U(\gamma)\psi(x_0)$ がゲージ不変な（非局所）演算子であることを説明せよ。
+\end{problem}
+
+\begin{solution}
+(1) $\mathcal A(s)=A_\mu(\gamma(s))\dot\gamma^\mu(s)$ とおく。$\gamma$ に沿う $D\psi=0$ は $\dot\psi=i\mathcal A(s)\psi$ なので
+\[
+\frac{dU}{ds}=i\mathcal A(s)U(s),\qquad U(0)=\mathbf 1 .
+\]
+積分方程式 $U(s)=\mathbf 1+i\int_0^s\mathcal A(s_1)U(s_1)ds_1$ を反復代入すると
+\[
+U(s)=\mathbf 1+i\int_0^s\!\mathcal A(s_1)ds_1+i^2\!\int_0^s\!ds_1\!\int_0^{s_1}\!ds_2\,\mathcal A(s_1)\mathcal A(s_2)+\cdots
+\]
+となり、各項は $s_1\ge s_2\ge\cdots$ の順に左から並ぶ。これが経路順序積 $P\exp(i\int\mathcal A\,ds)$ の定義である（級数は $\lVert\mathcal A\rVert$ が有界なら $\sum(\lVert\mathcal A\rVert s)^n/n!$ で抑えられ収束する）。$U(1)$ では $\mathcal A(s)$ は数で互いに可換なので、$n$ 次の項は $\frac{i^n}{n!}(\int_0^s\mathcal A)^n$ となり $U=\exp(i\int_\gamma A)$。
+
+(2) $\tilde U(s)=g(s)U(s)g(0)^{-1}$（$g(s)=g(\gamma(s))$）とおくと
+\[
+\frac{d\tilde U}{ds}=\dot g\,Ug(0)^{-1}+g\,i\mathcal AUg(0)^{-1}=\bigl(\dot g g^{-1}+i\,g\mathcal Ag^{-1}\bigr)\tilde U .
+\]
+一方 $A^g$ の引き戻しは $\mathcal A^g=g\mathcal Ag^{-1}+i\,g\,\tfrac{d}{ds}g^{-1}=g\mathcal Ag^{-1}-i\dot gg^{-1}$ なので $i\mathcal A^g=i\,g\mathcal Ag^{-1}+\dot gg^{-1}$。よって $\tilde U$ は $A^g$ に対する方程式 $d\tilde U/ds=i\mathcal A^g\tilde U$ と初期条件 $\tilde U(0)=\mathbf 1$ をみたし、常微分方程式の解の一意性から $U[A^g]=g(\gamma(1))U[A]g(\gamma(0))^{-1}$。
+
+(3) 閉曲線では $\gamma(1)=\gamma(0)=x_0$ なので $U\mapsto g(x_0)Ug(x_0)^{-1}$、トレースの巡回性から $W$ は不変。基点を $C$ 上の別の点 $x_0'$ に移すと、$C$ を $x_0\to x_0'$ の部分 $\alpha$ と $x_0'\to x_0$ の部分 $\beta$ に分けて $U_{x_0}=U(\beta)U(\alpha)$、$U_{x_0'}=U(\alpha)U(\beta)$ となり、トレースは等しい。
+
+$\psi\mapsto g\psi$、$\bar\psi\mapsto\bar\psi g^{-1}$（$\bar\psi=\psi^\dagger\gamma^0$、$g$ はユニタリ）なので
+\[
+\bar\psi(x_1)U(\gamma)\psi(x_0)\mapsto\bar\psi(x_1)g(x_1)^{-1}\,g(x_1)U(\gamma)g(x_0)^{-1}\,g(x_0)\psi(x_0)=\bar\psi(x_1)U(\gamma)\psi(x_0).
+\]
+これは離れた点のクォーク・反クォークを「ゲージひも」で結んだ演算子であり、格子ゲージ理論ではリンク変数の積として現れる。
+\end{solution}
+
+\begin{problem}[難易度 A]\label{ch08-prob-ab}
+半径 $a$ の無限に長いソレノイドの外 $r>a$ で $U(1)$ ゲージ場が $A=\dfrac{\Phi}{2\pi}d\varphi$（円柱座標）であるとする。\\
+(1) $r>a$ で $F=0$ であることを確かめ、ソレノイドを1周する閉曲線 $C$ に沿う電荷 $q$ の粒子のホロノミー $e^{iq\oint_CA}$ を求めよ。\\
+(2) $q\Phi\in2\pi\Z$ のとき、$r>a$ の領域で $A$ は（電荷 $q$ の場に対する）$A=d\beta$（$e^{iq\beta}$ は一価）と純ゲージの形に書けることを示せ。$q\Phi\notin2\pi\Z$ のときは書けないことを示せ。\\
+(3) 定理 \ref{thm:ch08-flat} の言葉で (1), (2) を言いかえ、AB 効果の干渉縞のずれが何で決まるかを述べよ。
+\end{problem}
+
+\begin{solution}
+(1) $d\varphi$ は閉形式（局所的には関数 $\varphi$ の微分）なので $F=dA=\frac{\Phi}{2\pi}d(d\varphi)=0$。$\oint_Cd\varphi=2\pi$（$C$ が $z$ 軸を正の向きに1周）より $\oint_CA=\Phi$、ホロノミーは $e^{iq\Phi}$。ソレノイド内部の磁束が $\Phi$ であることと、ストークスの定理 $\oint_CA=\int_SF$ は整合している（$S$ はソレノイドを横切る）。
+
+(2) 電荷 $q$ の場 $\psi$ に対するゲージ変換 $\psi\mapsto e^{iq\beta}\psi$ のもとで $A\mapsto A+d\beta$（記法と規約で $g=e^{iq\beta}$、$qA\mapsto qA+i\,g\,dg^{-1}=qA+q\,d\beta$）。$A=d\beta$ となるのは $\beta=\frac{\Phi}{2\pi}\varphi+\text{定数}$ のときに限る（$r>a$ は連結で、$d(\beta-\frac{\Phi}{2\pi}\varphi)=0$ だから）。$e^{iq\beta}=e^{iq\Phi\varphi/2\pi}$ が $\varphi\to\varphi+2\pi$ で一価であることは $q\Phi\in2\pi\Z$ と同値。したがって $q\Phi\in2\pi\Z$ なら $A$ は（電荷 $q$ の粒子にとって）ゲージ変換で $0$ にでき、そうでなければできない。
+
+(3) $r>a$ の領域は $\R^2\setminus D^2$（$\times\R$）で、$\pi_1=\Z$。平坦接続のゲージ同値類は $\Hom(\Z,U(1))=U(1)$、すなわち生成元のホロノミー $e^{iq\Phi}$ で完全に分類される。$e^{iq\Phi}=1$ なら自明な類（純ゲージ）で、そうでなければ $F=0$ でも自明でない。二重スリット実験で、ソレノイドの両側を通る2つの経路の振幅の相対位相は $e^{iq\oint_CA}=e^{iq\Phi}$ だけずれ、干渉縞は $q\Phi$ を $2\pi$ を法として決まる量だけずれる。観測されるのはゲージ不変なホロノミーであり、局所的な場の強さ（$F=0$）ではない。
+\end{solution}
+
+\begin{problem}[難易度 B]\label{ch08-prob-monopole}
+$S^2$ を $U_N=S^2\setminus\{\text{南極}\}$、$U_S=S^2\setminus\{\text{北極}\}$ で覆い、実数 $n$ に対して
+\[
+A_N=\frac n2(1-\cos\theta)\,d\varphi,\qquad A_S=-\frac n2(1+\cos\theta)\,d\varphi
+\]
+とおく（$\theta$ は北極からの角、$S^2$ の向きは $d\theta\wedge d\varphi$、すなわち外向き法線）。\\
+(1) $A_N$ が北極で、$A_S$ が南極で滑らかであることを説明し、$F=dA_N=dA_S$ と $\int_{S^2}F$ を求めよ。\\
+(2) 緯度 $\theta_0$ の円 $C$（$\varphi$ 増加の向き）に沿うホロノミー（電荷 $1$）を $A_N$ と $A_S$ で別々に計算し、北側の帽子の立体角 $\Omega=2\pi(1-\cos\theta_0)$ で表せ。両者が一致するための条件を求めよ。\\
+(3) $U_N\cap U_S$ 上で $A_N=A_S+i\,g\,dg^{-1}$ となる推移関数 $g$ を求め、$n\in\Z$ のとき $c_1=\frac1{2\pi}\int F$ が $g\colon S^1\to U(1)$ の巻き付き数に等しいことを確かめよ。
+\end{problem}
+
+\begin{solution}
+(1) 北極付近で $1-\cos\theta\approx\theta^2/2$ なので $A_N\approx\frac n4\theta^2d\varphi=\frac n4(x\,dy-y\,dx)$（$x=\theta\cos\varphi$, $y=\theta\sin\varphi$ は北極付近の直交座標）で滑らか。$A_S$ も南極付近で $1+\cos\theta\approx(\pi-\theta)^2/2$ により同様。一方 $A_N$ は南極で $-n\,d\varphi$ に近づき、$d\varphi$ が特異なので滑らかでない（ディラック・ストリング）。
+\[
+F=dA_N=\frac n2\sin\theta\,d\theta\wedge d\varphi=dA_S,\qquad\int_{S^2}F=\frac n2\cdot4\pi=2\pi n .
+\]
+
+(2) $\oint_CA_N=\frac n2(1-\cos\theta_0)\cdot2\pi=\frac n2\Omega$。$\oint_CA_S=-\frac n2(1+\cos\theta_0)\cdot2\pi=\frac n2\Omega-2\pi n$。これはストークスの定理とも整合する：$C$ は北側の帽子 $D_N$ の正の向きの境界、南側の帽子 $D_S$ の負の向きの境界なので、$\oint_CA_N=\int_{D_N}F=\frac n2\Omega$、$\oint_CA_S=-\int_{D_S}F=-\frac n2(4\pi-\Omega)$。ホロノミーは
+\[
+e^{i\oint A_N}=e^{in\Omega/2},\qquad e^{i\oint A_S}=e^{in\Omega/2}e^{-2\pi in}
+\]
+であり、一致する（粒子がどちらのパッチで記述されても物理が同じ）ための条件は $e^{2\pi in}=1$、すなわち $n\in\Z$。これがホロノミーから見たディラックの量子化条件である。
+
+(3) $A_N-A_S=n\,d\varphi$。$g=e^{in\varphi}$ とすると $i\,g\,dg^{-1}=i\cdot(-in)\,d\varphi=n\,d\varphi$。よって $g_{NS}=e^{in\varphi}$（$\psi_N=e^{in\varphi}\psi_S$）で、$n\in\Z$ のときに限り一価。赤道 $C$ に対し
+\[
+\int_{S^2}F=\int_{D_N}dA_N+\int_{D_S}dA_S=\oint_CA_N-\oint_CA_S=\oint_Cn\,d\varphi=2\pi n,
+\]
+すなわち $c_1=n$ は $g_{NS}\colon S^1\to U(1)$, $\varphi\mapsto e^{in\varphi}$ の巻き付き数 $\frac1{2\pi i}\oint g^{-1}dg=n$ に等しい。第7章の「$S^2$ 上の $U(1)$ 束は $\pi_1(U(1))=\Z$ で分類される」ことの微分形式による表現である。
+\end{solution}
+
+\begin{problem}[難易度 B]\label{ch08-prob-torus}
+2次元トーラス $T^2=\R^2/\Z^2$（座標 $(x,y)\sim(x+1,y)\sim(x,y+1)$）上の平坦接続を考える。定理 \ref{thm:ch08-flat} を用いてよい。\\
+(1) $G=U(1)$ のとき、平坦接続のゲージ同値類が $A=a\,dx+b\,dy$（$a,b$ 定数）で代表され、$(a,b)\sim(a+2\pi m,b+2\pi n)$（$m,n\in\Z$）が同値類を与えること、したがってモジュライ空間がトーラス $T^2$ であることを示せ。どのようなゲージ変換が $(a,b)$ をずらすか。\\
+(2) $G=SU(2)$ のとき、互いに可換な $U,V\in SU(2)$ は同時に $\exp(i\alpha\sigma^3)$ の形に共役できることを示し、平坦接続のモジュライ空間が $(\alpha,\beta)\in T^2$ を $(\alpha,\beta)\sim(-\alpha,-\beta)$ で割った空間（「枕カバー」）であることを示せ。固定点はいくつあり、どのようなホロノミーに対応するか。\\
+(3) 物理的な意味：コンパクト化された次元に沿ったウィルソン線の真空期待値（ホソトニ機構）や、トーラス上のゲージ理論の古典的真空として、(1), (2) を解釈せよ。
+\end{problem}
+
+\begin{solution}
+$\pi_1(T^2)=\Z^2$ は生成元 $\gamma_x$（$x$ 方向に1周）と $\gamma_y$ をもつ可換群であり、$\Hom(\Z^2,G)=\{(U,V)\in G^2:UV=VU\}$。
+
+(1) $U(1)$ では $\Hom(\Z^2,U(1))=U(1)\times U(1)$、共役作用は自明。$A=a\,dx+b\,dy$ は平坦で、ホロノミーは $(e^{ia},e^{ib})$。定理 \ref{thm:ch08-flat} により、平坦接続の類はホロノミーの組で決まるので、任意の平坦接続はある $(a,b)$ の $A$ とゲージ同値であり、$(a,b)$ と $(a',b')$ が同値 $\iff$ $e^{ia}=e^{ia'}$ かつ $e^{ib}=e^{ib'}$ $\iff$ $(a'-a,b'-b)\in2\pi\Z^2$。モジュライ空間は $\R^2/2\pi\Z^2\cong T^2$。
+
+（直接の議論：$F=dA=0$ で、$a=\oint_{\gamma_x}A$, $b=\oint_{\gamma_y}A$ とおけば $A-a\,dx-b\,dy$ は周期がすべて $0$ の閉1形式なので完全形式 $d\beta$ であり（第5章）、ゲージ変換 $e^{-i\beta}$ で消せる。）
+
+$(a,b)$ をずらすのは「大きなゲージ変換」$g=e^{2\pi i(mx+ny)}$ で、$T^2$ 上一価であり、$i\,g\,dg^{-1}=2\pi(m\,dx+n\,dy)$。これは $T^2\to U(1)$ の写像のホモトピー類 $[T^2,S^1]\cong\Z^2$ の非自明な元であり、連続的に恒等変換に変形できない。
+
+(2) $U$ はユニタリなので対角化でき、固有値は $e^{\pm i\alpha}$。(i) $U\ne\pm\mathbf 1$ なら固有値は異なり、$UV=VU$ から $V$ は $U$ の各固有空間を保つので、$U$ を対角化する基底で $V$ も対角。(ii) $U=\pm\mathbf 1$ なら $V$ を対角化すればよい（$U$ はどの基底でも対角）。いずれも基底変換は $SU(2)$ でとれる（ユニタリ行列に位相をかけて行列式を $1$ にする）。よって $(U,V)=h(e^{i\alpha\sigma^3},e^{i\beta\sigma^3})h^{-1}$。
+
+対角形どうしの同値性：$\mathrm{diag}$ の組が $h$ で共役なら、固有値の組 $\{e^{\pm i\alpha}\}$ が保たれ、同時固有ベクトルの対応から $h$ は対角行列（$(\alpha,\beta)$ 不変）か $w=i\sigma^2$ 倍の対角行列（$w\sigma^3w^{-1}=-\sigma^3$ により $(\alpha,\beta)\mapsto(-\alpha,-\beta)$）に限られる（ワイル群 $\Z_2$）。$\alpha$, $\beta$ は $2\pi$ 周期なので
+\[
+\mathcal M_{\text{flat}}(T^2,SU(2))=\bigl(\R^2/2\pi\Z^2\bigr)\big/\bigl((\alpha,\beta)\sim(-\alpha,-\beta)\bigr).
+\]
+対応する接続は $A=(\alpha\,dx+\beta\,dy)\sigma^3$（ホロノミー $P\exp(i\oint A)=e^{i\alpha\sigma^3}$ など）。$\Z_2$ 作用の固定点は $(\alpha,\beta)\equiv(-\alpha,-\beta)$、すなわち $\alpha,\beta\in\{0,\pi\}$ の4点で、ホロノミーが中心 $\{\pm\mathbf 1\}$ に値をとる4つの平坦接続である（$U,V\in\{\pm\mathbf 1\}$）。商空間は4つの角をもつ球面（枕カバー）と同相である。
+
+(3) 時空 $\R^{d}\times T^2$ でコンパクトな方向に沿う定数ゲージ場 $A_x$, $A_y$ は、$F=0$ なので古典的エネルギーをもたず、その値はホロノミー（ウィルソン線）を通してのみ物理に効く。(1) の周期性は、大きなゲージ変換が $A_x$ を $2\pi$ ずらすことを表し、ウィルソン線の期待値の空間がトーラスになる（弦理論の T 双対性ではこの $(a,b)$ が双対トーラス上の D ブレーンの位置になる）。(2) では、$e^{i\alpha\sigma^3}$ が $\pm\mathbf 1$ でないときゲージ群は $U(1)$ に破れる（ウィルソン線による対称性の破れ、ホソトニ機構）。固定点ではホロノミーが中心にあり $SU(2)$ が破れない。
+\end{solution}
+
+\subsection{ベリー位相}
+
+\begin{problem}[難易度 B]\label{ch08-prob-berry}
+(1) 時間に依存するハミルトニアン $H(\lambda(t))$ のもとで、断熱近似の状態を $\lvert\psi(t)\rangle=c(t)\lvert n(\lambda(t))\rangle$ と書く。シュレーディンガー方程式から $c(t)=e^{-i\int E_n dt}e^{i\int\mathcal A}$（$\mathcal A=i\langle n|dn\rangle$）を導き、$\mathcal A$ が実であること、$c$ のうち幾何学的な部分が $(d-i\mathcal A)c=0$（記法と規約の平行移動）をみたすことを示せ。\\
+(2) 磁場中のスピン $1/2$、$H=-\mu\bm B\cdot\bm\sigma$（$\mu>0$）の基底状態は $\hat{\bm n}\cdot\bm\sigma\lvert+\rangle=\lvert+\rangle$（$\hat{\bm n}=\bm B/\lvert\bm B\rvert=(\sin\theta\cos\varphi,\sin\theta\sin\varphi,\cos\theta)$）をみたす。
+\[
+\lvert+\rangle_N=\begin{pmatrix}\cos\frac\theta2\\ e^{i\varphi}\sin\frac\theta2\end{pmatrix}
+\]
+についてベリー接続 $\mathcal A_N$ と曲率 $\mathcal F$ を求め、$\hat{\bm n}$ が緯度 $\theta_0$ の円を $\varphi$ の増える向きに1周したときのベリー位相を、囲む立体角 $\Omega$ で表せ。\\
+(3) $\mathcal F$ を $\bm B$ 空間の2形式として書き、それが原点に置かれた磁荷 $-\frac12$（$\frac1{2\pi}\int_{S^2}\mathcal F=-1$）の単極子の場であることを示せ。南極で滑らかなゲージ $\lvert+\rangle_S$ を求め、問題 \ref{ch08-prob-monopole} と比較せよ。\\
+(4) 励起状態 $\lvert-\rangle$ のベリー位相はどうなるか。2つの準位のベリー曲率の和について述べよ。
+\end{problem}
+
+\begin{solution}
+(1) $i\partial_t\lvert\psi\rangle=H\lvert\psi\rangle$ に代入し、断熱近似（他の準位への遷移を無視）で $\langle n|$ を作用させると
+\[
+i\dot c+i c\langle n|\dot n\rangle=E_nc\quad\Longrightarrow\quad\dot c=-iE_nc+i\bigl(i\langle n|\dot n\rangle\bigr)c .
+\]
+よって $c(t)=e^{-i\int_0^tE_ndt'}e^{i\int\mathcal A}c(0)$、$\mathcal A=i\langle n|dn\rangle$。$\langle n|n\rangle=1$ を微分して $\langle dn|n\rangle+\langle n|dn\rangle=0$、つまり $\langle n|dn\rangle$ は純虚数なので $\mathcal A$ は実。動的位相を除いた $\tilde c=e^{i\int\mathcal A}$ は $d\tilde c=i\mathcal A\tilde c$、すなわち $(d-i\mathcal A)\tilde c=0$ をみたし、記法と規約の $D=d-iA$ による平行移動である。閉曲線を1周したときの位相 $\gamma=\oint\mathcal A$ はホロノミー $e^{i\oint\mathcal A}$ を与える。
+
+(2) $\lvert+\rangle_N$ を微分すると $d\lvert+\rangle_N=\bigl(-\tfrac12\sin\tfrac\theta2\,d\theta,\ e^{i\varphi}(\tfrac12\cos\tfrac\theta2\,d\theta+i\sin\tfrac\theta2\,d\varphi)\bigr)^T$。よって
+\[
+\langle+|d+\rangle=-\tfrac12\sin\tfrac\theta2\cos\tfrac\theta2\,d\theta+\tfrac12\sin\tfrac\theta2\cos\tfrac\theta2\,d\theta+i\sin^2\tfrac\theta2\,d\varphi=i\sin^2\tfrac\theta2\,d\varphi,
+\]
+\[
+\mathcal A_N=-\sin^2\tfrac\theta2\,d\varphi=-\tfrac12(1-\cos\theta)\,d\varphi,\qquad\mathcal F=d\mathcal A_N=-\tfrac12\sin\theta\,d\theta\wedge d\varphi .
+\]
+$\theta=0$ では $\lvert+\rangle_N=(1,0)^T$ で $\varphi$ によらず、$\mathcal A_N$ も滑らか。緯度 $\theta_0$ の円では
+\[
+\gamma=\oint\mathcal A_N=-\pi(1-\cos\theta_0)=-\frac{\Omega}{2},\qquad\Omega=2\pi(1-\cos\theta_0).
+\]
+（ストークスにより $\gamma=\int_{\text{北の帽子}}\mathcal F=-\frac12\Omega$ と一般の閉曲線に拡張される。）例えば赤道を1周すると $\gamma=-\pi$ で、状態の符号が反転する。
+
+(3) $\bm B$ 空間（原点を除く）では $\hat{\bm n}=\bm B/\lvert\bm B\rvert$ を通して
+\[
+\mathcal F=-\frac12\,\frac{\epsilon_{ijk}B_i\,dB_j\wedge dB_k}{2\lvert\bm B\rvert^3},
+\]
+（単位球面に制限すると $\epsilon_{ijk}n_idn_j\wedge dn_k=2\sin\theta\,d\theta\wedge d\varphi$ だから一致）。これは $\mathcal F=\frac12\mathcal F_{ij}dB_i\wedge dB_j$、$\mathcal F_{ij}=\epsilon_{ijk}\mathcal B_k$ と書いたとき「磁場」$\bm{\mathcal B}=-\frac12\bm B/\lvert\bm B\rvert^3$、すなわち原点の磁荷 $-\frac12$ の単極子場であり、全束 $\int_{S^2}\mathcal F=-2\pi$。単極子の位置はエネルギー準位の縮退点 $\bm B=0$ である。
+
+$\lvert+\rangle_N$ は南極で $(0,e^{i\varphi})^T$ となり $\varphi$ に依存するので特異。$\lvert+\rangle_S=e^{-i\varphi}\lvert+\rangle_N=(e^{-i\varphi}\cos\frac\theta2,\sin\frac\theta2)^T$ は南極で $(0,1)^T$ と滑らか。$\lvert n\rangle\mapsto e^{i\alpha}\lvert n\rangle$ で $\mathcal A\mapsto\mathcal A-d\alpha$ なので（$\alpha=-\varphi$）
+\[
+\mathcal A_S=\mathcal A_N+d\varphi=\tfrac12(1+\cos\theta)\,d\varphi .
+\]
+これは問題 \ref{ch08-prob-monopole} の $A_N$, $A_S$ で $n=-1$ としたものに一致し、$c_1=-1$。
+
+(4) $\lvert-\rangle_N=(-e^{-i\varphi}\sin\frac\theta2,\cos\frac\theta2)^T$（北極で滑らか）について同様に $\langle-|d-\rangle=-i\sin^2\frac\theta2\,d\varphi$、$\mathcal A^{(-)}_N=+\frac12(1-\cos\theta)d\varphi$、ベリー位相 $+\Omega/2$、チャーン数 $+1$。2準位のベリー曲率の和は $0$ である。これは $\lvert+\rangle$, $\lvert-\rangle$ の張る束が自明な束 $S^2\times\C^2$ であり、$c_1$ の和（ホイットニー和公式）が $c_1(\text{自明束})=0$ になることの反映である。
+\end{solution}
+
+\begin{problem}[難易度 C]\label{ch08-prob-spinj}
+スピン $j$ の表現で、$\hat{\bm n}(\theta,\varphi)$ 方向を向いた状態（スピン・コヒーレント状態）を
+\[
+\lvert\hat{\bm n};m\rangle=e^{-i\varphi J_z}e^{-i\theta J_y}\lvert j,m\rangle\qquad(m=-j,\dots,j)
+\]
+とおく。$\hat{\bm n}\cdot\bm J\lvert\hat{\bm n};m\rangle=m\lvert\hat{\bm n};m\rangle$ を認めてよい。\\
+(1) $\mathcal A=i\langle\hat{\bm n};m|d|\hat{\bm n};m\rangle=m\cos\theta\,d\varphi$ を示せ。\\
+(2) $\lvert\hat{\bm n};m\rangle$ は半整数 $j$ では $\varphi\mapsto\varphi+2\pi$ で一価でなく、また北極でも滑らかでない。$\lvert\hat{\bm n};m\rangle_N=e^{im\varphi}\lvert\hat{\bm n};m\rangle$ が北極の近傍で一価かつ滑らかであることを示し、$\mathcal A_N$ を求めよ。\\
+(3) 状態 $\lvert\hat{\bm n};m\rangle$ のなす直線束のチャーン数が $-2m$、特に最高ウェイト状態 $m=j$ では $-2j$ であることを示し、全ての $m$ について和をとると $0$ になる理由を述べよ。\\
+(4) スピンの経路積分では、作用にベリー位相 $-j\,\Omega[\hat{\bm n}(t)]$ が現れる（$\Omega$ は $\hat{\bm n}(t)$ の描く閉曲線が囲む立体角）。立体角は北側の領域と南側の領域のどちらで測るかで $4\pi$ だけ異なる。$e^{-ij\Omega}$ が well-defined であるための条件を求め、ディラックの量子化条件と比較せよ。
+\end{problem}
+
+\begin{solution}
+(1) $\lvert\hat{\bm n};m\rangle=R\lvert j,m\rangle$、$R=e^{-i\varphi J_z}e^{-i\theta J_y}$ とすると
+\[
+d\lvert\hat{\bm n};m\rangle=-i\,d\varphi\,J_zR\lvert j,m\rangle+e^{-i\varphi J_z}(-i\,d\theta\,J_y)e^{-i\theta J_y}\lvert j,m\rangle .
+\]
+$\langle\hat{\bm n};m|$ をかけると
+\[
+\langle\hat{\bm n};m|d|\hat{\bm n};m\rangle=-i\,d\varphi\,\langle j,m|e^{i\theta J_y}J_ze^{-i\theta J_y}|j,m\rangle-i\,d\theta\,\langle j,m|J_y|j,m\rangle .
+\]
+$\langle J_y\rangle=0$（$J_y=(J_+-J_-)/2i$ は $m$ を変える）。$e^{i\theta J_y}J_ze^{-i\theta J_y}=J_z\cos\theta-J_x\sin\theta$（$y$ 軸まわりの回転、符号は $\langle J_x\rangle=0$ なので結果に効かない）より期待値は $m\cos\theta$。よって $\langle d\rangle=-im\cos\theta\,d\varphi$、$\mathcal A=m\cos\theta\,d\varphi$。
+
+(2) $e^{-2\pi iJ_z}\lvert j,m'\rangle=e^{-2\pi im'}\lvert j,m'\rangle=(-1)^{2j}\lvert j,m'\rangle$（$m'-j\in\Z$）なので、$\varphi\mapsto\varphi+2\pi$ で $\lvert\hat{\bm n};m\rangle\mapsto(-1)^{2j}\lvert\hat{\bm n};m\rangle$。さらに $\theta=0$ で $\lvert\hat{\bm n};m\rangle=e^{-im\varphi}\lvert j,m\rangle$ は $\varphi$ に依存し、北極（$\varphi$ が定義されない点）で連続でない。$e^{im\varphi}$ をかけると、$\theta=0$ で $\lvert j,m\rangle$ となり $\varphi$ によらず、また $e^{2\pi im}(-1)^{2j}=e^{2\pi i(m-j)}e^{2\pi ij}(-1)^{2j}=1$（$e^{2\pi ij}=(-1)^{2j}$）なので一価。このとき $\mathcal A\mapsto\mathcal A-d(m\varphi)$ だから
+\[
+\mathcal A_N=-m(1-\cos\theta)\,d\varphi .
+\]
+同様に $\lvert\hat{\bm n};m\rangle_S=e^{-im\varphi}\lvert\hat{\bm n};m\rangle$ は南極付近で一価かつ滑らかである。実際 $\theta=\pi$ では $e^{-i\pi J_y}\lvert j,m\rangle=c\lvert j,-m\rangle$（$c$ は定数の位相）、$e^{-i\varphi J_z}\lvert j,-m\rangle=e^{im\varphi}\lvert j,-m\rangle$ なので $\lvert\hat{\bm n};m\rangle_S=c\lvert j,-m\rangle$ は $\varphi$ によらない。このとき $\mathcal A_S=\mathcal A+d(m\varphi)=m(1+\cos\theta)\,d\varphi$。
+
+(3) $\mathcal F=d\mathcal A_N=-m\sin\theta\,d\theta\wedge d\varphi$、$\frac1{2\pi}\int_{S^2}\mathcal F=-\frac{m}{2\pi}\cdot4\pi=-2m$。貼り合わせは $\lvert\cdot\rangle_N=e^{2im\varphi}\lvert\cdot\rangle_S$ で、状態の係数（断面の成分）は $c_N=e^{-2im\varphi}c_S$ と変換する。推移関数 $e^{-2im\varphi}$ の巻き付き数 $-2m$ がチャーン数に一致する（$\mathcal A_N-\mathcal A_S=-2m\,d\varphi$、問題 \ref{ch08-prob-monopole} で $n=-2m$ の場合）。$m=j$ では $-2j$。$j=\frac12$ では問題 \ref{ch08-prob-berry} の $-1$ に一致する。
+
+$2j+1$ 個の直線束の直和は、各点で $\{\lvert\hat{\bm n};m\rangle\}_m$ が張る空間、すなわちスピン $j$ 表現空間全体 $\C^{2j+1}$ であり、$S^2\times\C^{2j+1}$ という自明な束である。ホイットニー和公式より $\sum_mc_1=c_1(\text{自明束})=0$。実際 $\sum_{m=-j}^j(-2m)=0$。
+
+(4) 2つの測り方の差は $\Omega_N-(-\Omega_S)=\Omega_N+\Omega_S=4\pi$（南側の領域は逆向きに囲まれる）なので、$e^{-ij\Omega}$ の不定性は $e^{-4\pi ij}$。これが $1$ となる条件は $2j\in\Z$。すなわちスピンの大きさの量子化は、「磁荷 $-j$（全磁束 $-4\pi j$）の単極子の場の中を運動する電荷 $1$ の粒子」に対するディラックの量子化条件 $\int F\in2\pi\Z$、すなわち $2j\in\Z$ と同じものである（(3) のチャーン数 $-2j$ が整数であること）。
+\end{solution}
+
+\begin{problem}[難易度 B]\label{ch08-prob-hopf}
+$\CP^1$ の点 $[z_1:z_2]$ に複素直線 $\ell=\C(z_1,z_2)\subset\C^2$ を対応させる直線束 $L=\{([z],v):v\in\ell\}$ を\textbf{トートロジカル直線束}という。$\C^2$ の内積から誘導されるエルミート計量のもとで、単位長さの局所切断 $s$ に対し $\mathcal A=i\,s^\dagger ds$ とおく（$\C^2$ の自明な接続を $L$ に射影したもの）。\\
+(1) $w=z_2/z_1$ を座標とするパッチで $s_N(w)=(1,w)/\sqrt{1+\lvert w\rvert^2}$ とする。$\mathcal A_N$ と $\mathcal F=d\mathcal A_N$ を $w=\varrho e^{i\varphi}$ で表し、$\CP^1$ の複素構造による向き（$w$ 平面で $d(\mathrm{Re}\,w)\wedge d(\mathrm{Im}\,w)$）に関して $\int_{\CP^1}\mathcal F/2\pi=-1$ を示せ。\\
+(2) $L$ の単位ベクトル全体が $S^3$ であり、$S^3\to\CP^1\cong S^2$ がホップ写像（ホップ束、第7章）であることを説明せよ。また $w=\tan\frac\theta2e^{i\varphi}$ とおくと、$s_N$ が問題 \ref{ch08-prob-berry} の $\lvert+\rangle_N$ と一致することを確かめよ。\\
+(3) 双対束 $L^*=\mathcal O(1)$ と $L^{\otimes n}$ の $c_1$ を求め、磁荷 $n$ の単極子束をこれらで表せ。
+\end{problem}
+
+\begin{solution}
+(1) $N=1+\lvert w\rvert^2$、$s=N^{-1/2}(1,w)$ とする。
+\[
+s^\dagger ds=N^{-1/2}(1,\bar w)\cdot\bigl[N^{-1/2}(0,dw)+(1,w)\,d(N^{-1/2})\bigr]=\frac{\bar w\,dw}{N}+N^{1/2}d(N^{-1/2})=\frac{\bar w\,dw}{N}-\frac{dN}{2N}.
+\]
+$dN=\bar w\,dw+w\,d\bar w$ なので $s^\dagger ds=\dfrac{\bar w\,dw-w\,d\bar w}{2N}$。$w=\varrho e^{i\varphi}$ では $\bar w\,dw-w\,d\bar w=2i\varrho^2d\varphi$ だから
+\[
+\mathcal A_N=i\cdot\frac{2i\varrho^2d\varphi}{2(1+\varrho^2)}=-\frac{\varrho^2}{1+\varrho^2}\,d\varphi,\qquad\mathcal F=-\frac{2\varrho\,d\varrho\wedge d\varphi}{(1+\varrho^2)^2}.
+\]
+$d(\mathrm{Re}\,w)\wedge d(\mathrm{Im}\,w)=\varrho\,d\varrho\wedge d\varphi$ なので、この向きで
+\[
+\int_{\CP^1}\mathcal F=-2\pi\int_0^\infty\frac{2\varrho\,d\varrho}{(1+\varrho^2)^2}=-2\pi\Bigl[-\frac{1}{1+\varrho^2}\Bigr]_0^\infty=-2\pi .
+\]
+（$w$ のパッチは $\CP^1$ から1点 $[0:1]$ を除いたもので、積分には影響しない。）よって $c_1(L)=-1$。
+
+(2) $L$ の単位ベクトルは $(z_1,z_2)\in\C^2$、$\lvert z_1\rvert^2+\lvert z_2\rvert^2=1$、すなわち $S^3$ の点であり、各ファイバー（直線 $\ell$）の単位円 $\{e^{i\alpha}z\}$ が $S^1$。射影 $S^3\to\CP^1$, $z\mapsto[z]$ を $\CP^1\cong S^2$（ブロッホ球、$[z]\mapsto z^\dagger\bm\sigma z$）と合成したものがホップ写像であり、$L$ は主 $U(1)$ 束 $S^3\to S^2$ に同伴する直線束である。$w=\tan\frac\theta2e^{i\varphi}$ とおくと $N=1/\cos^2\frac\theta2$、$s_N=\cos\frac\theta2(1,\tan\frac\theta2e^{i\varphi})=(\cos\frac\theta2,e^{i\varphi}\sin\frac\theta2)$ で $\lvert+\rangle_N$ に一致する。さらに $\varrho=\tan\frac\theta2$ は $\theta$ の増加関数なので $\varrho\,d\varrho\wedge d\varphi$ と $d\theta\wedge d\varphi$ は同じ向きを与え、$c_1=-1$ はベリー位相の計算（問題 \ref{ch08-prob-berry}）と一致する。$\mathcal A_N$ 自体も $\varrho^2/(1+\varrho^2)=\sin^2\frac\theta2$ により一致している。
+
+(3) 双対束の接続は $-\mathcal A$ で、$c_1(L^*)=+1$。テンソル積では接続が足されるので $c_1(L^{\otimes n})=-n$、$c_1((L^*)^{\otimes n})=n$。したがって磁荷 $n$（$\int F/2\pi=n$）の単極子束は $\mathcal O(n)=(L^*)^{\otimes n}$ と同型であり（$S^2$ 上の直線束は $c_1$ で分類される）、問題 \ref{ch08-prob-monopole} の $A_N$ は $-n\mathcal A_N=n\sin^2\frac\theta2\,d\varphi$ に一致する。ホップ束の主 $U(1)$ 束としての「チャーン数 $\pm1$」は、どちらの表現（電荷 $\pm1$）で同伴束をつくるかによる符号の違いである。
+\end{solution}
+
+\subsection{チャーン・ヴェイユ理論と特性類}
+
+\begin{problem}[難易度 B]\label{ch08-prob-transg}
+同じ束上の接続 $A_0$, $A_1$ に対し $\eta=A_1-A_0$、$A_t=A_0+t\eta$、$F_t$ をその曲率とする。\\
+(1) $\dfrac{dF_t}{dt}=D_t\eta:=d\eta-i(A_t\wedge\eta+\eta\wedge A_t)$ を示せ。\\
+(2) $\tr(D_t\eta\wedge F_t)=d\,\tr(\eta\wedge F_t)$ を示せ（ビアンキ恒等式を用いよ）。\\
+(3) $\tr F_1\wedge F_1-\tr F_0\wedge F_0=d\Bigl(2\displaystyle\int_0^1\tr(\eta\wedge F_t)\,dt\Bigr)$ を示し、$A_0=0$, $A_1=A$ のとき右辺が $8\pi^2\,dCS(A)$ になることを確かめよ。\\
+(4) 閉4次元多様体上の同じ束の2つの接続について $\int\tr F_1^2=\int\tr F_0^2$ を結論し、インスタントン数が場の小さな揺らぎで変わらないことの意味を述べよ。
+\end{problem}
+
+\begin{solution}
+(1) $F_t=dA_0+t\,d\eta-i(A_0+t\eta)\wedge(A_0+t\eta)$ を $t$ で微分すると
+\[
+\dot F_t=d\eta-i(A_0\eta+\eta A_0)-2it\,\eta\wedge\eta=d\eta-i(A_t\eta+\eta A_t),
+\]
+（$A_t\eta+\eta A_t=A_0\eta+\eta A_0+2t\eta^2$）。
+
+(2) 1形式 $\eta$ と2形式 $F$ について $d\,\tr(\eta F)=\tr(d\eta\,F)-\tr(\eta\,dF)$。一方
+\[
+\tr(D\eta\,F)-\tr(\eta\,DF)=\tr(d\eta F)-\tr(\eta dF)-i\tr(A\eta F+\eta AF)+i\tr(\eta AF-\eta FA).
+\]
+$\tr(\eta FA)$ では1形式 $A$ を3形式 $\eta F$ の前へ移すと符号 $(-1)^{1\cdot3}=-1$ がつくので $\tr(\eta FA)=-\tr(A\eta F)$。よって余分な項は $-i\tr(A\eta F)-i\tr(\eta FA)=-i\tr(A\eta F)+i\tr(A\eta F)=0$ となり、$\tr(D\eta F)-\tr(\eta DF)=d\tr(\eta F)$。ビアンキ $D_tF_t=0$ より $\tr(D_t\eta\wedge F_t)=d\tr(\eta\wedge F_t)$。
+
+(3) 2形式どうしは可換なので $\frac{d}{dt}\tr F_t^2=\tr(\dot F_tF_t+F_t\dot F_t)=2\tr(D_t\eta\,F_t)=2\,d\tr(\eta F_t)$。$t$ で $0$ から $1$ まで積分すれば主張を得る。$A_0=0$、$\eta=A$ なら $F_t=t\,dA-it^2A^2$ で
+\[
+2\int_0^1\tr\bigl(A(t\,dA-it^2A^2)\bigr)dt=2\Bigl(\frac12\tr(A\,dA)-\frac i3\tr A^3\Bigr)=\tr\Bigl(A\,dA-\frac{2i}{3}A^3\Bigr)=8\pi^2CS(A).
+\]
+特に $\tr F^2=8\pi^2dCS(A)$。
+
+(4) $\eta$ は大域的な1形式なので $Q=2\int_0^1\tr(\eta F_t)dt$ も大域的な3形式であり、閉多様体上 $\int dQ=0$。よって $\int\tr F\wedge F$ は接続によらない。場の小さな揺らぎ $A\to A+\delta A$（同じ束の上の変形）でインスタントン数 $k$ は不変であり、摂動論の範囲では異なる $k$ のセクターは移り合わない。$k$ を変えるには束そのもの（貼り合わせ）を変える必要があり、それは連続変形ではできない。なお $CS(A)$ は $A$ が大域的に定義されているときにだけ大域的な形式であり、自明でない束では $\tr F^2=8\pi^2dCS$ はパッチごとにしか成り立たない（だから $\int\tr F^2\ne0$ になりうる）。
+\end{solution}
+
+\begin{problem}[難易度 A]\label{ch08-prob-chernpoly}
+(1) $\det(1+X)=1+\tr X+\frac12\bigl((\tr X)^2-\tr X^2\bigr)+O(X^3)$ を用いて、$c_1$, $c_2$ を $F$ で表し、$\ch_2=\frac12c_1^2-c_2$ を示せ。\\
+(2) $SU(N)$ 束では $c_2=-\ch_2$ であることを示せ。BPST インスタントン（$k=1$）の $\int c_2$ を答えよ。\\
+(3) 直線束の直和 $E=L_1\oplus L_2$（$c_1(L_1)=a$, $c_1(L_2)=b$）について $c(E)$ と $\ch(E)$ を求め、(1) の関係を確かめよ。また $\ch(L^{\otimes n})=e^{nc_1(L)}$ を説明せよ。
+\end{problem}
+
+\begin{solution}
+(1) $X=F/2\pi$ とすると
+\[
+c_1=\frac{\tr F}{2\pi},\qquad c_2=\frac{1}{8\pi^2}\bigl(\tr F\wedge\tr F-\tr F\wedge F\bigr).
+\]
+（$\det(1+X)$ の展開：固有値 $x_i$ で $\prod(1+x_i)=1+\sum x_i+\sum_{i<j}x_ix_j+\cdots$、$\sum_{i<j}x_ix_j=\frac12((\sum x_i)^2-\sum x_i^2)$。$F$ は偶数次の形式なので固有値の議論が形式的に使える。）一方 $\ch(F)=\tr e^{X}=N+\tr X+\frac12\tr X^2+\cdots$ で $\ch_2=\frac1{8\pi^2}\tr F^2$。よって $\frac12c_1^2-c_2=\frac1{8\pi^2}\bigl(\tr F\wedge\tr F-(\tr F\wedge\tr F-\tr F^2)\bigr)=\ch_2$。
+
+(2) $\mathfrak{su}(N)$ はトレースゼロなので $c_1=0$、$c_2=-\ch_2$。BPST では $\int\ch_2=k=1$ なので $\int c_2=-1$。
+
+(3) 曲率は $\mathrm{diag}(F_1,F_2)$ なので
+\[
+c(E)=(1+a)(1+b)=1+(a+b)+ab,\qquad\ch(E)=e^a+e^b=2+(a+b)+\tfrac12(a^2+b^2)+\cdots .
+\]
+$\frac12c_1^2-c_2=\frac12(a+b)^2-ab=\frac12(a^2+b^2)=\ch_2$ で (1) と一致。$L^{\otimes n}$ では電荷 $n$ の場として接続が $nA$、曲率が $nF$ なので $\ch=e^{nF/2\pi}=e^{nc_1(L)}$（$\ch$ が積を積に移すことの例）。
+\end{solution}
+
+\begin{problem}[難易度 B]\label{ch08-prob-cpn}
+$\CP^n$ の接束について $c(T\CP^n)=(1+x)^{n+1}$ が成り立つことを認める。ここで $x\in H^2(\CP^n;\Z)$ は $\mathcal O(1)$ の $c_1$ で $\int_{\CP^n}x^n=1$（$x$ の冪 $1,x,\dots,x^n$ がコホモロジーの基底、第6章）。また、複素 $n$ 次元のコンパクト複素多様体 $M$ について $\chi(M)=\int_Mc_n(TM)$（ガウス・ボンネ・チャーン、$c_n(TM)=e(TM)$）を認める。\\
+(1) $n=1$ のとき $\int c_1(TS^2)=2=\chi(S^2)$ を確かめよ。\\
+(2) $\chi(\CP^n)=n+1$ を示し、胞体分割 $\CP^n=e^0\cup e^2\cup\cdots\cup e^{2n}$ と比較せよ。\\
+(3) $\CP^2$ について $p_1=c_1^2-2c_2$ を用いて $p_1(T\CP^2)=3x^2$ を示せ。ヒルツェブルフの符号数定理 $\sigma=\frac13\int p_1$（第9章）が $\CP^2$ の交叉形式 $(+1)$（第6章）と整合することを確かめよ。\\
+(4) $c_1(T\CP^n)$ がゼロにならないことから、$\CP^n$ はカラビ・ヤウ多様体（第10章）でないことを述べよ。
+\end{problem}
+
+\begin{solution}
+(1) $n=1$：$c(TS^2)=(1+x)^2=1+2x$（$x^2=0$）。$\int_{\CP^1}c_1=2\int x=2=\chi(S^2)$。ガウス・ボンネ（問題 \ref{ch08-prob-lc}, \ref{ch08-prob-gb}）とも一致する。
+
+(2) $c_n=\binom{n+1}{n}x^n=(n+1)x^n$ なので $\chi(\CP^n)=(n+1)\int x^n=n+1$。胞体分割では各偶数次元に1つずつ胞体があり $\chi=\sum(-1)^k\#(k\text{ 胞体})=n+1$（第4章）。
+
+(3) $n=2$：$c(T\CP^2)=(1+x)^3=1+3x+3x^2$。$p_1=c_1^2-2c_2=9x^2-6x^2=3x^2$。
+
+（$p_1=c_1^2-2c_2$ の理由：実束としての $T\CP^2$ の複素化は $T\oplus\bar T$、$c(\bar T)=1-c_1+c_2-\cdots$ なので $c(T\otimes\C)=(1+c_1+c_2)(1-c_1+c_2)=1+(2c_2-c_1^2)+\cdots$、$p_1=-c_2(T\otimes\C)=c_1^2-2c_2$。）
+
+よって $\frac13\int p_1=1$。一方 $H^2(\CP^2)=\Z x$、$\int x^2=1$ なので交叉形式は $(+1)$、符号数 $\sigma=1$ で一致する。また $\chi=3$ は (2) と一致し、$\chi=b_0+b_2+b_4=1+1+1$。
+
+(4) カラビ・ヤウ多様体は $c_1(TM)=0$（リッチ平坦計量をもつ）ケーラー多様体である。$c_1(T\CP^n)=(n+1)x\ne0$ なので $\CP^n$ はカラビ・ヤウではない（実際 $c_1>0$ の「ファノ多様体」で、正のリッチ曲率をもつフビニ・スタディ計量をもつ）。カラビ・ヤウ多様体は $\CP^{n}$ の中の超曲面として作られる（第10章）。
+\end{solution}
+
+\subsection{曲率と重力：ガウス・ボンネ}
+
+\begin{problem}[難易度 C]\label{ch08-prob-lc}
+単位球面 $S^2$（計量 $d\theta^2+\sin^2\theta\,d\varphi^2$）上で正規直交枠 $e^1=d\theta$, $e^2=\sin\theta\,d\varphi$（双対ベクトルは $\bm e_1=\partial_\theta$, $\bm e_2=\frac1{\sin\theta}\partial_\varphi$）をとる。\\
+(1) ねじれなしの条件 $de^a+\omega^a{}_b\wedge e^b=0$ からレヴィ・チヴィタ接続 $\omega^1{}_2$ を求め、$R^1{}_2=d\omega^1{}_2=K\,e^1\wedge e^2$ により $K=1$ を確かめよ。\\
+(2) 接ベクトル $v=v^1\bm e_1+v^2\bm e_2$ の平行移動 $dv^a+\omega^a{}_bv^b=0$ を複素数 $v=v^1+iv^2$ で書くと $dv=iA\,v$、$A=\omega^1{}_2$ となることを示せ（$TS^2$ を複素直線束とみなし、記法と規約の $D=d-iA$ を用いている）。\\
+(3) 緯度 $\theta_0$ の円を $\varphi$ の増える向きに1周する平行移動で、接ベクトルは（枠 $\bm e_1,\bm e_2$ に対して）どれだけ回転するか。それが北側の帽子の $\int K\,dS$ に等しいことを示し、緯度 $\lambda$ の地点でのフーコーの振り子の1恒星日あたりの回転角を求めよ。\\
+(4) 北極・南極で滑らかな枠への取りかえにより $A_N$, $A_S$ を求め、推移関数の巻き付き数が $2$ であること、すなわち $\int_{S^2}e(TS^2)=c_1(TS^2)=2=\chi(S^2)$ を示せ。
+\end{problem}
+
+\begin{solution}
+(1) $de^1=0$、$de^2=\cos\theta\,d\theta\wedge d\varphi$。$\omega^1{}_1=\omega^2{}_2=0$、$\omega^2{}_1=-\omega^1{}_2$。条件は
+\[
+de^1=-\omega^1{}_2\wedge e^2,\qquad de^2=-\omega^2{}_1\wedge e^1=\omega^1{}_2\wedge d\theta .
+\]
+$\omega^1{}_2=-\cos\theta\,d\varphi$ とおくと、第2式は $-\cos\theta\,d\varphi\wedge d\theta=\cos\theta\,d\theta\wedge d\varphi$ ✓、第1式は $\cos\theta\sin\theta\,d\varphi\wedge d\varphi=0$ ✓。（ねじれなしの解は一意。）$R^1{}_2=d\omega^1{}_2+\omega^1{}_c\wedge\omega^c{}_2=d\omega^1{}_2=\sin\theta\,d\theta\wedge d\varphi=e^1\wedge e^2$。よって $K=1$。
+
+(2) $dv^1=-\omega^1{}_2v^2$、$dv^2=-\omega^2{}_1v^1=\omega^1{}_2v^1$ より
+\[
+d(v^1+iv^2)=-\omega^1{}_2v^2+i\omega^1{}_2v^1=i\omega^1{}_2(v^1+iv^2).
+\]
+よって $dv=iAv$、$A=\omega^1{}_2=-\cos\theta\,d\varphi$（$i$ をかけることは $\bm e_1\mapsto\bm e_2$ の $90^\circ$ 回転で、外向き法線について反時計回り）。曲率 $F=dA=R^1{}_2=K\,dS$。
+
+(3) $\theta=\theta_0$ 上で $dv/d\varphi=-i\cos\theta_0\,v$ なので $v(2\pi)=e^{-2\pi i\cos\theta_0}v(0)=e^{2\pi i(1-\cos\theta_0)}v(0)$。すなわち枠に対して角度
+\[
+\Delta=2\pi(1-\cos\theta_0)\ (\mathrm{mod}\ 2\pi)
+\]
+だけ反時計回り（外から見て）に回転する。$\int_{\text{北の帽子}}K\,dS=\int_0^{2\pi}\!\int_0^{\theta_0}\sin\theta\,d\theta\,d\varphi=2\pi(1-\cos\theta_0)$ に等しい。（枠 $\bm e_1,\bm e_2$ は緯線上で一価なので「枠に対する回転」は意味をもつ。）
+
+フーコーの振り子：振動面は（地球の自転に比べ速い振動の平均として）地表に沿って平行移動される。緯度 $\lambda$（北緯）では余緯度 $\theta_0=\frac\pi2-\lambda$、1恒星日で振り子は緯線を1周するので、地表の枠（南北・東西）に対して振動面は $2\pi(1-\sin\lambda)\equiv-2\pi\sin\lambda$ だけ回る。すなわち北半球では上から見て時計回りに1日 $2\pi\sin\lambda$（北極で $2\pi$、赤道で $0$）。
+
+(4) 枠を回す（$v\mapsto e^{i\alpha}v$）と $A\mapsto A+d\alpha$（$g=e^{i\alpha}$、$i\,g\,dg^{-1}=d\alpha$）。北極付近で滑らかな枠は、$(\bm e_1,\bm e_2)$ を $-\varphi$ だけ回したもの（北極で $\varphi$ によらない向き）で、$v_N=e^{i\varphi}v$。よって $A_N=-\cos\theta\,d\varphi+d\varphi=(1-\cos\theta)d\varphi$（$\theta\to0$ で $\theta^2d\varphi/2$、滑らか）。南極では $v_S=e^{-i\varphi}v$、$A_S=-(1+\cos\theta)d\varphi$。$v_N=e^{2i\varphi}v_S$ で推移関数 $e^{2i\varphi}$ の巻き付き数は $2$。問題 \ref{ch08-prob-monopole} で $n=2$ の場合であり
+\[
+\int_{S^2}\frac{F}{2\pi}=\frac1{2\pi}\int_{S^2}K\,dS=\frac{4\pi}{2\pi}=2=\chi(S^2).
+\]
+「毛玉の定理」（$S^2$ 上にゼロ点のないベクトル場は存在しない）は、この束が自明でない（$e\ne0$）ことの言いかえである。
+\end{solution}
+
+\begin{problem}[難易度 A]\label{ch08-prob-gb}
+ガウス・ボンネの定理 $\chi(\Sigma)=\frac1{2\pi}\int_\Sigma K\,dS$ を認める。\\
+(1) 半径 $a$ の球面で右辺を計算し、$a$ によらないことを確かめよ。\\
+(2) 種数 $g\ge2$ の閉曲面が $K\equiv-1$ の計量をもつとき、その面積を求めよ。\\
+(3) 2次元の計量 $h_{\alpha\beta}$ のスカラー曲率は $R=2K$ である。弦の世界面の作用の項 $S_\lambda=\frac{\lambda}{4\pi}\int d^2\sigma\sqrt h\,R$ が $\lambda\chi$ に等しいことを示し、経路積分の重み $e^{-S_\lambda}$ が種数 $g$ の閉世界面に $g_s^{2g-2}$（$g_s=e^\lambda$）を与えることを示せ。\\
+(4) 2次元のアインシュタイン方程式が自明（アインシュタイン・テンソルが恒等的にゼロ）であることを、(3) を用いて説明せよ。
+\end{problem}
+
+\begin{solution}
+(1) $K=1/a^2$、面積 $4\pi a^2$ で $\frac1{2\pi}\cdot\frac{4\pi a^2}{a^2}=2=\chi(S^2)$。
+
+(2) $\chi=2-2g=\frac1{2\pi}\int(-1)dS=-\frac{\text{面積}}{2\pi}$ より、面積 $=4\pi(g-1)$。（双曲幾何の面積は位相で決まる。）
+
+(3) $\sqrt h\,d^2\sigma=dS$、$R=2K$ なので $\frac{1}{4\pi}\int\sqrt hR\,d^2\sigma=\frac1{2\pi}\int K\,dS=\chi$。よって $S_\lambda=\lambda\chi$、$e^{-S_\lambda}=e^{-\lambda\chi}=g_s^{-\chi}=g_s^{2g-2}$。球面（$g=0$）が $g_s^{-2}$、トーラスが $g_s^0$、と種数ごとに $g_s^2$ ずつ抑えられ、弦の摂動展開が種数展開になる（境界・クロスキャップがあれば $\chi$ はそれも数える。第10章）。
+
+(4) $S_\lambda$ は計量の局所的な変化 $h\to h+\delta h$ で変わらない（$\chi$ は整数で連続変化しない）ので $\delta S_\lambda=0$。一方、一般に $\delta\int\sqrt hR=\int\sqrt h\,(R_{\alpha\beta}-\frac12Rh_{\alpha\beta})\delta h^{\alpha\beta}$（境界項を除く）なので、2次元ではアインシュタイン・テンソル $G_{\alpha\beta}$ が恒等的にゼロ（実際 $R_{\alpha\beta}=\frac12Rh_{\alpha\beta}$）。2次元重力は局所的な力学をもたず、位相（オイラー数）だけを感じる。
+\end{solution}
+
+\subsection{インスタントン・チャーン・サイモンズ・θ 真空}
+
+\begin{problem}[難易度 C]\label{ch08-prob-bpst1}
+ユークリッド $\R^4$（$x^2=x^\mu x^\mu$）上の $SU(2)$ ゲージ場
+\[
+A_\mu=A_\mu^aT^a,\qquad A^a_\mu=\frac{2\eta^a_{\mu\nu}x^\nu}{x^2+\rho^2},\qquad T^a=\frac{\sigma^a}{2}
+\]
+を考える（$\eta^a_{\mu\nu}$ は例 \ref{ex:ch08-bpst} のトフーフト記号）。恒等式
+\[
+\epsilon^{abc}\eta^a_{\mu\lambda}\eta^b_{\nu\sigma}=\delta_{\mu\nu}\eta^c_{\lambda\sigma}-\delta_{\mu\sigma}\eta^c_{\lambda\nu}-\delta_{\lambda\nu}\eta^c_{\mu\sigma}+\delta_{\lambda\sigma}\eta^c_{\mu\nu}
+\]
+を認めてよい。\\
+(1) 記法と規約のもとで $F^c_{\mu\nu}=\partial_\mu A^c_\nu-\partial_\nu A^c_\mu+\epsilon^{abc}A^a_\mu A^b_\nu$ となることを示せ。\\
+(2) $F^c_{\mu\nu}=-\dfrac{4\rho^2\eta^c_{\mu\nu}}{(x^2+\rho^2)^2}$ を示し、$F$ が自己双対 $F=*F$ であることを結論せよ。\\
+(3) $A$ が原点で滑らかであること、$\lvert x\rvert\to\infty$ で $A_\mu=O(1/\lvert x\rvert)$、$F_{\mu\nu}=O(1/\lvert x\rvert^4)$ であることを確かめよ。$A$ が遠方で純ゲージ $i\,g\,dg^{-1}$、$g=(x^4\mathbf 1+ix^a\sigma^a)/\lvert x\rvert$ に近づくことを認めて、純ゲージなのに $A=O(1/\lvert x\rvert)$ で遠方の $F$ は速く減衰する理由を述べよ。
+\end{problem}
+
+\begin{solution}
+(1) $-i[A_\mu,A_\nu]=-iA^a_\mu A^b_\nu[T^a,T^b]=-iA^a_\mu A^b_\nu\,i\epsilon^{abc}T^c=\epsilon^{abc}A^a_\mu A^b_\nu T^c$。
+
+(2) $h=2/(x^2+\rho^2)$ とおくと $A^c_\nu=h\,\eta^c_{\nu\lambda}x^\lambda$、$\partial_\mu h=-h^2x_\mu$（添字の上下は区別しない）。
+\[
+\partial_\mu A^c_\nu=h\,\eta^c_{\nu\mu}-h^2x_\mu\eta^c_{\nu\lambda}x_\lambda .
+\]
+$\eta$ の反対称性から
+\[
+\partial_\mu A^c_\nu-\partial_\nu A^c_\mu=-2h\,\eta^c_{\mu\nu}-h^2\bigl(x_\mu\eta^c_{\nu\lambda}-x_\nu\eta^c_{\mu\lambda}\bigr)x_\lambda .
+\]
+非可換項は与えられた恒等式を $x_\lambda x_\sigma$ で縮約して（$\eta^c_{\lambda\sigma}x_\lambda x_\sigma=0$）
+\[
+\epsilon^{abc}A^a_\mu A^b_\nu=h^2\bigl(-x_\mu\eta^c_{\lambda\nu}x_\lambda-x_\nu\eta^c_{\mu\sigma}x_\sigma+x^2\eta^c_{\mu\nu}\bigr)=h^2\bigl(x_\mu\eta^c_{\nu\lambda}-x_\nu\eta^c_{\mu\lambda}\bigr)x_\lambda+h^2x^2\eta^c_{\mu\nu}.
+\]
+和をとると $x_\mu x_\lambda$ を含む項はちょうど打ち消し合い
+\[
+F^c_{\mu\nu}=\eta^c_{\mu\nu}\bigl(-2h+h^2x^2\bigr)=\eta^c_{\mu\nu}\Bigl(-\frac{4}{x^2+\rho^2}+\frac{4x^2}{(x^2+\rho^2)^2}\Bigr)=-\frac{4\rho^2\eta^c_{\mu\nu}}{(x^2+\rho^2)^2}.
+\]
+$\eta^c$ は自己双対（$\frac12\epsilon_{\mu\nu\rho\sigma}\eta^c_{\rho\sigma}=\eta^c_{\mu\nu}$）なので $(*F)_{\mu\nu}=\frac12\epsilon_{\mu\nu\rho\sigma}F_{\rho\sigma}=F_{\mu\nu}$。
+
+\begin{note}
+自己双対性の確認：例えば $\eta^a_{12}=\epsilon_{a12}=\delta_{a3}$、$\eta^a_{34}=\delta_{a3}$ で $\frac12(\epsilon_{1234}\eta_{34}+\epsilon_{1243}\eta_{43})=\eta_{34}=\eta_{12}$。他の成分も同様。$\eta^a_{\mu\nu}\eta^a_{\mu\nu}=12$（各 $a$ について非ゼロ成分が4つ）。
+\end{note}
+
+(3) 分母 $x^2+\rho^2\ge\rho^2>0$ なので $A$ は $\R^4$ 全体で滑らか（原点付近で $A^a_\mu\approx2\eta^a_{\mu\nu}x^\nu/\rho^2$）。遠方で $A\sim2\eta x/x^2=O(1/\lvert x\rvert)$、$F\sim4\rho^2/x^4$。純ゲージ $i\,g\,dg^{-1}$ は $g$ が角度方向だけに依存するので $dg=O(1/\lvert x\rvert)$ であり、$A$ がこの形に $O(1/\lvert x\rvert^3)$ の速さで近づく（$\frac{1}{x^2+\rho^2}=\frac1{x^2}-\frac{\rho^2}{x^4}+\cdots$）。純ゲージの曲率はゼロなので、$F$ はずれ $O(1/\lvert x\rvert^3)$ の微分程度、$O(1/\lvert x\rvert^4)$ になる。作用 $\int F^2d^4x$ の有限性に必要なのは $F$ の減衰だけで、$A$ 自身はゼロに近づく必要はなく、遠方の $g\colon S^3_\infty\to SU(2)$ の巻き付き数が位相的電荷になる（第3章）。
+\end{solution}
+
+\begin{problem}[難易度 C]\label{ch08-prob-bpst2}
+問題 \ref{ch08-prob-bpst1} の BPST インスタントンについて考える。ヤン・ミルズ作用は、結合定数を $A$ に吸収した記法で
+\[
+S_E=\frac{1}{2g_{\mathrm{YM}}^2}\int d^4x\,\tr F_{\mu\nu}F_{\mu\nu}=\frac{1}{g_{\mathrm{YM}}^2}\int\tr F\wedge*F
+\]
+である。\\
+(1) 正準規格化した場 $A^{\mathrm{can}}=A/g_{\mathrm{YM}}$ で書くと $S_E=\frac14\int(F^{\mathrm{can},a}_{\mu\nu})^2d^4x$ となることを確かめよ。\\
+(2) ボゴモルニー不等式 $S_E\ge\dfrac{8\pi^2}{g_{\mathrm{YM}}^2}\lvert k\rvert$ を示し、等号が（反）自己双対で成り立つことを示せ。\\
+(3) BPST インスタントンの $k$ を $\tr F\wedge F$ の積分で計算し、$k=1$、$S_E=8\pi^2/g_{\mathrm{YM}}^2$ を示せ。\\
+(4) 同じ $k$ を、定理 \ref{thm:ch08-csgauge} と向きの注意（基本事項のまとめ）を用いて $S^3_\infty$ 上の積分 $k=\int_{S^3_\infty}CS(A)$ から求め、一致を確かめよ。\\
+(5) 解は $\rho$ と中心 $x_0$ と大域的なゲージの向き（$SU(2)$）をパラメータとしてもつ。$k=1$ の解のモジュライ空間の次元を数えよ（$SU(2)$ の中心 $\pm\mathbf 1$ は $A$ に作用しないことに注意）。
+\end{problem}
+
+\begin{solution}
+(1) $F=dA-iA\wedge A=g_{\mathrm{YM}}(dA^{\mathrm{can}}-ig_{\mathrm{YM}}A^{\mathrm{can}}\wedge A^{\mathrm{can}})=g_{\mathrm{YM}}F^{\mathrm{can}}$。$\tr T^aT^b=\frac12\delta^{ab}$ より $\tr F_{\mu\nu}F_{\mu\nu}=\frac{g_{\mathrm{YM}}^2}{2}F^{\mathrm{can},a}_{\mu\nu}F^{\mathrm{can},a}_{\mu\nu}$、よって $S_E=\frac14\int(F^{\mathrm{can},a}_{\mu\nu})^2$。また $F\wedge*F=\frac12F_{\mu\nu}F_{\mu\nu}d^4x$ から2つ目の表示が従う。
+
+(2) ユークリッド4次元の2形式では $**=1$ なので
+\[
+0\le\int\tr(F\mp*F)\wedge*(F\mp*F)=2\int\tr F\wedge*F\mp2\int\tr F\wedge F
+\]
+（$*F\wedge**F=*F\wedge F=F\wedge*F$、$F\wedge*(*F)=F\wedge F$）。左辺の非負性は $\tr(G\wedge*G)=\frac12\tr G_{\mu\nu}G_{\mu\nu}d^4x$、$G$ エルミートで $\tr G_{\mu\nu}^2\ge0$ による。よって $\int\tr F\wedge*F\ge\pm8\pi^2k$、すなわち $S_E\ge8\pi^2\lvert k\rvert/g_{\mathrm{YM}}^2$。等号は $F=\pm*F$ のとき。
+
+(3) $\tr F\wedge F=\frac14\epsilon_{\mu\nu\rho\sigma}\tr(F_{\mu\nu}F_{\rho\sigma})d^4x$。自己双対なら $\frac12\epsilon_{\mu\nu\rho\sigma}F_{\rho\sigma}=F_{\mu\nu}$ なので $=\frac12\tr F_{\mu\nu}F_{\mu\nu}\,d^4x$。
+\[
+\tr F_{\mu\nu}F_{\mu\nu}=\frac12F^c_{\mu\nu}F^c_{\mu\nu}=\frac12\cdot\frac{16\rho^4}{(x^2+\rho^2)^4}\cdot12=\frac{96\rho^4}{(x^2+\rho^2)^4}.
+\]
+$d^4x=2\pi^2r^3dr$（$S^3$ の体積 $2\pi^2$）と
+\[
+\int_0^\infty\frac{r^3dr}{(r^2+\rho^2)^4}=\frac12\int_0^\infty\frac{u\,du}{(u+\rho^2)^4}=\frac12\Bigl(\frac{1}{2\rho^4}-\frac{\rho^2}{3\rho^6}\Bigr)=\frac{1}{12\rho^4}
+\]
+より
+\[
+\int\tr F\wedge F=\frac12\cdot96\rho^4\cdot2\pi^2\cdot\frac1{12\rho^4}=8\pi^2,\qquad k=1 .
+\]
+$\rho$ によらない。自己双対なので (2) の等号が成り立ち $S_E=8\pi^2/g_{\mathrm{YM}}^2$。トンネル振幅は $e^{-8\pi^2/g_{\mathrm{YM}}^2}$ で、摂動論では見えない。
+
+(4) $A$ は $\R^4$ 全体で滑らかなので $CS(A)$ は大域的な3形式で、半径 $R$ の球 $B_R$ にストークスを用いると $\frac1{8\pi^2}\int_{B_R}\tr F^2=\int_{S^3_R}CS(A)$。$R\to\infty$ で $A\to i\,g\,dg^{-1}$（ずれは $O(R^{-3})$ で、$S^3_R$ 上の積分への寄与は $R\to\infty$ で消える）なので、定理 \ref{thm:ch08-csgauge} より $k=\int_{S^3_\infty}CS(i\,g\,dg^{-1})=-w(g)$。向きの注意により $g=(x^4+ix^a\sigma^a)/\lvert x\rvert$ は境界の向きで $w(g)=-1$（北極で $g^{-1}dg=i\sigma^adx^a$、$\tr(i\sigma^adx^a)^3=-i\cdot2i\epsilon^{abc}dx^adx^bdx^c=12\,dx^{123}$、左不変性から $\frac{1}{24\pi^2}\cdot12\cdot(-2\pi^2)=-1$）。よって $k=1$ で (3) と一致する。
+
+(5) 中心4、大きさ1、ゲージの向き $SU(2)/\{\pm\mathbf1\}=SO(3)$ の3、合計 $4+1+3=8$。（指数定理（第9章）により、$SU(2)$ の $k$ インスタントンのモジュライ空間は $8k$ 次元であることが示される。）大きさ $\rho$ が任意であるのは古典的なスケール不変性の反映で、量子論では結合定数の走りにより $\rho$ 積分が赤外発散する。
+\end{solution}
+
+\begin{problem}[難易度 D]\label{ch08-prob-csgauge}
+定理 \ref{thm:ch08-csgauge} を証明する。$\theta=g^{-1}dg$、$B=A-i\theta$ とおく。\\
+(1) $A^g=gBg^{-1}$、$d\theta=-\theta\wedge\theta$、$dA^g=g(\theta B+dB+B\theta)g^{-1}$ を示せ。\\
+(2) $8\pi^2\,CS(A^g)=\tr(B\,dB)+2\tr(B^2\theta)-\frac{2i}{3}\tr B^3$ を示せ。\\
+(3) $B=A-i\theta$ を代入して
+\[
+8\pi^2\bigl(CS(A^g)-CS(A)\bigr)=-\frac13\tr\theta^3+i\,d\,\tr(\theta\wedge A)
+\]
+を示せ。\\
+(4) 閉3次元多様体上で $\int CS(A^g)=\int CS(A)-w(g)$ を結論し、純ゲージ $i\,g\,dg^{-1}$ のチャーン・サイモンズ数が $-w(g)$ であることを直接（$F=0$ を用いて）確かめよ。
+\end{problem}
+
+\begin{solution}
+(1) $i\,g\,dg^{-1}=-i\,dg\,g^{-1}=g(-i\theta)g^{-1}$ より $A^g=g(A-i\theta)g^{-1}=gBg^{-1}$。$d\theta=d(g^{-1})\wedge dg=-g^{-1}dg\,g^{-1}\wedge dg=-\theta\wedge\theta$。$dg=g\theta$、$dg^{-1}=-\theta g^{-1}$ を用いて
+\[
+d(gBg^{-1})=dg\wedge Bg^{-1}+g\,dB\,g^{-1}-gB\wedge dg^{-1}=g(\theta B+dB+B\theta)g^{-1}.
+\]
+
+(2) $\tr(A^g\,dA^g)=\tr\bigl(B(\theta B+dB+B\theta)\bigr)=\tr(B\theta B)+\tr(B\,dB)+\tr(B^2\theta)$。$\tr(B\theta B)$ で最後の1形式 $B$ を2形式 $B\theta$ の前に移しても符号は $(-1)^{1\cdot2}=+1$ なので $\tr(B\theta B)=\tr(B^2\theta)$。$\tr(A^g)^3=\tr B^3$。よって主張を得る。
+
+(3) 以下 $\wedge$ を省略し、奇数次の形式のトレースの巡回性（1形式を2形式の反対側へ移すときは符号なし）を用いる。$dB=dA-i\,d\theta=dA+i\theta^2$。
+\begin{align*}
+\tr(B\,dB)&=\tr(A\,dA)+i\tr(A\theta^2)-i\tr(\theta\,dA)+\tr\theta^3,\\
+2\tr(B^2\theta)&=2\tr(A^2\theta)-4i\tr(A\theta^2)-2\tr\theta^3,\\
+-\tfrac{2i}{3}\tr B^3&=-\tfrac{2i}{3}\tr A^3-2\tr(A^2\theta)+2i\tr(A\theta^2)+\tfrac23\tr\theta^3 .
+\end{align*}
+\begin{note}
+2行目：$B^2=A^2-i(A\theta+\theta A)-\theta^2$、$\tr((A\theta+\theta A)\theta)=2\tr(A\theta^2)$。3行目：$\tr B^3=\tr A^3-3i\tr(A^2\theta)-3\tr(A\theta^2)+i\tr\theta^3$（$\theta$ を1個含む3つの項 $\tr(AA\theta)$, $\tr(A\theta A)$, $\tr(\theta AA)$ は巡回性で等しい。2個含む項も同様。$(-i)^2=-1$, $(-i)^3=i$）。
+\end{note}
+和をとると、$\tr(A\,dA)-\frac{2i}3\tr A^3=8\pi^2CS(A)$ のほかに、$\tr\theta^3$ の係数 $1-2+\frac23=-\frac13$、$\tr(A^2\theta)$ の係数 $0$、$\tr(A\theta^2)$ の係数 $i-4i+2i=-i$ が残り
+\[
+8\pi^2\bigl(CS(A^g)-CS(A)\bigr)=-\tfrac13\tr\theta^3-i\tr(\theta\,dA)-i\tr(A\theta^2).
+\]
+一方 $d\tr(\theta A)=\tr(d\theta\,A)-\tr(\theta\,dA)=-\tr(\theta^2A)-\tr(\theta\,dA)=-\tr(A\theta^2)-\tr(\theta\,dA)$。よって最後の2項は $i\,d\tr(\theta A)$ に等しく、主張を得る。
+
+(4) 閉多様体上では完全形式の積分はゼロなので
+\[
+\int CS(A^g)-\int CS(A)=-\frac{1}{24\pi^2}\int\tr(g^{-1}dg)^3=-w(g).
+\]
+直接の確認：$A=i\,g\,dg^{-1}=-i\,dg\,g^{-1}$ は $F=0$、すなわち $dA=iA^2$ をみたすので
+\[
+8\pi^2CS(A)=\tr\bigl(iA^3-\tfrac{2i}3A^3\bigr)=\tfrac i3\tr A^3,\qquad A^3=(-i)^3(dg\,g^{-1})^3=i(dg\,g^{-1})^3 .
+\]
+$\tr(dg\,g^{-1})^3=\tr(g^{-1}dg)^3$（0形式 $g^{-1}$ を先頭へ巡回）なので $8\pi^2CS=\frac i3\cdot i\tr\theta^3=-\frac13\tr\theta^3$、$\int CS(i\,g\,dg^{-1})=-w(g)$。これは $A=0$ に対して (3) を適用したものと一致する。
+\end{solution}
+
+\begin{problem}[難易度 C]\label{ch08-prob-theta}
+$\R^4=\R_\tau\times\R^3$ で $A_\tau=0$（テンポラル・ゲージ）をとり、各時刻で $\lvert\bm x\rvert\to\infty$ のとき $A\to0$ が十分速いとする（空間を $S^3$ とみなせる）。$\R^3$ の向きは $d\tau\wedge(\R^3\text{ の向き})$ が $\R^4$ の向きになるようにとり、$N_{CS}(\tau)=\int_{\R^3}CS(A(\tau))$ とおく。\\
+(1) $\tau\to\pm\infty$ で $A$ が真空（純ゲージ）に近づく有限作用の配位について $k=N_{CS}(+\infty)-N_{CS}(-\infty)$ を示せ。\\
+(2) 古典的真空 $A=i\,g\,dg^{-1}$（$g\colon S^3\to G$）を $N_{CS}=n$ で分類し、量子状態 $\lvert n\rangle$ とする。$w(h)=1$ の大きなゲージ変換 $h$ を表す演算子 $\mathcal T$ が $\mathcal T\lvert n\rangle=\lvert n-1\rangle$ と作用することを示し、$\mathcal T$ の固有状態 $\lvert\theta\rangle=\sum_ne^{-in\theta}\lvert n\rangle$ の固有値を求めよ。\\
+(3) $\langle\theta'|e^{-HT}|\theta\rangle$ を $k$ セクターの経路積分 $Z_k$ で表し、θ 真空では各 $k$ に重み $e^{i\theta k}$ がつくこと、これはユークリッド作用に $-i\theta k=-\frac{i\theta}{8\pi^2}\int\tr F\wedge F$ を加えることと同じであることを示せ。$\theta\sim\theta+2\pi$ の理由を述べよ。\\
+(4) 2次元 $U(1)$ ゲージ理論の θ 項 $\frac{\theta}{2\pi}\int_\Sigma F$ と、円周上の粒子 $L=\frac I2\dot\varphi^2+\frac{\theta}{2\pi}\dot\varphi$ について、同じ周期性 $\theta\sim\theta+2\pi$ を説明せよ。後者ではエネルギー準位を求めよ。
+\end{problem}
+
+\begin{solution}
+(1) $[\tau_1,\tau_2]\times\R^3$ の向き $d\tau\wedge(\R^3)$ に関して、ストークスの定理の境界は $\{\tau_2\}\times\R^3-\{\tau_1\}\times\R^3$（外向き法線 $\pm\partial_\tau$ を先頭に置く規約）であり、空間無限遠からの寄与は仮定によりない。$\tr F^2=8\pi^2dCS(A)$ で、テンポラル・ゲージでは $CS(A)$ の時間一定面への制限は空間成分だけのチャーン・サイモンズ形式なので
+\[
+\frac1{8\pi^2}\int_{[\tau_1,\tau_2]\times\R^3}\tr F\wedge F=N_{CS}(\tau_2)-N_{CS}(\tau_1).
+\]
+$\tau_{1,2}\to\mp\infty$ として $k=N_{CS}(+\infty)-N_{CS}(-\infty)$。両端は真空なので $N_{CS}(\pm\infty)$ は整数（(2)）、その差が $k$ である。
+
+(2) 定理 \ref{thm:ch08-csgauge} より $N_{CS}[i\,g\,dg^{-1}]=-w(g)\in\Z$。ゲージ変換 $h$ は $A\mapsto A^h$ で、$i\,g\,dg^{-1}\mapsto i(hg)d(hg)^{-1}$、$N_{CS}[A^h]=N_{CS}[A]-w(h)$（$w(hg)=w(h)+w(g)$ と整合）。よって $w(h)=1$ なら $\mathcal T\lvert n\rangle=\lvert n-1\rangle$。
+\[
+\mathcal T\lvert\theta\rangle=\sum_ne^{-in\theta}\lvert n-1\rangle=\sum_me^{-i(m+1)\theta}\lvert m\rangle=e^{-i\theta}\lvert\theta\rangle .
+\]
+小さなゲージ変換（ガウスの法則で生成される）は物理状態に自明に作用するが、大きなゲージ変換は位相 $e^{-i\theta}$ までしか固定されない。$\mathcal T$ はハミルトニアンと可換なので $\theta$ は超選択則のラベルであり、異なる $\theta$ は別の理論とみなせる。
+
+(3) $\langle m|e^{-HT}|n\rangle=Z_{m-n}$（境界条件 $n\to m$ の経路積分、(1) により $k=m-n$ のセクター）。
+\[
+\langle\theta'|e^{-HT}|\theta\rangle=\sum_{m,n}e^{im\theta'}e^{-in\theta}Z_{m-n}=\sum_ne^{in(\theta'-\theta)}\sum_ke^{ik\theta'}Z_k\ \propto\ \delta(\theta-\theta')\sum_ke^{ik\theta}Z_k .
+\]
+θ 真空の間では各 $k$ セクターに重み $e^{i\theta k}$ がつき、これは $e^{-S_E}$ の $S_E$ に $-i\theta k=-\frac{i\theta}{8\pi^2}\int\tr F\wedge F$ を加えることと同じ。$k\in\Z$ なので $e^{i(\theta+2\pi)k}=e^{i\theta k}$ で $\theta\sim\theta+2\pi$。（QCD では $\theta$ は CP を破り、中性子の電気双極子モーメントの上限から $\lvert\theta\rvert\lesssim10^{-10}$。これが強い CP 問題である。）
+
+(4) 2次元：閉曲面上 $\int_\Sigma F\in2\pi\Z$（ディラックの量子化、記法と規約）なので $\frac{\theta}{2\pi}\int F=\theta n$、$e^{i\theta n}$ は $\theta\mapsto\theta+2\pi$ で不変。円周上の粒子：$\frac{\theta}{2\pi}\int\dot\varphi\,dt$ は周期的な（ユークリッド）時間の経路の巻き付き数 $\nu$ の $\theta$ 倍で、同じ理由で周期的。正準運動量 $p=I\dot\varphi+\frac{\theta}{2\pi}$、波動関数 $e^{ip\varphi}$ の一価性から $p=\ell\in\Z$、
+\[
+H=\frac{1}{2I}\Bigl(p-\frac{\theta}{2\pi}\Bigr)^2,\qquad E_\ell=\frac{1}{2I}\Bigl(\ell-\frac{\theta}{2\pi}\Bigr)^2 .
+\]
+$\theta\mapsto\theta+2\pi$ は $\ell\mapsto\ell+1$ と付け替えれば同じスペクトル。これは AB 磁束 $\Phi=\theta$ の円環上の粒子と同じであり（問題 \ref{ch08-prob-ab}）、θ 項は「配位空間の非自明なループを貫く磁束」とみなせる。ヤン・ミルズでは配位空間（ゲージ同値類）の非自明なループが大きなゲージ変換であり、その $\pi_1$ が $\pi_3(G)=\Z$ に対応する。
+\end{solution}
+
+\begin{problem}[難易度 D]\label{ch08-prob-cslevel}
+閉3次元多様体 $M$ 上の $SU(N)$ チャーン・サイモンズ理論
+\[
+S_\kappa[A]=\frac{\kappa}{4\pi}\int_M\tr\Bigl(A\wedge dA-\frac{2i}{3}A\wedge A\wedge A\Bigr)
+\]
+を考える（$\tr$ は基本表現、$\tr T^aT^b=\frac12\delta^{ab}$、$A$ は大域的に定義されているとする）。\\
+(1) $S_\kappa=2\pi\kappa\int_MCS(A)$ を確かめ、ゲージ変換 $g\colon M\to SU(N)$ のもとで $S_\kappa\mapsto S_\kappa-2\pi\kappa\,w(g)$ を示せ。\\
+(2) $M=S^3$ で $w(g)=1$ となる $g$ が存在することを示し、$e^{iS_\kappa}$ のゲージ不変性から $\kappa\in\Z$ を導け。\\
+(3) 4次元多様体 $X$ で $\partial X=M$、$A$ が $X$ 上の接続に拡張されるとき、$S_\kappa=2\pi\kappa\int_X\ch_2(F)$ と書けることを示せ。2つの拡張 $X$, $X'$ による値の差が $2\pi\kappa\int_{Y}\ch_2$（$Y=X\cup_M(-X')$ は閉4次元多様体）であることから、この定義で $e^{iS_\kappa}$ が well-defined であるための条件を求め、(2) と比較せよ。\\
+(4) $U(1)$ チャーン・サイモンズ $S=\frac{\kappa}{4\pi}\int A\wedge dA$ について (3) と同じ議論を行うと、$\kappa$ に対する条件はどうなるか。閉4次元多様体の交叉形式が偶（スピン多様体）の場合とそうでない場合に分けて答えよ。
+\end{problem}
+
+\begin{solution}
+(1) $\frac{\kappa}{4\pi}\cdot8\pi^2=2\pi\kappa$ より $S_\kappa=2\pi\kappa\int CS(A)$。定理 \ref{thm:ch08-csgauge}（問題 \ref{ch08-prob-csgauge}）より、閉多様体上 $\int CS(A^g)=\int CS(A)-w(g)$ なので $S_\kappa[A^g]=S_\kappa[A]-2\pi\kappa\,w(g)$。$w(g)$ は整数である（$g^*$ による $H^3(SU(N);\Z)\cong\Z$ の生成元の引き戻しの積分、$M=S^3$ なら写像度）。
+
+(2) $SU(2)\subset SU(N)$ を左上の $2\times2$ ブロックに埋め込み、$S^3\cong SU(2)$（向きの規約により $w=1$ となる同一視）を $g$ とすれば $w(g)=1$。（$\tr$ は基本表現で、埋め込んだ $SU(2)$ の基本表現と $N-2$ 個の自明表現の和に分解するので、$\tr(g^{-1}dg)^3$ は $SU(2)$ のものと同じ。）すると $e^{iS_\kappa}\mapsto e^{iS_\kappa}e^{-2\pi i\kappa}$。経路積分の被積分関数がゲージ不変であるには $e^{-2\pi i\kappa}=1$、すなわち $\kappa\in\Z$。
+
+(3) $A$ が $X$ 上に（大域的に）拡張されるならストークスと $dCS=\ch_2$ により $\int_X\ch_2(F)=\int_MCS(A)$、よって $S_\kappa=2\pi\kappa\int_X\ch_2$。この右辺は束が自明でなくても意味をもつので、一般にはこれを定義とする（$SU(N)$ の場合、3次元多様体上の束は常に自明で、拡張 $X$ も常に存在する（$\Omega_3^{SO}(BSU(N))=0$）という事実を認める）。2つの拡張の差は、$X$ と向きを逆にした $X'$ を $M$ で貼り合わせた閉多様体 $Y$ 上の積分
+\[
+2\pi\kappa\int_X\ch_2-2\pi\kappa\int_{X'}\ch_2=2\pi\kappa\int_Y\ch_2(F)=-2\pi\kappa\int_Yc_2 .
+\]
+$c_2$ は整数類なので $\int_Yc_2\in\Z$。逆に $Y=S^4$、$k=1$ の束（インスタントン）で $\int_Y\ch_2=1$ となる。したがって $e^{iS_\kappa}$ が拡張によらない条件は $\kappa\in\Z$ で、(2) と同じ結論を、ゲージ変換を経由せず、自明でない束も含めて得る。（(2) とのつながり：$M=S^3$ 上の $A$ と $A^g$ を $S^3\times I$ の両端に置き、補間する接続を考えて両端を $g$ で貼り合わせると、$S^3\times S^1$ 上の束ができ、その $\int\ch_2$ が $\pm w(g)$ である。）
+
+(4) $U(1)$：$S=\frac{\kappa}{4\pi}\int_XF\wedge F$。$F/2\pi=c_1$ を用いると
+\[
+\frac{\kappa}{4\pi}\int_YF\wedge F=\frac{\kappa}{4\pi}(2\pi)^2\int_Yc_1^2=\pi\kappa\int_Yc_1^2 .
+\]
+$\int_Yc_1^2=Q(c_1,c_1)$ は交叉形式（第6章）の値で整数。$e^{iS}$ が well-defined であるには、すべての閉 $Y$ と束について $\kappa\,Q(c_1,c_1)\in2\mathbb Z$。一般の $Y$（例えば $\CP^2$、$Q=(+1)$ で $c_1^2=1$ となる束がある）を許すと $\kappa\in2\Z$。$Y$ をスピン多様体に限る（理論がフェルミオンを含みスピン構造に依存する）と、交叉形式は偶で $Q(c_1,c_1)\in2\Z$ なので $\kappa\in\Z$ でよい。$U(1)$ では $\kappa$ 奇数のチャーン・サイモンズ理論は「スピン TQFT」であり、これは $\ch_2=\frac12c_1^2$ の $\frac12$ が整数性を壊すことに由来する。$SU(N)$ では $c_1=0$ で $\ch_2=-c_2$ が常に整数だったので、この区別は生じない。
+\end{solution}

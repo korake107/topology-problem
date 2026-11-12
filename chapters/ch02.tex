@@ -1,0 +1,908 @@
+%================================================
+\chapter{基本群・被覆空間と量子力学}\label{ch:02}
+% 20問
+%================================================
+
+\section{物理からの動機}
+
+\subsection*{アハラノフ・ボーム効果}
+無限に長いソレノイドの外側では磁場 $\bm B=0$ であるが、ベクトル・ポテンシャルは $0$ にできない。ソレノイドを貫く磁束を $\Phi$ とすると、外側で $A=\dfrac{\Phi}{2\pi}\,d\theta$ ととれ、$F=dA=0$ でありながら $\oint A=\Phi$ である。電荷 $q$ の粒子の経路積分で、経路 $\gamma$ には位相 $\exp\bigl(iq\int_\gamma A\bigr)$ がかかる。ソレノイドの上を通る経路 $\gamma_1$ と下を通る経路 $\gamma_2$ の位相差は
+\[
+\exp\Bigl(iq\int_{\gamma_1}A-iq\int_{\gamma_2}A\Bigr)=\exp\Bigl(iq\oint_{\gamma_1\cdot\bar\gamma_2}A\Bigr)=e^{iq\Phi}
+\]
+であり、スクリーン上の干渉縞がずれる（\term{アハラノフ・ボーム効果}{Aharonov--Bohm effect}、AB効果）。$F=0$ の領域では、$\int_\gamma A$ は端点を止めた連続変形で変わらない（ストークスの定理）。したがって位相は経路そのものではなく、経路がソレノイドのまわりを\textbf{何回まわるか}だけで決まる。
+\begin{center}
+\begin{tikzpicture}[scale=1.1]
+  \fill[gray!30] (0,0) circle (0.45);
+  \draw[thick] (0,0) circle (0.45);
+  \node at (0,0) {\footnotesize $\Phi$};
+  \node[vtx] at (-3.5,0) {}; \node[left] at (-3.5,0) {源};
+  \draw[very thick] (3.6,-1.6) -- (3.6,1.6); \node[right] at (3.6,1.3) {スクリーン};
+  \node[vtx] at (3.6,0.2) {}; \node[right] at (3.6,0.2) {\footnotesize $x$};
+  \draw[thick,red!70!black,mid arrow] (-3.5,0) .. controls (-1.8,1.6) and (1.6,1.6) .. (3.6,0.2);
+  \draw[thick,blue!70!black,mid arrow] (-3.5,0) .. controls (-1.8,-1.6) and (1.6,-1.4) .. (3.6,0.2);
+  \node[red!70!black] at (0,1.45) {$\gamma_1$};
+  \node[blue!70!black] at (0,-1.45) {$\gamma_2$};
+  \node at (0,-0.75) {\footnotesize $\bm B=0$ の領域で $A=\frac{\Phi}{2\pi}d\theta$};
+\end{tikzpicture}
+\zucap{AB効果の配置。灰色のソレノイドの中にだけ磁場がある。粒子が通れる空間は $\R^2\setminus D^2\simeq S^1$ で、2つの経路の差 $\gamma_1\cdot\bar\gamma_2$ はソレノイドを1周するループである。}
+\end{center}
+粒子が動ける空間 $X=\R^2\setminus(\text{ソレノイド})$ の中のループを、連続変形で移り合うものを同一視して分類したものが\term{基本群}{fundamental group} $\pi_1(X)$ である。いまの場合 $\pi_1(X)\cong\Z$ で、整数は巻き付き数である。AB位相は準同型 $\pi_1(X)\to U(1)$、$n\mapsto e^{inq\Phi}$ にほかならない。
+
+\subsection*{本章の主題}
+\begin{itemize}
+\item \textbf{渦とひも}：3次元空間のひも状の位相欠陥（宇宙ひも、超伝導の磁束管、超流動の渦）は、ひもを囲む円周から真空多様体 $\mathcal M$ への写像で特徴づけられ、$\pi_1(\mathcal M)$ で分類される。$U(1)\to1$ の破れでは $\pi_1(S^1)=\Z$ で、渦は整数の巻き付き数をもつ。$\pi_1$ が $\Z_2$ や非可換群になる例もある。
+\item \textbf{スピン}：$SO(3)$ の中で $2\pi$ 回転のループは1点に縮められず、$4\pi$ 回転のループは縮められる。これは $\pi_1(SO(3))=\Z_2$ であり、$SU(2)\to SO(3)$ が\term{普遍被覆}{universal cover}であることの言いかえである。スピン $1/2$ の状態が $2\pi$ 回転で $-1$ 倍になることの位相幾何的な起源である。
+\item \textbf{量子統計}：同種粒子の配位空間の基本群は、3次元では $\Z_2$ 程度の情報（置換群 $S_n$）しかもたないが、2次元では組みひも群 $B_n$ になる。前者からボソン・フェルミオン、後者からエニオンが現れる。
+\item \textbf{多重連結空間上の経路積分}：配位空間 $Q$ が単連結でないとき、経路積分は $\pi_1(Q)$ の元ごとのセクターに分かれ、
+\[
+K=\sum_{\alpha\in\pi_1(Q)}\chi(\alpha)\,K_\alpha,\qquad \chi\colon\pi_1(Q)\to U(1)\ \text{は準同型}
+\]
+の形に書ける（シュルマン、レイドロー・ドウィット）。$\chi$ の選び方が AB 位相、統計の位相、$\theta$ 角などの「量子化の曖昧さ」である。
+\end{itemize}
+これらすべてを支える数学的道具が\term{被覆空間}{covering space}であり、多価関数（位相 $\arg\phi$、スピノル、エニオンの波動関数）を一価にする「上の空間」として現れる。
+
+\section{基本事項のまとめ}
+
+\subsection{基本群}
+
+\begin{mydef}{道・ループ・基本群}{ch02-pi1}
+$X$ の\term{道}{path}とは連続写像 $f\colon I\to X$ のことで、$f(0)=f(1)=x_0$ のとき $x_0$ を基点とする\term{ループ}{loop}という。$f(1)=g(0)$ のとき道の積を
+\[
+(f\cdot g)(s)=\begin{cases}f(2s)&(0\le s\le\tfrac12)\\ g(2s-1)&(\tfrac12\le s\le1)\end{cases}
+\]
+で定め（$f$ を先にたどる）、逆の道を $\bar f(s)=f(1-s)$ とする。2つの道が\textbf{端点を止めてホモトピック}（$f\simeq g$ rel $\{0,1\}$）であるとは、$H\colon I\times I\to X$ で $H(s,0)=f(s)$、$H(s,1)=g(s)$、$H(0,t)$、$H(1,t)$ が $t$ によらないものがあることをいう。$x_0$ を基点とするループのこの同値類の集合
+\[
+\pi_1(X,x_0)
+\]
+は積 $[f][g]=[f\cdot g]$ で群になる（単位元は定値ループ、逆元は $[\bar f]$）。$\pi_1(X,x_0)=1$ かつ $X$ が弧状連結のとき、$X$ は\term{単連結}{simply connected}であるという。
+\end{mydef}
+
+\begin{myprop}{基点の変更}{ch02-basept}
+$h$ を $x_0$ から $x_1$ への道とすると、$\beta_h[\gamma]=[h\cdot\gamma\cdot\bar h]$ は群同型 $\pi_1(X,x_1)\to\pi_1(X,x_0)$ である。別の道 $h'$ に対し $\beta_{h'}=c_{g}\circ\beta_h$（$g=[h'\cdot\bar h]$ による共役 $c_g(x)=gxg^{-1}$）。したがって弧状連結な $X$ では $\pi_1(X)$ は同型を除いて基点によらず、$\pi_1$ がアーベル群なら同型は標準的である。また基点を止めない\term{自由ループ}{free loop}のホモトピー類は、$\pi_1(X,x_0)$ の\textbf{共役類}と1対1に対応する。
+\end{myprop}
+
+\begin{mythm}{誘導準同型とホモトピー不変性}{ch02-functor}
+連続写像 $f\colon(X,x_0)\to(Y,y_0)$ は準同型 $f_*\colon\pi_1(X,x_0)\to\pi_1(Y,y_0)$、$f_*[\gamma]=[f\circ\gamma]$ を誘導し、$(g\circ f)_*=g_*\circ f_*$、$\id_*=\id$ をみたす。ホモトピー同値 $X\simeq Y$ は基本群の同型を誘導する。特に可縮な空間は単連結であり、$\pi_1(X\times Y)\cong\pi_1(X)\times\pi_1(Y)$。
+\end{mythm}
+
+\begin{mythm}{円周の基本群}{ch02-pi1S1}
+$p\colon\R\to S^1$、$p(s)=e^{2\pi is}$ とする。$1\in S^1$ を基点とするループ $\gamma$ の、$0$ を始点とする持ち上げ $\tilde\gamma$（$p\circ\tilde\gamma=\gamma$）の終点を対応させる写像
+\[
+\deg\colon\pi_1(S^1,1)\longrightarrow\Z,\qquad [\gamma]\longmapsto\tilde\gamma(1)
+\]
+は群同型である。$\deg[\gamma]$ を $\gamma$ の\term{巻き付き数}{winding number}（写像度）という。
+\end{mythm}
+\begin{center}
+\begin{tikzpicture}[scale=1.0]
+  \draw[thick,gray,domain=-0.25:2.25,samples=200,smooth]
+    plot ({1.6*cos(360*\x)}, {0.45*sin(360*\x)+1.1*\x+1.2});
+  \draw[very thick,red!75!black,domain=0:2,samples=160,smooth]
+    plot ({1.6*cos(360*\x)}, {0.45*sin(360*\x)+1.1*\x+1.2});
+  \foreach \n in {0,1,2}{
+    \node[vtx] at (1.6,{1.1*\n+1.2}) {};
+    \node[right] at (1.65,{1.1*\n+1.2}) {\footnotesize $\n$};
+  }
+  \node[left] at (-1.7,3.0) {$\R$};
+  \draw[thick] (0,-1.3) ellipse (1.6 and 0.45);
+  \draw[very thick,red!75!black,mid arrow] (1.6,-1.3) arc (0:350:1.6 and 0.45);
+  \node[vtx] at (1.6,-1.3) {};
+  \node[right] at (1.65,-1.3) {\footnotesize $1=p(n)$};
+  \node[left] at (-1.7,-1.3) {$S^1$};
+  \draw[-{Stealth[length=2.2mm]}] (2.6,1.6) -- (2.6,-0.9) node[midway,right] {$p$};
+\end{tikzpicture}
+\zucap{普遍被覆 $p\colon\R\to S^1$。$\R$ を螺旋として描き、真下の円周へ射影する。$S^1$ を2周するループ $\gamma(s)=e^{4\pi is}$ の $0$ からの持ち上げ $\tilde\gamma(s)=2s$（赤）の終点 $2$ が巻き付き数である。}
+\end{center}
+
+物理では巻き付き数を積分で書くことが多い。$\gamma$ が $\C\setminus\{0\}$ の滑らかなループなら
+\[
+\deg\gamma=\frac{1}{2\pi}\oint_\gamma d\theta=\frac{1}{2\pi i}\oint_\gamma\frac{dz}{z},\qquad d\theta=\frac{x\,dy-y\,dx}{x^2+y^2}
+\]
+である（問題 \ref{ch02-prob-windint}）。$d\theta$ は閉形式だが完全形式ではなく、この「完全でない閉形式」が第5章のド・ラーム・コホモロジーの出発点になる。
+
+\subsection{ファン・カンペンの定理と計算例}
+
+\begin{mythm}{ザイフェルト・ファン・カンペンの定理}{ch02-vk}
+$X=U\cup V$（$U,V$ は開集合）で、$U$, $V$, $U\cap V$ が弧状連結、$x_0\in U\cap V$ とする。$\pi_1(U\cap V)\to\pi_1(U)$, $\pi_1(V)$ を包含が誘導する準同型 $i_1,i_2$ とすると
+\[
+\pi_1(X,x_0)\cong\pi_1(U,x_0)*_{\pi_1(U\cap V,x_0)}\pi_1(V,x_0)
+=\bigl(\pi_1(U)*\pi_1(V)\bigr)\big/\bigl\langle\!\bigl\langle i_1(c)\,i_2(c)^{-1}\bigr\rangle\!\bigr\rangle .
+\]
+ここで $*$ は自由積、$\langle\!\langle\cdots\rangle\!\rangle$ は生成される正規部分群である。特に $U\cap V$ が単連結なら $\pi_1(X)\cong\pi_1(U)*\pi_1(V)$。
+\end{mythm}
+\begin{note}
+「どのループも $U$ 内の部分と $V$ 内の部分の積に分解でき（ルベーグ数の議論）、分解の仕方の曖昧さは $U\cap V$ のループを $U$ 側で見るか $V$ 側で見るかだけである」というのが証明の要点である。
+\end{note}
+
+\begin{myprop}{2胞体の接着}{ch02-cell}
+弧状連結な $X$ に、接着写像 $\varphi\colon S^1\to X$ で2胞体を貼った空間 $Y=X\cup_\varphi D^2$ では
+\[
+\pi_1(Y)\cong\pi_1(X)\big/\langle\!\langle[\varphi]\rangle\!\rangle
+\]
+（$[\varphi]$ は基点へ道でつないだループの類）。$n\ge3$ の胞体を貼っても $\pi_1$ は変わらない。したがって CW 複体の $\pi_1$ は2骨格で決まり、「1胞体が生成元、2胞体が関係式」を与える。
+\end{myprop}
+
+\begin{myex}{基本群の表}{ch02-table}
+\begin{center}
+\renewcommand{\arraystretch}{1.25}
+\begin{tabular}{lll}
+空間 & $\pi_1$ & 理由\\ \hline
+$\R^n$, $D^n$, 可縮な空間 & $1$ & 可縮\\
+$S^1\simeq\R^2\setminus\{0\}\simeq\R^3\setminus(\text{直線})$ & $\Z$ & 定理 \ref{thm:ch02-pi1S1}\\
+$S^n$（$n\ge2$）, $\R^n\setminus\{0\}$（$n\ge3$） & $1$ & ファン・カンペン\\
+$\R^2\setminus\{k\ \text{点}\}\simeq\bigvee^kS^1$ & 自由群 $F_k$ & ファン・カンペン\\
+$T^n$ & $\Z^n$ & 積\\
+$\RP^n$（$n\ge2$） & $\Z_2$ & 被覆 $S^n\to\RP^n$\\
+$\Sigma_g$（種数 $g$ の閉曲面） & $\langle a_i,b_i\mid\prod_{i=1}^g[a_i,b_i]\rangle$ & 2胞体の接着\\
+レンズ空間 $L(N,p)=S^3/\Z_N$ & $\Z_N$ & 被覆 $S^3\to L(N,p)$
+\end{tabular}
+\end{center}
+ここで $[a,b]=aba^{-1}b^{-1}$。
+\end{myex}
+
+可換化 $\pi_1(X)^{\mathrm{ab}}=\pi_1/[\pi_1,\pi_1]$ は第4章の1次ホモロジー $H_1(X)$ と一致する（フレヴィッチの定理）。巻き付き数のような「足し算できる」量は可換化しか見ないので、非可換な $\pi_1$ の情報（交換子）は検出できない（問題 \ref{ch02-prob-twopts}）。
+
+\subsection{被覆空間}
+
+\begin{mydef}{被覆空間}{ch02-cov}
+連続全射 $p\colon\tilde X\to X$ が\term{被覆写像}{covering map}であるとは、各 $x\in X$ が開近傍 $U$ をもち、$p^{-1}(U)$ が互いに交わらない開集合 $\tilde U_\alpha$ の和で、各 $p|_{\tilde U_\alpha}\colon\tilde U_\alpha\to U$ が同相となることをいう（$U$ は\textbf{均等に覆われる}）。$p^{-1}(x)$ を\term{ファイバー}{fiber}、その濃度（$X$ が連結なら一定）を\textbf{葉数}という。同相 $\tau\colon\tilde X\to\tilde X$ で $p\circ\tau=p$ をみたすものを\term{被覆変換}{deck transformation}といい、その群を $\mathrm{Deck}(\tilde X/X)$ と書く。
+\end{mydef}
+
+\begin{mythm}{持ち上げ}{ch02-lift}
+$p\colon\tilde X\to X$ を被覆写像、$p(\tilde x_0)=x_0$ とする。
+\begin{enumerate}
+\item （道の持ち上げ）$x_0$ を始点とする道 $\gamma$ に対し、$\tilde x_0$ を始点とする持ち上げ $\tilde\gamma$（$p\circ\tilde\gamma=\gamma$）がただ1つ存在する。
+\item （ホモトピーの持ち上げ）$H\colon I\times I\to X$ と $H(0,0)$ の上の点を与えると、持ち上げ $\tilde H$ がただ1つ存在する。特に端点を止めてホモトピックな道の持ち上げは同じ終点をもつ。
+\item $p_*\colon\pi_1(\tilde X,\tilde x_0)\to\pi_1(X,x_0)$ は単射で、$[\gamma]\in p_*\pi_1(\tilde X,\tilde x_0)$ と「$\tilde\gamma$ が閉じる」ことは同値。葉数は指数 $[\pi_1(X):p_*\pi_1(\tilde X)]$ に等しい（$\tilde X$ 連結のとき）。
+\item （持ち上げの判定法）$Y$ が弧状連結かつ局所弧状連結のとき、$f\colon(Y,y_0)\to(X,x_0)$ が持ち上げ $\tilde f\colon(Y,y_0)\to(\tilde X,\tilde x_0)$ をもつための必要十分条件は $f_*\pi_1(Y,y_0)\subset p_*\pi_1(\tilde X,\tilde x_0)$。持ち上げは1点での値で一意に決まる。
+\end{enumerate}
+\end{mythm}
+
+\begin{mythm}{被覆空間のガロア対応}{ch02-galois}
+$X$ が弧状連結・局所弧状連結・半局所単連結（多様体や CW 複体はすべてそう）とする。
+\begin{enumerate}
+\item 単連結な被覆 $\tilde X\to X$（\term{普遍被覆}{universal cover}）が存在し、$\mathrm{Deck}(\tilde X/X)\cong\pi_1(X)$。
+\item 連結な被覆の同型類 $\longleftrightarrow$ $\pi_1(X,x_0)$ の部分群の共役類（$\tilde X\mapsto p_*\pi_1(\tilde X)$）。
+\item $H=p_*\pi_1(\tilde X,\tilde x_0)$ が正規部分群であること（\textbf{正規被覆}）と、被覆変換群がファイバーに推移的に作用することは同値で、このとき $\mathrm{Deck}\cong\pi_1(X)/H$。一般には $\mathrm{Deck}\cong N(H)/H$（$N(H)$ は正規化群）。
+\end{enumerate}
+\end{mythm}
+
+\begin{mythm}{自由な作用による商}{ch02-quotient}
+群 $G$ が空間 $Y$ に\term{被覆空間作用}{covering space action}をする（各 $y$ に近傍 $U$ があって $g\ne e$ なら $gU\cap U=\emptyset$；有限群のハウスドルフ空間への自由な作用、リー群の離散部分群の作用など）とき、$Y\to Y/G$ は被覆写像で、被覆変換群は $G$ である。さらに $Y$ が単連結なら
+\[
+\pi_1(Y/G)\cong G .
+\]
+\end{mythm}
+
+\begin{myex}{被覆の例}{ch02-covex}
+\begin{itemize}
+\item $\R\to S^1$（$\Z$ が平行移動で作用）、$S^1\to S^1$、$z\mapsto z^n$（$n$ 重、被覆変換群 $\Z_n$）。$S^1$ の連結な被覆はこれらで尽きる（$\Z$ の部分群は $n\Z$）。
+\item $\R^n\to T^n$（$\Z^n$）、$S^n\to\RP^n$（$\Z_2=\{\pm1\}$）。
+\item $SU(2)\cong S^3\to SO(3)\cong\RP^3$（$\{\pm\mathbf 1\}$）、$SU(N)\to SU(N)/\Z_N$。
+\item $S^3\to L(N,p)$（$\Z_N$；問題 \ref{ch02-prob-lens}）。
+\end{itemize}
+\end{myex}
+
+\subsection{リー群と等質空間の基本群}
+
+\begin{myprop}{リー群の基本群}{ch02-liepi1}
+\begin{center}
+\renewcommand{\arraystretch}{1.25}
+\begin{tabular}{llll}
+群 $G$ & $\pi_1(G)$ & 普遍被覆 & 備考\\ \hline
+$U(1)$ & $\Z$ & $\R$ & \\
+$SU(N)$ & $1$ & $SU(N)$ & 第3章（ファイブレーション）\\
+$U(N)$ & $\Z$ & $SU(N)\times\R$ & $\det_*$ が同型\\
+$SU(N)/\Z_N$ & $\Z_N$ & $SU(N)$ & \\
+$SO(2)$ & $\Z$ & $\R$ & \\
+$SO(n)$（$n\ge3$） & $\Z_2$ & $\Spin(n)$ & $\Spin(3)=SU(2)$ など\\
+$SO^+(3,1)$ & $\Z_2$ & $SL(2,\C)$ & \\
+$Sp(N)$ & $1$ & $Sp(N)$ &
+\end{tabular}
+\end{center}
+連結なリー群の $\pi_1$ は常にアーベル群である。
+\end{myprop}
+
+\begin{mythm}{等質空間の基本群}{ch02-GH}
+$G$ が連結かつ単連結なリー群、$H\subset G$ が閉部分群なら
+\[
+\pi_1(G/H)\cong\pi_0(H)=H/H_0\qquad(H_0\ \text{は単位元を含む連結成分}).
+\]
+$H$ が離散なら $G\to G/H$ は $H$ を被覆変換群とする普遍被覆で、定理 \ref{thm:ch02-quotient} から従う（問題 \ref{ch02-prob-strings}）。一般の場合はファイブレーションの完全列から従う（第3, 7章）。$G$ が単連結でないときは、普遍被覆 $\tilde G$ と $H$ の逆像 $\tilde H$ に置き換えて $\pi_1(G/H)\cong\pi_0(\tilde H)$ とする。
+\end{mythm}
+
+\begin{physbox}[：ひも状欠陥の分類]
+3次元空間で対称性が $G\to H$ と破れ、真空多様体が $\mathcal M=G/H$ のとき、ひも（線欠陥）を1周する小さな円周上で場は $\mathcal M$ に値をとり、ループ $S^1\to\mathcal M$ が定まる。基点を止めないので、ひもの種類は $\pi_1(\mathcal M)$ の\textbf{共役類}で分類される。
+\begin{center}
+\renewcommand{\arraystretch}{1.2}\small
+\begin{tabular}{lll}
+破れ & $\pi_1(\mathcal M)$ & 欠陥\\ \hline
+$U(1)\to1$（超伝導） & $\Z$ & ANO 渦、磁束量子化\\
+$U(1)\to\Z_N$（電荷 $N$ のヒッグス） & $\Z$ & 磁束 $2\pi/N$ を単位とする渦\\
+$SO(3)\to1$ & $\Z_2$ & $\Z_2$ ひも（2本で対消滅）\\
+$SO(3)\to D_2$（2軸性ネマティック液晶） & $Q_8$（非可換） & 非可換ひも\\
+$SU(2)\times U(1)\to U(1)_{\mathrm{em}}$（電弱） & $1$ & 安定なひもなし
+\end{tabular}
+\end{center}
+$\pi_1$ が非可換だと、2本のひもが交差したとき交換子に当たるひもでつながれ、自由にすり抜けられない。
+\end{physbox}
+
+\subsection{量子力学と基本群}
+
+\begin{mythm}{多重連結空間上の経路積分（シュルマン、レイドロー・ドウィット）}{ch02-sld}
+配位空間 $Q$ の普遍被覆を $\tilde Q$、被覆変換群を $\pi_1(Q)$ とする。$Q$ 上の伝播関数を $\tilde Q$ 上の伝播関数 $\tilde K$ の和で
+\[
+K(q,t;q',0)=\sum_{\alpha\in\pi_1(Q)}\chi(\alpha)\,\tilde K(\tilde q,t;\alpha\tilde q',0)
+\]
+と表すとき（$\tilde q,\tilde q'$ は $q,q'$ の上の点）、合成則 $\int K K=K$ と確率の保存から $\chi$ は1次元ユニタリ表現（準同型 $\chi\colon\pi_1(Q)\to U(1)$）でなければならない。異なる $\chi$ は異なる量子化を与える。
+\end{mythm}
+同じことを、「波動関数を $\tilde Q$ 上の関数で $\psi(\alpha\tilde q)=\chi(\alpha)\psi(\tilde q)$ をみたすものとする」と言っても、あるいは「$Q$ 上に平坦な $U(1)$ 接続を入れ、そのホロノミーを $\chi$ とする」と言ってもよい（問題 \ref{ch02-prob-wilson}；第7, 8章）。
+
+\begin{myex}{同種粒子の配位空間と組みひも群}{ch02-braid}
+$d$ 次元空間の $n$ 個の同種粒子の配位空間は
+\[
+C_n(\R^d)=\bigl\{(x_1,\dots,x_n)\in(\R^d)^n: x_i\neq x_j\ (i\ne j)\bigr\}\big/S_n
+\]
+である。
+\begin{itemize}
+\item $d\ge3$：$\pi_1(C_n(\R^d))\cong S_n$（置換群）。$S_n$ の1次元表現は自明表現と符号表現だけで、ボソンとフェルミオンに対応する。
+\item $d=2$：$\pi_1(C_n(\R^2))\cong B_n$（\term{組みひも群}{braid group}）。生成元 $\sigma_1,\dots,\sigma_{n-1}$（$i$ 番目と $i+1$ 番目の粒子を反時計回りに半回転させて入れ替える）と関係式
+\[
+\sigma_i\sigma_{i+1}\sigma_i=\sigma_{i+1}\sigma_i\sigma_{i+1},\qquad \sigma_i\sigma_j=\sigma_j\sigma_i\ (\lvert i-j\rvert\ge2)
+\]
+で表示される（アルティン）。$\sigma_i^2\ne1$ である点が $S_n$ と異なる。
+\end{itemize}
+\end{myex}
+\begin{center}
+\begin{tikzpicture}[scale=0.9,thick]
+  \begin{scope}
+    \draw (0,0) -- (0,2); \draw (3,0) -- (3,2);
+    \draw (1,0) .. controls (1,1) and (2,1) .. (2,2);
+    \draw[white,line width=5pt] (2,0) .. controls (2,1) and (1,1) .. (1,2);
+    \draw (2,0) .. controls (2,1) and (1,1) .. (1,2);
+    \foreach \x in {0,1,2,3}{\node[vtx] at (\x,0) {}; \node[vtx] at (\x,2) {};}
+    \node[below] at (0,-0.1) {\footnotesize $1$}; \node[below] at (1,-0.1) {\footnotesize $i$};
+    \node[below] at (2,-0.1) {\footnotesize $i{+}1$}; \node[below] at (3,-0.1) {\footnotesize $n$};
+    \node at (1.5,-0.8) {$\sigma_i$};
+  \end{scope}
+  \begin{scope}[xshift=4.5cm]
+    \draw (0,0) -- (0,2); \draw (3,0) -- (3,2);
+    \draw (2,0) .. controls (2,1) and (1,1) .. (1,2);
+    \draw[white,line width=5pt] (1,0) .. controls (1,1) and (2,1) .. (2,2);
+    \draw (1,0) .. controls (1,1) and (2,1) .. (2,2);
+    \foreach \x in {0,1,2,3}{\node[vtx] at (\x,0) {}; \node[vtx] at (\x,2) {};}
+    \node at (1.5,-0.8) {$\sigma_i^{-1}$};
+  \end{scope}
+  \begin{scope}[xshift=9cm]
+    \draw (0,0) .. controls (0,0.5) and (1,0.5) .. (1,1);
+    \draw[white,line width=5pt] (1,0) .. controls (1,0.5) and (0,0.5) .. (0,1);
+    \draw (1,0) .. controls (1,0.5) and (0,0.5) .. (0,1);
+    \draw (0,1) .. controls (0,1.5) and (1,1.5) .. (1,2);
+    \draw[white,line width=5pt] (1,1) .. controls (1,1.5) and (0,1.5) .. (0,2);
+    \draw (1,1) .. controls (1,1.5) and (0,1.5) .. (0,2);
+    \foreach \x in {0,1}{\node[vtx] at (\x,0) {}; \node[vtx] at (\x,2) {};}
+    \node at (0.5,-0.8) {$\sigma_1^2$};
+  \end{scope}
+\end{tikzpicture}
+\zucap{組みひも群の生成元（時間は下から上）。$\sigma_i$ と $\sigma_i^{-1}$ は交差の上下が逆。$\sigma_1^2$ は一方の粒子が他方のまわりを1周する運動で、2次元平面内では縮められないが、3次元では第3の方向へ持ち上げてほどける。}
+\end{center}
+
+\begin{physbox}[：本章の辞書]
+\begin{center}
+\small
+\begin{tabular}{p{0.5\linewidth}p{0.4\linewidth}}
+物理 & 数学\\ \hline
+AB 位相 $e^{iq\Phi n}$ & 準同型 $\pi_1(X)\to U(1)$\\
+平坦な接続のウィルソン・ループ & ホロノミー表現 $\pi_1\to G$\\
+渦の巻き付き数・ひもの種類 & $\pi_1(\mathcal M)$ の（共役類の）元\\
+多価な位相 $\arg\phi$、スピノル、エニオン波動関数 & 被覆空間上の一価関数\\
+スピン $1/2$ の $2\pi$ 回転で $-1$ & $\pi_1(SO(3))=\Z_2$、$SU(2)\to SO(3)$\\
+ボソン／フェルミオン／エニオン & $S_n$／$B_n$ の1次元表現\\
+$\theta$ セクター、量子化の曖昧さ & $\mathrm{Hom}(\pi_1(Q),U(1))$
+\end{tabular}
+\end{center}
+\end{physbox}
+
+\section{問題}
+
+\subsection{基本群の計算}
+
+\begin{problem}[難易度 A]\label{ch02-prob-basept}
+$X$ を弧状連結な空間、$h$ を $x_0$ から $x_1$ への道とし、$\beta_h\colon\pi_1(X,x_1)\to\pi_1(X,x_0)$、$\beta_h[\gamma]=[h\cdot\gamma\cdot\bar h]$ とする。\\
+(1) $\beta_h$ が well-defined な群同型であることを示せ。\\
+(2) $x_0$ から $x_1$ への別の道 $h'$ について、$\beta_{h'}(x)=g\,\beta_h(x)\,g^{-1}$（$g=[h'\cdot\bar h]\in\pi_1(X,x_0)$）を示せ。\\
+(3) 3次元空間のひも状欠陥の「種類」を、ひもを囲むループの $\pi_1(\mathcal M,x_0)$ の元で表そうとすると、基点のとり方によって元が共役で変わりうる。ひもの種類として意味をもつのは何か。$\pi_1(\mathcal M)$ がアーベル群のときはどうか。
+\end{problem}
+
+\begin{solution}
+(1) $\gamma\simeq\gamma'$（rel 端点）なら、ホモトピーの前後に $h$, $\bar h$ をつなげて $h\cdot\gamma\cdot\bar h\simeq h\cdot\gamma'\cdot\bar h$。道の積は（端点を止めたホモトピーの意味で）結合的で、$\bar h\cdot h$ は $x_1$ での定値ループとホモトピックなので
+\[
+\beta_h[\gamma]\beta_h[\gamma']=[h\cdot\gamma\cdot\bar h\cdot h\cdot\gamma'\cdot\bar h]=[h\cdot\gamma\cdot\gamma'\cdot\bar h]=\beta_h([\gamma][\gamma']).
+\]
+$\beta_{\bar h}\colon\pi_1(X,x_0)\to\pi_1(X,x_1)$ が逆写像である（$\bar h\cdot h\cdot\gamma\cdot\bar h\cdot h\simeq\gamma$）。よって同型。
+
+(2) $h'\cdot\gamma\cdot\bar h'\simeq(h'\cdot\bar h)\cdot(h\cdot\gamma\cdot\bar h)\cdot(h\cdot\bar h')$ であり、$h\cdot\bar h'$ は $h'\cdot\bar h$ の逆の道なので、$\beta_{h'}[\gamma]=g\,\beta_h[\gamma]\,g^{-1}$。
+
+(3) ひもを囲むループは基点を止めずに連続変形してよい（ひもの周りの小さな円周の選び方、ひもに沿った移動）。基点 $x_0$ と円周上の点を結ぶ道の選び方の曖昧さは (2) により共役で表されるので、意味をもつのは $\pi_1(\mathcal M,x_0)$ の\textbf{共役類}である（自由ループのホモトピー類と共役類は1対1に対応する）。$\pi_1$ がアーベル群なら共役類は1元からなり、ひもの種類は $\pi_1$ の元そのもの（例えば $U(1)$ 渦の巻き付き数 $n\in\Z$）で、基点のとり方によらない。非可換な場合の例は問題 \ref{ch02-prob-strings} で扱う。
+\end{solution}
+
+\begin{problem}[難易度 B]\label{ch02-prob-S1}
+$p\colon\R\to S^1$、$p(s)=e^{2\pi is}$ とし、道とホモトピーの持ち上げ（定理 \ref{thm:ch02-lift} (1)(2)）を認める。$\deg[\gamma]=\tilde\gamma(1)$（$\tilde\gamma$ は $\gamma$ の $0$ からの持ち上げ）が well-defined な群同型 $\pi_1(S^1,1)\to\Z$ であることを示せ。また、定値でない写像 $S^1\to S^1$、$z\mapsto z^n$ の巻き付き数を求めよ。
+\end{problem}
+
+\begin{solution}
+$p(\tilde\gamma(1))=\gamma(1)=1$ なので $\tilde\gamma(1)\in p^{-1}(1)=\Z$。
+
+\textbf{well-defined}：$H$ を $\gamma\simeq\gamma'$（rel 端点）とし、$\tilde H(0,0)=0$ となる持ち上げ $\tilde H$ をとる。$t\mapsto\tilde H(0,t)$ は定値の道 $1$ の持ち上げで、離散集合 $\Z$ に値をとる連続関数なので一定値 $0$。同様に $t\mapsto\tilde H(1,t)\in\Z$ も一定。$\tilde H(\cdot,0)$, $\tilde H(\cdot,1)$ はそれぞれ $\gamma$, $\gamma'$ の $0$ からの持ち上げ（一意性）なので $\tilde\gamma(1)=\tilde\gamma'(1)$。
+
+\textbf{準同型}：$m=\tilde\gamma(1)$ とする。$T_m(s)=s+m$ は $p\circ T_m=p$ をみたすので、$\tilde\gamma'+m$ は $\gamma'$ の $m$ からの持ち上げ。よって $\tilde\gamma\cdot(\tilde\gamma'+m)$ は $\gamma\cdot\gamma'$ の $0$ からの持ち上げで、終点は $m+\tilde\gamma'(1)$。
+
+\textbf{全射}：$\gamma_n(s)=e^{2\pi ins}$ の持ち上げは $\tilde\gamma_n(s)=ns$ で、$\deg=n$。
+
+\textbf{単射}：$\tilde\gamma(1)=0$ なら $\tilde\gamma$ は $\R$ のループで、$\R$ は凸なので $G(s,t)=(1-t)\tilde\gamma(s)$ は $\tilde\gamma$ と定値ループの間の rel 端点ホモトピー。$p\circ G$ が $\gamma\simeq$ 定値ループを与える。
+
+以上より $\deg$ は同型である。$z\mapsto z^n$ を $s\mapsto e^{2\pi ins}$ で表すと、持ち上げは $ns$ で巻き付き数は $n$ である。物理的には、$U(1)$ のゲージ変換 $g(\theta)=e^{in\theta}$ の巻き付き数、渦 $\phi=ve^{in\theta}$ の渦度である。
+\end{solution}
+
+\begin{problem}[難易度 B]\label{ch02-prob-windint}
+(1) $\gamma\colon I\to\C\setminus\{0\}$ を滑らかなループとする。被覆 $\exp\colon\C\to\C\setminus\{0\}$ に関する持ち上げ $\tilde\gamma$（$e^{\tilde\gamma}=\gamma$）を用いて、
+\[
+\frac{1}{2\pi i}\oint_\gamma\frac{dz}{z}=\frac{1}{2\pi}\oint_\gamma d\theta
+\]
+が整数で、$\gamma/\lvert\gamma\rvert\colon I\to S^1$ の巻き付き数に等しいことを示せ。\\
+(2) 平面上の複素スカラー場 $\phi(z)=(z-1)^2(\bar z+1)$ について、円周 $\lvert z\rvert=R$ 上の $\phi$ の巻き付き数を $R<1$ と $R>1$ で求めよ。また $z=1$, $z=-1$ のまわりの小さな円周上の巻き付き数を求めよ。\\
+(3) 連続な場 $\phi\colon\C\to\C$ の零点が有限個 $z_1,\dots,z_k$ で、各零点のまわりの巻き付き数を $n_j$ とする。$\phi$ の零点をすべて内部に含む大きな円周上の巻き付き数は $\sum_jn_j$ に等しいことを示せ。（$\pi_1(\C\setminus\{z_1,\dots,z_k\})$ が、各 $z_j$ のまわりを1周するループ $a_j$ で生成され、大きな円周がある順序の積 $a_{1}a_2\cdots a_k$ とホモトピックであることは認めてよい。）
+\end{problem}
+
+\begin{solution}
+(1) $\exp\colon\C\to\C^\times$ は被覆写像（$\R\to S^1$ と $\R_{>0}$ の積）なので、持ち上げ $\tilde\gamma=\log\lvert\gamma\rvert+i\theta$（$\theta$ は連続に選んだ偏角）が存在し、$\gamma$ が滑らかなら $\tilde\gamma$ も滑らか。$dz/z$ を $\gamma$ に引き戻すと $\gamma'/\gamma\,ds=\tilde\gamma'\,ds$ なので
+\[
+\oint_\gamma\frac{dz}{z}=\tilde\gamma(1)-\tilde\gamma(0)=\underbrace{\log\lvert\gamma(1)\rvert-\log\lvert\gamma(0)\rvert}_{=0}+i\bigl(\theta(1)-\theta(0)\bigr).
+\]
+$e^{i\theta(1)}=e^{i\theta(0)}$ より $\theta(1)-\theta(0)=2\pi n$、$n\in\Z$。$\theta/2\pi$ は $\gamma/\lvert\gamma\rvert$ の $\R\to S^1$ に関する持ち上げ（を平行移動したもの）なので $n$ は巻き付き数である。また $\dfrac{dz}{z}=\dfrac{dr}{r}+i\,d\theta$ で、$d\theta=\operatorname{Im}(dz/z)=(x\,dy-y\,dx)/(x^2+y^2)$。
+
+(2) 偏角は積で足し算になるので、巻き付き数は積について加法的である：$\deg(\phi_1\phi_2)=\deg\phi_1+\deg\phi_2$。また $\deg\bar\phi=-\deg\phi$。円周 $\lvert z\rvert=R$ 上で、$z-a$（$\lvert a\rvert\ne R$）の巻き付き数は $\lvert a\rvert<R$ なら $1$、$\lvert a\rvert>R$ なら $0$（後者は $z-a$ が円板内で零にならないので、$R\to0$ への縮小で定値に変形できる）。よって
+\begin{center}
+\begin{tabular}{c|ccc}
+ & $(z-1)^2$ & $\bar z+1=\overline{z+1}$ & $\phi$\\ \hline
+$R<1$ & $0$ & $0$ & $0$\\
+$R>1$ & $2$ & $-1$ & $1$
+\end{tabular}
+\end{center}
+$z=1$ の近く（半径 $\epsilon<2$）では $\bar z+1\neq0$ が円板内で零にならないので巻き付き数 $2$、$z=-1$ の近くでは $-1$。すなわち $z=1$ に渦度 $2$ の渦、$z=-1$ に渦度 $-1$ の反渦がある。
+
+(3) $X=\C\setminus\{z_j\}$ とすると $\phi|_X\colon X\to\C^\times$ は準同型 $\phi_*\colon\pi_1(X)\to\pi_1(\C^\times)=\Z$ を誘導し、$\phi_*(a_j)=n_j$（$a_j$ は基点から $z_j$ の近くまで道でつないだ小円周であるが、$\Z$ はアーベル群なので道の選び方によらない）。大きな円周 $C\simeq a_1\cdots a_k$ より $\deg(\phi|_C)=\phi_*(a_1\cdots a_k)=\sum_jn_j$。(2) の例では $2+(-1)=1$ で整合する。物理的には、遠方での巻き付き数（全渦度）は内部の渦の渦度の和で、渦と反渦は対消滅できるが全渦度は変わらない。
+\end{solution}
+
+\begin{problem}[難易度 A]\label{ch02-prob-product}
+(1) $\pi_1(X\times Y,(x_0,y_0))\cong\pi_1(X,x_0)\times\pi_1(Y,y_0)$ を示せ。\\
+(2) $\pi_1(T^n)\cong\Z^n$ を示せ。\\
+(3) 10次元時空 $\R^{1,7}\times T^2$ の閉じた弦は、トーラス方向の\term{巻き付き数}{winding number} $(w_1,w_2)\in\Z^2$ をもつ。弦の運動で $(w_1,w_2)$ が保存される理由を述べよ。また $\R^{1,8}\times S^1$ ではどうか。
+\end{problem}
+
+\begin{solution}
+(1) $p_X,p_Y$ を射影とし、$\Psi[\gamma]=([p_X\circ\gamma],[p_Y\circ\gamma])$ とおく（$(p_X)_*$, $(p_Y)_*$ の組なので準同型）。逆に $X$ のループ $\alpha$ と $Y$ のループ $\beta$ から $(\alpha,\beta)(s)=(\alpha(s),\beta(s))$ が作れ、$\alpha\simeq\alpha'$（$H$）、$\beta\simeq\beta'$（$K$）なら $(H,K)$ が $(\alpha,\beta)\simeq(\alpha',\beta')$ を与えるので、$([\alpha],[\beta])\mapsto[(\alpha,\beta)]$ は well-defined。両者は互いに逆である（ループは成分の組で決まり、ホモトピーも成分ごとに与えられる）。
+
+(2) $T^n=S^1\times\cdots\times S^1$ なので (1) と $\pi_1(S^1)=\Z$ より $\Z^n$。生成元は $j$ 番目の円周を1周するループ。
+
+(3) 閉じた弦の配位は（各時刻で）ループ $S^1\to\R^{1,7}\times T^2$ であり、その自由ホモトピー類は $\pi_1(\R^{1,7}\times T^2)=\pi_1(T^2)=\Z^2$ の共役類、すなわち $\Z^2$ の元（アーベル群）である。弦の時間発展は連続なので、異なる時刻の弦はホモトピックで、巻き付き数 $(w_1,w_2)$ は保存される（弦の分裂・結合があっても全体の和が保存される）。$\R^{1,8}\times S^1$ では $\pi_1=\Z$ で、1つの巻き付き数 $w\in\Z$ が保存される。T双対性（第10章）では巻き付き数と運動量量子数 $n$ が入れ替わる。
+\end{solution}
+
+\begin{problem}[難易度 B]\label{ch02-prob-twopts}
+$X=\R^2\setminus\{p,q\}$（$p=(-1,0)$, $q=(1,0)$）、基点 $x_0=(0,-1)$ とする。$a$ を $p$ のまわりを、$b$ を $q$ のまわりを反時計回りに1周するループとし（下図左）、$\pi_1(X,x_0)$ が $a,b$ を生成元とする自由群 $F_2$ であることを用いてよい。
+\begin{center}
+\begin{tikzpicture}[scale=0.85]
+  \begin{scope}
+    \draw[thick,red!75!black,mid arrow] (0,-1) .. controls (-0.1,0.3) and (-0.5,0.9) .. (-1,0.9)
+       .. controls (-1.7,0.9) and (-2,0) .. (-1.7,-0.6) .. controls (-1.3,-1.1) and (-0.4,-1.1) .. (0,-1);
+    \draw[thick,blue!75!black,mid arrow] (0,-1) .. controls (0.4,-1.1) and (1.3,-1.1) .. (1.7,-0.6)
+       .. controls (2,0) and (1.7,0.9) .. (1,0.9) .. controls (0.5,0.9) and (0.1,0.3) .. (0,-1);
+    \node[red!75!black] at (-2.0,0.6) {$a$};
+    \node[blue!75!black] at (2.0,0.6) {$b$};
+    \node[hvtx] at (-1,0) {}; \node[below] at (-1,0) {\footnotesize $p$};
+    \node[hvtx] at (1,0) {};  \node[below] at (1,0) {\footnotesize $q$};
+    \node[vtx] at (0,-1) {};  \node[below] at (0,-1) {\footnotesize $x_0$};
+  \end{scope}
+  \begin{scope}[xshift=5.2cm]
+    \draw[thick,mid arrow] (0,-1) .. controls (1.6,-1.05) and (2.2,-0.6) .. (2.2,0)
+       .. controls (2.2,0.8) and (1.2,1.1) .. (0,1.1) .. controls (-1.2,1.1) and (-2.2,0.8) .. (-2.2,0)
+       .. controls (-2.2,-0.6) and (-1.6,-1.05) .. (0,-1);
+    \node at (0,1.4) {$\gamma_1$};
+    \node[hvtx] at (-1,0) {}; \node[below] at (-1,0) {\footnotesize $p$};
+    \node[hvtx] at (1,0) {};  \node[below] at (1,0) {\footnotesize $q$};
+    \node[vtx] at (0,-1) {};  \node[below] at (0,-1) {\footnotesize $x_0$};
+  \end{scope}
+  \begin{scope}[xshift=10.4cm]
+    \draw[thick,mid arrow] (0,-1) .. controls (-0.1,0.3) and (-0.5,0.9) .. (-1,0.9)
+       .. controls (-1.7,0.9) and (-2,0) .. (-1.7,-0.6) .. controls (-1.3,-1.1) and (-0.4,-1.1) .. (0,-1);
+    \draw[thick,mid arrow] (0,-1) .. controls (0.1,0.3) and (0.5,0.9) .. (1,0.9)
+       .. controls (1.7,0.9) and (2,0) .. (1.7,-0.6) .. controls (1.3,-1.1) and (0.4,-1.1) .. (0,-1);
+    \node at (0,1.4) {$\gamma_2$（左の輪が先）};
+    \node[hvtx] at (-1,0) {}; \node[below] at (-1,0) {\footnotesize $p$};
+    \node[hvtx] at (1,0) {};  \node[below] at (1,0) {\footnotesize $q$};
+    \node[vtx] at (0,-1) {};  \node[below] at (0,-1) {\footnotesize $x_0$};
+  \end{scope}
+\end{tikzpicture}
+\zucap{左：生成元 $a,b$。中：両方の点を囲む反時計回りのループ $\gamma_1$。右：8の字のループ $\gamma_2$（左の輪をたどってから右の輪をたどる）。}
+\end{center}
+(1) $[\gamma_1]$, $[\gamma_2]$ を $a,b$ の語で表せ。\\
+(2) $p$, $q$ のまわりの巻き付き数の組 $w=(w_p,w_q)\colon\pi_1(X)\to\Z^2$ が準同型であることを認めて、$w(\gamma_1)$, $w(\gamma_2)$ を求めよ。\\
+(3) 交換子 $c=aba^{-1}b^{-1}$ は $w(c)=(0,0)$ だが、定値ループとホモトピックでないことを示せ。\\
+(4) $p$, $q$ に非可換ゲージ群 $G$ の磁束管（外側では平坦な接続）があり、$a$, $b$ に沿ったホロノミーがそれぞれ $g_p,g_q\in G$ であるとする。ホロノミーが準同型 $\rho\colon\pi_1(X)\to G$ を与えることを認めて、ループ $c$ に沿って運ばれた粒子の内部状態の変化を述べよ。
+\end{problem}
+
+\begin{solution}
+(1) $\gamma_1$ の上半分を、$p$ と $q$ の間の点 $(0,0)$ を通るように引き下げる（$p,q$ を横切らないのでホモトピー）。
+\begin{center}
+\begin{tikzpicture}[scale=0.8]
+  \draw[thick,blue!75!black,mid arrow] (0,-1) .. controls (0.4,-1.1) and (1.3,-1.1) .. (1.7,-0.6)
+     .. controls (2,0) and (1.7,0.9) .. (1,0.9) .. controls (0.5,0.9) and (0.15,0.4) .. (0.08,-0.95);
+  \draw[thick,red!75!black,mid arrow] (-0.08,-0.95) .. controls (-0.15,0.4) and (-0.5,0.9) .. (-1,0.9)
+     .. controls (-1.7,0.9) and (-2,0) .. (-1.7,-0.6) .. controls (-1.3,-1.1) and (-0.4,-1.1) .. (0,-1);
+  \node[hvtx] at (-1,0) {}; \node[hvtx] at (1,0) {};
+  \node[vtx] at (0,-1) {};
+  \node[blue!75!black] at (2.1,0.5) {$b$};
+  \node[red!75!black] at (-2.1,0.5) {$a$};
+  \node at (3.6,0) {$\gamma_1\simeq b\cdot a$};
+\end{tikzpicture}
+\zucap{中央の縦の往復は打ち消し合うので、$\gamma_1$ はまず $b$、次に $a$ をたどるループとホモトピック。}
+\end{center}
+$\gamma_1$ は $x_0$ から右へ出て $q$ の右側を上り、上を左へ通って $p$ の左側を下り $x_0$ に戻る。中央に「下って上る」往復 $\delta\cdot\bar\delta$（定値の道とホモトピック）を挿入すると、前半は $q$ を反時計回りに1周する $b$、後半は $p$ を反時計回りに1周する $a$ になるので $[\gamma_1]=ba$。
+$\gamma_2$ の左の輪は $a$ そのもの。右の輪は $x_0$ から中央を上り、$q$ の上を右へ通って右側を下り、下を通って戻るので、$q$ のまわりを時計回りに1周する $\bar b$。よって $[\gamma_2]=ab^{-1}$。
+
+(2) $w(a)=(1,0)$、$w(b)=(0,1)$（$a$ は半平面 $\{x<1\}$ に含まれ、そこでは $q$ から見た偏角を $(\pi/2,3\pi/2)$ の範囲で連続に選べるので $w_q(a)=0$。$w_p(b)=0$ も同様）。よって $w(\gamma_1)=(1,1)$、$w(\gamma_2)=(1,-1)$。
+
+(3) $\Z^2$ は可換なので $w(c)=w(a)+w(b)-w(a)-w(b)=(0,0)$。一方、自由群の元は既約語で一意に表され、$aba^{-1}b^{-1}$ は隣り合う文字が互いに逆元でない空でない既約語なので $c\neq1$。巻き付き数（第4章の $H_1$ のクラス）は可換化 $\pi_1^{\mathrm{ab}}$ の情報しかもたず、交換子は検出できない。
+
+(4) $\rho(c)=\rho(a)\rho(b)\rho(a)^{-1}\rho(b)^{-1}=g_pg_qg_p^{-1}g_q^{-1}$。（ホロノミーの順序の規約によっては逆準同型になり $\rho(c)=g_p^{-1}g_q^{-1}g_pg_q$ となるが、議論は同じ。）$g_p$ と $g_q$ が可換でなければ $\rho(c)\ne\mathbf 1$ で、$c$ に沿って一巡した粒子の内部状態（色など）は $\rho(c)$ だけ回転し、干渉実験で検出できる。各磁束管のまわりの「巻き付き数」はゼロなのに効果が残る、非可換 AB 効果である。アーベル群 $G=U(1)$ なら $\rho(c)=1$ で、効果は巻き付き数だけで決まる。
+\end{solution}
+
+\begin{problem}[難易度 B]\label{ch02-prob-surface}
+(1) 種数 $g\ge1$ の向き付け可能閉曲面 $\Sigma_g$ は、1つの0胞体、1胞体 $a_1,b_1,\dots,a_g,b_g$、語 $[a_1,b_1]\cdots[a_g,b_g]$ に沿って貼られた1つの2胞体からなる。$\pi_1(\Sigma_g)$ とその可換化を求め、$g\ne g'$ なら $\Sigma_g\not\simeq\Sigma_{g'}$ を示せ。\\
+(2) $\RP^2$ は1つの0胞体、1つの1胞体 $a$、語 $a^2$ に沿って貼られた2胞体からなる。$\pi_1(\RP^2)$ を求めよ。\\
+(3) $g=1$ のとき (1) の結果が問題 \ref{ch02-prob-product} の $\pi_1(T^2)=\Z^2$ と一致することを確かめよ。
+\end{problem}
+
+\begin{solution}
+(1) 1骨格は $2g$ 個の円周の楔和で、ファン・カンペンの定理を繰り返し用いると $\pi_1$ は $a_1,\dots,b_g$ 上の自由群（$\R^2$ から $2g$ 点を除いた空間と同様）。2胞体の接着（命題 \ref{prop:ch02-cell}）により
+\[
+\pi_1(\Sigma_g)\cong\bigl\langle a_1,b_1,\dots,a_g,b_g\ \big|\ [a_1,b_1]\cdots[a_g,b_g]\bigr\rangle .
+\]
+可換化は $\Z^{2g}$ を関係子の像で割ったものだが、可換群では $[a_i,b_i]\mapsto a_i+b_i-a_i-b_i=0$ なので $\pi_1(\Sigma_g)^{\mathrm{ab}}\cong\Z^{2g}$。ホモトピー同値なら $\pi_1$、したがって可換化が同型で、$\Z^{2g}/2\Z^{2g}$ の位数 $2^{2g}$ を比べて $g=g'$。
+
+(2) 1骨格は円周で $\pi_1=\langle a\rangle\cong\Z$。2胞体の境界は $a$ を2回まわるので $\pi_1(\RP^2)\cong\langle a\mid a^2\rangle\cong\Z_2$。（定理 \ref{thm:ch02-quotient} を $S^2\to\RP^2$ に用いても同じ結果が得られる。）
+
+(3) $g=1$：$\langle a,b\mid aba^{-1}b^{-1}\rangle$ は $ab=ba$ を課した自由群で、$\Z^2$ である。
+
+物理との関係：閉じた弦の世界面は $\Sigma_g$ で、弦の摂動展開は種数 $g$ の和になる（第10章）。$\RP^2$ は向き付けられない弦の世界面（クロスキャップ）に現れるほか、3次元の2粒子系の相対配位空間でもある（問題 \ref{ch02-prob-stat}）。
+\end{solution}
+
+\begin{problem}[難易度 C]\label{ch02-prob-lens}
+$N\ge2$、$p$ を $N$ と互いに素な整数、$\omega=e^{2\pi i/N}$ とする。$S^3=\{(z_1,z_2)\in\C^2:\lvert z_1\rvert^2+\lvert z_2\rvert^2=1\}$ に、$\Z_N$ の生成元を $\tau(z_1,z_2)=(\omega z_1,\omega^pz_2)$ として作用させる。\\
+(1) この作用が自由（$\tau^k\ne\id$ なら固定点をもたない）であることを示し、\term{レンズ空間}{lens space} $L(N,p)=S^3/\Z_N$ の基本群を求めよ。\\
+(2) $L(2,1)$ は何と同相か。$SO(3)$ の基本群と比べよ。\\
+(3) $\C^2$ への作用 $(z_1,z_2)\mapsto(\omega z_1,\omega^{-1}z_2)$ による\term{オービフォールド}{orbifold} $\C^2/\Z_N$ は原点を固定点にもち、作用は自由でない。$\C^2/\Z_N$ と $(\C^2\setminus\{0\})/\Z_N$ の基本群を求めよ。（後者は特異点の「遠方から見た形」で、第10章の弦理論のコンパクト化で使う。）
+\end{problem}
+
+\begin{solution}
+(1) $1\le k\le N-1$ で $\tau^k(z)=z$ とする。$z_1\ne0$ なら $\omega^k=1$ となり矛盾。$z_1=0$ なら $\lvert z_2\rvert=1$ で $\omega^{kp}=1$、すなわち $N\mid kp$。$\gcd(N,p)=1$ より $N\mid k$ となり矛盾。よって作用は自由である。有限群のハウスドルフ空間への自由な作用は被覆空間作用である（$y$ の像 $gy$ たちは互いに異なる有限個の点なので、互いに交わらない近傍で分離できる）。$S^3$ は単連結なので、定理 \ref{thm:ch02-quotient} より
+\[
+\pi_1(L(N,p))\cong\Z_N .
+\]
+$\Z_N$ の生成元は、$(1,0)$ から $(\omega,0)$ へ至る道 $s\mapsto(e^{2\pi is/N},0)$ の像（$L(N,p)$ のループ）で表される。
+
+(2) $N=2$、$p=1$ では $\tau=-\id$ で、$L(2,1)=S^3/\{\pm1\}=\RP^3\cong SO(3)$（第1章）。$\pi_1=\Z_2$ は $\pi_1(SO(3))=\Z_2$（問題 \ref{ch02-prob-su2so3}）と一致する。実際、$S^3\cong SU(2)$ とみなせば $\tau=-\mathbf 1$ の作用による商が $SU(2)/\{\pm\mathbf 1\}=SO(3)$ である。
+
+(3) $\C^2/\Z_N$ は可縮である：$H([z],t)=[(1-t)z]$ は $\Z_N$ の作用（線形）と可換なので商空間上の連続写像を定め、恒等写像と原点への定値写像を結ぶ。よって $\pi_1(\C^2/\Z_N)=1$。一方、$\C^2\setminus\{0\}$ は $S^3$ に強変位レトラクトし（$z\mapsto z/\lvert z\rvert$ への直線ホモトピーは作用と可換）、$(\C^2\setminus\{0\})/\Z_N\simeq S^3/\Z_N=L(N,-1)$。$\gcd(N,-1)=1$ なので (1) より $\pi_1\cong\Z_N$。すなわち特異点を除くと、原点を囲む $S^3/\Z_N$ に $\Z_N$ だけ「ねじれた」ループが残る。このループに沿ったウィルソン線（問題 \ref{ch02-prob-wilson}）や弦の「ねじれたセクター」がオービフォールドの物理に現れる。
+\end{solution}
+
+\subsection{被覆空間と持ち上げ}
+
+\begin{problem}[難易度 C]\label{ch02-prob-sqrt}
+持ち上げの判定法（定理 \ref{thm:ch02-lift} (4)）を用いて、次を示せ。\\
+(1) $\Omega$ が単連結で局所弧状連結（例えば $\R^n$ の凸開集合、$\R^3\setminus\{0\}$）なら、連続な $\phi\colon\Omega\to\C^\times$ は連続な位相をもつ：$\phi=\lvert\phi\rvert e^{i\alpha}$ となる連続関数 $\alpha\colon\Omega\to\R$ がある。特に $\R^3$ の点欠陥は複素スカラー場の位相によっては作れない。\\
+(2) $\Omega=\{1<\lvert z\rvert<2\}$ とし、$\phi\colon\Omega\to\C^\times$ の円周 $\lvert z\rvert=3/2$ 上の巻き付き数を $n$ とする。連続な平方根 $\psi$（$\psi^2=\phi$）が存在するための必要十分条件は $n$ が偶数であることを示せ。\\
+(3) 秩序変数が $\Psi=e^{i\alpha}\,\hat{\bm d}$（$\alpha\in\R/2\pi\Z$、$\hat{\bm d}=(\cos\beta,\sin\beta)\in S^1$）の形で、$(\alpha,\beta)$ と $(\alpha+\pi,\beta+\pi)$ が同じ物理状態を表す系（スピン1ボース凝縮の極性相などで、$\hat{\bm d}$ を面内に制限した模型）を考える。真空多様体を $\mathcal M=\R^2/\Lambda$（$\Lambda$ は $(2\pi,0)$, $(0,2\pi)$, $(\pi,\pi)$ で生成される格子）と表し、$\pi_1(\mathcal M)$ を求めよ。位相 $\alpha$ が $\pi$ だけ（すなわち「半分だけ」）まわる渦が位相的に安定に存在することを説明せよ。
+\end{problem}
+
+\begin{solution}
+(1) $\C^\times\cong\R_{>0}\times S^1$ なので $\hat\phi=\phi/\lvert\phi\rvert\colon\Omega\to S^1$ を $p\colon\R\to S^1$、$p(s)=e^{is}$ に持ち上げればよい。$\Omega$ は単連結なので $\hat\phi_*\pi_1(\Omega)=1\subset p_*\pi_1(\R)$ で、判定法から持ち上げ $\alpha$（$e^{i\alpha}=\hat\phi$）が存在する。$\R^3\setminus\{0\}$ は単連結（$\simeq S^2$）なので、点欠陥のまわりで $\phi$ は常に連続な位相をもち、$\hat\phi$ は $\alpha$ の直線ホモトピーで定値に変形できる。これは $[S^2,S^1]=0$ を意味し、$U(1)$ の破れは3次元で安定な点欠陥（モノポール）を与えない。モノポールには $\pi_2(\mathcal M)\ne0$ が必要である（第3章）。
+
+(2) $q\colon\C^\times\to\C^\times$、$q(w)=w^2$ は2重被覆で、$q_*\colon\pi_1(\C^\times)=\Z\to\Z$ は2倍写像なので $q_*\pi_1=2\Z$。$\Omega\simeq S^1$ で $\pi_1(\Omega)=\Z$ は円周 $\lvert z\rvert=3/2$ で生成され、$\phi_*(1)=n$。判定法から、$\psi$（$q\circ\psi=\phi$）が存在 $\iff n\Z\subset2\Z\iff n$ が偶数。（具体的には、$n$ が偶数なら $\phi=z^{n}\cdot\phi_0$ で $\phi_0$ の巻き付き数は $0$、$\phi_0$ は (1) と同様に連続な対数をもつので $\psi=z^{n/2}e^{\frac12\log\phi_0}$。$n$ が奇数なら $\psi$ の巻き付き数 $m$ は $2m=n$ をみたさねばならず不可能。）
+
+(3) $(\alpha,\beta)\in\R^2$ が状態を表し、$(2\pi,0)$, $(0,2\pi)$（各角度の周期性）と $(\pi,\pi)$（同一視）の平行移動で移り合うものが同じ状態である。これらが生成する格子 $\Lambda$ は
+\[
+\Lambda=\{(\pi m,\pi m')\colon m\equiv m'\ (\mathrm{mod}\ 2)\}=\Z(\pi,\pi)\oplus\Z(2\pi,0)
+\]
+であり（$(0,2\pi)=2(\pi,\pi)-(2\pi,0)$）、$\Lambda\cong\Z^2$ は $\R^2$ に平行移動で被覆空間作用をする。$\R^2$ は単連結なので定理 \ref{thm:ch02-quotient} より
+\[
+\pi_1(\mathcal M)\cong\Lambda\cong\Z^2 .
+\]
+$\mathcal M$ のループは、$\R^2$ で $(0,0)$ から $\lambda\in\Lambda$ へ至る道の像として表され、その類が $\lambda$ である。$\lambda=(\pi,\pi)$ に対応する渦では、渦を1周すると位相 $\alpha$ が $\pi$ だけ増え、同時に $\hat{\bm d}$ が $\pi$ 回転する。$e^{i\alpha}$ も $\hat{\bm d}$ も単独では符号を変えるが、積 $\Psi$ は一価である。$(\pi,\pi)\ne0$ は $\pi_1(\mathcal M)$ の自明でない元なので、この\term{半整数渦}{half-quantum vortex}は連続変形で消せない。(2) と同じく、「$e^{i\alpha}$ だけを一価に定義しようとすると平方根の障害に出会う」ことが、半整数の巻き付きを許す仕組みである。
+\end{solution}
+
+\begin{problem}[難易度 C]\label{ch02-prob-figure8}
+$X=S^1\vee S^1$ の2つの円周を $a,b$、$\pi_1(X,x_0)=F_2=\langle a,b\rangle$ とする。\\
+(1) $X$ の連結な2重被覆は同型を除いてちょうど3つあることを示し、それぞれを図示せよ。（指数2の部分群は正規であることを用いてよい。）\\
+(2) 下図のグラフ $\tilde X$（頂点 $v_0,v_1,v_2$）から $X$ への写像 $p$ を、頂点をすべて $x_0$ に、実線（赤）の辺を $a$ に、破線（青）の辺を $b$ に、矢印の向きを保って写すものとする。$p$ が3重被覆であることを確かめ、$H=p_*\pi_1(\tilde X,v_0)$ の生成系を求めよ。$p$ は正規被覆か。被覆変換群を求めよ。
+\begin{center}
+\begin{tikzpicture}[scale=1.0,thick]
+  \tikzset{aedge/.style={red!75!black,mid arrow},bedge/.style={blue!75!black,dashed,mid arrow}}
+  \coordinate (V0) at (0,0); \coordinate (V1) at (3,0); \coordinate (V2) at (1.5,2.3);
+  \draw[aedge] (V0) to[bend right=15] (V1);
+  \draw[aedge] (V1) to[bend right=15] (V2);
+  \draw[aedge] (V2) to[bend right=15] (V0);
+  \draw[bedge] (V1) to[bend right=55] (V2);
+  \draw[bedge] (V2) to[bend right=25] (V1);
+  \draw[bedge] (V0) .. controls (-1.5,0.8) and (-1.5,-0.8) .. (V0);
+  \node[vtx] at (V0) {}; \node[vtx] at (V1) {}; \node[vtx] at (V2) {};
+  \node[below] at (0,-0.1) {$v_0$}; \node[below right] at (3,-0.05) {$v_1$}; \node[above] at (1.5,2.4) {$v_2$};
+\end{tikzpicture}
+\zucap{$a$ 辺：$v_0\to v_1\to v_2\to v_0$。$b$ 辺：$v_0$ でのループ、$v_1\to v_2$、$v_2\to v_1$。}
+\end{center}
+(3) 2重被覆の分類が、$X$ 上の「$\Z_2$ のひねり（各ループを1周したときに波動関数の符号が変わるかどうか）」の選び方と対応することを説明せよ。
+\end{problem}
+
+\begin{solution}
+(1) ガロア対応（定理 \ref{thm:ch02-galois}）により、連結な2重被覆は指数2の部分群の共役類に対応する。指数2の部分群 $H$ は正規なので、全射準同型 $\psi\colon F_2\to\Z_2$ の核と1対1に対応する（$\Z_2$ への全射は核で決まる）。$F_2$ は自由なので $\psi$ は $(\psi(a),\psi(b))\in\Z_2^2$ を任意に指定して決まり、全射なのは $(1,0),(0,1),(1,1)$ の3通り。よって連結な2重被覆はちょうど3つ。
+\begin{center}
+\begin{tikzpicture}[scale=0.85,thick]
+  \tikzset{aedge/.style={red!75!black,mid arrow},bedge/.style={blue!75!black,dashed,mid arrow}}
+  \begin{scope}
+    \draw[aedge] (0,0) to[bend left=40] (2,0);
+    \draw[aedge] (2,0) to[bend left=40] (0,0);
+    \draw[bedge] (0,0) .. controls (-1.3,0.9) and (-1.3,-0.9) .. (0,0);
+    \draw[bedge] (2,0) .. controls (3.3,-0.9) and (3.3,0.9) .. (2,0);
+    \node[vtx] at (0,0) {}; \node[vtx] at (2,0) {};
+    \node[below] at (0,-0.1) {\footnotesize $v_0$}; \node[below] at (2,-0.1) {\footnotesize $v_1$};
+    \node at (1,-1.2) {$(\psi(a),\psi(b))=(1,0)$};
+  \end{scope}
+  \begin{scope}[xshift=5.4cm]
+    \draw[bedge] (0,0) to[bend left=40] (2,0);
+    \draw[bedge] (2,0) to[bend left=40] (0,0);
+    \draw[aedge] (0,0) .. controls (-1.3,0.9) and (-1.3,-0.9) .. (0,0);
+    \draw[aedge] (2,0) .. controls (3.3,-0.9) and (3.3,0.9) .. (2,0);
+    \node[vtx] at (0,0) {}; \node[vtx] at (2,0) {};
+    \node[below] at (0,-0.1) {\footnotesize $v_0$}; \node[below] at (2,-0.1) {\footnotesize $v_1$};
+    \node at (1,-1.2) {$(0,1)$};
+  \end{scope}
+  \begin{scope}[xshift=10.6cm]
+    \draw[aedge] (0,0) to[bend left=30] (2,0);
+    \draw[aedge] (2,0) to[bend left=30] (0,0);
+    \draw[bedge] (0,0) to[bend left=80] (2,0);
+    \draw[bedge] (2,0) to[bend left=80] (0,0);
+    \node[vtx] at (0,0) {}; \node[vtx] at (2,0) {};
+    \node[left] at (-0.05,0) {\footnotesize $v_0$}; \node[right] at (2.05,0) {\footnotesize $v_1$};
+    \node at (1,-1.2) {$(1,1)$};
+  \end{scope}
+\end{tikzpicture}
+\zucap{連結な2重被覆の3つ。各頂点から出る $a$ 辺・入る $a$ 辺・出る $b$ 辺・入る $b$ 辺がちょうど1本ずつあることが、被覆であるための条件である。}
+\end{center}
+各場合、$\psi$ の値が $1$ の文字の辺だけが2頂点を入れ替えるので、$v_0$ からの持ち上げが閉じるのは $\psi[\gamma]=0$ のときであり、$p_*\pi_1(\tilde X,v_0)=\ker\psi$ が確かめられる。
+
+(2) \textbf{被覆であること}：各頂点で、出る $a$ 辺・入る $a$ 辺・出る $b$ 辺・入る $b$ 辺がちょうど1本ずつある（$v_0$ の $b$ ループは出る辺と入る辺を1本ずつ与える）。よって $x_0$ の小さな近傍（4方向に出る短い線分の和）の逆像は、各頂点のまわりの同じ形の近傍3つの非交和に同相に写り、辺の内部の点でも同様。3重被覆である。
+
+\textbf{生成系}：道の持ち上げは「各頂点で、読んでいる文字の辺を矢印の向き（逆元なら逆向き）にたどる」ことで得られる。極大な木 $T$ として $a$ 辺 $v_0\to v_1$, $v_1\to v_2$ をとると、$T$ 外の各辺 $e$ に対し「$T$ 内で $v_0$ から $e$ の始点へ、$e$ を通り、$T$ 内で $v_0$ へ戻る」ループが $\pi_1(\tilde X,v_0)$ の自由な生成系になる（第1章：グラフは $E-V+1$ 個の円周の楔和）。
+\begin{center}
+\begin{tabular}{lll}
+$T$ 外の辺 & 対応するループ & $H$ の元\\ \hline
+$a\colon v_2\to v_0$ & $v_0\xrightarrow{a}v_1\xrightarrow{a}v_2\xrightarrow{a}v_0$ & $a^3$\\
+$b\colon v_0\to v_0$ & $v_0\xrightarrow{b}v_0$ & $b$\\
+$b\colon v_1\to v_2$ & $v_0\xrightarrow{a}v_1\xrightarrow{b}v_2\xrightarrow{a^{-1}}v_1\xrightarrow{a^{-1}}v_0$ & $aba^{-2}$\\
+$b\colon v_2\to v_1$ & $v_0\xrightarrow{a}v_1\xrightarrow{a}v_2\xrightarrow{b}v_1\xrightarrow{a^{-1}}v_0$ & $a^2ba^{-1}$
+\end{tabular}
+\end{center}
+$p_*$ は単射なので $H=\langle a^3,\ b,\ aba^{-2},\ a^2ba^{-1}\rangle$（階数 $E-V+1=6-3+1=4$）。
+
+\textbf{非正規性}：$b\in H$ だが、$aba^{-1}$ の $v_0$ からの持ち上げは $v_0\xrightarrow{a}v_1\xrightarrow{b}v_2\xrightarrow{a^{-1}}v_1$ で閉じないので $aba^{-1}\notin H$。よって $aHa^{-1}\ne H$ で、正規被覆ではない。
+
+\textbf{被覆変換群}：被覆変換 $\tau$ は $b$ ループ（始点と終点が同じ $b$ 辺）を $b$ ループに写す。$b$ ループをもつ頂点は $v_0$ だけなので $\tau(v_0)=v_0$、持ち上げの一意性より $\tau=\id$。被覆変換群は自明で、$N(H)/H$ とも整合する（$H\subset N(H)\subsetneq F_2$ で指数3は素数なので $N(H)=H$）。
+
+(3) 連結な2重被覆 $\tilde X\to X$ 上の関数で、2つのシートを入れ替える被覆変換のもとで符号を変えるもの（「反周期的な」関数）は、$X$ 上の「ループ $\gamma$ を1周すると $(-1)^{\psi[\gamma]}$ 倍になる多価関数」と同じものである。したがって (1) の3通りは、$a$, $b$ それぞれを1周したときの符号 $((-1)^{\psi(a)},(-1)^{\psi(b)})$ の自明でない選び方、すなわち $\mathrm{Hom}(\pi_1(X),\Z_2)\setminus\{0\}$ に対応する（自明な選び方 $(0,0)$ は非連結な自明被覆 $X\sqcup X$ に対応する）。これは、ねじれた境界条件、$\Z_2$ ウィルソン線、スピン構造（第7章）の選び方と同じ構造である。
+\end{solution}
+
+\subsection{リー群の基本群とスピン}
+
+\begin{problem}[難易度 B]\label{ch02-prob-su2so3}
+$U\in SU(2)$ に対し $R(U)_{ij}=\tfrac12\tr(\sigma_iU\sigma_jU^\dagger)$ とおく。\\
+(1) $U\sigma_jU^\dagger=\sigma_iR(U)_{ij}$ を示し、$R(U)\in SO(3)$、$R(UV)=R(U)R(V)$ を示せ。\\
+(2) $U=\exp(-i\psi\,\sigma_3/2)$ のとき $R(U)$ は $z$ 軸まわりの角度 $\psi$ の（反時計回りの）回転であることを示し、$R\colon SU(2)\to SO(3)$ が全射であることを結論せよ。\\
+(3) $\ker R=\{\pm\mathbf 1\}$ を示し、$SO(3)\cong SU(2)/\Z_2$、$\pi_1(SO(3))\cong\Z_2$ を結論せよ。
+\end{problem}
+
+\begin{solution}
+(1) $U\sigma_jU^\dagger$ はトレースゼロのエルミート行列なので $\sum_ic_i\sigma_i$（$c_i\in\R$）と書け、$\tr(\sigma_i\sigma_k)=2\delta_{ik}$ より $c_i=\tfrac12\tr(\sigma_iU\sigma_jU^\dagger)=R(U)_{ij}$。$R(U)$ は実である（$c_i$ が実）。$\bm x\cdot\bm\sigma\mapsto U(\bm x\cdot\bm\sigma)U^\dagger=(R\bm x)\cdot\bm\sigma$ であり、$\det(\bm x\cdot\bm\sigma)=-\lvert\bm x\rvert^2$ は共役で不変なので $\lvert R\bm x\rvert=\lvert\bm x\rvert$、$R\in O(3)$。$SU(2)$ は連結で $\det R$ は連続な $\pm1$ 値、$R(\mathbf 1)=\mathbf 1$ なので $\det R=1$。また
+\[
+UV\sigma_jV^\dagger U^\dagger=U\sigma_kU^\dagger R(V)_{kj}=\sigma_iR(U)_{ik}R(V)_{kj}
+\]
+より $R(UV)=R(U)R(V)$。
+
+(2) $\sigma_1\sigma_3=-\sigma_3\sigma_1$ より $\sigma_1e^{i\psi\sigma_3/2}=e^{-i\psi\sigma_3/2}\sigma_1$ なので
+\[
+U\sigma_1U^\dagger=e^{-i\psi\sigma_3}\sigma_1=(\cos\psi-i\sin\psi\,\sigma_3)\sigma_1=\cos\psi\,\sigma_1+\sin\psi\,\sigma_2
+\]
+（$\sigma_3\sigma_1=i\sigma_2$）。同様に $U\sigma_2U^\dagger=-\sin\psi\,\sigma_1+\cos\psi\,\sigma_2$、$U\sigma_3U^\dagger=\sigma_3$。よって $R(U)$ は $z$ 軸まわりの角度 $\psi$ の回転。任意の軸 $\hat{\bm n}$ には $\hat{\bm n}=R(W)\hat{\bm z}$ となる $W$ をとれば（$z$ 軸と $y$ 軸まわりの回転の合成で任意の方向に行ける）、$W e^{-i\psi\sigma_3/2}W^\dagger=e^{-i\psi\,\hat{\bm n}\cdot\bm\sigma/2}$ が $\hat{\bm n}$ まわりの角度 $\psi$ の回転に写る。すべての回転はある軸まわりの回転なので $R$ は全射。
+
+(3) $R(U)=\mathbf 1$ なら $U$ はすべての $\sigma_j$ と可換で、シューアの補題（あるいは直接計算）から $U=\lambda\mathbf 1$、$\det U=\lambda^2=1$ より $U=\pm\mathbf 1$。準同型定理より $SO(3)\cong SU(2)/\{\pm\mathbf 1\}$（コンパクト→ハウスドルフの連続全単射なので同相でもある）。$\{\pm\mathbf 1\}$ は $SU(2)\cong S^3$ に自由に作用し、$S^3$ は単連結なので、定理 \ref{thm:ch02-quotient} より $\pi_1(SO(3))\cong\Z_2$。$SU(2)$ が $SO(3)$ の普遍被覆である。
+\end{solution}
+
+\begin{problem}[難易度 B]\label{ch02-prob-belt}
+$R_z(\psi)$ を $z$ 軸まわりの角度 $\psi$ の回転とし、$SO(3)$ のループ $\gamma_m(t)=R_z(2\pi mt)$（$t\in I$、$m\in\Z$）を考える。\\
+(1) 問題 \ref{ch02-prob-su2so3} の被覆 $SU(2)\to SO(3)$ を用いて、$\gamma_m$ の $\mathbf 1$ からの持ち上げを求め、$\gamma_1$（$2\pi$ 回転）は1点に縮められず、$\gamma_2$（$4\pi$ 回転）は縮められることを示せ。\\
+(2) $SO(3)$ を半径 $\pi$ の球の境界の対蹠点を同一視したもの（第1章）として、$\gamma_1$ と $\gamma_2$ を図示し、$\gamma_2$ を縮める変形を図で説明せよ。\\
+(3) 皿を手のひらに載せて腕をねじらずに1回転させると腕がねじれるが、同じ向きにもう1回転させると元に戻る（\term{ディラックのベルト・トリック}{Dirac belt trick}）。これが (1) とどう関係するか説明せよ。
+\end{problem}
+
+\begin{solution}
+(1) $U_m(t)=\exp(-i\pi mt\,\sigma_3)$ は $R(U_m(t))=R_z(2\pi mt)$ をみたし（問題 \ref{ch02-prob-su2so3} (2) で $\psi=2\pi mt$）、$U_m(0)=\mathbf 1$ なので $\gamma_m$ の持ち上げである。終点は $U_m(1)=e^{-i\pi m\sigma_3}=(-1)^m\mathbf 1$。定理 \ref{thm:ch02-lift} (3) より、$\gamma_m$ が縮められる（$p_*\pi_1(SU(2))=1$ に属する）$\iff$ 持ち上げが閉じる $\iff m$ が偶数。よって $\gamma_1$ は縮められず、$\gamma_2$ は縮められる。より具体的に、$\gamma_2$ の持ち上げ $U_2(t)=\cos(2\pi t)-i\sin(2\pi t)\sigma_3$ は $S^3$ の大円で、$S^3$ 上で1点に縮められ、その像が $\gamma_2$ の縮約を与える。$[\gamma_1]$ が $\pi_1(SO(3))=\Z_2$ の生成元で、$[\gamma_m]=m\bmod2$。
+
+(2) 軸・角度表示で、$\psi\in[0,\pi]$ では $R_z(\psi)$ は点 $\psi\hat{\bm z}$、$\psi\in[\pi,2\pi]$ では $R_z(\psi)=R_{-z}(2\pi-\psi)$ は点 $-(2\pi-\psi)\hat{\bm z}$ である。よって $\gamma_1$ は中心から北極 $N=\pi\hat{\bm z}$ へ上り、対蹠点の南極 $S$ に「跳んで」中心へ戻る。
+\begin{center}
+\begin{tikzpicture}[scale=1.0]
+  \begin{scope}
+    \draw[thick] (0,0) circle (1.4);
+    \draw[very thick,red!70!black,mid arrow] (0,0) -- (0,1.4);
+    \draw[very thick,red!70!black,mid arrow] (0,-1.4) -- (0,0);
+    \node[vtx] at (0,0) {}; \node[right] at (0,0) {\footnotesize $\mathbf 1$};
+    \node[vtx,red!70!black] at (0,1.4) {}; \node[above] at (0,1.4) {\footnotesize $N$};
+    \node[vtx,red!70!black] at (0,-1.4) {}; \node[below] at (0,-1.4) {\footnotesize $S$};
+    \node at (0,-2.2) {(a) $\gamma_1$：$2\pi$ 回転};
+  \end{scope}
+  \begin{scope}[xshift=4.2cm]
+    \draw[thick] (0,0) circle (1.4);
+    \draw[very thick,red!70!black,mid arrow] (0,0) -- (0,1.4);
+    \draw[very thick,red!70!black,mid arrow] (0,-1.4) -- (0,0);
+    \draw[very thick,blue!70!black,mid arrow] (0,0) -- (40:1.4);
+    \draw[very thick,blue!70!black,mid arrow] (220:1.4) -- (0,0);
+    \node[vtx] at (0,0) {};
+    \node[vtx,blue!70!black] at (40:1.4) {}; \node[above right] at (40:1.4) {\footnotesize $Q$};
+    \node[vtx,blue!70!black] at (220:1.4) {}; \node[below left] at (220:1.4) {\footnotesize $-Q$};
+    \draw[-{Stealth[length=2mm]},gray,thick] (32:1.7) arc (32:-5:1.7);
+    \draw[-{Stealth[length=2mm]},gray,thick] (212:1.7) arc (212:175:1.7);
+    \node at (0,-2.2) {(b) $\gamma_2$ の2周目を傾ける};
+  \end{scope}
+  \begin{scope}[xshift=8.4cm]
+    \draw[thick] (0,0) circle (1.4);
+    \draw[very thick,red!70!black,mid arrow] (-0.07,0) -- (-0.07,1.4);
+    \draw[very thick,red!70!black,mid arrow] (-0.07,-1.4) -- (-0.07,0);
+    \draw[very thick,blue!70!black,mid arrow] (0.07,0) -- (0.07,-1.4);
+    \draw[very thick,blue!70!black,mid arrow] (0.07,1.4) -- (0.07,0);
+    \node[vtx] at (0,0) {}; \node[vtx,red!70!black] at (0,1.4) {}; \node[above] at (0,1.4) {\footnotesize $N=-Q$};
+    \node[vtx,red!70!black] at (0,-1.4) {}; \node[below] at (0,-1.4) {\footnotesize $S=Q$};
+    \node at (0,-2.2) {(c) $Q\to S$：往復に縮む};
+  \end{scope}
+\end{tikzpicture}
+\zucap{$SO(3)$ を半径 $\pi$ の球（境界の対蹠点を同一視）で表す。(a) $2\pi$ 回転は中心→$N$、$S$→中心。対蹠点の組 $\{N,S\}$ は境界上で動かせないので縮まない。(b) $4\pi$ 回転の2周目の直径を $Q,-Q$ へ傾ける。(c) $Q$ を $S$ まで（$-Q$ を $N$ まで）動かすと、ループは赤（1周目）と青（2周目）が同じ直径を逆向きにたどる往復になり、1点に縮む。}
+\end{center}
+$\gamma_2$ は直径を2回たどる：中心→$N\equiv S$→中心→$N\equiv S$→中心。2周目の直径を（端点の対蹠関係を保ったまま）別の直径 $Q,-Q$ へ傾けたループ「中心→$N\equiv S$→中心→$Q\equiv-Q$→中心」は $\gamma_2$ とホモトピックである。$Q$ を境界に沿って $S$ まで動かす（$-Q$ は $N$ へ）と、ループは「中心→$N\equiv S$→中心→$S\equiv N$→中心」となる。この中の「$S$→中心→$S$」は往復で $S$ に縮み、残る「中心→$N$→中心」も往復なので、ループ全体が1点に縮む。$\gamma_1$ では「跳び」が1回しかないので、このような相殺ができない。
+
+(3) 腕の各点（肩から手のひらまで）での向きの変化を $SO(3)$ の元と見ると、腕は $\mathbf 1$（肩）から皿の向き $R$ への $SO(3)$ の道である。皿を $2\pi$ 回転させる操作の各段階で腕の配位が決まるので、操作全体は「肩から手のひらまでの道」の1パラメータ族、すなわちループ $\gamma_1$ を縮めようとするホモトピーに相当し、(1) よりそれは不可能（腕はねじれたまま）。$4\pi$ 回転では $\gamma_2$ が縮められるので、腕を連続に動かしてねじれのない状態に戻せる。スピン $1/2$ の状態が $2\pi$ 回転で $-1$ 倍、$4\pi$ 回転で元に戻るのは、この $\Z_2$ の現れである（問題 \ref{ch02-prob-spinor}）。
+\end{solution}
+
+\begin{problem}[難易度 A]\label{ch02-prob-spinor}
+スピン $j$ の状態に対する $z$ 軸まわりの角度 $\psi$ の回転は $\mathcal U(\psi)=\exp(-i\psi J_z)$ で表される。\\
+(1) $\mathcal U(2\pi)=(-1)^{2j}$ を示せ。\\
+(2) スピン上向きの中性子ビームを2つに分け、一方だけを磁場中でスピン歳差により $z$ 軸まわりに角度 $\psi$ 回転させてから再び重ねる。干渉強度が $\psi$ について周期 $4\pi$ であることを示せ。\\
+(3) 物理的状態は射線（全体位相を除いた状態ベクトル）なので、$\mathcal U(2\pi)=-1$ は回転群 $SO(3)$ の\textbf{射影表現}である。この符号が $\pi_1(SO(3))=\Z_2$ と関係する理由を述べよ。また、整数スピンと半整数スピンの状態の重ね合わせを考えると何が起こるか。
+\end{problem}
+
+\begin{solution}
+(1) $J_z$ の固有値は $m\in\{-j,-j+1,\dots,j\}$ で、$e^{-2\pi im}$ は $m$ が整数なら $1$、半整数なら $-1$。$2j$ と $2m$ の偶奇は一致するので $\mathcal U(2\pi)=(-1)^{2j}$。$j=1/2$ では $\mathcal U(\psi)=e^{-i\psi\sigma_3/2}$、$\mathcal U(2\pi)=-\mathbf 1$。
+
+(2) 出口での状態は（規格化定数を除いて）$\tfrac12\bigl(\mathbf 1+e^{-i\psi\sigma_3/2}\bigr)\lvert\uparrow\rangle=\tfrac12(1+e^{-i\psi/2})\lvert\uparrow\rangle$ なので、強度は
+\[
+I(\psi)\propto\Bigl\lvert\tfrac12(1+e^{-i\psi/2})\Bigr\rvert^2=\frac{1+\cos(\psi/2)}{2}.
+\]
+$\psi=2\pi$ で $0$（完全に打ち消し合う）、周期は $4\pi$。これは中性子干渉実験（1975年）で観測された。
+
+(3) $SO(3)$ の各元に $\mathcal U$ を連続に割り当てようとすると、ループ $\gamma_1$（$2\pi$ 回転）に沿って $\mathcal U$ を連続に追いかけた結果が $\mathcal U(2\pi)=(-1)^{2j}$ である。もし $\gamma_1$ が縮められれば、連続性から $\mathcal U(2\pi)$ は $\mathcal U(0)=\mathbf 1$ に連続変形でき、離散的な値 $\pm1$ をとるので $+1$ でなければならない。$\pi_1(SO(3))=\Z_2$ だからこそ $-1$ が許され、$4\pi$ 回転（$\gamma_2\simeq$ 定値）では必ず $+1$ である。言いかえると、半整数スピンは $SO(3)$ ではなく普遍被覆 $SU(2)$ の真の表現である。整数スピン $\lvert a\rangle$ と半整数スピン $\lvert b\rangle$ の重ね合わせ $\lvert a\rangle+\lvert b\rangle$ は $2\pi$ 回転で $\lvert a\rangle-\lvert b\rangle$ になり、物理的に同じ状態であるべきなのに異なる射線になる。したがってこのような重ね合わせは観測できない（ボソン・フェルミオンの\term{超選択則}{superselection rule}）。
+\end{solution}
+
+\begin{problem}[難易度 B]\label{ch02-prob-spin4}
+$\R^4$ の点 $x=(x_1,x_2,x_3,x_4)$ に $2\times2$ 行列 $X=x_4\mathbf 1+i\,x_k\sigma_k$ を対応させる（$\det X=\lvert x\rvert^2$）。\\
+(1) $(q_L,q_R)\in SU(2)\times SU(2)$ に対し $X\mapsto q_LXq_R^\dagger$ が $SO(4)$ の元 $\Lambda(q_L,q_R)$ を定め、$\Lambda$ が準同型であることを示せ。\\
+(2) $\ker\Lambda=\{(\mathbf 1,\mathbf 1),(-\mathbf 1,-\mathbf 1)\}$ を示せ。\\
+(3) $\Lambda$ が全射であることを（$SO(4)$ の連結性と次元を用いて）示し、$\pi_1(SO(4))\cong\Z_2$、$\Spin(4)\cong SU(2)\times SU(2)$ を結論せよ。ユークリッド化したローレンツ群の表現 $(j_L,j_R)$ との関係を述べよ。
+\end{problem}
+
+\begin{solution}
+(1) $X$ の形の行列全体 $\mathcal Q=\{a\mathbf 1+i\bm b\cdot\bm\sigma\}$ は $\R_{\ge0}\cdot SU(2)$ に等しく（第1章の $SU(2)$ の表示）、$SU(2)$ の元を左右から掛けても $\mathcal Q$ に留まる。$X\mapsto q_LXq_R^\dagger$ は $\R$ 線形で $\det(q_LXq_R^\dagger)=\det X$、すなわち $\lvert x\rvert^2$ を保つので $\Lambda\in O(4)$。$SU(2)\times SU(2)$ は連結で $\Lambda(\mathbf 1,\mathbf 1)=\mathbf 1$ なので $\det\Lambda=1$。$(q_Lq_L')X(q_Rq_R')^\dagger=q_L(q_L'Xq_R'^\dagger)q_R^\dagger$ より準同型。
+
+(2) $q_LXq_R^\dagger=X$ がすべての $X$ で成り立つとする。$X=\mathbf 1$ とおいて $q_L=q_R=:q$。すると $qXq^\dagger=X$ がすべての $X$、特に $X=i\sigma_k$ で成り立ち、$q$ はすべての $\sigma_k$ と可換なので $q=\pm\mathbf 1$。逆に $(-\mathbf 1,-\mathbf 1)$ は自明に作用する。
+
+(3) 核が離散なので微分 $d\Lambda\colon\mathfrak{su}(2)\oplus\mathfrak{su}(2)\to\mathfrak{so}(4)$ は単射で、両辺とも6次元なので同型。逆関数定理により像は $\mathbf 1$ の近傍を含み、したがって開部分群である。開部分群は（剰余類の和として補集合も開なので）閉でもあり、$SO(4)$ は連結（第1章）なので像は $SO(4)$ 全体。よって $SO(4)\cong(SU(2)\times SU(2))/\Z_2$。$SU(2)\times SU(2)\cong S^3\times S^3$ は単連結で、$\Z_2=\{\pm(\mathbf 1,\mathbf 1)\}$ は自由に作用するので $\pi_1(SO(4))\cong\Z_2$、普遍被覆 $\Spin(4)=SU(2)\times SU(2)$。
+
+物理では、4次元ユークリッド空間の回転群の表現は $SU(2)_L\times SU(2)_R$ の表現 $(j_L,j_R)$ で分類され、$(\tfrac12,0)$ と $(0,\tfrac12)$ が左巻き・右巻きのワイル・スピノル、$(\tfrac12,\tfrac12)$ がベクトル $X$ そのものである。$(-\mathbf 1,-\mathbf 1)$ は $(-1)^{2(j_L+j_R)}$ で作用し、$j_L+j_R$ が半整数の表現（スピノル）は $SO(4)$ の真の表現ではない。また2形式は $(1,0)\oplus(0,1)$ に分かれ、自己双対・反自己双対2形式に対応する（インスタントン、第3, 8章）。
+\end{solution}
+
+\begin{problem}[難易度 B]\label{ch02-prob-un}
+$N\ge2$ とし、$\pi_1(SU(N))=1$（第3章）を認める。\\
+(1) $\det_*\colon\pi_1(U(N))\to\pi_1(U(1))=\Z$ が同型であることを示し、生成元を与えよ。ループ $t\mapsto e^{2\pi it}\mathbf 1_N$ は $\pi_1(U(N))$ のどの元か。\\
+(2) $\Z_N=\{\omega^k\mathbf 1:\omega=e^{2\pi i/N}\}$ を $SU(N)$ の中心とする。$\pi_1(SU(N)/\Z_N)\cong\Z_N$ を示し、生成元を $SU(N)$ の道として具体的に書け。\\
+(3) 随伴表現の場（グルーオン）だけを含む $SU(N)$ ゲージ理論では、中心 $\Z_N$ は自明に作用するので、実質的なゲージ群は $SU(N)/\Z_N$ である。このとき $\Z_N$ に値をとる「中心磁束」をもつ渦（ひも）がありうることを説明せよ。基本表現のクォークを加えると何が変わるか。
+\end{problem}
+
+\begin{solution}
+(1) 第1章より同相 $\Phi\colon U(N)\to SU(N)\times U(1)$、$\Phi(U)=(U\,D(\det U)^{-1},\det U)$（$D(z)=\operatorname{diag}(z,1,\dots,1)$）があり、$\det=p_2\circ\Phi$。よって $\pi_1(U(N))\cong\pi_1(SU(N))\times\pi_1(U(1))=1\times\Z$ で、この同型のもとで $\det_*$ は第2成分への射影、すなわち同型である。生成元は $\Phi^{-1}(\mathbf 1,e^{2\pi it})=D(e^{2\pi it})=\operatorname{diag}(e^{2\pi it},1,\dots,1)$。$\det(e^{2\pi it}\mathbf 1_N)=e^{2\pi iNt}$ なので、$e^{2\pi it}\mathbf 1_N$ は生成元の $N$ 倍である。
+
+(2) $\Z_N$ は有限群で、$SU(N)$ に左からの掛け算で自由に作用する（$\omega^kU=U\Rightarrow\omega^k=1$）。$SU(N)$ は単連結なので、定理 \ref{thm:ch02-quotient} より $\pi_1(SU(N)/\Z_N)\cong\Z_N$。$k\in\Z_N$ に対応する元は、$\mathbf 1$ から $\omega^k\mathbf 1$ への $SU(N)$ の道の像である。$k=1$ には
+\[
+u(t)=\operatorname{diag}\bigl(e^{2\pi it/N},\dots,e^{2\pi it/N},e^{-2\pi i(N-1)t/N}\bigr)\quad(t\in I)
+\]
+をとればよい：$\det u(t)=e^{2\pi i t(N-1)/N}e^{-2\pi i(N-1)t/N}=1$、$u(0)=\mathbf 1$、$u(1)=\operatorname{diag}(\omega,\dots,\omega,\omega^{-(N-1)})=\omega\mathbf 1$（$\omega^{-(N-1)}=\omega\cdot\omega^{-N}=\omega$）。$N=2$ では $SU(2)/\Z_2=SO(3)$ で問題 \ref{ch02-prob-su2so3} と一致する。
+
+(3) ひもを囲む円周上で、ゲージ変換が「$\mathbf 1$ から中心元 $\omega^k$ へ行く $SU(N)$ の道」になっている配位は、$SU(N)/\Z_N$ ではループであり、(2) の $\pi_1=\Z_N$ の非自明な元を表す。随伴表現の場にとってはこのゲージ変換は一価なので、こうした配位は許され、$\Z_N$ の電荷をもつ渦（\term{中心渦}{center vortex}、トフーフト磁束）として現れる。これらはウィルソン・ループに $\omega^k$ の位相を与え、閉じ込めの描像で重要である。基本表現のクォーク $\psi\mapsto g\psi$ に対しては $\omega^k\ne1$ が自明に作用しないので、ゲージ群は $SU(N)$ のままで $\pi_1=1$、中心渦は位相的に安定でなくなる（ひもの切断）。
+\end{solution}
+
+\subsection{位相欠陥：渦とひも}
+
+\begin{problem}[難易度 D]\label{ch02-prob-strings}
+(1) $G$ を連結かつ単連結なリー群、$H\subset G$ を離散部分群とする。$H$ は $G$ に右からの掛け算で被覆空間作用をすること（離散部分群なので認めてよい）を用いて、$\pi_1(G/H)\cong H$ を示せ。\\
+(2) $U(1)$ ゲージ理論で電荷 $N$ のヒッグス場 $\phi\mapsto e^{iN\lambda}\phi$（$e^{i\lambda}\in U(1)$）が凝縮すると、$U(1)\to\Z_N$ と破れる。$U(1)$ の普遍被覆 $\R$ を用いて $\pi_1(\mathcal M)$ を求め、基本的な渦の磁束が $2\pi/N$ であることを示せ。（単位電荷の粒子の AB 位相は $e^{2\pi i/N}$ になる。）\\
+(3) 2つの随伴表現ヒッグス場が平行でない期待値をもち、$SO(3)$ が完全に破れる場合の $\pi_1(\mathcal M)$ を求めよ。2本の基本的なひもを合わせるとどうなるか。\\
+(4) \textbf{2軸性ネマティック液晶}：分子の向きは直交する3つの軸（向きは区別しない）で表され、$\mathcal M=SO(3)/D_2$、$D_2=\{\mathbf 1,R_x(\pi),R_y(\pi),R_z(\pi)\}$ である。$\pi_1(\mathcal M)$ が四元数群 $Q_8=\{\pm\mathbf 1,\pm i\sigma_1,\pm i\sigma_2,\pm i\sigma_3\}$ であることを示し、共役類を求めよ。ひもの種類はいくつあるか。\\
+(5) (4) で $i\sigma_1$ 型と $i\sigma_2$ 型のひもが交差してすり抜けようとすると、両者をつなぐひもが残る。そのひもの種類を交換子から求めよ。
+\end{problem}
+
+\begin{solution}
+(1) 被覆空間作用なので $G\to G/H$ は被覆写像で、被覆変換群は $H$（$gH$ の点を $g\mapsto gh$ で動かす）。$G$ は単連結なので定理 \ref{thm:ch02-quotient} より $\pi_1(G/H)\cong H$。具体的には、$h\in H$ に $\mathbf 1$ から $h$ への $G$ の道の像（$G/H$ のループ）が対応し、積は道の連結 $\tilde\gamma_{h_1}\cdot(h_1\tilde\gamma_{h_2})$ で $h_1h_2$ に対応する。
+
+(2) $U(1)=\R/2\pi\Z$ を $e^{i\lambda}$（$\lambda\in\R$）で表す。普遍被覆 $\tilde G=\R$ で、ヒッグス場の固定部分群は $e^{iN\lambda}=1$、すなわち $\tilde H=\{\lambda\in\tfrac{2\pi}{N}\Z\}\cong\Z$。$\mathcal M=\R/\tfrac{2\pi}{N}\Z\cong S^1$ で、(1) より $\pi_1(\mathcal M)\cong\tilde H\cong\Z$。生成元は $\lambda$ が $0$ から $2\pi/N$ まで動く道で、渦を囲む円周上でゲージ変換が $\lambda(\theta)=\theta/N$ のように巻くことに対応する。遠方で $D\phi=(d-iNA)\phi=0$ と $\phi=v\,e^{iN\lambda(\theta)}=ve^{i\theta}$ から $NA=d\theta$、すなわち $A=d\theta/N$ で、磁束 $\oint A=2\pi/N$。単位電荷の粒子の AB 位相は $e^{i\oint A}=e^{2\pi i/N}$ で、遠方からは電荷 $\bmod N$ だけが見える（離散ゲージ理論 $\Z_N$）。
+
+(3) $SO(3)$ を普遍被覆 $SU(2)$ で考えると、$SO(3)$ の固定部分群 $\{1\}$ の逆像は $\tilde H=\{\pm\mathbf 1\}$。$\mathcal M=SU(2)/\{\pm\mathbf 1\}=SO(3)$ で $\pi_1(\mathcal M)\cong\Z_2$（問題 \ref{ch02-prob-su2so3}）。基本的なひもの類は $-\mathbf 1$ で、$(-\mathbf 1)^2=\mathbf 1$ なので2本のひもを合わせると位相的に自明になり、対消滅できる（\term{$\Z_2$ ひも}{$\Z_2$ string}）。
+
+(4) 同様に $SU(2)$ に持ち上げる。$R_k(\pi)$（$k$ 軸まわりの $\pi$ 回転）の逆像は $\pm\exp(-i\pi\sigma_k/2)=\mp i\sigma_k$ なので、$D_2$ の逆像は $\tilde H=\{\pm\mathbf 1,\pm i\sigma_1,\pm i\sigma_2,\pm i\sigma_3\}=Q_8$（$(i\sigma_1)(i\sigma_2)=-\sigma_1\sigma_2=-i\sigma_3$ などで閉じている）。$\mathcal M=SO(3)/D_2=SU(2)/Q_8$ で、(1) より $\pi_1(\mathcal M)\cong Q_8$。
+
+共役類：$\pm\mathbf 1$ は中心なので $\{\mathbf 1\}$, $\{-\mathbf 1\}$。$(i\sigma_2)(i\sigma_1)(i\sigma_2)^{-1}=(i\sigma_2)(i\sigma_1)(-i\sigma_2)=i\,\sigma_2\sigma_1\sigma_2=-i\sigma_1$ なので $\{\pm i\sigma_1\}$、同様に $\{\pm i\sigma_2\}$, $\{\pm i\sigma_3\}$。共役類は5つで、自明なものを除いて4種類のひもがある（$\pm i\sigma_k$ は $k$ 軸以外の2軸が $\pi$ だけ回る「半整数」の回位、$-\mathbf 1$ は $2\pi$ 回位）。
+
+(5) 2本のひもが交差してすり抜けると、交換子 $c=g_1g_2g_1^{-1}g_2^{-1}$ の類をもつひもが両者をつなぐ。$g_1=i\sigma_1$, $g_2=i\sigma_2$ のとき $g_1^{-1}=-i\sigma_1$, $g_2^{-1}=-i\sigma_2$ で
+\[
+c=(i\sigma_1)(i\sigma_2)(-i\sigma_1)(-i\sigma_2)=(\sigma_1\sigma_2)^2=(i\sigma_3)^2=-\mathbf 1 .
+\]
+$-\mathbf 1\ne\mathbf 1$ なので、2本のひもは自由にすり抜けられず、$-\mathbf 1$ 型（$2\pi$ 回位）のひもでつながれる。$\pi_1$ が可換なら交換子は常に自明で、このような現象は起こらない（問題 \ref{ch02-prob-twopts} の非可換 AB 効果と同じ構造）。
+\end{solution}
+
+\subsection{アハラノフ・ボーム効果と経路積分}
+
+\begin{problem}[難易度 B]\label{ch02-prob-ring}
+半径 $R$ の円周上に束縛された質量 $m$、電荷 $q$ の粒子があり、円周の内部を磁束 $\Phi$ が貫いている（円周上で $\bm B=0$）。$A=\frac{\Phi}{2\pi}d\theta$ とする。\\
+(1) ハミルトニアン $H=\dfrac{1}{2mR^2}\bigl(-i\partial_\theta-\tfrac{q\Phi}{2\pi}\bigr)^2$ のエネルギー準位が
+\[
+E_n=\frac{1}{2mR^2}\Bigl(n-\frac{q\Phi}{2\pi}\Bigr)^2\qquad(n\in\Z)
+\]
+であることを示せ。\\
+(2) スペクトル全体は $\Phi\to\Phi+2\pi/q$ で不変であることを示し、基底エネルギーを $\Phi$ の関数として図示せよ。\\
+(3) ゲージ変換 $\psi\mapsto e^{iq\lambda}\psi$、$A\mapsto A+d\lambda$ で $A$ を消そうとして $\lambda=-\frac{\Phi}{2\pi}\theta$ とすると何が問題か。$q\Phi\in2\pi\Z$ のときはどうか。\\
+(4) 円周上で $\bm B=0$ なのにエネルギーが $\Phi$ に依存することは、何を意味するか。
+\end{problem}
+
+\begin{solution}
+(1) 共変微分 $D_\theta=\partial_\theta-iqA_\theta=\partial_\theta-iq\Phi/2\pi$ より、運動エネルギー $-\frac{1}{2mR^2}D_\theta^2=\frac{1}{2mR^2}(-iD_\theta)^2$ が与えられたハミルトニアンである。波動関数は円周上の一価関数なので $\psi_n=e^{in\theta}/\sqrt{2\pi}$（$n\in\Z$）が完全系をなし、$(-i\partial_\theta-\tfrac{q\Phi}{2\pi})\psi_n=(n-\tfrac{q\Phi}{2\pi})\psi_n$。よって $E_n$ が得られる。
+
+(2) $\Phi\to\Phi+2\pi/q$ で $E_n\to\frac{1}{2mR^2}(n-1-\frac{q\Phi}{2\pi})^2=E_{n-1}$ なので、スペクトル（集合）は不変。基底エネルギー $E_0(\Phi)=\frac{1}{2mR^2}\min_n(n-\alpha)^2$（$\alpha=q\Phi/2\pi$）は放物線を周期的につないだ形で、$\alpha\in\Z+\tfrac12$ で2つの準位 $n=\alpha\pm\tfrac12$ が交差する。
+\begin{center}
+\begin{tikzpicture}[xscale=1.3,yscale=2.4]
+  \draw[-{Stealth[length=2mm]}] (-2.3,0) -- (2.5,0) node[right] {\footnotesize $\alpha=\frac{q\Phi}{2\pi}$};
+  \draw[-{Stealth[length=2mm]}] (0,-0.05) -- (0,0.75) node[above] {\footnotesize $2mR^2E$};
+  \foreach \n in {-2,-1,0,1,2}{
+    \draw[gray,domain={\n-1.0}:{\n+1.0},samples=40] plot (\x,{(\x-\n)*(\x-\n)*0.6});
+  }
+  \foreach \n in {-2,-1,0,1,2}{
+    \draw[very thick,red!70!black,domain={\n-0.5}:{\n+0.5},samples=30] plot (\x,{(\x-\n)*(\x-\n)*0.6});
+    \node[below] at (\n,0) {\footnotesize $\n$};
+  }
+\end{tikzpicture}
+\zucap{各準位 $(n-\alpha)^2$（灰色）と基底エネルギー（赤）。周期1（$\Phi$ について周期 $2\pi/q$）で、半整数で準位が交差する。}
+\end{center}
+
+(3) $\lambda=-\frac{\Phi}{2\pi}\theta$ なら $A+d\lambda=0$ となるが、$\psi'=e^{-iq\Phi\theta/2\pi}\psi$ は $\theta\to\theta+2\pi$ で $e^{-iq\Phi}$ 倍になり、一価でない。すなわち $A$ を消す代わりに、波動関数の境界条件が $\psi'(\theta+2\pi)=e^{-iq\Phi}\psi'(\theta)$ にねじれる（このとき $\psi'_n\propto e^{i(n-\alpha)\theta}$ で同じスペクトルを与える）。$g=e^{iq\lambda}$ が円周から $U(1)$ への写像として well-defined なのは $q\Phi\in2\pi\Z$ のときに限り、このとき $g=e^{-ik\theta}$（$k=q\Phi/2\pi\in\Z$）は巻き付き数 $-k$ の「大きなゲージ変換」で、$A$ は真にゲージ同値なものとして消え、スペクトルは $\Phi=0$ のものと一致する（(2) の周期性）。
+
+(4) 円周上の局所的な場の強さ $F=0$ だけでは物理は決まらず、ゲージ不変量 $e^{iq\oint A}=e^{iq\Phi}$（ホロノミー、ウィルソン・ループ）が観測可能である。円周は単連結でない（$\pi_1=\Z$）ので、$F=0$ でも $A$ は大域的に純ゲージとは限らない。これが AB 効果の本質であり、持続電流 $I=-\partial E_0/\partial\Phi$ として実際に観測される。
+\end{solution}
+
+\begin{problem}[難易度 D]\label{ch02-prob-pathint}
+前問の系を経路積分で扱う。慣性モーメントを $\mathcal I=mR^2$、$\alpha=q\Phi/2\pi$ とし、ユークリッド作用を $S_E=\int_0^\tau d\tau'\bigl[\tfrac{\mathcal I}{2}\dot\theta^2-i\alpha\dot\theta\bigr]$ とする。\\
+(1) 円周 $S^1$ の普遍被覆 $\R$ への持ち上げを用いると、$\theta'$ から $\theta$ への経路は巻き付き数 $n\in\Z$（$\R$ 上で $\theta'$ から $\theta+2\pi n$ へ行く）で分類される。熱核 $K(\theta,\theta';\tau)=\langle\theta|e^{-H\tau}|\theta'\rangle$ が
+\[
+K(\theta,\theta';\tau)=\sum_{n\in\Z}e^{i\alpha(\theta-\theta'+2\pi n)}\sqrt{\frac{\mathcal I}{2\pi\tau}}\exp\Bigl(-\frac{\mathcal I(\theta-\theta'+2\pi n)^2}{2\tau}\Bigr)
+\]
+と書けることを説明せよ（$\R$ 上の自由粒子の熱核 $\sqrt{\mathcal I/2\pi\tau}\,e^{-\mathcal I x^2/2\tau}$ は既知としてよい）。\\
+(2) ポアソンの和公式 $\sum_ng(x+2\pi n)=\frac{1}{2\pi}\sum_k\hat g(k)e^{ikx}$（$\hat g(k)=\int_\R g(y)e^{-iky}dy$）を用いて
+\[
+K(\theta,\theta';\tau)=\frac{1}{2\pi}\sum_{k\in\Z}e^{ik(\theta-\theta')}\exp\Bigl(-\frac{(k-\alpha)^2}{2\mathcal I}\tau\Bigr)
+\]
+を示し、前問のスペクトルを再現せよ。\\
+(3) 一般に、多重連結な配位空間 $Q$ 上で各ホモトピー類の寄与に重み $\chi$ をつけるとき、伝播関数の合成則から $\chi(n+m)=\chi(n)\chi(m)$、確率の保存から $\lvert\chi\rvert=1$ が要求されることを説明し、$\pi_1(S^1)=\Z$ の場合の可能な重みをすべて求めよ。$\theta$ 角との類似を述べよ。
+\end{problem}
+
+\begin{solution}
+(1) 円周上の経路 $\theta(\tau')$ は $\R$ への持ち上げ $\tilde\theta(\tau')$ をもち、$\tilde\theta(0)=\theta'$ と固定すると終点は $\theta+2\pi n$ のいずれか（定理 \ref{thm:ch02-lift}）で、$n$ は経路の端点を止めたホモトピー類を区別する。円周上の経路積分は $\R$ 上の経路積分を、終点 $\theta+2\pi n$ について足し上げたものになる。運動項 $\int\frac{\mathcal I}{2}\dot\theta^2$ は $\R$ 上の自由粒子の作用で、その経路積分が熱核 $\sqrt{\mathcal I/2\pi\tau}\,e^{-\mathcal I(\theta+2\pi n-\theta')^2/2\tau}$ を与える。一方、項 $i\alpha\int\dot\theta\,d\tau'=i\alpha(\theta+2\pi n-\theta')$ は経路の端点だけで決まる（位相的な項）ので、各セクターで一定の位相 $e^{i\alpha(\theta-\theta'+2\pi n)}$ として外に出る（$e^{-S_E}$ の中で $-S_E\ni+i\alpha\Delta\tilde\theta$）。以上より与式。
+
+\begin{note}
+実時間の作用 $S=\int dt\,[\tfrac{\mathcal I}{2}\dot\theta^2+\alpha\dot\theta]$（$qA_\theta\dot\theta=\alpha\dot\theta$）で $t=-i\tau$ とおくと、$iS=\int d\tau\,[-\tfrac{\mathcal I}{2}(\partial_\tau\theta)^2+i\alpha\partial_\tau\theta]=-S_E$。位相的な項は1階微分なのでウィック回転しても虚数のまま残る。
+\end{note}
+
+(2) $g(y)=e^{i\alpha y}\sqrt{\mathcal I/2\pi\tau}\,e^{-\mathcal Iy^2/2\tau}$、$x=\theta-\theta'$ とおくと $K=\sum_ng(x+2\pi n)$。ガウス積分により
+\[
+\hat g(k)=\sqrt{\frac{\mathcal I}{2\pi\tau}}\int_\R e^{-\mathcal Iy^2/2\tau}e^{-i(k-\alpha)y}dy=\exp\Bigl(-\frac{(k-\alpha)^2\tau}{2\mathcal I}\Bigr).
+\]
+ポアソンの和公式より与式が従う。一方、スペクトル分解 $K=\sum_k\psi_k(\theta)\overline{\psi_k(\theta')}e^{-E_k\tau}$ と比べると、$\psi_k=e^{ik\theta}/\sqrt{2\pi}$、$E_k=(k-\alpha)^2/2\mathcal I=\frac{1}{2mR^2}(k-\frac{q\Phi}{2\pi})^2$ で、前問の結果と一致する。巻き付き数の和（経路積分）と角運動量の和（ハミルトニアン）がポアソン双対で結ばれている。
+
+(3) 時間 $\tau_1+\tau_2$ の伝播関数は、中間点 $\theta''$ で積分した $\int d\theta''K(\theta,\theta'';\tau_2)K(\theta'',\theta';\tau_1)$ に等しくなければならない。巻き付き数 $m$ の経路と $n$ の経路をつなぐと巻き付き数 $m+n$ の経路になり、逆に巻き付き数 $m+n$ の経路はこのように分解される。したがって各セクターに重み $\chi(n)$ をつけた $K=\sum_n\chi(n)K_n$ が合成則をみたすには $\chi(m)\chi(n)=\chi(m+n)$ が必要である。また $\chi$ の絶対値が1でないと、$K$ が与える時間発展は（実時間で）ユニタリにならない（例えば $\lvert\chi(1)\rvert>1$ なら大きな巻き付き数の寄与が指数的に増える）。よって $\chi\colon\Z\to U(1)$ は準同型で、$\chi(n)=\chi(1)^n=e^{i\vartheta n}$、$\vartheta\in[0,2\pi)$ が可能な重みのすべてである。(1) と比べると $\vartheta=2\pi\alpha=q\Phi$：重みの選択は、円周を貫く磁束（AB位相）を選ぶことと同じである。
+
+QCD の $\theta$ 真空（第8章）でも、ユークリッド配位はインスタントン数 $k\in\Z$ で分類され、経路積分に $e^{ik\theta}$ の重みをつける自由度がある。真空のエネルギーが $\theta$ について周期 $2\pi$ であることは、(2) の $E_0(\alpha)$ の周期性と同じ構造である。
+\end{solution}
+
+\begin{problem}[難易度 C]\label{ch02-prob-wilson}
+多様体 $M$ 上の $U(1)$ 接続 $A$ が平坦（$F=dA=0$）であるとし、電荷 $q$ の粒子に対するウィルソン・ループを $W(\gamma)=\exp\bigl(iq\oint_\gamma A\bigr)$ とする。\\
+(1) $x_0$ を基点とするループ $\gamma_0\simeq\gamma_1$（rel 端点）なら $W(\gamma_0)=W(\gamma_1)$ であることを、ホモトピー $H\colon I\times I\to M$（滑らかとしてよい）とストークスの定理を用いて示し、$W$ が準同型 $\pi_1(M,x_0)\to U(1)$ を定めることを示せ。また $W$ がゲージ変換 $A\mapsto A+d\lambda$ で不変であることを確かめよ。\\
+(2) $M=T^2=\R^2/(L_1\Z\oplus L_2\Z)$ 上の定数接続 $A=\frac{a_1}{L_1}dx+\frac{a_2}{L_2}dy$（$q=1$）について、$W$ を $\pi_1(T^2)=\Z^2$ の生成元上で求めよ。ゲージ変換 $g=\exp\bigl(2\pi i(\tfrac{m_1x}{L_1}+\tfrac{m_2y}{L_2})\bigr)$（$m_i\in\Z$）による $(a_1,a_2)$ の変化を求め、平坦接続のゲージ同値類の空間（モジュライ空間）が $\mathrm{Hom}(\Z^2,U(1))\cong T^2$ であることを説明せよ。\\
+(3) $M$ がレンズ空間 $L(N,p)$ のとき、平坦 $U(1)$ 接続のホロノミーとしてありうるものを求めよ。$F=0$ でありながら観測可能な効果をもつことを説明せよ。\\
+(4) 非可換群 $G$ の平坦接続では、ホロノミーが準同型 $\pi_1(M,x_0)\to G$ を定め、基点の変更やゲージ変換で全体の共役だけ変わる。このことを (1) の類推から説明せよ（詳しくは第8章）。
+\end{problem}
+
+\begin{solution}
+(1) $H(s,0)=\gamma_0(s)$, $H(s,1)=\gamma_1(s)$, $H(0,t)=H(1,t)=x_0$ とする。正方形 $I^2$ 上でストークスの定理を $H^*A$ に適用すると
+\[
+\int_{I^2}H^*F=\int_{I^2}d(H^*A)=\oint_{\partial I^2}H^*A=\int_{\gamma_0}A+\int_{\text{右辺}}A-\int_{\gamma_1}A-\int_{\text{左辺}}A .
+\]
+左右の辺は定値の道 $x_0$ なので寄与はゼロ、$F=0$ より左辺もゼロ。よって $\oint_{\gamma_0}A=\oint_{\gamma_1}A$ で、$W$ は $\pi_1(M,x_0)$ 上で well-defined。積については $\oint_{\gamma\cdot\delta}A=\oint_\gamma A+\oint_\delta A$ なので $W(\gamma\cdot\delta)=W(\gamma)W(\delta)$、準同型である。ゲージ変換では $\oint_\gamma d\lambda=0$（ループ上の完全形式の積分；$\lambda$ が一価な関数のとき）なので不変。$\lambda$ が $U(1)$ 値 $e^{i\lambda}$ としてのみ一価な場合（大きなゲージ変換）は $\oint d\lambda\in2\pi\Z$ で、$q\in\Z$ なら $W$ はやはり不変。
+
+(2) 生成元は $\gamma_1(s)=(L_1s,0)$, $\gamma_2(s)=(0,L_2s)$ で、$W(\gamma_j)=e^{ia_j}$。$g$ は $T^2$ 上で一価（$x\to x+L_1$ で $e^{2\pi im_1}=1$）で、$A\mapsto A+i\,g\,dg^{-1}=A+2\pi(\tfrac{m_1}{L_1}dx+\tfrac{m_2}{L_2}dy)$。すなわち $a_j\mapsto a_j+2\pi m_j$。小さなゲージ変換（一価な $\lambda$）では定数接続の $a_j$ は変わらない。よって定数接続のゲージ同値類は $(a_1,a_2)\in(\R/2\pi\Z)^2$。（任意の平坦接続は $A=A_{\text{定数}}+d\lambda$ と書けることも示せる：調和形式の議論、第5章。）一方、ホロノミー $(e^{ia_1},e^{ia_2})$ は準同型 $\Z^2\to U(1)$ を定め、これはすべての準同型を尽くす。モジュライ空間 $\cong\mathrm{Hom}(\Z^2,U(1))=U(1)^2\cong T^2$。トーラス・コンパクト化のウィルソン線（第10章）はこの自由度である。
+
+(3) $\pi_1(L(N,p))\cong\Z_N$（問題 \ref{ch02-prob-lens}）なので、ホロノミーは準同型 $\Z_N\to U(1)$、すなわち生成元の像 $e^{2\pi ik/N}$（$k=0,\dots,N-1$）で決まる $N$ 通りである。$\Z_N$ は有限なので連続的な変形の余地がなく、$k\neq0$ の接続は $F=0$ であるにもかかわらず自明な接続とゲージ同値でない。電荷 $q$ の粒子が生成元のループを一周すると $e^{2\pi ikq/N}$ の位相を得て、干渉やエネルギー準位（前問と同様）に効果が現れる。オービフォールド・コンパクト化では、こうした離散的なウィルソン線がゲージ対称性を破る手段になる（第10章）。
+
+(4) 非可換の場合、ホロノミーは経路順序積 $P\exp(i\int_\gamma A)$ で、ストークスの定理の代わりに「平坦なら平行移動は端点を止めた変形で変わらない」ことが（非可換ストークスの定理から）示せる。経路をつなぐとホロノミーは積になる（向きの規約により準同型または逆準同型）。基点を $x_0$ から $x_1$ に動かすと、道 $h$ に沿った平行移動 $U_h$ による共役 $U_h(\cdot)U_h^{-1}$ だけ変わり、ゲージ変換 $g$ では $x_0$ での値 $g(x_0)$ による共役で変わる。したがってゲージ不変な情報は $\mathrm{Hom}(\pi_1(M),G)/G$（共役による商）であり、平坦 $G$ 接続のモジュライ空間になる。$\tr$ をとったウィルソン・ループ $\tr P\exp(i\oint A)$ は共役で不変なので、ゲージ不変な観測量である（第8章）。
+\end{solution}
+
+\subsection{量子統計と組みひも群}
+
+\begin{problem}[難易度 C]\label{ch02-prob-stat}
+$d$ 次元空間の2つの同種粒子の配位空間を $C_2(\R^d)=\{(x_1,x_2)\in\R^d\times\R^d:x_1\ne x_2\}/S_2$ とする（$S_2$ は入れ替え）。\\
+(1) 重心 $X=\tfrac12(x_1+x_2)$ と相対座標 $\bm r=x_1-x_2$ を用いて、$C_2(\R^d)\cong\R^d\times P_d$、$P_d=(\R^d\setminus\{0\})/(\bm r\sim-\bm r)$ を示し、$P_d\simeq\RP^{d-1}$ を示せ。\\
+(2) $d=1,2,3$ について $\pi_1(C_2(\R^d))$ を求めよ（$d\ge3$ でも同様）。\\
+(3) 粒子の交換を表すループ $\varepsilon$（相対座標 $\bm r$ を、ある平面内で角度 $\pi$ だけ回転させる道の像）が、$d\ge3$ では $\varepsilon^2\simeq$ 定値、$d=2$ では $\pi_1$ の生成元であることを示せ。これより、交換の位相 $\chi(\varepsilon)$ は $d\ge3$ で $\pm1$（ボソン・フェルミオン）、$d=2$ では任意の $e^{i\vartheta}$（\term{エニオン}{anyon}）であることを結論せよ。\\
+(4) $d=2$ で、相対運動の波動関数を極座標 $\bm r=(r\cos\varphi,r\sin\varphi)$ の普遍被覆上の関数とし、$\psi(r,\varphi+\pi)=e^{i\vartheta}\psi(r,\varphi)$ を課す。相対角運動量 $\ell$（$\psi\propto e^{i\ell\varphi}$）の許される値を求め、ボソン・フェルミオンの場合と比べよ。
+\end{problem}
+
+\begin{solution}
+(1) $(x_1,x_2)\mapsto(X,\bm r)$ は $\R^d\times\R^d$ の線形同型で、対角集合 $x_1=x_2$ は $\bm r=0$ に、入れ替えは $(X,\bm r)\mapsto(X,-\bm r)$ に対応する。よって $C_2(\R^d)\cong\R^d\times(\R^d\setminus\{0\})/\pm=\R^d\times P_d$（商の連続性は直積の商として確かめられる）。$\R^d$ は可縮なので $C_2\simeq P_d$。$\R^d\setminus\{0\}$ は $S^{d-1}$ に $H(\bm r,t)=(1-t)\bm r+t\bm r/\lvert\bm r\rvert$ で強変位レトラクトし、$H(-\bm r,t)=-H(\bm r,t)$ なので商に降りて $P_d\simeq S^{d-1}/\pm=\RP^{d-1}$。
+
+(2) $d=1$：$\RP^0$ は1点で $\pi_1=1$。（$P_1=(\R\setminus\{0\})/\pm\cong(0,\infty)$。1次元では粒子は互いを通り抜けられず、交換というループが存在しない。）
+$d=2$：$\RP^1\cong S^1$（$S^1\to\RP^1$ は $z\mapsto z^2$ と同一視できる）なので $\pi_1=\Z$。
+$d\ge3$：$S^{d-1}$（$d-1\ge2$）は単連結で、$\pm1$ は自由に作用するので $\pi_1(\RP^{d-1})\cong\Z_2$（定理 \ref{thm:ch02-quotient}）。
+
+(3) $\varepsilon$ の $S^{d-1}$ への持ち上げは $\hat{\bm r}$ から $-\hat{\bm r}$ への半円で、閉じないので $\varepsilon\ne1$（$d\ge2$）。
+$d\ge3$：$\pi_1=\Z_2$ の唯一の非自明元が $\varepsilon$ で、$\varepsilon^2\simeq$ 定値。（$\varepsilon^2$ の持ち上げは大円全体で、$S^{d-1}$（$d\ge3$）上で縮められる。物理的には、相対座標の $2\pi$ 回転は3次元では第3の方向へ持ち上げてほどける。）
+$d=2$：$\RP^1\cong S^1$ で、$S^1\to\RP^1$ の2重被覆に関して $\varepsilon$ の持ち上げは半周なので、$\RP^1$ を「ちょうど1周」するループであり、生成元である。$\varepsilon^2$ は相対座標が $2\pi$ 回転するループで、生成元の2倍であり縮まない。
+
+シュルマン・レイドロー・ドウィットの定理より、量子化は1次元ユニタリ表現 $\chi\colon\pi_1\to U(1)$ で分類される。$d\ge3$ では $\chi(\varepsilon)^2=\chi(\varepsilon^2)=1$ より $\chi(\varepsilon)=\pm1$。$+1$ がボソン、$-1$ がフェルミオンである。$d=2$ では $\pi_1=\Z$ が自由に生成されるので $\chi(\varepsilon)=e^{i\vartheta}$ は任意で、交換の位相が任意のエニオンが許される。
+
+(4) 交換 $\varphi\to\varphi+\pi$ に位相 $e^{i\vartheta}$ を課すと、$e^{i\ell(\varphi+\pi)}=e^{i\vartheta}e^{i\ell\varphi}$ より $e^{i\pi\ell}=e^{i\vartheta}$、すなわち
+\[
+\ell\in\frac{\vartheta}{\pi}+2\Z .
+\]
+ボソン（$\vartheta=0$）では $\ell$ は偶数、フェルミオン（$\vartheta=\pi$）では奇数で、相対波動関数の対称・反対称性と一致する。エニオンでは $\ell$ が整数でなくなり、角運動量の値がずれる。これは、相対座標の原点に磁束 $\Phi$ を置いた AB 系（問題 \ref{ch02-prob-ring}）で角運動量が $n\to n-q\Phi/2\pi$ とずれるのと同じ構造で、エニオンは「電荷と磁束の複合粒子」とみなせる（チャーン・サイモンズ理論、第8章）。
+\end{solution}
+
+\begin{problem}[難易度 C]\label{ch02-prob-braid}
+$n\ge2$ とし、$\pi_1(C_n(\R^2))\cong B_n=\langle\sigma_1,\dots,\sigma_{n-1}\mid\sigma_i\sigma_{i+1}\sigma_i=\sigma_{i+1}\sigma_i\sigma_{i+1},\ \sigma_i\sigma_j=\sigma_j\sigma_i\ (\lvert i-j\rvert\ge2)\rangle$、および $d\ge3$ で $\pi_1(C_n(\R^d))\cong S_n$（$\sigma_i\mapsto$ 互換 $(i\ i{+}1)$ による）を認める。\\
+(1) $B_n$ の1次元ユニタリ表現 $\chi$ はすべて $\chi(\sigma_i)=e^{i\vartheta}$（$i$ によらない）の形であることを示せ。\\
+(2) $\sigma_i\mapsto1$ が準同型 $B_n\to\Z$ を定めることを示し、$B_n$ の可換化が $\Z$ であることを示せ。\\
+(3) $d\ge3$ では1次元ユニタリ表現は $\vartheta\in\{0,\pi\}$ に限ることを示せ。\\
+(4) 球面 $S^2$ 上の $n$ 粒子では、さらに関係式 $\sigma_1\sigma_2\cdots\sigma_{n-1}\sigma_{n-1}\cdots\sigma_2\sigma_1=1$ が加わる（1つの粒子が他のすべての粒子のまわりを1周するループが、球面の裏側を通って縮められる）。このとき許される $\vartheta$ を求めよ。
+\end{problem}
+
+\begin{solution}
+(1) $U(1)$ は可換なので、関係式 $\sigma_i\sigma_{i+1}\sigma_i=\sigma_{i+1}\sigma_i\sigma_{i+1}$ から $\chi(\sigma_i)^2\chi(\sigma_{i+1})=\chi(\sigma_i)\chi(\sigma_{i+1})^2$、すなわち $\chi(\sigma_i)=\chi(\sigma_{i+1})$。よってすべて同じ値 $e^{i\vartheta}$。逆に任意の $\vartheta$ で、$\sigma_i\mapsto e^{i\vartheta}$ はすべての関係式（両辺で各生成元の個数が等しい）を保つので表現になる。
+
+(2) 各関係式の両辺は生成元を同じ個数（3個ずつ、2個ずつ）含むので、$\sigma_i\mapsto1$ は自由群からの準同型として関係子を $0$ に送り、準同型 $\ell\colon B_n\to\Z$（「交差の符号付き個数」）を誘導する。可換化 $B_n^{\mathrm{ab}}$ では (1) と同じ議論ですべての $\sigma_i$ が等しくなるので、$B_n^{\mathrm{ab}}$ は1つの元 $\sigma$ で生成される巡回群で、$\ell$ がそれを $\Z$ に全射に写すので $B_n^{\mathrm{ab}}\cong\Z$。特に $B_n$ の元 $\sigma_1^k$（$k\ne0$）は単位元でない。（$n=2$ では $B_2\cong\Z$。$\sigma_1^2$ は図の通り、一方の粒子が他方を1周する運動である。）
+
+(3) $d\ge3$ では $\pi_1=S_n$ で、互換は $\sigma_i^2=1$ をみたす。1次元表現は $\chi(\sigma_i)^2=1$、かつ (1) と同じ関係式（$S_n$ でも組みひも関係式は成り立つ）からすべて等しいので、$\chi(\sigma_i)=e^{i\vartheta}$、$\vartheta\in\{0,\pi\}$：自明表現（ボソン）と符号表現（フェルミオン）。2次元では $\sigma_i^2\ne1$（(2) より $\ell(\sigma_i^2)=2\ne0$）なので、この制限がない。
+
+(4) 1次元表現では関係式の左辺は $e^{i\vartheta\cdot2(n-1)}$ なので $e^{2i(n-1)\vartheta}=1$、すなわち
+\[
+\vartheta\in\frac{\pi}{n-1}\Z .
+\]
+平面上では任意だった統計の角度が、球面上では粒子数に依存して量子化される。$n=2$ では $\vartheta\in\pi\Z$ でボソン・フェルミオンに限る。このように多体系の統計は空間のトポロジーに敏感で、トーラス上ではさらに基底状態の縮退が生じる（トポロジカル秩序）。
+\end{solution}

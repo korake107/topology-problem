@@ -1,0 +1,924 @@
+%================================================
+\chapter{弦理論・コンパクト化のトポロジー}\label{ch:10}
+% 17問
+%================================================
+
+\section{物理からの動機}
+
+\subsection*{世界面の位相による摂動展開}
+弦理論の摂動論では、ファインマン図の代わりに弦の\term{世界面}{worldsheet}についての和をとる。ユークリッド化した世界面 $\Sigma$ 上のポリャコフ作用には、定数のディラトン $\Phi$ が
+\[
+S_\Phi=\frac{\Phi}{4\pi}\int_\Sigma d^2\sigma\sqrt{h}\,R+\frac{\Phi}{2\pi}\oint_{\partial\Sigma}ds\,k_g=\Phi\,\chi(\Sigma)
+\]
+の形で入る（$R$ は世界面のスカラー曲率、$k_g$ は境界の測地的曲率）。2番目の等号は境界付きのガウス・ボンネの定理（第8章）である。したがって振幅は $e^{-S_\Phi}=g_s^{-\chi(\Sigma)}$（$g_s=e^\Phi$ は\term{弦の結合定数}{string coupling}）で重みづけられ、閉弦の真空振幅は
+\[
+Z=\sum_{g=0}^\infty g_s^{2g-2}Z_g
+\]
+と\term{種数展開}{genus expansion}される。ループの数を数えていたファインマン図のオイラー標数（第4章）の役割を、世界面のオイラー標数が果たすのである。
+\begin{center}
+\begin{tikzpicture}[scale=0.9]
+  \shade[ball color=blue!8] (0,0) circle (0.75);
+  \draw[thick] (0,0) circle (0.75);
+  \draw[gray] (-0.75,0) arc (180:360:0.75 and 0.2);
+  \draw[gray,dashed] (0.75,0) arc (0:180:0.75 and 0.2);
+  \node at (0,-1.2) {\footnotesize $g=0$：$g_s^{-2}$};
+  \node at (1.45,0) {$+$};
+  \begin{scope}[shift={(3.3,0)}]
+    \shade[ball color=blue!8] (0,0) ellipse (1.25 and 0.75);
+    \draw[thick] (0,0) ellipse (1.25 and 0.75);
+    \draw[thick] (-0.45,0.05) to[bend right=35] (0.45,0.05);
+    \draw[thick,fill=white] (-0.34,-0.01) to[bend left=35] (0.34,-0.01) to[bend left=20] (-0.34,-0.01);
+    \node at (0,-1.2) {\footnotesize $g=1$：$g_s^{0}$};
+  \end{scope}
+  \node at (5.15,0) {$+$};
+  \begin{scope}[shift={(7.6,0)}]
+    \shade[ball color=blue!8] (0,0) ellipse (1.9 and 0.8);
+    \draw[thick] (0,0) ellipse (1.9 and 0.8);
+    \foreach \x in {-0.8,0.8}{
+      \draw[thick] (\x-0.42,0.05) to[bend right=35] (\x+0.42,0.05);
+      \draw[thick,fill=white] (\x-0.32,-0.01) to[bend left=35] (\x+0.32,-0.01) to[bend left=20] (\x-0.32,-0.01);
+    }
+    \node at (0,-1.2) {\footnotesize $g=2$：$g_s^{2}$};
+  \end{scope}
+  \node at (10.4,0) {$+\ \cdots$};
+\end{tikzpicture}
+\zucap{閉弦の真空振幅の種数展開。取っ手が1つ増えるごとに $\chi$ は $2$ 減り、$g_s^2$ が掛かる。開弦・向き付け不可能な弦では、境界や交差帽を持つ世界面も現れる（問題 \ref{ch10-prob-ws}）。}
+\end{center}
+
+\subsection*{コンパクト化：4次元の物理を内部空間のトポロジーが決める}
+超弦理論は10次元時空で定義されるので、時空を $M_4\times K$（$K$ はコンパクトな6次元多様体）とし、$K$ の大きさより長い波長で見た4次元の有効理論を考える。このとき
+\begin{itemize}
+\item 10次元の $p$ 形式場を $K$ 上の\textbf{調和形式}で展開すると、4次元の質量ゼロ場が得られる。その個数はベッチ数 $b_k(K)$、$K$ が複素多様体ならホッジ数 $h^{p,q}(K)$ で決まる（ホッジの定理、第5章）。
+\item 4次元で何個の超対称性が残るかは $K$ の\textbf{ホロノミー群}で決まる。$\mathcal N=1$ が残る代表例が\term{カラビ・ヤウ多様体}{Calabi--Yau manifold}である。
+\item ヘテロティック弦をカラビ・ヤウ多様体 $X$ にコンパクト化すると、カイラルなクォーク・レプトンの\textbf{世代数}が $\lvert\chi(X)\rvert/2$ になる。これは指数定理（第9章）の帰結である。
+\item 弦の真空の連続パラメータ（\term{モジュライ}{moduli}）の数は $h^{1,1}$, $h^{2,1}$ で数えられる。
+\item フラックスやDブレーンの電荷は、一般化されたディラックの量子化により\textbf{整数係数コホモロジー}の元になる。コンパクトな空間ではガウスの法則により総電荷がゼロでなければならず（\term{タドポール相殺}{tadpole cancellation}）、その条件に $\chi/24$ のような特性数が現れる。
+\item 10次元のアノマリーの相殺（グリーン・シュワルツ機構）がゲージ群を $SO(32)$ か $E_8\times E_8$ に限る。
+\end{itemize}
+本章では、これらを支える代数トポロジー・複素幾何の道具を、弦理論の具体例（トーラス、K3、5次超曲面、オービフォールド）で計算する。
+
+\begin{physbox}[：本章の辞書]
+\begin{center}
+\small
+\begin{tabular}{p{0.46\linewidth}p{0.44\linewidth}}
+物理 & 数学\\ \hline
+弦の摂動の次数 & 世界面のオイラー標数 $\chi=2-2g-b-c$\\
+4次元の質量ゼロ場の数 & ベッチ数、ホッジ数 $h^{p,q}$\\
+残る超対称性 & ホロノミー群、共変定数スピノル\\
+世代数 & 指数 $\int\ch(V)\Td(X)=\chi/2$\\
+ケーラー・モジュライ／複素構造モジュライ & $h^{1,1}$ ／ $h^{2,1}$\\
+オービフォールドの「ねじれたセクター」 & 固定点、特異点の解消\\
+フラックス量子・ブレーン電荷 & $H^{k}(K;\Z)$ の元\\
+タドポール相殺 & コンパクト空間上のガウス則、$\chi/24$\\
+グリーン・シュワルツ機構 & $I_{12}$ の因数分解、$\dim G=496$\\
+ミラー対称性 & $h^{1,1}\leftrightarrow h^{2,1}$
+\end{tabular}
+\end{center}
+\end{physbox}
+
+\section{基本事項のまとめ}
+
+\subsection{曲面の分類と世界面}
+
+\begin{mythm}{コンパクト曲面の分類}{ch10-surf}
+コンパクトで連結な曲面（境界があってもよい）は、球面 $S^2$ に $g$ 個の取っ手（\term{ハンドル}{handle}）を付け、$b$ 個の円板を取り除き（\term{境界}{boundary}）、$c$ 個の\term{交差帽}{crosscap}（円板を取り除いて境界の対蹠点を同一視したもの）を付けて得られる。そのオイラー標数は
+\[
+\chi=2-2g-b-c
+\]
+である。$c\ge1$ なら向き付け不可能。取っ手1つと交差帽1つの組は交差帽3つと同じ曲面を与えるので、$c\ge1$ のときは $g=0$ としてよい。
+\end{mythm}
+\begin{note}
+$\chi$ の公式は、円板を取り除くと（面が1つ減るので）$\chi$ が $1$ 減ること、交差帽は円板を取り除いて $\RP^2$ から円板を除いたもの（メビウスの帯、$\chi=0$）を貼ることで $\chi$ を $1$ 減らすこと、取っ手は $\chi$ を $2$ 減らすことから従う。一般に $\chi(A\cup B)=\chi(A)+\chi(B)-\chi(A\cap B)$（第4章のMV完全列）と $\chi(S^1)=0$ を使えばよい。
+\end{note}
+
+\begin{physbox}[：弦の種類と世界面]
+\begin{itemize}
+\item 閉じた向き付けられた弦（II型、ヘテロティック）：閉じた向き付け可能曲面 $\Sigma_g$ のみ。重み $g_s^{2g-2}$。
+\item 開弦を含む理論：境界 $b\ge1$ が現れる。境界は開弦の端点の軌跡で、Dブレーン上にある。
+\item 向き付けられていない弦（I型）：交差帽 $c\ge1$ も現れる。交差帽はオリエンティフォールド面（O面）との相互作用を表す。
+\end{itemize}
+$\chi$ を固定すると $2g+b+c=2-\chi$ なので、各次数に寄与する世界面の位相型は有限個である。
+\end{physbox}
+
+\subsection{複素多様体とホッジ数}
+
+\begin{mydef}{複素多様体とドルボー・コホモロジー}{ch10-dolb}
+$\C^n$ の開集合を正則な座標変換で貼り合わせたものを複素 $n$ 次元の\term{複素多様体}{complex manifold}という。局所座標 $z^i$ で微分形式は $dz^{i_1}\wedge\dots\wedge dz^{i_p}\wedge d\bar z^{j_1}\wedge\dots\wedge d\bar z^{j_q}$ の線形結合として $(p,q)$ 型に分解され、外微分は $d=\partial+\bar\partial$ と分かれる。$\bar\partial^2=0$ なので
+\[
+H^{p,q}_{\bar\partial}(X)=\frac{\{\bar\partial\text{-閉な }(p,q)\text{ 形式}\}}{\bar\partial\{(p,q-1)\text{ 形式}\}}
+\]
+が定まる（\term{ドルボー・コホモロジー}{Dolbeault cohomology}）。$h^{p,q}=\dim_\C H^{p,q}_{\bar\partial}(X)$ を\term{ホッジ数}{Hodge number}という。
+\end{mydef}
+
+\begin{mydef}{ケーラー多様体}{ch10-kahler}
+エルミート計量 $g_{i\bar j}$ をもつ複素多様体で、2形式 $J=ig_{i\bar j}\,dz^i\wedge d\bar z^j$ が $dJ=0$ をみたすものを\term{ケーラー多様体}{K\"ahler manifold}、$J$ を\term{ケーラー形式}{K\"ahler form}という。コンパクトなケーラー多様体では $\int_XJ^n>0$ なので $[J]\neq0\in H^2(X;\R)$、特に $b_{2k}\ge1$（$0\le k\le n$）。
+\end{mydef}
+$\C^n$、トーラス $\C^n/\Lambda$、$\CP^n$（フビニ・スタディ計量）、$\CP^n$ の複素部分多様体はすべてケーラー多様体である。
+
+\begin{mythm}{ホッジ分解}{ch10-hodge}
+コンパクトなケーラー多様体 $X$（複素 $n$ 次元）について
+\[
+H^k(X;\C)\cong\bigoplus_{p+q=k}H^{p,q}(X),\qquad b_k=\sum_{p+q=k}h^{p,q},
+\]
+\[
+h^{p,q}=h^{q,p}\ (\text{複素共役}),\qquad h^{p,q}=h^{n-p,n-q}\ (\text{セール双対性}).
+\]
+各類はラプラシアン $\Delta_d=2\Delta_{\bar\partial}$ について調和な $(p,q)$ 形式を一意に代表元にもつ。特に奇数次のベッチ数は偶数。
+\end{mythm}
+\begin{note}
+ホッジの定理（第5章）により $H^k(X;\R)$ は調和 $k$ 形式の空間と同型である。ケーラー条件のもとでは $\Delta_d$ が $(p,q)$ 型を保つので、調和形式が型ごとに分解する。$h^{p,q}=h^{q,p}$ は調和形式の複素共役が調和であることから、$h^{p,q}=h^{n-p,n-q}$ はホッジの $*$ と複素共役の組み合わせ（あるいはポアンカレ双対、第6章）から従う。
+\end{note}
+
+ホッジ数は\term{ホッジ・ダイヤモンド}{Hodge diamond}と呼ばれる菱形に並べる。$k$ 段目（上から $0$ 段目）に $p+q=k$ の数を並べ、横の和がベッチ数 $b_k$ になる。
+
+\begin{center}
+\begin{tikzpicture}[x=0.62cm,y=0.5cm]
+  \foreach \p/\q/\t in {0/0/1, 1/0/0, 0/1/0, 2/0/0, 1/1/h^{1,1}, 0/2/0,
+      3/0/1, 2/1/h^{2,1}, 1/2/h^{2,1}, 0/3/1, 3/1/0, 2/2/h^{1,1}, 1/3/0,
+      3/2/0, 2/3/0, 3/3/1}{
+    \node at ({\q-\p},{-(\p+\q)}) {\small $\t$};
+  }
+  \node[blue!60!black] at (-0.2,1.2) {\footnotesize 一般のCY3};
+  \begin{scope}[xshift=6.2cm]
+  \foreach \p/\q/\t in {0/0/1, 1/0/0, 0/1/0, 2/0/0, 1/1/1, 0/2/0,
+      3/0/1, 2/1/101, 1/2/101, 0/3/1, 3/1/0, 2/2/1, 1/3/0,
+      3/2/0, 2/3/0, 3/3/1}{
+    \node at ({\q-\p},{-(\p+\q)}) {\small $\t$};
+  }
+  \node[blue!60!black] at (0,1.2) {\footnotesize 5次超曲面 $X_5\subset\CP^4$};
+  \end{scope}
+\end{tikzpicture}
+\zucap{カラビ・ヤウ3次元多様体（CY3）のホッジ・ダイヤモンド。$h^{p,q}$ を座標 $(q-p,\,-(p+q))$ に置いた。左右対称は $h^{p,q}=h^{q,p}$、上下対称はセール双対性 $h^{p,q}=h^{3-p,3-q}$。}
+\end{center}
+
+\begin{myex}{トーラスと射影空間のホッジ数}{ch10-hodgeex}
+\begin{itemize}
+\item 平坦なトーラス $T^{2n}=\C^n/\Lambda$：調和形式は定数係数の形式なので $h^{p,q}=\binom{n}{p}\binom{n}{q}$（問題 \ref{ch10-prob-torus}）。$T^6$ では $h^{1,0}=3$, $h^{2,0}=3$, $h^{1,1}=9$, $h^{2,1}=9$, $h^{3,0}=1$。
+\item $\CP^n$：$h^{p,p}=1$（$0\le p\le n$）、それ以外は $0$。$H^{2p}$ はケーラー形式のべき $J^p$ で生成される。
+\end{itemize}
+\end{myex}
+
+\subsection{カラビ・ヤウ多様体}
+
+\begin{mydef}{カラビ・ヤウ多様体}{ch10-cy}
+コンパクトなケーラー多様体 $X$ で第1チャーン類 $c_1(X)=c_1(TX)$ が（実係数で）ゼロであるものを\term{カラビ・ヤウ多様体}{Calabi--Yau manifold}という。本書では特に、単連結で、ホロノミーがちょうど $SU(n)$ のものを考える。複素 $3$ 次元のものをCY3と略す。
+\end{mydef}
+
+\begin{mythm}{カラビ予想（ヤウの定理）と帰結}{ch10-yau}
+$c_1(X)=0$ のコンパクトなケーラー多様体の各ケーラー類 $[J]$ には、リッチ平坦なケーラー計量がただ1つ存在する。その計量のホロノミーは $SU(n)$ に含まれ、次が成り立つ。
+\begin{enumerate}
+\item 至るところゼロにならない正則 $n$ 形式 $\Omega$ が存在する（標準束 $K_X=\Lambda^nT^*X$ が自明）。ホロノミーがちょうど $SU(n)$ なら $h^{n,0}=1$、$h^{p,0}=0$（$0<p<n$）。
+\item \term{共変定数スピノル}{covariantly constant spinor} $\nabla\eta=0$ が存在する（$U(n)$ ホロノミーではスピノルは $\Lambda^{0,*}$ のように分解し、$SU(n)$ に縮小すると $\Lambda^{0,0}$ と $\Lambda^{0,n}$ の成分が不変になる）。
+\end{enumerate}
+\end{mythm}
+
+\begin{myprop}{CY3のホッジ数とモジュライ}{ch10-cy3}
+ホロノミー $SU(3)$ のCY3では、ホッジ・ダイヤモンドは上図の形になり、独立なホッジ数は $h^{1,1}$ と $h^{2,1}$ の2つだけである。
+\[
+b_0=b_6=1,\quad b_1=b_5=0,\quad b_2=b_4=h^{1,1},\quad b_3=2+2h^{2,1},
+\]
+\[
+\chi(X)=2\bigl(h^{1,1}-h^{2,1}\bigr).
+\]
+リッチ平坦計量の変形は、$h^{1,1}$ 個の実パラメータ（\term{ケーラー・モジュライ}{K\"ahler moduli}：$J$ の変形）と $h^{2,1}$ 個の複素パラメータ（\term{複素構造モジュライ}{complex structure moduli}）からなる。後者は $H^1(X,TX)\cong H^{2,1}(X)$（$\Omega$ との縮約による同型）で数えられる。
+\end{myprop}
+
+\begin{myex}{代表的なカラビ・ヤウ多様体}{ch10-cyex}
+\begin{center}
+\small
+\renewcommand{\arraystretch}{1.15}
+\begin{tabular}{lll}
+多様体 & ホッジ数など & $\chi$\\ \hline
+楕円曲線 $T^2$（$\CP^2$ の3次曲線） & $h^{1,0}=1$ & $0$\\
+K3曲面（$\CP^3$ の4次曲面など） & $h^{2,0}=1$, $h^{1,1}=20$, $b_2=22$ & $24$\\
+5次超曲面 $X_5\subset\CP^4$ & $(h^{1,1},h^{2,1})=(1,101)$ & $-200$\\
+ミラー5次超曲面 & $(101,1)$ & $200$\\
+$T^6/\Z_3$ の解消 & $(36,0)$ & $72$
+\end{tabular}
+\end{center}
+$T^6$ は $c_1=0$ だがホロノミーが自明で、$h^{1,0}=3\ne0$ なので上の意味のCY3ではない。
+\end{myex}
+
+\subsection{チャーン類と添加公式}
+チャーン類・ガウス・ボンネ・チャーンの定理の一般論は第8章で扱った。本章では次を用いる。複素 $n$ 次元のコンパクト複素多様体について
+\[
+\chi(X)=\int_Xc_n(TX).
+\]
+
+\begin{myprop}{射影空間と超曲面の全チャーン類}{ch10-adj}
+$H\in H^2(\CP^N;\Z)$ を超平面の類（ポアンカレ双対）とすると $\int_{\CP^N}H^N=1$ であり
+\[
+c(T\CP^N)=(1+H)^{N+1}.
+\]
+$d$ 次の斉次多項式の零点として定まる滑らかな超曲面 $X\subset\CP^N$（複素 $N-1$ 次元）について、\term{添加公式}{adjunction formula}
+\[
+c(TX)=\frac{(1+H)^{N+1}}{1+dH}\Big|_X,\qquad \int_XH^{N-1}=d
+\]
+が成り立つ。特に $c_1(TX)=(N+1-d)H$ なので、$X$ がカラビ・ヤウになるのは $d=N+1$ のときである。
+\end{myprop}
+\begin{note}
+$T\CP^N$ の式はオイラー完全列 $0\to\underline{\C}\to\mathcal O(1)^{\oplus(N+1)}\to T\CP^N\to0$ から、超曲面の式は $0\to TX\to T\CP^N|_X\to N_X\to0$ と法束 $N_X=\mathcal O(d)|_X$（$c(N_X)=1+dH$）から、チャーン類の積公式 $c(E)=c(E')c(E'')$ によって従う。$\int_XH^{N-1}=d$ は、$X$ と一般の位置にある $N-1$ 枚の超平面の交点（＝$d$ 次方程式1つと1次方程式 $N-1$ 個の共通解）が $d$ 個であることを表す。
+\end{note}
+
+\begin{mythm}{レフシェッツの超平面定理}{ch10-lef}
+$X\subset\CP^N$ を滑らかな超曲面（複素 $n=N-1$ 次元）とし、$i\colon X\hookrightarrow\CP^N$ を包含とする。$i^*\colon H^k(\CP^N;\Z)\to H^k(X;\Z)$ は $k<n$ で同型、$k=n$ で単射である。
+\end{mythm}
+例えば5次超曲面（$n=3$）では $H^1(X)=0$、$H^2(X)\cong\Z$（$H$ で生成）。
+
+\subsection{オービフォールド}
+
+\begin{mydef}{大域的オービフォールド}{ch10-orb}
+多様体 $X$ に有限群 $G$ が作用しているとき、商空間 $X/G$ を\term{オービフォールド}{orbifold}という。$g\in G$ の固定点集合を $X^g=\{x:gx=x\}$ と書く。$G$ が自由に作用する（$g\ne1$ なら $X^g=\emptyset$）とき $X/G$ は多様体で、$X\to X/G$ は $\lvert G\rvert$ 重の被覆である（第2章）。固定点があると、その像は一般に特異点（例：$\C^2/\Z_2$ は $\RP^3$ 上の錐）になる。
+\end{mydef}
+
+\begin{mythm}{オービフォールドのオイラー標数}{ch10-orbchi}
+\begin{enumerate}
+\item（位相的な商空間）$\displaystyle\chi(X/G)=\frac{1}{\lvert G\rvert}\sum_{g\in G}\chi(X^g)$。自由な作用なら $\chi(X/G)=\chi(X)/\lvert G\rvert$。
+\item（弦理論のオービフォールド；ディクソン・ハーヴェイ・ヴァッファ・ウィッテン）弦の真空の「オイラー標数」は
+\[
+\chi_{\rm str}(X,G)=\frac{1}{\lvert G\rvert}\sum_{\substack{g,h\in G\\ gh=hg}}\chi\bigl(X^g\cap X^h\bigr).
+\]
+$X$ がCYで $G$ が正則体積形式を保つとき（複素次元 $\le3$）、これは特異点をカラビ・ヤウ性を保って解消した多様体（\term{クレパント解消}{crepant resolution}）のオイラー標数に等しい（ここでは認める）。
+\end{enumerate}
+\end{mythm}
+\begin{note}
+(1) は $G$ と両立する三角形分割をとり、各単体を「その単体を固定する元の数」で数え直すことで示される（バーンサイドの補題の位相版）。(2) の和で $h=1$ の項は (1) を再現する（\term{ねじれていないセクター}{untwisted sector}）。$h\ne1$ の項は、$h$ でねじれた境界条件 $X(\sigma+2\pi)=hX(\sigma)$ をもつ閉弦（\term{ねじれたセクター}{twisted sector}）からの寄与で、固定点に局在している。
+\end{note}
+
+\begin{center}
+\begin{tikzpicture}[scale=1.6]
+  \fill[blue!6] (0,0) rectangle (2,1);
+  \draw[thick] (0,0) rectangle (2,2);
+  \draw[densely dashed,gray] (0,1)--(2,1);
+  \foreach \x/\y in {0/0,1/0,0/1,1/1,2/0,2/1,0/2,1/2,2/2}{\node[vtx,red!70!black] at (\x,\y) {};}
+  \node[below] at (0,0) {\footnotesize $0$};
+  \node[below] at (1,0) {\footnotesize $\tfrac12$};
+  \node[below] at (2,0) {\footnotesize $1$};
+  \node[left] at (0,1) {\footnotesize $\tfrac{\tau}{2}$};
+  \node[left] at (0,2) {\footnotesize $\tau$};
+  \node[right] at (1,1.15) {\footnotesize $\tfrac{1+\tau}{2}$};
+  \node at (1,-0.5) {\footnotesize $T^2$ と $z\mapsto-z$ の固定点};
+  \begin{scope}[xshift=3.4cm,yshift=0.2cm]
+    \fill[blue!6] (0,0) .. controls (0.6,-0.12) and (1.2,-0.12) .. (1.8,0)
+       .. controls (1.92,0.5) and (1.92,1.1) .. (1.8,1.6)
+       .. controls (1.2,1.72) and (0.6,1.72) .. (0,1.6)
+       .. controls (-0.12,1.1) and (-0.12,0.5) .. (0,0);
+    \draw[thick] (0,0) .. controls (0.6,-0.12) and (1.2,-0.12) .. (1.8,0)
+       .. controls (1.92,0.5) and (1.92,1.1) .. (1.8,1.6)
+       .. controls (1.2,1.72) and (0.6,1.72) .. (0,1.6)
+       .. controls (-0.12,1.1) and (-0.12,0.5) .. (0,0);
+    \draw[gray,densely dashed] (0,0) .. controls (0.5,0.35) and (1.3,0.35) .. (1.8,0);
+    \foreach \x/\y in {0/0,1.8/0,1.8/1.6,0/1.6}{\node[vtx,red!70!black] at (\x,\y) {};}
+    \node at (0.9,-0.7) {\footnotesize $T^2/\Z_2$（枕）$\cong S^2$};
+  \end{scope}
+\end{tikzpicture}
+\zucap{左：$T^2=\C/(\Z+\tau\Z)$（図は $\tau=i$）の $\Z_2$ 作用 $z\mapsto-z$ の固定点（赤、格子で同一視すると4点）。影をつけた下半分が基本領域。右：商空間は4つの角（錐角 $\pi$ の円錐特異点）をもつ「枕」で、位相的には球面である（問題 \ref{ch10-prob-pillow}）。}
+\end{center}
+
+\begin{myex}{特異点の解消}{ch10-resol}
+\begin{itemize}
+\item $\C^2/\Z_2$（$z\mapsto-z$）：原点を $\CP^1\cong S^2$ に置き換えた $T^*S^2$（\term{江口・ハンソン空間}{Eguchi--Hanson space}）で解消できる。解消空間は $S^2$ にホモトピー同値で、例外曲線の自己交叉数は $-2$。
+\item $\C^3/\Z_3$（$z\mapsto\omega z$, $\omega=e^{2\pi i/3}$）：原点を $\CP^2$ に置き換えた空間（$\CP^2$ 上の直線束 $\mathcal O(-3)$ の全空間）で解消できる。$\CP^2$ にホモトピー同値。
+\end{itemize}
+1点を $E$ に置き換えると、オイラー標数は $\chi(E)-1$ だけ増える（$\chi(A\cup B)=\chi(A)+\chi(B)-\chi(A\cap B)$ を用いる）。
+\end{myex}
+
+\subsection{ヘテロティック弦のコンパクト化と世代数}
+ヘテロティック弦 $E_8\times E_8$ を、$\mathcal N=1$ の超対称性を保つためにCY3 $X$ にコンパクト化する（問題 \ref{ch10-prob-susy}）。ゲージ場の真空期待値として、$X$ のスピン接続（$SU(3)$ に値をとる）を一方の $E_8$ の部分群 $SU(3)$ に埋め込む（\term{標準埋め込み}{standard embedding}）。これはベクトル束 $V=TX$ の上の接続を選ぶことにあたり、後で述べるビアンキ恒等式の条件を自動的にみたす。$E_8\supset E_6\times SU(3)$ の分解
+\[
+\mathbf{248}=(\mathbf{78},\mathbf 1)\oplus(\mathbf 1,\mathbf 8)\oplus(\mathbf{27},\mathbf 3)\oplus(\overline{\mathbf{27}},\overline{\mathbf 3})
+\]
+により、4次元には $E_6$ の大統一理論が残る。
+
+\begin{mythm}{世代数（候補・ホロヴィッツ・ストロミンジャー・ウィッテン）}{ch10-gen}
+標準埋め込みでは、4次元の質量ゼロのカイラル多重項として $\mathbf{27}$ が $h^{2,1}(X)$ 個、$\overline{\mathbf{27}}$ が $h^{1,1}(X)$ 個現れる。正味の世代数は
+\[
+n_{\rm gen}=\bigl\lvert h^{2,1}-h^{1,1}\bigr\rvert=\frac{\lvert\chi(X)\rvert}{2}.
+\]
+これは $X$ 上の $V$ に結合したディラック作用素の指数 $\int_X\ch(V)\Td(X)=\tfrac12\int_Xc_3(V)$ に等しい（第9章、問題 \ref{ch10-prob-gen}）。
+\end{mythm}
+
+\subsection{$p$ 形式場、フラックス、ブレーン電荷}
+弦理論には電磁場の一般化である $p$ 形式ゲージ場が現れる。$D$ 次元時空で空間 $p$ 次元に広がった物体（\term{$p$ ブレーン}{$p$-brane}、世界体積 $p+1$ 次元）は、$(p+1)$ 形式ゲージ場 $C_{p+1}$ に
+\[
+\exp\Bigl(i\mu\int_{W_{p+1}}C_{p+1}\Bigr)
+\]
+の形で結合する（$\mu$ は電荷）。場の強さ $F_{p+2}=dC_{p+1}$ はゲージ変換 $C\to C+d\lambda_p$ で不変である。$p=0$ が通常の荷電粒子と $A=C_1$ の結合 $\exp(iq\int A)$ である。
+
+\begin{mythm}{一般化されたディラックの量子化}{ch10-dirac}
+$D$ 次元時空で、電気的 $p$ ブレーン（電荷 $\mu_e$）と、それを囲む $(p+2)$ 次元球面 $S^{p+2}$ を貫く磁気的フラックス $\int_{S^{p+2}}F_{p+2}=\mu_m$ をもつ物体が共存するなら
+\[
+\mu_e\,\mu_m\in2\pi\Z .
+\]
+磁気的な物体は $(D-p-4)$ ブレーンである（$S^{p+2}$ で囲まれる物体の横方向は $p+3$ 次元なので、世界体積は $D-p-3$ 次元）。電荷の単位を $\mu_e=1$ に選ぶと、任意の閉 $(p+2)$ 次元部分多様体 $\Sigma$ について $\int_\Sigma F_{p+2}\in2\pi\Z$。
+\end{mythm}
+証明は第5章のディラックの議論と同じである（問題 \ref{ch10-prob-dirac}）。
+
+\begin{center}
+\begin{tikzpicture}[scale=1.1]
+  \fill[orange!15] (-2.4,-0.5) -- (1.6,-0.5) -- (2.4,0.5) -- (-1.6,0.5) -- cycle;
+  \draw[thick,orange!60!black] (-2.4,-0.5) -- (1.6,-0.5) -- (2.4,0.5) -- (-1.6,0.5) -- cycle;
+  \node[orange!50!black] at (-1.6,-0.25) {\footnotesize D$p$};
+  \shade[ball color=blue!15,opacity=0.55] (0.2,0) circle (1.05);
+  \draw[blue!60!black,thick] (0.2,0) circle (1.05);
+  \draw[blue!60!black,dashed] (1.25,0) arc (0:180:1.05 and 0.28);
+  \draw[blue!60!black] (-0.85,0) arc (180:360:1.05 and 0.28);
+  \node[vtx] at (0.2,0) {};
+  \foreach \a in {30,90,150,210,270,330}{
+    \draw[-{Stealth[length=1.6mm]},red!70!black] ($(0.2,0)+(\a:0.25)$) -- ($(0.2,0)+(\a:1.55)$);
+  }
+  \node[blue!60!black] at (2.2,1.1) {\footnotesize $S^{8-p}$};
+  \node[red!70!black] at (-1.6,1.2) {\footnotesize $F_{8-p}={*F_{p+2}}$};
+\end{tikzpicture}
+\zucap{Dブレーンの電荷の測り方（模式図）。D$p$ ブレーンは10次元のうち $p+1$ 次元に広がり、横方向 $\R^{9-p}$ の1点に見える。その点を囲む球面 $S^{8-p}$ 上で $\int_{S^{8-p}}F_{8-p}=2\pi N$ が、ブレーンの枚数 $N$ を与える。}
+\end{center}
+
+\begin{physbox}[：Dブレーンと RR 場]
+II型超弦理論には\term{ラモン・ラモン場}{Ramond--Ramond field}（RR場）$C_{p+1}$ があり、D$p$ ブレーンがその電気的な源になる。IIA型では $p$ が偶数（D0, D2, D4, D6, D8）、IIB型では奇数（D$(-1)$, D1, D3, D5, D7, D9）。$D=10$ では D$p$ の磁気的双対は D$(6-p)$ ブレーンで、電荷は
+\[
+N=\frac{1}{2\pi}\int_{S^{8-p}}F_{8-p},\qquad F_{8-p}={*F_{p+2}}
+\]
+で測られる（適当な規格化のもと）。コンパクトな内部空間 $K$ 上のフラックスは $[F/2\pi]\in H^{p+2}(K;\Z)$ の像に値をとり、独立なフラックス量子の数は $b_{p+2}(K)$ である。より精密には、RR電荷はコホモロジーではなく\textbf{K理論}で分類される（第11章で扱う）。
+\end{physbox}
+
+\begin{myprop}{タドポール相殺（ガウスの法則）}{ch10-tad}
+コンパクトな空間 $K$ 上で $dF=\rho$（$\rho$ は源の電荷密度を表す閉形式）なら、ストークスの定理より $\int_K\rho=\int_KdF=0$：\textbf{総電荷はゼロでなければならない}。弦理論では、ブレーンの電荷に加えて、フラックスや曲率（オリエンティフォールド面、高次微分補正）も電荷を担う。代表的な結果（ここでは認める）：
+\begin{itemize}
+\item M理論をCY4 $Y$ にコンパクト化すると、M2ブレーンの数 $N_{M2}$ と4形式フラックス $G$ について
+$\displaystyle N_{M2}+\frac12\int_Y\frac{G}{2\pi}\wedge\frac{G}{2\pi}=\frac{\chi(Y)}{24}$。
+F理論（楕円ファイバー付きCY4）では $N_{M2}$ が D3ブレーンの数 $N_{D3}$ に置き換わる。
+\item ヘテロティック弦では $dH=\frac{\alpha'}{4}\bigl(\tr R\wedge R-\tr F\wedge F\bigr)$（$\tr$ は適当に規格化したトレース）。したがって $[\tr R\wedge R]=[\tr F\wedge F]$、すなわち $SU(3)$ 束 $V$ について $c_2(V)=c_2(TX)$ が必要（5ブレーンがないとき）。標準埋め込み $V=TX$ はこれを自動的にみたす。
+\end{itemize}
+\end{myprop}
+
+\subsection{カルツァ・クライン還元と質量ゼロ場の数}
+
+\begin{myprop}{調和形式による展開}{ch10-kk}
+$D=4+n$ 次元の $p$ 形式ゲージ場 $C_p$ を $M_4\times K$（$K$ はコンパクトなリーマン多様体）上で考える。$K$ 上の調和 $k$ 形式の基底 $\omega^{(\alpha)}_k$（$\alpha=1,\dots,b_k(K)$）で
+\[
+C_p=\sum_{k=0}^{p}\sum_{\alpha=1}^{b_k(K)}c^{(\alpha)}_{p-k}(x)\wedge\omega_k^{(\alpha)}(y)+(\text{質量をもつモード})
+\]
+と展開すると、4次元の質量ゼロ場は、各 $k$ について $b_k(K)$ 個の $(p-k)$ 形式場 $c^{(\alpha)}_{p-k}$ である。
+\end{myprop}
+\begin{note}
+ゲージ $d^\dagger C=0$ で運動方程式は $\Delta_{M_4\times K}C=(\Delta_{M_4}+\Delta_K)C=0$。$\Delta_K$ の固有値 $m^2>0$ のモードは4次元で質量 $m$ をもつので、質量ゼロは $\Delta_K\omega=0$（調和形式）のモードに限る。その数はホッジの定理（第5章）により $b_k(K)$。4次元では2形式は（質量ゼロなら）スカラーと双対、3形式は伝播自由度をもたない。
+\end{note}
+
+\subsection{アノマリー相殺とミラー対称性}
+
+\begin{mythm}{グリーン・シュワルツ機構（主張）}{ch10-gs}
+10次元 $\mathcal N=1$ 超重力＋超対称ヤン・ミルズ理論（ゲージ群 $G$）のアノマリー多項式 $I_{12}$（第9章）は、$\tr R^6$（重力の既約部分）を係数 $\dim G-496$ で含み、ゲージ部分は $\operatorname{Tr}F^6$（随伴表現のトレース）の既約部分を含む。これらが消えるとき、
+\[
+I_{12}\propto\Bigl(\tr R^2-\tfrac{1}{30}\operatorname{Tr}F^2\Bigr)\wedge X_8
+\]
+と因数分解し、$B$ 場の相互作用 $\int B\wedge X_8$ と修正されたビアンキ恒等式 $dH\propto\tr R^2-\tfrac{1}{30}\operatorname{Tr}F^2$ によってアノマリーが相殺される。異常のない弦理論のゲージ群は $SO(32)$ と $E_8\times E_8$ である。
+\end{mythm}
+
+\begin{physbox}[：ミラー対称性]
+CY3 の組 $(X,W)$ で $h^{1,1}(X)=h^{2,1}(W)$, $h^{2,1}(X)=h^{1,1}(W)$ をみたし、IIA型弦理論を $X$ にコンパクト化したものと IIB型を $W$ にコンパクト化したものが同じ物理を与えるものを\term{ミラー対}{mirror pair}という。ホッジ・ダイヤモンドは $90^\circ$ 回転し、$\chi(W)=-\chi(X)$。$X$ のケーラー・モジュライ空間（の量子補正を含む幾何、世界面インスタントンの数え上げ）が $W$ の複素構造モジュライ空間の古典幾何で計算できる。
+\end{physbox}
+
+\section{問題}
+
+\subsection{世界面とトーラス}
+
+\begin{problem}[難易度 A]\label{ch10-prob-ws}
+次の世界面のオイラー標数 $\chi$ と、振幅に掛かる $g_s$ のべき $g_s^{-\chi}$ を求めよ：球面 $S^2$、円板 $D^2$、射影平面 $\RP^2$、トーラス $T^2$、円環（アニュラス）、メビウスの帯、クラインの壺。また、閉じた向き付けられた弦の理論（II型、ヘテロティック）とI型弦理論で、それぞれどれが現れるかを答えよ。さらに、I型弦理論の1ループの真空振幅には $T^2$ 以外にどの世界面が同じ次数で寄与するか。
+\begin{center}
+\begin{tikzpicture}[scale=0.85]
+  \foreach \x/\nm in {0/{$S^2$},2.1/{$D^2$},4.2/{$\RP^2$},6.3/{$T^2$},8.4/{円環},10.5/{メビウス},12.6/{クライン}}{
+    \shade[ball color=blue!8] (\x,0) circle (0.75);
+    \draw[thick] (\x,0) circle (0.75);
+    \node at (\x,-1.1) {\footnotesize \nm};
+  }
+  % disk: one boundary
+  \draw[very thick,blue!70!black,fill=white] (2.1,0) circle (0.25);
+  % RP2: one crosscap
+  \draw[red!70!black,fill=white] (4.2,0) circle (0.22);
+  \draw[red!70!black] (4.05,-0.15)--(4.35,0.15); \draw[red!70!black] (4.05,0.15)--(4.35,-0.15);
+  % torus: handle
+  \draw[thick] (6.0,0.05) to[bend right=35] (6.6,0.05);
+  \draw[thick,fill=white] (6.08,-0.01) to[bend left=35] (6.52,-0.01) to[bend left=20] (6.08,-0.01);
+  % annulus: two boundaries
+  \draw[very thick,blue!70!black,fill=white] (8.1,0) circle (0.2);
+  \draw[very thick,blue!70!black,fill=white] (8.7,0) circle (0.2);
+  % Mobius: boundary + crosscap
+  \draw[very thick,blue!70!black,fill=white] (10.2,0) circle (0.2);
+  \draw[red!70!black,fill=white] (10.8,0) circle (0.2);
+  \draw[red!70!black] (10.66,-0.14)--(10.94,0.14); \draw[red!70!black] (10.66,0.14)--(10.94,-0.14);
+  % Klein: two crosscaps
+  \foreach \c in {12.3,12.9}{
+    \draw[red!70!black,fill=white] (\c,0) circle (0.2);
+    \draw[red!70!black] (\c-0.14,-0.14)--(\c+0.14,0.14); \draw[red!70!black] (\c-0.14,0.14)--(\c+0.14,-0.14);
+  }
+\end{tikzpicture}
+\zucap{球面に取っ手（$T^2$）、穴＝境界（青の太線）、交差帽（$\times$ 印）を付けて表した世界面。}
+\end{center}
+\end{problem}
+
+\begin{solution}
+定理 \ref{thm:ch10-surf} の $\chi=2-2g-b-c$ を用いる。
+\begin{center}
+\begin{tabular}{lcccccc}
+世界面 & $g$ & $b$ & $c$ & $\chi$ & $g_s^{-\chi}$ & 現れる理論\\ \hline
+$S^2$ & 0&0&0& $2$ & $g_s^{-2}$ & 閉弦すべて\\
+$D^2$ & 0&1&0& $1$ & $g_s^{-1}$ & I型\\
+$\RP^2$ & 0&0&1& $1$ & $g_s^{-1}$ & I型\\
+$T^2$ & 1&0&0& $0$ & $g_s^{0}$ & 閉弦すべて\\
+円環 & 0&2&0& $0$ & $g_s^{0}$ & I型\\
+メビウスの帯 & 0&1&1& $0$ & $g_s^{0}$ & I型\\
+クラインの壺 & 0&0&2& $0$ & $g_s^{0}$ & I型
+\end{tabular}
+\end{center}
+胞体分割でも確かめられる：$\RP^2=e^0\cup e^1\cup e^2$ で $\chi=1-1+1=1$。クラインの壺は正方形の辺を同一視したもので頂点1、辺2、面1なので $\chi=0$。円板は可縮で $\chi=1$、円環とメビウスの帯は円周に変位レトラクトするので $\chi=\chi(S^1)=0$。
+
+閉じた向き付けられた弦では、世界面は境界も交差帽ももたない向き付け可能な閉曲面 $\Sigma_g$ に限られるので、上の表では $S^2$（木）と $T^2$（1ループ）だけが現れる。I型弦理論は開弦（境界）を含み、世界面の向きを区別しない（交差帽を許す）ので、すべてが現れる。
+
+1ループ（$\chi=0$, $g_s^0$）の真空振幅には $T^2$ に加えて、円環・メビウスの帯・クラインの壺が寄与する。$2g+b+c=2$ の解は $(g,b,c)=(1,0,0),(0,2,0),(0,1,1),(0,0,2)$ のちょうど4つで、これで尽きている。I型弦理論では、後の3つの和に現れる発散（RR場のタドポール）が相殺することを要求すると、ゲージ群が $SO(32)$ に決まる（グリーン・シュワルツ。円環が $N^2$、メビウスの帯が $N$ に比例し、$N=32$ でクラインの壺と相殺する）。
+\end{solution}
+
+\begin{problem}[難易度 A]\label{ch10-prob-torus}
+$T^{2n}=\C^n/\Lambda$（$\Lambda$ は $\R^{2n}$ の格子）に平坦な計量を入れる。調和形式が定数係数の形式であること（第5章）を用いて次を示せ。\\
+(1) $h^{p,q}(T^{2n})=\binom np\binom nq$。\\
+(2) $b_k(T^{2n})=\binom{2n}{k}$ と $\chi(T^{2n})=0$。\\
+(3) $T^2$, $T^4$, $T^6$ のホッジ・ダイヤモンドを書け。$T^6$ が（ホロノミー $SU(3)$ の意味の）CY3 でないのはホッジ数のどこに現れているか。
+\end{problem}
+
+\begin{solution}
+(1) 定数係数の $(p,q)$ 形式の基底は $dz^{i_1}\wedge\dots\wedge dz^{i_p}\wedge d\bar z^{j_1}\wedge\dots\wedge d\bar z^{j_q}$（$i_1<\dots<i_p$, $j_1<\dots<j_q$）で、$i$ の選び方が $\binom np$、$j$ の選び方が $\binom nq$ 通り。よって $h^{p,q}=\binom np\binom nq$。
+
+(2) ホッジ分解とファンデルモンドの恒等式より
+\[
+b_k=\sum_{p+q=k}\binom np\binom nq=\binom{2n}{k}.
+\]
+（実際、定数係数の実 $k$ 形式は $dx^1,\dots,dx^{2n}$ から $k$ 個選ぶので直接 $\binom{2n}k$ である。）$\chi=\sum_k(-1)^k\binom{2n}{k}=(1-1)^{2n}=0$。
+
+(3) $n=1,2,3$ で
+\[
+T^2:\ \begin{matrix}&1&\\1&&1\\&1&\end{matrix}\qquad
+T^4:\ \begin{matrix}&&1&&\\&2&&2&\\1&&4&&1\\&2&&2&\\&&1&&\end{matrix}\qquad
+T^6:\ \begin{matrix}&&&1&&&\\&&3&&3&&\\&3&&9&&3&\\1&&9&&9&&1\\&3&&9&&3&\\&&3&&3&&\\&&&1&&&\end{matrix}
+\]
+$T^6$ のベッチ数は $1,6,15,20,15,6,1$（和は $2^6=64$）。$T^6$ も $c_1=0$（$\Omega=dz^1\wedge dz^2\wedge dz^3$ がある）で $h^{3,0}=1$ だが、$h^{1,0}=3$, $h^{2,0}=3$ が $0$ でない。ホロノミー $SU(3)$ なら $h^{1,0}=h^{2,0}=0$ なので、$T^6$ はそうでない。実際 $T^6$ のホロノミーは自明で、平行な1形式 $dz^i$ が存在する。これが問題 \ref{ch10-prob-susy} で見るように超対称性が多く残ること（$\mathcal N=4$）に対応する。
+\end{solution}
+
+\subsection{ホッジ数・チャーン類・カラビ・ヤウ多様体}
+
+\begin{problem}[難易度 A]\label{ch10-prob-cpn}
+$c(T\CP^n)=(1+H)^{n+1}$、$\int_{\CP^n}H^n=1$ を用いて次を示せ。\\
+(1) $c_k(T\CP^n)=\binom{n+1}{k}H^k$、$\chi(\CP^n)=n+1$。これを胞体分割 $\CP^n=e^0\cup e^2\cup\dots\cup e^{2n}$ から得られる値と比べよ。\\
+(2) $n=1$ のとき、(1) をガウス・ボンネの定理と比べよ。\\
+(3) $\CP^n$ はカラビ・ヤウ多様体でないことを示せ。\\
+(4) $\CP^2$ の第1ポントリャーギン類 $p_1=c_1^2-2c_2$ を計算し、ヒルツェブルフの符号数定理 $\sigma=\frac13\int p_1$ が $\sigma(\CP^2)=1$ を与えることを確かめよ。
+\end{problem}
+
+\begin{solution}
+(1) 2項展開より $c_k=\binom{n+1}{k}H^k$。$\chi=\int c_n=\binom{n+1}{n}\int H^n=n+1$。胞体分割では偶数次元の胞体が $n+1$ 個なので $\chi=\sum_k(-1)^k(\text{$k$ 胞体の数})=n+1$ で一致する。
+
+(2) $n=1$：$c_1(T\CP^1)=2H$、$\int c_1=2=\chi(S^2)$。ガウス・ボンネでは $\frac{1}{2\pi}\int_{S^2}K\,dA=2$ で、$c_1(TS^2)$ がちょうど $\frac{1}{2\pi}K\,dA$ で代表される（第8章）ことと合う。
+
+(3) $c_1(T\CP^n)=(n+1)H$ であり、$\int_{\CP^1}H=1$（$\CP^1\subset\CP^n$ は直線）なので $\int_{\CP^1}c_1=n+1\ne0$。よって $c_1\ne0$ で、カラビ・ヤウではない（$\CP^n$ は正のリッチ曲率をもつ）。
+
+(4) $n=2$：$c_1=3H$, $c_2=3H^2$。$p_1=c_1^2-2c_2=9H^2-6H^2=3H^2$、$\int p_1=3$ で $\sigma=1$。一方 $H^2(\CP^2;\Z)=\Z H$ の交叉形式は $\int H\wedge H=1$ の $(1)$ で、符号数 $1$ に一致する。
+\end{solution}
+
+\begin{problem}[難易度 B]\label{ch10-prob-adj}
+命題 \ref{prop:ch10-adj} の添加公式を用いる。\\
+(1) $\CP^2$ の滑らかな $d$ 次曲線 $C$ の $\chi(C)$ と種数 $g(C)$ を求め、$g=\frac{(d-1)(d-2)}{2}$ を示せ。$c_1(C)=0$ となるのはどの $d$ か。\\
+(2) $\CP^3$ の滑らかな4次曲面 $S$ について $c(TS)=1+6H^2$ を示し、$\chi(S)=24$ を導け。レフシェッツの超平面定理を用いて $b_1(S)=0$, $b_2(S)=22$ を示せ。\\
+(3) 複素1次元・2次元・3次元のカラビ・ヤウ超曲面を、射影空間の次元と次数で答えよ。
+\end{problem}
+
+\begin{solution}
+(1) $N=2$：$c(TC)=(1+H)^3(1+dH)^{-1}=(1+3H)(1-dH)=1+(3-d)H$（$C$ 上で $H^2=0$）。よって $c_1(C)=(3-d)H$、$\chi(C)=\int_Cc_1=(3-d)\int_CH=d(3-d)$。$\chi=2-2g$ より
+\[
+g=1-\frac{d(3-d)}{2}=\frac{d^2-3d+2}{2}=\frac{(d-1)(d-2)}{2}.
+\]
+$d=1,2$ で $g=0$（$\CP^1$）、$d=3$ で $g=1$、$d=4$ で $g=3$。$c_1=0$ は $d=3$ のみで、これは楕円曲線（$T^2$）である。
+
+(2) $N=3$, $d=4$：$(1+H)^4=1+4H+6H^2+\dots$、$(1+4H)^{-1}=1-4H+16H^2-\dots$。
+\[
+c(TS)=1+(4-4)H+(6-16+16)H^2=1+6H^2.
+\]
+$\chi=\int_Sc_2=6\int_SH^2=6\cdot4=24$。レフシェッツの定理（$n=2$）より $H^1(S)\cong H^1(\CP^3)=0$ なので $b_1=0$、ポアンカレ双対で $b_3=0$。$\chi=b_0-b_1+b_2-b_3+b_4=2+b_2=24$ より $b_2=22$。$c_1=0$ なのでこれはK3曲面である（問題 \ref{ch10-prob-k3}）。
+
+(3) $c_1=(N+1-d)H=0$ より $d=N+1$。複素1次元：$\CP^2$ の3次曲線（楕円曲線）。2次元：$\CP^3$ の4次曲面（K3）。3次元：$\CP^4$ の5次超曲面（\term{5次超曲面}{quintic}）。
+\end{solution}
+
+\begin{problem}[難易度 B]\label{ch10-prob-k3}
+\term{K3曲面}{K3 surface} $S$ は、単連結なコンパクト・ケーラー曲面で $c_1(S)=0$、$h^{2,0}=1$、$\chi(S)=24$ をもつものである。\\
+(1) $S$ のホッジ・ダイヤモンドを決定せよ。\\
+(2) コンパクト・ケーラー曲面では $b_2^+=2h^{2,0}+1$、$b_2^-=h^{1,1}-1$ であること（ホッジの指数定理）を認めて、交叉形式の符号数 $\sigma(S)=-16$ を示せ。ヒルツェブルフの符号数定理 $\sigma=\frac13\int p_1$ と $p_1=c_1^2-2c_2$ からも同じ値が得られることを確かめよ。\\
+(3) ネーターの公式 $\sum_q(-1)^qh^{0,q}=\frac{1}{12}\int(c_1^2+c_2)$ が成り立つことを確かめよ。\\
+(4) $H^0\oplus H^2\oplus H^4$ に（$H^0\oplus H^4$ には双曲型の形式 $\bigl(\begin{smallmatrix}0&1\\1&0\end{smallmatrix}\bigr)$ を入れて）内積を入れると、符号 $(4,20)$ の格子になることを示せ。これはヘテロティック弦を $T^4$ にコンパクト化したときのナラン格子 $\Gamma^{4,20}$ と同じ符号であり、IIA/K3 とヘテロティック/$T^4$ の双対性の手がかりとなった。
+\end{problem}
+
+\begin{solution}
+(1) 単連結なので $b_1=0$、よって $h^{1,0}=h^{0,1}=0$、セール双対性で $h^{2,1}=h^{1,2}=0$。$h^{0,0}=h^{2,2}=1$、$h^{2,0}=h^{0,2}=1$。$\chi=b_0+b_2+b_4=2+b_2=24$ より $b_2=22=h^{2,0}+h^{1,1}+h^{0,2}$、したがって $h^{1,1}=20$。
+\[
+\begin{matrix}&&1&&\\&0&&0&\\1&&20&&1\\&0&&0&\\&&1&&\end{matrix}
+\]
+
+(2) $b_2^+=2\cdot1+1=3$、$b_2^-=20-1=19$、$\sigma=3-19=-16$。一方 $c_1=0$ なので $p_1=-2c_2$、$\int p_1=-2\chi=-48$、$\sigma=-48/3=-16$ で一致する。
+
+(3) 左辺 $=h^{0,0}-h^{0,1}+h^{0,2}=1-0+1=2$。右辺 $=\frac{1}{12}(0+24)=2$。
+
+(4) $H^2$ の交叉形式は $(b_2^+,b_2^-)=(3,19)$。$H^0\oplus H^4$ の双曲型形式は固有値 $\pm1$ で符号 $(1,1)$。和は $(4,20)$、階数は $24=\chi(S)$ に等しい。ヘテロティック弦の $T^4$ コンパクト化では、左右の運動量・巻き付き数がなす偶自己双対格子が、右向き4次元・左向き $4+16=20$ 次元の $\Gamma^{4,20}$ になり、符号が一致する。なお $H^2(S;\Z)$ 自体は偶ユニモジュラー格子 $(-E_8)^{\oplus2}\oplus U^{\oplus3}$（$U$ は双曲型）であることが知られている（第6章の交叉形式）。
+\end{solution}
+
+\begin{problem}[難易度 C]\label{ch10-prob-quintic}
+(1) 5次超曲面 $X\subset\CP^4$ について
+\[
+c(TX)=1+10H^2-40H^3
+\]
+を示し、$\int_XH^3=5$ を用いて $\chi(X)=-200$ を導け。\\
+(2) 一般に、$\CP^N$ の滑らかな $d$ 次超曲面 $X$ のオイラー標数が
+\[
+\chi(X)=\frac{(1-d)^{N+1}-1}{d}+N+1
+\]
+であることを示せ。\\
+(3) (2) を用いて $d=N+1$（カラビ・ヤウ）の場合の $\chi$ を $N=2,3,4,5$ で計算し、問題 \ref{ch10-prob-adj} と (1) に一致することを確かめよ。
+\end{problem}
+
+\begin{solution}
+(1) $(1+H)^5=1+5H+10H^2+10H^3+\dots$、$(1+5H)^{-1}=1-5H+25H^2-125H^3+\dots$。積の各次数は
+\begin{align*}
+H^1&:\ 5-5=0,\\
+H^2&:\ 10-5\cdot5+25=10,\\
+H^3&:\ 10-10\cdot5+5\cdot25-125=-40.
+\end{align*}
+よって $c(TX)=1+10H^2-40H^3$（$X$ は複素3次元なので $H^4$ 以上は不要）。$c_1=0$ でカラビ・ヤウ。$\chi=\int_Xc_3=-40\cdot5=-200$。
+
+(2) $\chi(X)=\int_Xc_{N-1}(TX)=d\cdot a_{N-1}$ で、$a_{N-1}$ は $(1+H)^{N+1}(1+dH)^{-1}$ の $H^{N-1}$ の係数：
+\[
+a_{N-1}=\sum_{j=0}^{N-1}\binom{N+1}{j}(-d)^{N-1-j}.
+\]
+$d\,(-d)^{N-1-j}=\frac1d(-d)^{N+1-j}$ だから
+\begin{align*}
+\chi&=\frac1d\sum_{j=0}^{N-1}\binom{N+1}{j}(-d)^{N+1-j}
+=\frac1d\Bigl[(1-d)^{N+1}-\binom{N+1}{N}(-d)-\binom{N+1}{N+1}\Bigr]\\
+&=\frac{(1-d)^{N+1}-1}{d}+N+1 .
+\end{align*}
+（2項定理 $(1-d)^{N+1}=\sum_{j=0}^{N+1}\binom{N+1}{j}(-d)^{N+1-j}$ から $j=N,N+1$ の項を除いた。）
+
+(3) $d=N+1$ で $\chi=\dfrac{(-N)^{N+1}-1}{N+1}+N+1$。
+\begin{center}
+\begin{tabular}{cccl}
+$N$ & $d$ & $\chi$ & \\ \hline
+$2$ & $3$ & $\frac{-8-1}{3}+3=0$ & 楕円曲線\\
+$3$ & $4$ & $\frac{81-1}{4}+4=24$ & K3\\
+$4$ & $5$ & $\frac{-1024-1}{5}+5=-200$ & 5次超曲面\\
+$5$ & $6$ & $\frac{15625-1}{6}+6=2610$ & 6次超曲面（CY4）
+\end{tabular}
+\end{center}
+$N=2,3,4$ は問題 \ref{ch10-prob-adj} と (1) に一致する。$N=5$ の値は問題 \ref{ch10-prob-dirac} で使う。
+\end{solution}
+
+\begin{problem}[難易度 C]\label{ch10-prob-h21}
+5次超曲面 $X\subset\CP^4$ のホッジ数を3通りの方法で求める。$X$ はホロノミー $SU(3)$ のCY3であり、$\chi(X)=-200$ とする。\\
+(1) レフシェッツの超平面定理から $h^{1,1}$ を求め、$\chi=2(h^{1,1}-h^{2,1})$ から $h^{2,1}$ と $b_3$ を求めよ。\\
+(2) 複素構造の変形はすべて定義多項式 $P$ の係数を変えることで得られる（認めてよい）。5変数の5次斉次多項式の空間の次元から、$GL(5,\C)$ による座標変換で移り合う分を引いて $h^{2,1}=101$ を確かめよ。\\
+(3) フェルマー型 $P_0=\sum_{i=1}^5z_i^5$ の近くでは、無限小変形 $P_0+\epsilon Q$ のうち $GL(5,\C)$ の無限小変換で得られるのは $Q\in\operatorname{span}\{z_j\,\partial P_0/\partial z_i\}$ である。各指数が $3$ 以下の5次単項式の数を数えることで、再び $101$ を得よ。
+\end{problem}
+
+\begin{solution}
+(1) レフシェッツの定理（$n=3$）より $H^1(X)\cong H^1(\CP^4)=0$、$H^2(X;\Z)\cong H^2(\CP^4;\Z)=\Z$。よって $b_1=0$, $b_2=1$。CY3なので $h^{2,0}=0$ で $h^{1,1}=b_2=1$。
+\[
+-200=2(1-h^{2,1})\quad\Longrightarrow\quad h^{2,1}=101,\qquad b_3=2+2h^{2,1}=204.
+\]
+（$\chi=b_0-b_1+b_2-b_3+b_4-b_5+b_6=1+1-b_3+1+1=4-b_3$ からも $b_3=204$。）
+
+(2) 5変数の5次単項式の数は、重複組合せで $\binom{5+5-1}{5}=\binom94=126$。$GL(5,\C)$ は $25$ 次元で、一般の5次式の固定部分群は有限群なので、軌道は $25$ 次元。全体のスカラー倍 $P\to\lambda P$ は同じ超曲面を与えるが、これは $z\to\lambda^{1/5}z$ として $GL(5,\C)$ に含まれている。よって超曲面の変形の次元は
+\[
+126-25=101=h^{2,1}.
+\]
+
+(3) $z_j\partial_iP_0=5z_i^4z_j$（$i,j=1,\dots,5$）は25個の相異なる単項式 $z_i^5$（5個）と $z_i^4z_j$, $j\ne i$（20個）で、ちょうど「ある指数が $4$ 以上の5次単項式」の全体である。したがって真の変形は、これらを除いた単項式、すなわち各指数が $3$ 以下の5次単項式で張られ、その数は $126-25=101$。例えば $z_1z_2z_3z_4z_5$（よく知られた1パラメータ族 $P_0-5\psi z_1z_2z_3z_4z_5$ を与える）、$z_1^3z_2z_3$、$z_1^2z_2^2z_3$ などである。（内訳：指数の型 $(1,1,1,1,1)$ が $1$ 個、$(2,1,1,1,0)$ が $5\cdot4=20$ 個、$(2,2,1,0,0)$ が $\binom52\cdot3=30$ 個、$(3,1,1,0,0)$ が $5\cdot\binom42=30$ 個、$(3,2,0,0,0)$ が $5\cdot4=20$ 個で、合計 $101$。）
+
+3つの方法が一致し、ホッジ・ダイヤモンドは本文の図の右のとおりである。
+\end{solution}
+
+\subsection{ヘテロティック弦：超対称性と世代数}
+
+\begin{problem}[難易度 B]\label{ch10-prob-susy}
+ヘテロティック弦の10次元の超対称性は、マヨラナ・ワイル・スピノル（$\mathbf{16}$、実16成分）の超電荷で与えられる。$M_4\times K$（$K$ は6次元リーマン多様体）で、$\mathrm{Spin}(9,1)\supset\mathrm{Spin}(3,1)\times\mathrm{Spin}(6)$、$\mathrm{Spin}(6)\cong SU(4)$ のもとで
+\[
+\mathbf{16}=(\mathbf 2,\mathbf 4)\oplus(\bar{\mathbf 2},\bar{\mathbf 4})
+\]
+と分解する。4次元に残る超電荷は $K$ 上の共変定数スピノルに対応し、その数は $\mathbf 4$ の中でホロノミー群 $\mathrm{Hol}(K)\subset SU(4)$ の自明表現の個数 $n_0$ で決まる（4次元の $\mathcal N=n_0$、超電荷は $4n_0$ 個）。\\
+(1) $K=T^6$, $K=\mathrm{K3}\times T^2$, $K=$ CY3（ホロノミー $SU(3)$）, ホロノミーが $SO(6)$ 全体の一般の $K$ について、$\mathcal N$ を求めよ。\\
+(2) II型弦理論（超電荷32個）では、それぞれ何個の4次元超対称性が残るか。\\
+(3) 4次元 $\mathcal N=1$ が、カイラルなフェルミオン（標準模型）を許す唯一の可能性である理由を簡単に述べよ。
+\end{problem}
+
+\begin{solution}
+(1) \textbf{$T^6$}：ホロノミーは自明なので $\mathbf 4$ の4成分すべてが不変、$n_0=4$、$\mathcal N=4$（超電荷16個すべてが残る）。
+
+\textbf{K3$\times T^2$}：$\mathrm{Spin}(6)\supset\mathrm{Spin}(4)\times\mathrm{Spin}(2)=SU(2)_L\times SU(2)_R\times U(1)$ のもとで $\mathbf 4=(\mathbf 2,\mathbf 1)_{+1/2}\oplus(\mathbf 1,\mathbf 2)_{-1/2}$。K3 のホロノミーは $SU(2)\subset SO(4)$ で、$SU(2)_L\times SU(2)_R$ の一方（例えば $SU(2)_L$）である。したがって $\mathbf 4\to\mathbf 2\oplus\mathbf 1\oplus\mathbf 1$ で $n_0=2$、$\mathcal N=2$。
+
+\textbf{CY3}：$SU(3)\subset SU(4)$ で $\mathbf 4=\mathbf 3\oplus\mathbf 1$、$n_0=1$、$\mathcal N=1$。
+
+\textbf{一般の $K$}：ホロノミー $SO(6)$ はスピン群として $SU(4)$ 全体で、$\mathbf 4$ は既約。$n_0=0$、超対称性は残らない。
+
+（逆に、$\mathcal N\ge1$ を要求すると $K$ は共変定数スピノルをもち、ホロノミーが $SU(3)$ に含まれる。これからケーラーかつリッチ平坦、すなわちカラビ・ヤウであることが従う。これが弦理論でカラビ・ヤウ多様体が現れる理由である。）
+
+(2) II型は2つの $\mathbf{16}$（IIA は逆カイラリティ、IIB は同カイラリティ）をもつので、それぞれ2倍：$T^6$ で $\mathcal N=8$、K3$\times T^2$ で $\mathcal N=4$、CY3 で $\mathcal N=2$。
+
+(3) $\mathcal N\ge2$ の超対称多重項では、ゲージ場とフェルミオンが同じ表現に属するか、ハイパー多重項のフェルミオンがベクトル的（左右対称な表現）になり、ゲージ群の複素表現にカイラルなフェルミオンを置けない。$\mathcal N=1$ のカイラル多重項はワイル・フェルミオンを任意の表現にもてるので、カイラルな標準模型（およびその超対称拡張）を実現できる。ヘテロティック弦では CY3 がちょうどこれを与える。
+\end{solution}
+
+\begin{problem}[難易度 B]\label{ch10-prob-gen}
+ヘテロティック弦を CY3 $X$ に標準埋め込みでコンパクト化する（定理 \ref{thm:ch10-gen}）。\\
+(1) 5次超曲面では $\mathbf{27}$ と $\overline{\mathbf{27}}$ がそれぞれいくつ現れるか。正味の世代数を求めよ。\\
+(2) 階数3の複素ベクトル束 $V$ で $c_1(V)=0$ のもの、および $c_1(X)=0$ の複素3次元多様体について、$\Td(X)=1+\frac{1}{12}c_2(X)+\cdots$（6形式部分は $\frac{1}{24}c_1c_2=0$）と $\ch(V)=3-c_2(V)+\frac12c_3(V)$ を用いて
+\[
+\int_X\ch(V)\Td(X)=\frac12\int_Xc_3(V)
+\]
+を示せ。$V=TX$ ならこれは $\chi(X)/2$ である。また $V$ を自明な直線束にした $\int_X\Td(X)$ がドルボー・コホモロジーの交代和 $\sum_q(-1)^qh^{0,q}$ と一致することを確かめよ。\\
+(3) 有限群 $G$ が $X$ に自由に作用するとき $\chi(X/G)=\chi(X)/\lvert G\rvert$ を示せ。5次超曲面に自由に作用する $\Z_5\times\Z_5$ による商、および $\chi=-18$ の田・ヤウ多様体に自由に作用する $\Z_3$ による商の世代数を求めよ。3世代を得るには $\chi$ はいくつでなければならないか。
+\end{problem}
+
+\begin{solution}
+(1) $(h^{1,1},h^{2,1})=(1,101)$ なので $\mathbf{27}$ が $101$ 個、$\overline{\mathbf{27}}$ が $1$ 個。$\mathbf{27}$ と $\overline{\mathbf{27}}$ の1対は質量項 $\mathbf{27}\cdot\overline{\mathbf{27}}$ を組めるので、低エネルギーに残る正味の世代数は $101-1=100=\lvert-200\rvert/2$。
+
+(2) $\ch(V)\Td(X)$ の6形式部分は
+\[
+\ch_3(V)+\ch_2(V)\Td_1+\ch_1(V)\Td_2+\ch_0(V)\Td_3=\tfrac12c_3(V)+(-c_2(V))\cdot0+0\cdot\tfrac{c_2}{12}+3\cdot0
+\]
+（$\Td_1=\frac12c_1(X)=0$, $\ch_1(V)=c_1(V)=0$, $\Td_3=\frac1{24}c_1c_2=0$）。よって $\int\ch(V)\Td(X)=\frac12\int c_3(V)$。$\ch_3=\frac16(c_1^3-3c_1c_2+3c_3)=\frac12c_3$ を用いた。$V=TX$ なら $\int c_3(TX)=\chi(X)$ なので指数は $\chi/2$。5次超曲面で $-100$ で、絶対値が (1) の世代数に一致する（符号はどちらを「世代」と呼ぶかの規約による）。
+
+自明な直線束では $\int_X\Td(X)=\int\Td_3=0$。一方 CY3 では $h^{0,0}=1$, $h^{0,1}=0$, $h^{0,2}=h^{2,0}=0$, $h^{0,3}=h^{3,0}=1$ なので $\sum_q(-1)^qh^{0,q}=1-0+0-1=0$ で、ヒルツェブルフ・リーマン・ロッホの定理と整合する。
+
+(3) $X\to X/G$ は $\lvert G\rvert$ 重の被覆。$X/G$ の三角形分割を（十分細かくとって各単体が被覆で自明になるようにし）$X$ に持ち上げると、各単体がちょうど $\lvert G\rvert$ 個の単体に持ち上がる。よって各次元の単体数が $\lvert G\rvert$ 倍で、$\chi(X)=\lvert G\rvert\chi(X/G)$。
+
+5次超曲面の $\Z_5\times\Z_5$ 商：$\chi=-200/25=-8$、世代数 $4$。田・ヤウ多様体の $\Z_3$ 商：$\chi=-18/3=-6$、世代数 $3$。3世代には $\chi=\pm6$ が必要である。
+
+なお商空間は $\pi_1(X/G)=G$ をもつので、$E_6$ を標準模型に近い群に破るウィルソン線（平坦接続のホロノミー、第2, 8章）を入れることができる。これもトポロジーが現象論に効く例である。
+\end{solution}
+
+\subsection{オービフォールド}
+
+\begin{problem}[難易度 B]\label{ch10-prob-pillow}
+$T^2=\C/(\Z+\tau\Z)$（$\operatorname{Im}\tau>0$）に $\Z_2$ が $z\mapsto-z$ で作用する。\\
+(1) 固定点が $0,\ \frac12,\ \frac\tau2,\ \frac{1+\tau}{2}$ の4点であることを示せ。\\
+(2) 定理 \ref{thm:ch10-orbchi}(1) で $\chi(T^2/\Z_2)$ を求め、$T^2/\Z_2\cong S^2$ であることを説明せよ（「枕」の図を参照）。\\
+(3) 平坦な計量は商空間に下りて、固定点の像以外では平坦、固定点の像では錐角 $\pi$ の円錐特異点になることを示せ。円錐の頂点の曲率を欠損角 $2\pi-(\text{錐角})$ とみなして、ガウス・ボンネの定理 $\sum(\text{欠損角})=2\pi\chi$ が成り立つことを確かめよ。\\
+(4) 複素多様体としては $T^2/\Z_2$ は滑らかで、$\CP^1$ と同型であることを、局所座標 $w=z^2$ を用いて説明せよ。
+\end{problem}
+
+\begin{solution}
+(1) $-z\equiv z$ $\Leftrightarrow$ $2z\in\Z+\tau\Z$ $\Leftrightarrow$ $z\in\frac12(\Z+\tau\Z)$。$\frac12(\Z+\tau\Z)/(\Z+\tau\Z)\cong(\Z_2)^2$ なので $T^2$ 上では $0,\frac12,\frac\tau2,\frac{1+\tau}{2}$ の4点。
+
+(2) $\chi(T^2)=0$、$\chi(X^g)=4$（4点）：
+\[
+\chi(T^2/\Z_2)=\frac12(0+4)=2 .
+\]
+基本領域は $\{s+t\tau:0\le s\le1,\ 0\le t\le\frac12\}$ で、左右の辺は平行移動 $z\to z+1$ で同一視され（円筒）、下の辺 $t=0$ は $s\mapsto-s\equiv1-s$ で中点 $\frac12$ を折り目として半分に折られ、上の辺 $t=\frac12$ も $s+\frac\tau2\mapsto-s-\frac\tau2\equiv(1-s)+\frac\tau2$ で同様に折られる。円筒の両端の円周をそれぞれ半分に折って閉じると、2つの円板でふさいだのと同じで球面になる。角が4つの固定点の像で、形は枕である。閉じた向き付け可能曲面（$z\mapsto-z$ は向きを保つ）で $\chi=2$ だから、分類定理からも $S^2$。
+
+(3) $z\mapsto-z$ は等長変換なので、計量は商に下りる。固定点以外では作用は自由で、局所的に等長なので平坦。固定点 $z_0$ の近傍では、極座標 $z-z_0=re^{i\theta}$ で作用は $\theta\mapsto\theta+\pi$ なので、商は角度 $\theta\in[0,\pi]$ の扇形の両辺を貼ったもの、すなわち錐角 $\pi$ の円錐である。欠損角は $2\pi-\pi=\pi$ で、4点で計 $4\pi=2\pi\cdot2=2\pi\chi(S^2)$。ガウス・ボンネが成り立つ（平坦な部分は寄与しない）。
+
+(4) 固定点の近くで $w=(z-z_0)^2$ は $\Z_2$ 不変な正則関数で、商の近傍を $w$ 平面の近傍と正則に同一視する（$\C/\Z_2\cong\C$, $z\mapsto z^2$）。よって $T^2/\Z_2$ は特異点のないコンパクトなリーマン面で、種数 $0$ なので $\CP^1$。具体的には、ワイエルシュトラスの $\wp$ 関数（偶関数）が同型 $T^2/\Z_2\to\CP^1$ を与える。計量は特異でも、複素構造は滑らかであることに注意。複素1次元では固定点は複素構造の特異点にならないが、複素2次元以上の $\C^n/\Z_k$ は本当の特異点になる（問題 \ref{ch10-prob-t4}）。
+\end{solution}
+
+\begin{problem}[難易度 C]\label{ch10-prob-t4}
+$T^4=\C^2/\Lambda$（$\Lambda\cong\Z^4$）に $\Z_2$ が $(z_1,z_2)\mapsto(-z_1,-z_2)$ で作用する。\\
+(1) 固定点の数を求めよ。各固定点の近傍は $\C^2/\Z_2$ で、その「境界」は $S^3/\Z_2=\RP^3$ である。\\
+(2) 商空間 $T^4/\Z_2$ のオイラー標数と、$\Z_2$ 不変な調和形式から得られるベッチ数を求めよ。\\
+(3) 各特異点を江口・ハンソン空間で解消した多様体 $\widetilde X$ の $\chi$ と $b_2$ を求めよ。また $h^{1,1}(\widetilde X)$, $h^{2,0}(\widetilde X)$ を求め、$\widetilde X$ がK3曲面のホッジ数をもつことを確かめよ。\\
+(4) 弦理論のオービフォールド公式 $\chi_{\rm str}$ を計算し、(3) と比べよ。
+\end{problem}
+
+\begin{solution}
+(1) $2z\in\Lambda$、すなわち $z\in\frac12\Lambda/\Lambda\cong(\Z_2)^4$ で、固定点は $2^4=16$ 個。
+
+(2) 定理 \ref{thm:ch10-orbchi}(1)：$\chi(T^4/\Z_2)=\frac12(0+16)=8$。
+
+$T^4$ の調和形式（定数係数）のうち不変なもの：$dx^i\mapsto-dx^i$ なので、$k$ 形式は $(-1)^k$ 倍される。不変なのは偶数次だけで、$b_0=1$, $b_1=0$, $b_2=\binom42=6$, $b_3=0$, $b_4=1$。商空間の（実係数の）コホモロジーは不変部分で与えられ、$\chi=1+6+1=8$ と一致する。
+
+(3) 各固定点の像の近傍（$\C^2/\Z_2$ の球近傍、錐 $C(\RP^3)$、可縮で $\chi=1$）を江口・ハンソン空間の対応する部分（$S^2$ にホモトピー同値、$\chi=2$）に取り替える。境界 $\RP^3$ は $\chi=0$ なので、1つあたり $\chi$ が $2-1=+1$ 変わる：
+\[
+\chi(\widetilde X)=8+16\cdot1=24 .
+\]
+各例外曲線 $\CP^1$ が新しい2次ホモロジー類を与えるので $b_2=6+16=22$（$b_1=b_3=0$ は変わらず、$\chi=1+22+1=24$ と整合）。
+
+ホッジ数：$T^4$ 上の不変な2形式は $dz^1\wedge dz^2$（$(2,0)$）、$d\bar z^1\wedge d\bar z^2$（$(0,2)$）、$dz^i\wedge d\bar z^j$（$(1,1)$, 4個）。例外曲線は複素曲線なので、そのポアンカレ双対は $(1,1)$ 類。よって
+\[
+h^{2,0}=1,\qquad h^{1,1}=4+16=20,\qquad h^{1,0}=0 .
+\]
+これは問題 \ref{ch10-prob-k3} のK3のホッジ・ダイヤモンドに一致する（実際 $\widetilde X$ はK3曲面で、\term{クンマー曲面}{Kummer surface}と呼ばれる）。正則2形式 $dz^1\wedge dz^2$ が不変なので $\Z_2$ は $SU(2)$ に含まれ、解消後も $c_1=0$ が保たれる。
+
+(4) $G=\Z_2=\{1,g\}$ は可換で、可換な組 $(h_1,h_2)$ は4つ。$X^1\cap X^1=T^4$（$\chi=0$）、他の3組 $(1,g),(g,1),(g,g)$ ではいずれも16点（$\chi=16$）：
+\[
+\chi_{\rm str}=\frac12\bigl(0+3\cdot16\bigr)=24 .
+\]
+(3) の解消多様体のオイラー標数に一致する。素朴な商空間の値 $8$ との差 $16$ は、ねじれたセクター（固定点に局在した閉弦の状態）からの寄与で、幾何学的には特異点の解消で現れる16個の2サイクルに対応する。
+\end{solution}
+
+\begin{problem}[難易度 D]\label{ch10-prob-t6z3}
+$\omega=e^{2\pi i/3}$、$\Lambda_0=\Z+\Z\omega$（六角格子）とし、$T^2_0=\C/\Lambda_0$ に $\Z_3$ が $z\mapsto\omega z$ で作用する。\\
+(1) $T^2_0$ 上の固定点が、格子座標 $z=a+b\omega$ で $(a,b)=(0,0),(\frac23,\frac13),(\frac13,\frac23)$ の3点であることを示せ（図）。\\
+(2) $T^6=(T^2_0)^3$ に $\Z_3$ が $(z_1,z_2,z_3)\mapsto(\omega z_1,\omega z_2,\omega z_3)$ で作用する。固定点の数を求め、この作用が正則3形式 $\Omega=dz^1\wedge dz^2\wedge dz^3$ を保つことを確かめよ。\\
+(3) $\Z_3$ 不変な $(p,q)$ 形式を数え、ねじれていないセクターのホッジ数 $h^{1,1}_{\rm untw}$, $h^{2,1}_{\rm untw}$ を求めよ。\\
+(4) 各固定点を $\mathcal O(-3)\to\CP^2$ で解消すると $h^{1,1}$ と $h^{2,2}$ が1ずつ増える（例 \ref{ex:ch10-resol}）。解消した CY3 $\widetilde X$ の $(h^{1,1},h^{2,1})$ と $\chi$ を求め、$\chi_{\rm str}$ および「素朴な $\chi$＋例外因子の寄与」と一致することを確かめよ。\\
+(5) ヘテロティック弦を $\widetilde X$ にコンパクト化したときの世代数を求めよ。$h^{2,1}=0$（\term{剛的}{rigid}）であることから、ミラー多様体が通常の CY3 として存在しえないことを説明せよ。
+\begin{center}
+\begin{tikzpicture}[scale=2.0]
+  \coordinate (w) at (-0.5,0.8660);
+  \fill[blue!6] (0,0) -- (1,0) -- (0.5,0.866) -- (-0.5,0.866) -- cycle;
+  \foreach \xx/\yy in {-1/0,0/0,1/0,2/0,-1.5/0.866,-0.5/0.866,0.5/0.866,1.5/0.866,
+      -0.5/-0.866,0.5/-0.866,1.5/-0.866}{
+    \node[circle,fill=gray,inner sep=0.8pt] at (\xx,\yy) {};
+  }
+  \draw[gray!60] (-1,0)--(2,0) (-1.5,0.866)--(1.5,0.866) (-0.5,-0.866)--(1.5,-0.866);
+  \draw[gray!60] (-1,0)--(-0.5,0.866) (-0.5,-0.866)--(0.5,0.866) (0.5,-0.866)--(1.5,0.866) (1.5,-0.866)--(2,0);
+  \draw[gray!60] (-1.5,0.866)--(-0.5,-0.866) (-0.5,0.866)--(0.5,-0.866) (0.5,0.866)--(1.5,-0.866) (1.5,0.866)--(2,0);
+  \draw[thick] (0,0) -- (1,0) -- (0.5,0.866) -- (-0.5,0.866) -- cycle;
+  \draw[gray,densely dashed] (0,0) -- (0.5,0.866);
+  \node[vtx,red!70!black] at (0,0) {};
+  \node[red!70!black,below left] at (0,0) {\footnotesize $0$};
+  \node[vtx,red!70!black] at (0.5,0.2887) {};
+  \node[red!70!black,below] at (0.5,0.24) {\footnotesize $\tfrac{2+\omega}{3}$};
+  \node[vtx,red!70!black] at (0,0.5774) {};
+  \node[red!70!black,left] at (-0.04,0.5774) {\footnotesize $\tfrac{1+2\omega}{3}$};
+  \node[below] at (1,0) {\footnotesize $1$};
+  \node[above left] at (-0.5,0.866) {\footnotesize $\omega$};
+  \node[above right] at (0.5,0.866) {\footnotesize $1+\omega$};
+\end{tikzpicture}
+\zucap{六角格子 $\Lambda_0=\Z+\Z\omega$ と基本領域（影）。$z\mapsto\omega z$（$120^\circ$ 回転）の固定点は、原点と2つの正三角形の重心の3点（赤）。}
+\end{center}
+\end{problem}
+
+\begin{solution}
+(1) $\omega z\equiv z$ $\Leftrightarrow$ $(1-\omega)z\in\Lambda_0$。$\lvert1-\omega\rvert^2=3$ なので $(1-\omega)\Lambda_0$ は指数 $3$ の部分格子で、解 $z\in(1-\omega)^{-1}\Lambda_0$ は $\Lambda_0$ を法として3個。直接確かめると
+\[
+\omega\cdot\frac{2+\omega}{3}=\frac{2\omega+\omega^2}{3}=\frac{2\omega-1-\omega}{3}=\frac{\omega-1}{3}=\frac{2+\omega}{3}-1,
+\]
+\[
+\omega\cdot\frac{1+2\omega}{3}=\frac{\omega+2\omega^2}{3}=\frac{\omega-2-2\omega}{3}=\frac{1+2\omega}{3}-(1+\omega)
+\]
+（$\omega^2=-1-\omega$ を用いた）で、いずれも格子ベクトルの差しかない。$\frac{2+\omega}{3}=\frac23+\frac13\omega$, $\frac{1+2\omega}{3}=\frac13+\frac23\omega$ で、それぞれ三角形 $(0,1,1+\omega)$ と $(0,1+\omega,\omega)$ の重心である。
+
+(2) 固定点は各因子の固定点の組なので $3^3=27$ 個。$\Omega\mapsto\omega^3\Omega=\Omega$ で不変（作用は $SU(3)$ に含まれる：$\operatorname{diag}(\omega,\omega,\omega)$, $\det=1$）。
+
+(3) $dz^i\mapsto\omega\,dz^i$, $d\bar z^j\mapsto\bar\omega\,d\bar z^j=\omega^2d\bar z^j$ なので、$(p,q)$ 形式は $\omega^{p+2q}=\omega^{p-q}$ 倍される。不変 $\Leftrightarrow$ $p\equiv q\pmod3$。
+\begin{itemize}
+\item $(1,1)$：$p-q=0$ で不変。$h^{1,1}_{\rm untw}=3\cdot3=9$。
+\item $(2,1)$：$p-q=1$ で不変でない。$h^{2,1}_{\rm untw}=0$。
+\item $(1,0)$, $(2,0)$：不変でない（$h^{1,0}=h^{2,0}=0$）。$(3,0)$：$p-q=3\equiv0$ で不変、$h^{3,0}=1$。
+\end{itemize}
+よって不変部分のホッジ・ダイヤモンドはCY3の形で、$(h^{1,1},h^{2,1})_{\rm untw}=(9,0)$。
+
+(4) 27個の固定点の解消でそれぞれ $h^{1,1}$ が1増え、$h^{2,1}$ は変わらない：
+\[
+h^{1,1}(\widetilde X)=9+27=36,\qquad h^{2,1}(\widetilde X)=0,\qquad \chi(\widetilde X)=2(36-0)=72 .
+\]
+\textbf{弦理論の公式}：$\Z_3$ の可換な組は $3\times3=9$ 個。$(1,1)$ は $\chi(T^6)=0$。それ以外の8組では、$g\ne1$ の固定点集合は $g=\omega$ でも $g=\omega^2$ でも同じ27点で、$X^g\cap X^h$ は27点（$g$ または $h$ が $1$ ならもう一方の固定点集合）：
+\[
+\chi_{\rm str}=\frac13(0+8\cdot27)=72 .
+\]
+\textbf{素朴な $\chi$＋解消}：$\chi(T^6/\Z_3)=\frac13(0+27+27)=18$。各点を $\CP^2$ にホモトピー同値な空間に置き換えると $\chi$ は $\chi(\CP^2)-1=2$ 増えるので $18+27\cdot2=72$。3つとも一致する。
+
+(5) 世代数 $\lvert\chi\rvert/2=36$（$\overline{\mathbf{27}}$ が $h^{1,1}=36$ 個、$\mathbf{27}$ が $h^{2,1}=0$ 個）。ミラー $W$ は $h^{1,1}(W)=h^{2,1}(\widetilde X)=0$ をもたねばならないが、コンパクト・ケーラー多様体ではケーラー形式の類が $[J]\ne0\in H^{1,1}$ なので $h^{1,1}\ge1$。よって通常の幾何学的な CY3 としてのミラーは存在しない。（ミラーはランダウ・ギンツブルグ模型などの非幾何学的な $\mathcal N=2$ 共形場理論として存在する。）
+\end{solution}
+
+\subsection{カルツァ・クライン還元とミラー対称性}
+
+\begin{problem}[難易度 B]\label{ch10-prob-kk}
+命題 \ref{prop:ch10-kk} を用いる。\\
+(1) 10次元の2形式場 $B_{MN}$ を $M_4\times T^6$ に還元したときの4次元の質量ゼロ場（2形式、ベクトル、スカラー）の数を求めよ。10次元の質量ゼロの2形式の物理的自由度（光円錐ゲージで横方向 $SO(8)$ の反対称テンソル）と、4次元の自由度の和が一致することを確かめよ（4次元の質量ゼロの2形式は1自由度、ベクトルは2自由度）。\\
+(2) 10次元の計量 $g_{MN}$ についても同様に、4次元の計量・ベクトル・スカラーの数を数え、自由度（10次元の重力子は $SO(8)$ の対称トレースレス・テンソル）を確かめよ。ベクトル $g_{\mu i}$ は $T^6$ の平行なベクトル場（$b_1=6$ 個）に対応する。\\
+(3) $B$ を CY3 $X$ に還元すると、4次元で何個のスカラー（\term{アクシオン}{axion}）とベクトルが得られるか。5次超曲面ではいくつか。CY3 のリッチ平坦計量の変形から得られる実スカラーの数も答えよ。
+\end{problem}
+
+\begin{solution}
+(1) $B=\frac12B_{\mu\nu}dx^\mu dx^\nu+B_{\mu i}dx^\mu dy^i+\frac12B_{ij}dy^idy^j$ と分け、$b_0=1$, $b_1=6$, $b_2=15$ を用いる：
+\begin{center}
+\begin{tabular}{lll}
+成分 & 4次元の場 & 数\\ \hline
+$B_{\mu\nu}$ & 2形式（スカラーと双対） & $b_0=1$\\
+$B_{\mu i}$ & ベクトル & $b_1=6$\\
+$B_{ij}$ & スカラー & $b_2=15$
+\end{tabular}
+\end{center}
+自由度：10次元では $\binom82=28$。4次元では $1\cdot1+6\cdot2+15\cdot1=28$ で一致する。
+
+(2) $g_{\mu\nu}$：4次元の計量1個（2自由度）。$g_{\mu i}$：ベクトル $6$ 個（12自由度）。$g_{ij}$：$T^6$ の平坦計量の変形、対称行列の成分で $\frac{6\cdot7}{2}=21$ 個のスカラー（21自由度）。合計 $2+12+21=35$。10次元の重力子は $8\times8$ 対称トレースレスで $\frac{8\cdot9}{2}-1=35$。一致する。
+
+(3) CY3 では $b_1=0$, $b_2=h^{1,1}$（$h^{2,0}=0$）なので、$B$ からはベクトルは $0$ 個、スカラー（アクシオン）は $h^{1,1}$ 個、それに4次元の $B_{\mu\nu}$（もう1個のアクシオンと双対）が1個。5次超曲面ではアクシオン $1$ 個と $B_{\mu\nu}$ が $1$ 個。
+
+計量の変形は命題 \ref{prop:ch10-cy3} より実 $h^{1,1}+2h^{2,1}$ 個：5次超曲面で $1+2\cdot101=203$。（$T^6$ の場合のように $b_1\neq0$ だと $g_{\mu i}$ からベクトルが得られるが、CY3 では平行なベクトル場がないので得られない。）
+\end{solution}
+
+\begin{problem}[難易度 B]\label{ch10-prob-mirror}
+IIA型弦理論を CY3 $X$ にコンパクト化すると4次元 $\mathcal N=2$ 超重力で、ベクトル多重項が $h^{1,1}(X)$ 個、ハイパー多重項が $h^{2,1}(X)+1$ 個現れる。IIB型では、ベクトル多重項が $h^{2,1}(X)$ 個、ハイパー多重項が $h^{1,1}(X)+1$ 個である（認めてよい）。\\
+(1) 5次超曲面 $X_5$ について、IIA型とIIB型の多重項の数を求めよ。\\
+(2) ミラー5次超曲面 $W$ のホッジ・ダイヤモンドを書き、$\chi(W)$ を求めよ。IIA/$X_5$ と IIB/$W$ の多重項の数が一致することを確かめよ。\\
+(3) 一般に、ミラー対 $(X,W)$ について $\chi(W)=-\chi(X)$ と $b_3(W)=2b_2(X)+2$ を示せ。\\
+(4) IIB型では、10次元の自己双対4形式 $C_4$ から $b_3(X)$ 個の4次元ベクトルの「半分」、すなわち $\frac12b_3=h^{2,1}+1$ 個の独立なベクトル場が得られる。これが（ベクトル多重項の数）＋（重力多重項のグラビフォトン1個）と一致することを確かめよ。
+\end{problem}
+
+\begin{solution}
+(1) $(h^{1,1},h^{2,1})=(1,101)$。IIA/$X_5$：ベクトル多重項 $1$、ハイパー多重項 $102$。IIB/$X_5$：ベクトル多重項 $101$、ハイパー多重項 $2$。
+
+(2) $W$ は $(h^{1,1},h^{2,1})=(101,1)$：
+\[
+\begin{matrix}
+&&&1&&&\\
+&&0&&0&&\\
+&0&&101&&0&\\
+1&&1&&1&&1\\
+&0&&101&&0&\\
+&&0&&0&&\\
+&&&1&&&
+\end{matrix}
+\]
+$\chi(W)=2(101-1)=200$。IIB/$W$：ベクトル多重項 $h^{2,1}(W)=1$、ハイパー多重項 $h^{1,1}(W)+1=102$。IIA/$X_5$ と一致する。
+
+(3) $\chi(W)=2(h^{1,1}(W)-h^{2,1}(W))=2(h^{2,1}(X)-h^{1,1}(X))=-\chi(X)$。$b_3(W)=2+2h^{2,1}(W)=2+2h^{1,1}(X)=2+2b_2(X)$。すなわちミラー対称性は $X$ の偶数次コホモロジー $H^0\oplus H^2\oplus H^4\oplus H^6$（次元 $2+2h^{1,1}$）と $W$ の $H^3$ を入れ替える。偶数次元のDブレーン（IIA）が $X$ の偶数次サイクルに、奇数次元のDブレーン（IIB）が $W$ の3サイクルに巻き付くことと対応している。
+
+(4) $C_4=\sum_{\alpha=1}^{b_3}A^{(\alpha)}\wedge\omega_3^{(\alpha)}+\cdots$ から $b_3$ 個の4次元1形式が得られるが、自己双対性 $F_5={*F_5}$ により、4次元の電気的・磁気的な場が対になって同一視され、独立なのは半分の $\frac12b_3=h^{2,1}+1$ 個。ベクトル多重項 $h^{2,1}$ 個のベクトルと、重力多重項のグラビフォトン1個の和に等しい。5次超曲面では $102$。
+\end{solution}
+
+\subsection{ブレーン電荷とフラックスの量子化}
+
+\begin{problem}[難易度 A]\label{ch10-prob-dbrane}
+(1) 10次元時空で D$p$ ブレーンを囲む球面の次元を求め、そこで電荷を測る場の強さ $F_{8-p}={*F_{p+2}}$ の次数と一致することを確かめよ。\\
+(2) D$p$ ブレーンの磁気的双対が D$(6-p)$ ブレーンであることを示し、IIA型・IIB型それぞれで電気・磁気の対を列挙せよ。自分自身と双対なものはどれか。\\
+(3) 一般の $D$ 次元で、$p$ ブレーンの磁気的双対は $(D-p-4)$ ブレーンである。$D=4$ の粒子、$D=6$ のひも、$D=11$ の M2 ブレーンについて双対を答えよ。
+\end{problem}
+
+\begin{solution}
+(1) D$p$ の世界体積は $p+1$ 次元、横方向は $10-(p+1)=9-p$ 次元で、ブレーンは横方向の1点に見える。その点を囲む球面は $S^{8-p}$。$F_{p+2}$ の10次元のホッジ双対は $10-(p+2)=8-p$ 形式で、球面の次元と一致するので $\int_{S^{8-p}}{*F_{p+2}}$ が定義でき、ガウスの法則によりこれが電荷を測る。
+
+(2) $F_{8-p}=dC_{7-p}$ に電気的に結合するのは、世界体積 $7-p$ 次元、すなわち $(6-p)$ ブレーンである。$C_{7-p}$ の電気的な源は $F_{8-p}$ の、つまり $F_{p+2}$ の磁気的な源なので、D$p$ と D$(6-p)$ が電気・磁気の対になる。$p$ と $6-p$ の偶奇は同じなので、同じ理論の中で対になる。
+\begin{itemize}
+\item IIA：D0–D6、D2–D4（D8 は $F_{10}$ に対応する特別な場合で、双対の $F_0$ は「質量」パラメータ）。
+\item IIB：D$(-1)$–D7、D1–D5、D3–D3。D3 は自己双対で、$F_5={*F_5}$ に対応する。$N$ 枚の D3 の電荷は $\int_{S^5}F_5=2\pi N$ で、$\mathrm{AdS}_5\times S^5$ の $S^5$ を貫くフラックスになる。
+\end{itemize}
+
+(3) $D=4$, $p=0$：$4-0-4=0$、粒子の双対は粒子（電荷と磁気単極子、第5, 8章）。$D=6$, $p=1$：$6-1-4=1$、ひもは自分自身と双対（自己双対な3形式場 $H={*H}$ のひも）。$D=11$, $p=2$：$11-2-4=5$、M2 の双対は M5 ブレーン（4形式 $G_4$ と $G_7={*G_4}$）。
+\end{solution}
+
+\begin{problem}[難易度 D]\label{ch10-prob-dirac}
+(1) 定理 \ref{thm:ch10-dirac} を示せ。（ヒント：磁気的な物体を囲む $S^{p+2}$ の上で、電気的 $p$ ブレーンの閉じた世界体積 $\Sigma_{p+1}$（例えば赤道 $S^{p+1}$）に沿った位相因子 $\exp(i\mu_e\oint_\Sigma C)$ を考える。$C$ は $S^{p+2}$ 全体では定義できないので、$\Sigma$ を境界とする北半球 $B_+$ と南半球 $B_-$ を用いて $\exp(i\mu_e\int_{B_\pm}F)$ と書き直し、両者の一致を要求せよ。）\\
+(2) 電荷の単位を $\mu_e=1$ にとると、コンパクトな内部空間 $K$ 上のフラックス $F_{p+2}$ は格子 $H^{p+2}(K;\Z)/\text{ねじれ}$ に値をとる。IIB型弦理論を5次超曲面にコンパクト化したとき、3形式フラックス $F_3$, $H_3$ を指定する整数は全部で何個あるか。\\
+(3) M理論を CY4 $Y$ にコンパクト化するときのタドポール条件（命題 \ref{prop:ch10-tad}）
+\[
+N_{M2}+\frac12\int_Y\frac{G}{2\pi}\wedge\frac{G}{2\pi}=\frac{\chi(Y)}{24}
+\]
+を考える。(a) $Y=\mathrm{K3}\times\mathrm{K3}$、$G=0$ のとき $N_{M2}$ を求めよ。(b) $Y$ を $\CP^5$ の6次超曲面とすると $\chi(Y)=2610$（問題 \ref{ch10-prob-quintic}）で $\chi/24$ は整数でない。ウィッテンのフラックス量子化条件「$\frac{G}{2\pi}-\frac12c_2(Y)\in H^4(Y;\Z)$」と $c_2(Y)=15H^2$, $\int_YH^4=6$ を用いて、$G=0$ が許されないことを示し、$\frac{G}{2\pi}=\frac12H^2$ のとき $N_{M2}$ が整数になることを確かめよ。
+\end{problem}
+
+\begin{solution}
+(1) 磁気的な物体は $S^{p+2}$ の内部にあり、$S^{p+2}$ 上で $F=F_{p+2}$ は閉形式で $\int_{S^{p+2}}F=\mu_m$。$\mu_m\ne0$ なら $F$ は $S^{p+2}$ 上で完全形式でなく、$C$ は大域的に定義できない（第5章のディラック・モノポールと同じ）。しかし北半球 $B_+$、南半球 $B_-$ はそれぞれ可縮なので、その上では $F=dC_\pm$ と書ける。
+
+電気的 $p$ ブレーンの世界体積が赤道 $\Sigma=S^{p+1}$ を掃くとき、その経路積分の位相は $\exp(i\mu_e\oint_\Sigma C)$ で、ストークスの定理より北側の表示では $\exp\bigl(i\mu_e\int_{B_+}F\bigr)$、南側では $\exp\bigl(-i\mu_e\int_{B_-}F\bigr)$ と書ける（$\partial B_+=\Sigma$、$\partial B_-=-\Sigma$ と向きを付ける。$S^{p+2}=B_+\cup B_-$ は外向きの向き）。物理的な位相は表示によらないので
+\[
+\exp\Bigl(i\mu_e\int_{B_+}F\Bigr)=\exp\Bigl(-i\mu_e\int_{B_-}F\Bigr)
+\iff \exp\Bigl(i\mu_e\int_{S^{p+2}}F\Bigr)=1
+\iff \mu_e\mu_m\in2\pi\Z .
+\]
+（$C_+$ と $C_-$ は赤道の近傍でゲージ変換 $C_+-C_-=d\lambda_p$ で結ばれ、$\exp(i\mu_e\oint_\Sigma d\lambda)$ に相当する「大きなゲージ変換」の一価性と言ってもよい。）磁気的な物体の横方向は $S^{p+2}$ を含む $p+3$ 次元、世界体積は $D-(p+3)=D-p-3$ 次元なので $(D-p-4)$ ブレーンである。$\mu_e=1$ なら $\mu_m\in2\pi\Z$ で、任意の閉 $(p+2)$ 次元部分多様体 $\Sigma$ について同じ議論（$\Sigma$ を2つに分けて境界に沿ってブレーンを動かす）から $\int_\Sigma F\in2\pi\Z$。
+
+(2) $[F/2\pi]$ は $H^{p+2}(K;\R)$ の中の格子（$H^{p+2}(K;\Z)$ の像）に属し、その階数は $b_{p+2}(K)$。5次超曲面では $b_3=204$（問題 \ref{ch10-prob-h21}）なので、$F_3$ と $H_3$ でそれぞれ204個、計408個の整数がフラックスを指定する。（これらの整数の組み合わせの膨大さが、いわゆる弦理論の「ランドスケープ」の起源の一つである。）
+
+(3)(a) キュネットの公式で $\chi(\mathrm{K3}\times\mathrm{K3})=24\cdot24=576$。$N_{M2}=576/24=24$。
+
+(b) $\chi/24=2610/24=108.75$。$G=0$ なら量子化条件は $-\frac12c_2=-\frac{15}{2}H^2\in H^4(Y;\Z)$ を要求する。整数係数の類 $\alpha$ について $\int_Y\alpha\wedge\alpha\in\Z$ だが、$\alpha=-\frac{15}{2}H^2$ なら $\int\alpha^2=\frac{225}{4}\cdot6=337.5\notin\Z$。よって $G=0$ は許されない（タドポール条件の右辺が整数でないことと整合）。
+
+$\frac{G}{2\pi}=\frac12H^2$ とすると $\frac{G}{2\pi}-\frac12c_2=\frac12H^2-\frac{15}{2}H^2=-7H^2$ で、$H$ は整数係数なので条件をみたす。このとき
+\[
+\frac12\int_Y\Bigl(\frac{H^2}{2}\Bigr)^2=\frac18\int_YH^4=\frac68=\frac34,\qquad N_{M2}=108.75-0.75=108\in\Z .
+\]
+特性類に由来する半整数のずれと、タドポール条件の右辺の分数部分がちょうど打ち消し合う。（超対称性の条件など物理的な制約はここでは考えていない。）
+\end{solution}
+
+\subsection{グリーン・シュワルツ機構}
+
+\begin{problem}[難易度 C]\label{ch10-prob-gs}
+10次元 $\mathcal N=1$ 超重力＋超対称ヤン・ミルズ理論（ゲージ群 $G$）のアノマリーが、グリーン・シュワルツ機構で相殺されるための条件は次の2つである（定理 \ref{thm:ch10-gs}）。(i) $\dim G=496$。(ii) 随伴表現のトレース $\operatorname{Tr}F^6$ が、より低次のトレースの積で書ける（既約な6次のカシミールの寄与がない）。\\
+(1) $SO(N)$ では、ベクトル表現のトレース $\tr$ と随伴表現のトレース $\operatorname{Tr}$ の間に
+\begin{align*}
+\operatorname{Tr}F^2&=(N-2)\tr F^2,\\
+\operatorname{Tr}F^4&=(N-8)\tr F^4+3(\tr F^2)^2,\\
+\operatorname{Tr}F^6&=(N-32)\tr F^6+15\tr F^2\tr F^4
+\end{align*}
+が成り立つ。(i), (ii) がともに $N=32$ を与えることを示せ。$\frac1{30}\operatorname{Tr}F^2=\tr F^2$ となることも確かめよ。\\
+(2) $E_8$ は $SO(16)$ の随伴表現 $\mathbf{120}$ と、一方のカイラリティのスピノル表現から作られる。スピノルの次元を求めて $\dim E_8=248$ を確かめ、$E_8\times E_8$ が (i) をみたすことを示せ。$E_8$ では $\operatorname{Tr}F^4=\frac1{100}(\operatorname{Tr}F^2)^2$, $\operatorname{Tr}F^6=\frac1{7200}(\operatorname{Tr}F^2)^3$ が成り立つ（既約な4次・6次のカシミールがない）ことを認めて、(ii) もみたすことを説明せよ。\\
+(3) $SU(N)$ が (i) をみたしえないことを示せ。\\
+(4) 修正されたビアンキ恒等式 $dH\propto\tr R\wedge R-\frac1{30}\operatorname{Tr}F\wedge F$ が CY3 上で課す位相的条件を述べ、標準埋め込みがそれをみたす理由を説明せよ。
+\end{problem}
+
+\begin{solution}
+(1) $\dim SO(N)=\frac{N(N-1)}{2}=496$ $\iff$ $N^2-N-992=0$ $\iff$ $(N-32)(N+31)=0$ で、$N=32$。一方 (ii) は $\operatorname{Tr}F^6$ の既約部分 $(N-32)\tr F^6$ が消えることなので、やはり $N=32$。2つの独立な条件が同じ $N$ を選ぶのは注目すべき一致である。$N=32$ で $\operatorname{Tr}F^2=30\tr F^2$、すなわち $\frac1{30}\operatorname{Tr}F^2=\tr F^2$。さらに
+\[
+\operatorname{Tr}F^6=15\tr F^2\tr F^4,\qquad \operatorname{Tr}F^4=24\tr F^4+3(\tr F^2)^2
+\]
+となって、$I_{12}$ が $\tr F^2$ と $\tr F^4$ の多項式で書け、因数分解の可能性が開ける。
+
+(2) $SO(16)$ のディラック・スピノルは $2^{16/2}=256$ 次元、一方のカイラリティは $128$ 次元。$\dim E_8=120+128=248$。$\dim(E_8\times E_8)=2\cdot248=496$ で (i) をみたす。$F=F_1+F_2$（各因子の場の強さ）とすると $\operatorname{Tr}F^6=\operatorname{Tr}F_1^6+\operatorname{Tr}F_2^6=\frac1{7200}\bigl[(\operatorname{Tr}F_1^2)^3+(\operatorname{Tr}F_2^2)^3\bigr]$ で、すべて $\operatorname{Tr}F^2$ の積で書けるので (ii) もみたす。
+
+(3) $\dim SU(N)=N^2-1=496$ なら $N^2=497$。$22^2=484<497<529=23^2$ なので整数解がない。
+
+(4) $H$ は大域的な3形式なので $\tr R\wedge R-\frac1{30}\operatorname{Tr}F\wedge F$ は完全形式で、ド・ラーム・コホモロジー類としてゼロ：$[\tr R\wedge R]=[\tfrac1{30}\operatorname{Tr}F\wedge F]\in H^4(X;\R)$。これは（適当な規格化で）ゲージ束 $V$ と接束 $TX$ について $\ch_2(V)=\ch_2(TX)$、$SU(3)$ 束では $c_2(V)=c_2(TX)$ を意味する（命題 \ref{prop:ch10-tad}）。標準埋め込みではゲージ接続をスピン接続そのものに等しくとるので、$\tr F\wedge F$ と $\tr R\wedge R$ が形式として等しく、$dH=0$ が局所的に成り立ち、条件は自明にみたされる。$V\ne TX$ の一般のベクトル束を使う場合（非標準埋め込み）は、この位相的条件（5ブレーンがあればその寄与も含めたタドポール条件）を確かめる必要がある。
+\end{solution}

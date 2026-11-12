@@ -1,0 +1,900 @@
+%================================================
+\chapter{指数定理とアノマリー}\label{ch:09}
+% 18問
+%================================================
+
+\section{物理からの動機}
+
+\subsection*{ゼロモードは数えられる}
+インスタントンやモノポールのような位相的に非自明な背景場の中にフェルミオンを置くと、ディラック方程式 $\slashed{D}\psi=0$ の規格化可能な解（\term{ゼロモード}{zero mode}）が現れる。ゼロモードの数そのものは背景場を少し変えると変わりうるが、その\textbf{カイラリティごとの差}
+\[
+\ind\slashed D=n_+-n_-
+\]
+は連続変形で変わらない。しかもそれは背景場のトポロジー（第8章の特性類）だけで決まる：
+\[
+\ind\slashed D=\int_M\ch(F)\,\Ahat(TM)\qquad(\text{アティヤ・シンガーの指数定理}).
+\]
+左辺は解析的（微分方程式の解の数）、右辺は位相的（曲率の積分）な量である。この等式が、本章で扱う物理の多くの現象の数学的な核心になる。
+
+\subsection*{量子異常（アノマリー）}
+古典的な対称性が量子論で破れる現象を\term{アノマリー}{anomaly}という。代表例は質量ゼロのフェルミオンの軸性 $U(1)$ 対称性 $\psi\mapsto e^{i\alpha\gamma_5}\psi$ である。古典的には軸性電荷 $Q_5$ は保存するが、量子論では
+\[
+\Delta Q_5=2N_f\,k\qquad(N_f\text{ 個のディラック・フェルミオン、インスタントン数 }k)
+\]
+だけ変化する（\term{ABJアノマリー}{Adler--Bell--Jackiw anomaly}）。藤川の方法では、これは経路積分の測度のヤコビアンとして現れ、ヤコビアンの指数部分は\textbf{指数密度}そのものである。
+
+1+1次元の例が直観を与える。長さ $L$ の円周上の質量ゼロのフェルミオンに一様な電場をかけ、$A_1$ を $0$ から $2\pi/L$ まで断熱的に変えると、右巻きの準位はすべて1段下がり、左巻きの準位は1段上がる（下図左）。ディラックの海から右巻き（または左巻き）の粒子が1個ずつ押し出され、$N_R-N_L$ が $2$ だけ変化する。このとき時空を貫く磁束 $\int F=\int E\,dt\,dx=2\pi$ は1単位である。準位がゼロを横切る現象を\term{スペクトル流}{spectral flow}といい、スペクトル流の正味の数が指数に等しい。
+\begin{center}
+\begin{tikzpicture}[scale=1.0]
+  \begin{scope}
+    \draw[-{Stealth[length=2mm]}] (0,-1.9) -- (0,1.9) node[above] {\footnotesize $E$};
+    \draw[-{Stealth[length=2mm]}] (0,0) -- (3.4,0) node[right] {\footnotesize $t$};
+    \draw[dashed,gray] (3,-1.8) -- (3,1.8);
+    \node[below] at (3,-1.8) {\footnotesize $A_1=2\pi/L$};
+    \foreach \m in {-3,-2,-1,0,1,2}{
+      \draw[thick,blue!70!black] (0,{0.5*(\m+0.5)}) -- (3,{0.5*(\m-0.5)});
+      \draw[thick,red!70!black,densely dashed] (0,{0.5*(\m+0.5)+0.06}) -- (3,{0.5*(\m+1.5)+0.06});
+    }
+    \foreach \m in {-3,-2,-1}{ \node[vtx,blue!70!black] at (0,{0.5*(\m+0.5)}) {}; }
+    \node[blue!70!black] at (1.5,-2.2) {\footnotesize 実線：右巻き　破線：左巻き};
+  \end{scope}
+  \begin{scope}[xshift=6.3cm]
+    \draw[-{Stealth[length=2mm]}] (0,-1.9) -- (0,1.9) node[above] {\footnotesize $\lambda$};
+    \draw[-{Stealth[length=2mm]}] (0,0) -- (3.4,0) node[right] {\footnotesize $t$};
+    \draw[dashed,gray] (3,-1.8) -- (3,1.8);
+    \draw[very thick,red!70!black,domain=0:3,samples=60] plot (\x,{0.75*cos(60*\x)});
+    \draw[very thick,red!70!black,densely dashed,domain=0:3,samples=60] plot (\x,{-0.75*cos(60*\x)});
+    \foreach \s in {1,-1}{
+      \draw[thick,gray,domain=0:3,samples=40] plot (\x,{\s*(1.25+0.15*sin(120*\x))});
+      \draw[thick,gray,domain=0:3,samples=40] plot (\x,{\s*(1.65-0.1*sin(60*\x))});
+    }
+    \node[below] at (0,-1.8) {\footnotesize $A$};
+    \node[below] at (3,-1.8) {\footnotesize $A^U$};
+    \node[red!70!black] at (1.5,-2.2) {\footnotesize 1対の固有値 $\pm\lambda$ が入れ替わる};
+  \end{scope}
+\end{tikzpicture}
+\zucap{左：1+1次元の円周上で $A_1$ を1量子分ずらすと、右巻きの準位（実線）は1段下がり、左巻きの準位（破線）は1段上がる。黒丸ははじめに占有された準位。右：$SU(2)$ の大きなゲージ変換 $U$（$\pi_4(SU(2))=\Z_2$ の非自明元）に沿ったスペクトル流。奇数対の固有値が交差すると、パフィアンの符号が反転する（ウィッテン・アノマリー）。}
+\end{center}
+
+\subsection*{トフーフト頂点}
+4次元の $SU(N_c)$ ゲージ理論で $k=1$ のインスタントン背景を考えると、基本表現の質量ゼロのディラック・フェルミオンは1フレーバーあたりちょうど1個のゼロモード（正カイラリティ）をもつ。グラスマン積分ではゼロモードの積分変数が作用に現れないため、ゼロモードを「吸収」する演算子を挿入しない限り経路積分はゼロになる。結果として、インスタントンは $2N_f$ 本のフェルミオン線をもつ実効的な相互作用（\term{トフーフト頂点}{'t Hooft vertex}）を生み、軸性電荷を $2N_f$ だけ破る。
+\begin{center}
+\begin{tikzpicture}[scale=1.0]
+  \shade[ball color=orange!30] (0,0) circle (0.55);
+  \node at (0,0) {\footnotesize $k=1$};
+  \foreach \a/\lab in {90/u,150/d,210/s}{
+    \draw[thick,mid arrow] (\a:1.9) -- (\a:0.58);
+    \node at (\a:2.25) {\footnotesize $\psi_{\lab}$};
+  }
+  \foreach \a/\lab in {30/u,330/d,270/s}{
+    \draw[thick,mid arrow] (\a:0.58) -- (\a:1.9);
+    \node at (\a:2.25) {\footnotesize $\bar\psi_{\lab}$};
+  }
+  \begin{scope}[xshift=6.2cm]
+    \shade[ball color=orange!30] (0,0) circle (0.55);
+    \node at (0,0) {\footnotesize $SU(2)_L$};
+    \foreach \i in {0,...,11}{
+      \draw[thick,mid arrow] ({30*\i+15}:1.8) -- ({30*\i+15}:0.58);
+    }
+    \foreach \i/\lab in {0/q,1/q,2/q,3/\ell,4/q,5/q,6/q,7/\ell,8/q,9/q,10/q,11/\ell}{
+      \node at ({30*\i+15}:2.1) {\footnotesize $\lab$};
+    }
+  \end{scope}
+\end{tikzpicture}
+\zucap{左：$N_f=3$ の QCD のトフーフト頂点。各フレーバーにつき $\psi$ と $\bar\psi$ のゼロモードが1本ずつ現れ、6フェルミオン相互作用になる（軸性電荷を $6$ 破る）。右：電弱 $SU(2)_L$ インスタントンは各左巻き二重項（世代あたりクォーク3色＋レプトン1個）に1本ずつ線を出し、3世代で12本：$\Delta B=\Delta L=3$。}
+\end{center}
+
+\subsection*{ゲージ・アノマリーと理論の整合性}
+大域的対称性のアノマリーは物理的な効果（$\pi^0\to\gamma\gamma$、$\eta'$ の質量、$B+L$ の破れ）をもたらすが、\textbf{ゲージ}対称性のアノマリーは理論を壊す（ユニタリ性や繰り込み可能性が失われる）。したがってカイラルなゲージ理論では、フェルミオンの表現は\term{アノマリー相殺条件}{anomaly cancellation condition}をみたさなければならない。標準模型の一見でたらめなハイパーチャージ $\frac16,-\frac23,\frac13,-\frac12,1$ は、この条件を見事にみたしている。さらに、摂動論では見えない大域的なアノマリーもある。$SU(2)$ ゲージ理論で左巻きの二重項が奇数個あると理論は矛盾する（ウィッテンの $SU(2)$ アノマリー）。その起源はホモトピー群 $\pi_4(SU(2))=\Z_2$（第3章）である。
+
+アノマリーは「$d$ 次元の理論の問題を $d+2$ 次元の特性類で記述する」という構造をもつ（\term{アノマリー多項式}{anomaly polynomial}と\term{降下方程式}{descent equations}）。これは第8章のチャーン・サイモンズ形式の議論を一段進めたものであり、弦理論のグリーン・シュワルツ機構（第10章）にもつながる。
+
+\begin{physbox}[：本章の辞書]
+\begin{center}
+\small
+\begin{tabular}{p{0.46\linewidth}p{0.44\linewidth}}
+物理 & 数学\\ \hline
+ゼロモードの数（カイラリティ付き） & フレドホルム指数 $\ind\slashed D=n_+-n_-$\\
+ゼロモード数の安定性 & 指数の変形不変性\\
+軸性電荷の非保存 $\Delta Q_5$ & $2N_f\times$（指数）\\
+藤川のヤコビアン & 熱核の超トレース $\operatorname{Tr}\gamma_5e^{-t\slashed D^2}$\\
+最低ランダウ準位の縮退度 & $T^2$ や $S^2$ 上のディラック作用素の指数\\
+ゲージ・アノマリー & アノマリー多項式 $I_{d+2}=[\Ahat\ch(F)]_{d+2}$ と降下方程式\\
+ウィッテンの $SU(2)$ アノマリー & $\pi_4(SU(2))=\Z_2$、mod 2 のスペクトル流\\
+アノマリー流入 & 境界のある多様体上のチャーン・サイモンズ項
+\end{tabular}
+\end{center}
+\end{physbox}
+
+\section{基本事項のまとめ}
+
+\subsection{フレドホルム指数とディラック作用素}
+
+\begin{mydef}{フレドホルム指数}{ch09-fredholm}
+ヒルベルト空間の間の（有界または閉）線形作用素 $T\colon H_1\to H_2$ が、$\ker T$ と $\coker T=H_2/\operatorname{im}T$ がともに有限次元で $\operatorname{im}T$ が閉であるとき、\term{フレドホルム作用素}{Fredholm operator}といい、
+\[
+\ind T=\dim\ker T-\dim\coker T=\dim\ker T-\dim\ker T^\dagger
+\]
+をその\term{指数}{index}という。
+\end{mydef}
+
+\begin{mythm}{指数の変形不変性}{ch09-deform}
+フレドホルム作用素の連続な族 $T_s$（$s\in[0,1]$）について、$\ind T_s$ は $s$ によらない。$\dim\ker T_s$ 自体は跳びうるが、跳ぶときは $\ker T_s$ と $\ker T_s^\dagger$ が同じだけ増減する。
+\end{mythm}
+有限次元では $\ind T=\dim H_1-\dim H_2$（階数・退化次数の定理）であり、$T$ の詳細によらない。指数は無限次元でもこの「次元の差」の頑健さを保つ量である。
+
+\begin{mydef}{ディラック作用素とカイラリティ}{ch09-dirac}
+偶数次元 $d=2m$ の向き付けられたコンパクトなスピン多様体 $M$（第7章）上で、エルミートなガンマ行列 $\{\gamma^\mu,\gamma^\nu\}=2g^{\mu\nu}$ と、ゲージ場とスピン接続を含む共変微分 $D_\mu$ を用いて
+\[
+\slashed D=i\gamma^\mu D_\mu
+\]
+とおく（エルミート）。カイラリティ演算子 $\gamma_5$（$\gamma_5^2=1$, $\gamma_5^\dagger=\gamma_5$）は $\{\gamma_5,\slashed D\}=0$ をみたす。スピノル束を $S=S^+\oplus S^-$（$\gamma_5=\pm1$）に分けると
+\[
+\slashed D=\begin{pmatrix}0&\slashed D_-\\ \slashed D_+&0\end{pmatrix},\qquad \slashed D_\pm\colon\Gamma(S^\pm\otimes E)\to\Gamma(S^\mp\otimes E),\quad \slashed D_-=\slashed D_+^\dagger
+\]
+であり、$n_\pm=\dim\ker\slashed D_\pm$ として
+\[
+\ind\slashed D:=\ind\slashed D_+=n_+-n_- .
+\]
+$\gamma_5$ の符号は、指数定理が $\int\ch(F)\Ahat$ の形になるように選ぶ（記法と規約）。具体的には、$D_\mu=\partial_\mu-iA_\mu$、向き $dx^1\wedge dx^2(\wedge dx^3\wedge dx^4)$ のもとで、平坦な2次元では $\gamma^1=\sigma_1$, $\gamma^2=\sigma_2$, $\gamma_5=\sigma_3=-i\gamma^1\gamma^2$、4次元では $\gamma_5=-\gamma^1\gamma^2\gamma^3\gamma^4$ がこれにあたる（問題 \ref{ch09-prob-fujikawa2d}）。
+\end{mydef}
+
+\begin{myprop}{非ゼロモードの対と超トレース}{ch09-pair}
+$\slashed D\varphi=\lambda\varphi$ なら $\slashed D(\gamma_5\varphi)=-\lambda\gamma_5\varphi$。$\lambda\neq0$ の固有空間では、$\slashed D^2$ の固有空間 $E_{\lambda^2}=E^+_{\lambda^2}\oplus E^-_{\lambda^2}$ に対し $\slashed D/\lvert\lambda\rvert\colon E^+_{\lambda^2}\to E^-_{\lambda^2}$ が同型になる。したがって任意の $t>0$ で
+\[
+\ind\slashed D=\operatorname{Tr}\bigl(\gamma_5e^{-t\slashed D^2}\bigr)\qquad(\text{マッキーン・シンガーの公式})
+\]
+が成り立ち、$t\to0$ の極限から指数が局所的な量（曲率の多項式）の積分で書けることがわかる。
+\end{myprop}
+
+\subsection{アティヤ・シンガーの指数定理}
+
+\begin{mythm}{アティヤ・シンガーの指数定理（ディラック作用素）}{ch09-as}
+$M$ を偶数次元の向き付けられた閉スピン多様体、$E\to M$ を接続 $A$（曲率 $F$）をもつエルミート・ベクトル束とする。$E$ に結合したディラック作用素について
+\[
+\ind\slashed D_E=\int_M\ch(F)\,\Ahat(TM),
+\]
+\[
+\ch(F)=\tr\exp\frac{F}{2\pi},\quad \Ahat(TM)=1-\frac{p_1}{24}+\frac{7p_1^2-4p_2}{5760}-\cdots,
+\]
+ただし $p_1=-\dfrac{1}{8\pi^2}\tr R\wedge R$（$R$ は $\mathfrak{so}(d)$ 値の曲率2形式）。積分では $d$ 次の部分だけが寄与する。
+\end{mythm}
+
+\begin{myex}{低次元での形}{ch09-ascases}
+\begin{itemize}
+\item \textbf{2次元}：$\Ahat$ に2次の項はないので $\displaystyle\ind\slashed D=\frac{1}{2\pi}\int_M\tr F$。$U(1)$ で電荷1なら磁束量子数 $n=\int F/2\pi$ に等しい。
+\item \textbf{4次元}：表現 $R$ のディラック・フェルミオンで $\tr_R(T^aT^b)=T(R)\delta^{ab}$（基本表現で $T=\tfrac12$）とすると
+\[
+\ind\slashed D=\frac{1}{8\pi^2}\int\tr_RF\wedge F-\frac{\dim R}{24}\int p_1=2T(R)\,k-\frac{\dim R}{24}\int_Mp_1 ,
+\]
+$k$ は基本表現で測ったインスタントン数（記法と規約）。平坦な $S^4$ 上の基本表現なら $\ind=k$、随伴表現の $SU(N)$ なら $2Nk$。
+\end{itemize}
+\end{myex}
+
+指数定理は、他の楕円型作用素にも同じ形で拡張される。特に次の2つは位相不変量を「指数」として表す。
+
+\begin{mythm}{ガウス・ボンネとヒルツェブルフの符号数定理}{ch09-gbsign}
+$M$ を $d$ 次元の向き付けられた閉リーマン多様体とする。
+\begin{enumerate}
+\item $d+d^\dagger\colon\Omega^{\text{even}}\to\Omega^{\text{odd}}$ の指数はオイラー標数 $\chi(M)=\sum(-1)^pb_p$ に等しく、$\chi(M)=\int_Me(TM)$。2次元では $\displaystyle\chi=\frac{1}{2\pi}\int_MK\,dA$（$K$ はガウス曲率）。
+\item $d=4$ で、$*$ の固有値 $\pm1$ に対応する作用素（符号数作用素）の指数は符号数 $\sigma(M)=b_2^+-b_2^-$（第6章の交叉形式の符号数）に等しく
+\[
+\sigma(M)=\frac13\int_Mp_1 .
+\]
+\end{enumerate}
+\end{mythm}
+
+4次元のスピン多様体では、$\ind\slashed D=-\frac1{24}\int p_1=-\frac{\sigma}{8}$ である。
+
+\begin{myex}{いくつかの4次元多様体}{ch09-4mfd}
+\begin{center}
+\renewcommand{\arraystretch}{1.2}\small
+\begin{tabular}{lccccl}
+$M$ & $\chi$ & $\sigma$ & $\int p_1$ & $\Ahat[M]$ & スピン？\\ \hline
+$S^4$ & 2 & 0 & 0 & 0 & ○\\
+$S^2\times S^2$ & 4 & 0 & 0 & 0 & ○\\
+$\CP^2$ & 3 & 1 & 3 & $-\tfrac18$ & ×\\
+$K3$ & 24 & $-16$ & $-48$ & 2 & ○
+\end{tabular}
+\end{center}
+$\CP^2$ では $\Ahat[M]$ が整数でないので、指数定理より $\CP^2$ はスピン多様体でない（問題 \ref{ch09-prob-cp2}）。$K3$ はリッチ平坦で、2個の正カイラリティの平行スピノルをもつ（問題 \ref{ch09-prob-k3}）。
+\end{myex}
+
+\begin{mythm}{ロホリンの定理}{ch09-rokhlin}
+閉じた滑らかな4次元スピン多様体の符号数は16の倍数である。
+\end{mythm}
+\begin{note}
+指数定理から $\sigma=-8\ind\slashed D$ なので $\sigma\equiv0\pmod 8$ はすぐわかる。さらに4次元の半スピノル表現 $S^\pm$ は四元数的（擬実）で、$\ker\slashed D_\pm$ には四元数構造 $J$（$J^2=-1$、$\slashed D$ と可換な反線形写像）が作用するので $n_\pm$ は偶数。よって $\ind\slashed D$ は偶数で $\sigma\equiv0\pmod{16}$。
+\end{note}
+
+\begin{myex}{ゼロモードの例}{ch09-zmex}
+\begin{itemize}
+\item \textbf{$S^2$ とモノポール}：磁束 $\int F=2\pi n$（$n>0$）の背景では、正カイラリティのゼロモードが $n$ 個、負カイラリティのゼロモードはない（問題 \ref{ch09-prob-s2}）。ゼロモードは正則関数 $1,z,\dots,z^{n-1}$ で与えられる。
+\item \textbf{トーラスのランダウ準位}：$T^2$ 上で一様な磁場の磁束が $2\pi N$ なら、最低ランダウ準位の縮退度 $N$ が指数に等しい（問題 \ref{ch09-prob-landau}）。
+\item \textbf{BPSTインスタントン}：$k=1$ の $SU(2)$ インスタントン（大きさ $\rho$、正則ゲージ）中の基本表現のフェルミオンのゼロモードは
+\[
+\psi_0(x)\propto\frac{\rho}{(x^2+\rho^2)^{3/2}}\,\chi,\qquad \lvert\psi_0\rvert^2=\frac{2}{\pi^2}\frac{\rho^2}{(x^2+\rho^2)^3}
+\]
+（$\chi$ はスピンと色の添字をからめた定数スピノル）で、インスタントンのまわり半径 $\sim\rho$ に局在する。$\int d^4x\,\rho^2/(x^2+\rho^2)^3=\pi^2/2$ を用いた。
+\end{itemize}
+\end{myex}
+
+\begin{center}
+\begin{tikzpicture}[scale=1.0]
+  \draw[-{Stealth[length=2mm]}] (-3.6,0) -- (3.8,0) node[right] {\footnotesize $\lvert x\rvert/\rho$};
+  \draw[-{Stealth[length=2mm]}] (0,-0.2) -- (0,2.8);
+  \draw[very thick,blue!70!black,domain=-3.4:3.4,samples=120,smooth] plot (\x,{2.4/(1+\x*\x)/(1+\x*\x)/(1+\x*\x)});
+  \draw[thick,red!70!black,densely dashed,domain=-3.4:3.4,samples=120,smooth] plot (\x,{2.4/(1+\x*\x)/(1+\x*\x)/(1+\x*\x)/(1+\x*\x)});
+  \draw[thick,orange!70!black,domain=-3.4:3.4,samples=120,smooth] plot (\x,{2.4/(1+\x*\x)^1.5});
+  \foreach \t in {-3,-2,-1,1,2,3}{ \draw (\t,0.05) -- (\t,-0.05) node[below] {\scriptsize $\t$}; }
+  \node[blue!70!black,right] at (1.1,1.5) {\footnotesize $\lvert\psi_0\rvert^2\propto(1+x^2/\rho^2)^{-3}$};
+  \node[red!70!black,right] at (1.1,1.0) {\footnotesize $\tr F_{\mu\nu}F_{\mu\nu}\propto(1+x^2/\rho^2)^{-4}$};
+  \node[orange!70!black,right] at (1.6,2.2) {\footnotesize $\lvert\psi_0\rvert\propto(1+x^2/\rho^2)^{-3/2}$};
+\end{tikzpicture}
+\zucap{BPSTインスタントン中のフェルミオンのゼロモード（原点での値で規格化）。ゼロモードは作用密度と同程度に局在するが、遠方では $\lvert\psi_0\rvert\sim\rho/\lvert x\rvert^3$ とべき的に減衰する（質量ゼロの伝播関数と同じふるまい）。}
+\end{center}
+
+\subsection{藤川の方法とABJアノマリー}
+ユークリッド時空 $M$（4次元、コンパクト化したもの）上で、$SU(N_c)$ の基本表現の質量ゼロのディラック・フェルミオン $N_f$ 個を考える。作用は $S=\int\bar\psi\slashed D\psi$、重みは $e^{-S}$ で、$\psi$ と $\bar\psi$ は独立なグラスマン変数である。$\slashed D\varphi_n=\lambda_n\varphi_n$ の正規直交固有関数で
+\[
+\psi=\sum_na_n\varphi_n,\qquad \bar\psi=\sum_n\bar b_n\varphi_n^\dagger,\qquad \mathcal D\psi\mathcal D\bar\psi=\prod_n da_n\,d\bar b_n
+\]
+と展開する（フレーバー添字は省略）。
+
+\begin{mythm}{藤川のヤコビアン}{ch09-fujikawa}
+軸性変換 $\psi'=e^{i\alpha(x)\gamma_5}\psi$、$\bar\psi'=\bar\psi e^{i\alpha(x)\gamma_5}$ のもとで
+\[
+\mathcal D\psi'\mathcal D\bar\psi'=\exp\Bigl(-2i\int_Md^dx\,\alpha(x)\,\mathcal A(x)\Bigr)\mathcal D\psi\mathcal D\bar\psi,
+\]
+\[
+\mathcal A(x)=\lim_{M_{\mathrm{reg}}\to\infty}\sum_{f}\sum_n\varphi_n^\dagger(x)\gamma_5e^{-\lambda_n^2/M_{\mathrm{reg}}^2}\varphi_n(x).
+\]
+正則化した $\mathcal A(x)$ は指数密度に等しく、$\mathcal A\,d^dx=N_f\,[\ch(F)\Ahat]_d$。特に $\alpha$ が定数なら、ヤコビアンは $\exp(-2i\alpha N_f\ind\slashed D)=\exp(-2i\alpha N_fk)$。
+\end{mythm}
+\begin{note}
+グラスマン変数では $a'_n=\sum_mC_{nm}a_m$ のとき $\prod da'_n=(\det C)^{-1}\prod da_n$（通常の積分と逆）。$C_{nm}=\int\varphi_n^\dagger e^{i\alpha\gamma_5}\varphi_m$ で、$\bar\psi$ についても同じ行列が現れるので、ヤコビアンは $(\det C)^{-2}=\exp(-2\operatorname{Tr}\log C)=\exp(-2i\int\alpha\sum_n\varphi_n^\dagger\gamma_5\varphi_n)+O(\alpha^2)$。和 $\sum_n\varphi_n^\dagger\gamma_5\varphi_n=\operatorname{tr}\gamma_5\,\delta(0)$ は定義されないので、ゲージ不変な正則化 $e^{-\slashed D^2/M_{\mathrm{reg}}^2}$ を入れる。$\alpha$ が定数なら、マッキーン・シンガーの公式（命題 \ref{prop:ch09-pair}）により正則化によらず $\ind\slashed D$ に等しい。
+\end{note}
+
+\begin{myprop}{選択則と軸性電荷の非保存}{ch09-selection}
+演算子 $\mathcal O$ が定数の軸性変換で $\mathcal O\mapsto e^{iq\alpha}\mathcal O$ と変換するとき、インスタントン数 $k$ のセクターで $\langle\mathcal O\rangle_k\neq0$ となるのは
+\[
+q=2N_fk
+\]
+のときに限る。ミンコフスキー時空の言葉では、インスタントン数 $k$ のトンネル過程で軸性電荷 $Q_5=\int j_5^0$ は $\Delta Q_5=2N_fk$ だけ変化する。局所的には
+\[
+\partial_\mu j_5^\mu=2N_f\,q(x),\qquad q(x)=\frac{1}{32\pi^2}\epsilon^{\mu\nu\rho\sigma}\tr F_{\mu\nu}F_{\rho\sigma},\quad\int q\,d^4x=k
+\]
+（全体の符号は $\epsilon$ と $\gamma_5$ の規約による）。$U(1)$ で電荷1のときは $\partial_\mu j_5^\mu=\dfrac{N_f}{2\pi^2}\bm E\cdot\bm B$。2次元では同様に $\Delta Q_5=2N_f\cdot\frac{1}{2\pi}\int F$。
+\end{myprop}
+\begin{note}
+$\langle\mathcal O\rangle=\int\mathcal D\psi\mathcal D\bar\psi\,e^{-S}\mathcal O$ で積分変数を $\psi'$ に取りかえると、$S$ は（$\alpha$ 定数で）不変、測度は $e^{-2i\alpha N_fk}$、$\mathcal O$ は $e^{iq\alpha}$ を出すので $\langle\mathcal O\rangle_k=e^{i\alpha(q-2N_fk)}\langle\mathcal O\rangle_k$。
+\end{note}
+
+\begin{myprop}{$\theta$ 角の移動}{ch09-theta}
+ユークリッドの重みを $e^{-S+i\theta k}$、質量項を $\bar\psi\,(MP_-+M^\dagger P_+)\psi$（$P_\pm=\frac12(1\pm\gamma_5)$、$M$ はフレーバー空間の複素行列）とする。全フレーバーの軸性変換 $\psi\to e^{i\alpha\gamma_5}\psi$ によって、理論は
+\[
+(\theta,\ M)\ \longrightarrow\ (\theta-2N_f\alpha,\ e^{-2i\alpha}M)
+\]
+のものと等価になる。したがって物理的なのは
+\[
+\bar\theta=\theta-\arg\det M
+\]
+だけである（この符号は質量項の書き方に依存する）。どれか1つのクォークの質量がゼロなら $\bar\theta$ は消去でき、強いCP問題は生じない。
+\end{myprop}
+
+\begin{physbox}[：ABJアノマリーの帰結]
+\begin{itemize}
+\item $\pi^0\to\gamma\gamma$：軸性アイソスピン流の電磁アノマリー（三角形図、下図）が崩壊振幅を決める。
+\item $U(1)_A$ 問題：QCD で $U(1)_A$ はインスタントンによって $\Z_{2N_f}$ まで陽に破れるので、$\eta'$ は南部・ゴールドストン粒子にならず重い（$958\,\mathrm{MeV}$）。
+\item 電弱理論の $B+L$ の破れ：$SU(2)_L$ インスタントンは $\Delta B=\Delta L=N_{\mathrm{gen}}k$ を引き起こす。$B-L$ は保存。
+\item $\theta$ 真空（第8章）：$\bar\theta=\theta-\arg\det M$ が物理的な CP の破れのパラメータ。
+\end{itemize}
+\end{physbox}
+
+\subsection{ゲージ・アノマリー、アノマリー多項式、降下方程式}
+左巻きのワイル・フェルミオン（反粒子を荷電共役で左巻きに直したもの）をすべて並べ、表現 $R=\bigoplus_iR_i$ でゲージ場と結合させる。ゲージ流の非保存は1ループの三角形図で決まり、その係数は
+\[
+\mathcal A^{abc}=\sum_{\text{左巻きワイル}}\tr_R\bigl(T^a\{T^b,T^c\}\bigr)
+\]
+に比例する。
+
+\begin{center}
+\begin{tikzpicture}[scale=1.1]
+  \coordinate (A) at (90:1);
+  \coordinate (B) at (210:1);
+  \coordinate (C) at (330:1);
+  \draw[thick,mid arrow] (A) -- (B);
+  \draw[thick,mid arrow] (B) -- (C);
+  \draw[thick,mid arrow] (C) -- (A);
+  \node[vtx] at (A) {}; \node[vtx] at (B) {}; \node[vtx] at (C) {};
+  \begin{scope}[shift={(A)},rotate=90]
+    \draw[thick,blue!70!black,domain=0:1.2,samples=80] plot (\x,{0.08*sin(\x*1200)});
+  \end{scope}
+  \begin{scope}[shift={(B)},rotate=210]
+    \draw[thick,blue!70!black,domain=0:1.2,samples=80] plot (\x,{0.08*sin(\x*1200)});
+  \end{scope}
+  \begin{scope}[shift={(C)},rotate=330]
+    \draw[thick,blue!70!black,domain=0:1.2,samples=80] plot (\x,{0.08*sin(\x*1200)});
+  \end{scope}
+  \node at (90:2.45) {\footnotesize $A^a_\mu$};
+  \node at (210:2.45) {\footnotesize $A^b_\nu$};
+  \node at (330:2.45) {\footnotesize $A^c_\rho$};
+  \node at (0,0) {\footnotesize $\psi_L$};
+  \node[right] at (2.8,0.3) {\small $\propto\ \tr_R\bigl(T^a\{T^b,T^c\}\bigr)$};
+  \node[right] at (2.8,-0.3) {\small （交差図との和で対称化）};
+\end{tikzpicture}
+\zucap{三角形図。左巻きワイル・フェルミオンのループに3本のゲージ場がつく。ゲージ流の発散はこの図の係数 $\tr_R T^a\{T^b,T^c\}$ に比例し、ゲージ・アノマリーが相殺するにはその総和がゼロでなければならない。}
+\end{center}
+
+\begin{mythm}{摂動論的アノマリー相殺条件（4次元）}{ch09-pertcond}
+4次元のゲージ理論が摂動論的に整合的であるための必要十分条件は
+\[
+\sum_{\text{左巻きワイル}}\tr_R\bigl(T^a\{T^b,T^c\}\bigr)=0\quad(\text{すべての }a,b,c).
+\]
+重力との混合アノマリー（三角形の2本が重力子）が消える条件は、$U(1)$ 因子の生成子 $Y$ に対して $\sum\tr_RY=0$。
+\end{mythm}
+$SU(N)$ の基本表現 $\mathbf N$ で $\tr(T^a\{T^b,T^c\})=\frac12d^{abc}$ とおくと、$\overline{\mathbf N}$ では $-\frac12d^{abc}$。$SU(2)$ では $d^{abc}=0$ であり、実または擬実な表現（$R\cong\bar R$）ではアノマリー係数は自動的に消える（問題 \ref{ch09-prob-witten}）。
+
+\begin{mydef}{アノマリー多項式}{ch09-anpoly}
+$d$ 次元の（正カイラリティの）ワイル・フェルミオンのアノマリー多項式を
+\[
+I_{d+2}=\bigl[\Ahat(TM)\ch(F)\bigr]_{d+2}
+\]
+で定める（負カイラリティでは符号が反転）。具体的には
+\[
+I_4=\frac{1}{2}\frac{1}{(2\pi)^2}\tr F^2\ (d=2),\qquad
+I_6=\frac{1}{3!}\frac{1}{(2\pi)^3}\tr F^3-\frac{p_1}{24}\frac{1}{2\pi}\tr F\ (d=4).
+\]
+\end{mydef}
+$\tr F^3=F^aF^bF^c\tr(T^aT^bT^c)=\frac12F^aF^bF^c\tr(T^a\{T^b,T^c\})$（2形式は互いに可換）なので、$I_6$ の第1項が消えることが定理 \ref{thm:ch09-pertcond} の条件、第2項が重力との混合アノマリーの条件にあたる。
+
+\begin{mythm}{降下方程式}{ch09-descent}
+$I_{d+2}$ は閉形式でゲージ不変なので、局所的に $I_{d+2}=dI^{(0)}_{d+1}$ と書ける（$I^{(0)}_{d+1}$ はチャーン・サイモンズ形式）。$I^{(0)}_{d+1}$ の無限小ゲージ変換 $\delta_\lambda$ は閉形式なので、再び局所的に
+\[
+\delta_\lambda I^{(0)}_{d+1}=dI^{(1)}_d
+\]
+と書ける。$d$ 次元のワイル・フェルミオンの有効作用 $W[A]=-\log Z[A]$ のゲージ変換は
+\[
+\delta_\lambda W=\pm2\pi i\int_MI^{(1)}_d
+\]
+で与えられる（\term{整合的アノマリー}{consistent anomaly}。符号はカイラリティと向きの規約による）。
+\end{mythm}
+\begin{center}
+\begin{tikzcd}[column sep=large]
+I_{d+2}\ (d+2\text{ 次元}) \arrow[r,"d^{-1}"] & I^{(0)}_{d+1}\ (d+1\text{ 次元}) \arrow[r,"\delta_\lambda\text{ のち }d^{-1}"] & I^{(1)}_d\ (d\text{ 次元のアノマリー})
+\end{tikzcd}
+\zucap{降下方程式。$d$ 次元のアノマリーは、2つ上の次元の特性類から「微分の逆」と「ゲージ変換」を交互に施して得られる。}
+\end{center}
+$U(1)$ で電荷1の場合を例にとると（問題 \ref{ch09-prob-descent}）
+\[
+d=2:\ I_4=\frac{F^2}{8\pi^2},\ I_3^{(0)}=\frac{A\,dA}{8\pi^2},\ I_2^{(1)}=\frac{\lambda\,dA}{8\pi^2};
+\]
+\[
+d=4:\ I_6=\frac{F^3}{48\pi^3},\ I_5^{(0)}=\frac{A\,(dA)^2}{48\pi^3},\ I_4^{(1)}=\frac{\lambda\,(dA)^2}{48\pi^3}.
+\]
+非可換の場合、$F=dA-iA^2$ の規約で $I_5^{(0)}=\frac{1}{6(2\pi)^3}\tr\bigl(A(dA)^2-\frac{3i}{2}A^3dA-\frac35A^5\bigr)$ である。
+
+\begin{myex}{標準模型の1世代}{ch09-sm}
+1世代のフェルミオンをすべて左巻きのワイル場で書き、$SU(3)\times SU(2)\times U(1)_Y$ の表現を $(\mathbf r_3,\mathbf r_2)_Y$ で表す：
+\begin{center}
+\renewcommand{\arraystretch}{1.2}\small
+\begin{tabular}{lccccc}
+場 & $Q$ & $u^c$ & $d^c$ & $L$ & $e^c$\\ \hline
+表現 & $(\mathbf 3,\mathbf 2)_{1/6}$ & $(\bar{\mathbf 3},\mathbf 1)_{-2/3}$ & $(\bar{\mathbf 3},\mathbf 1)_{1/3}$ & $(\mathbf 1,\mathbf 2)_{-1/2}$ & $(\mathbf 1,\mathbf 1)_{1}$\\
+成分数 & 6 & 3 & 3 & 2 & 1
+\end{tabular}
+\end{center}
+電荷は $Q_{\mathrm{em}}=T_3+Y$。非自明な条件は $SU(3)^3$, $SU(3)^2U(1)$, $SU(2)^2U(1)$, $U(1)^3$, 重力$^2U(1)$ の5つで、すべてゼロになる（問題 \ref{ch09-prob-sm}）。$SU(2)^3$ と $SU(3)^2SU(2)$ 等は群論的に自明に消える。さらに $SU(2)$ 二重項の数は世代あたり $3+1=4$（偶数）で、ウィッテン・アノマリーもない。
+\end{myex}
+
+\paragraph{重力アノマリーとグリーン・シュワルツ機構（概略）}
+$d=4k+2$ 次元ではカイラルなフェルミオンや自己双対形式場が純粋な重力アノマリーをもちうる。10次元の $N=1$ 超重力＋超対称ヤン・ミルズ理論では、アノマリー多項式 $I_{12}$ が $I_{12}=X_4\wedge X_8$ と因数分解できれば、2形式場 $B$ の変換と相互作用 $\int B\wedge X_8$ でアノマリーを打ち消せる（\term{グリーン・シュワルツ機構}{Green--Schwarz mechanism}）。これが可能なのはゲージ群の次元が496のとき（$SO(32)$, $E_8\times E_8$）であり、詳しくは第10章で扱う。
+
+\paragraph{アノマリー流入（概略）}
+$d$ 次元のアノマリーは、$d+1$ 次元のチャーン・サイモンズ項 $2\pi\int I^{(0)}_{d+1}$ のゲージ変換が境界に残す項 $2\pi\int_{\partial}I^{(1)}_d$ で打ち消せる。すなわちアノマリーをもつ理論は「より高い次元のバルクの境界」として整合的に実現できる（\term{アノマリー流入}{anomaly inflow}、カラン・ハーヴェイ）。量子ホール効果のエッジ状態がその典型例である（問題 \ref{ch09-prob-inflow}）。
+
+\subsection{ウィッテンの $SU(2)$ アノマリー}
+$SU(2)$ の表現は実または擬実なので、摂動論的なアノマリーは存在しない。しかし、左巻きの二重項1個の分配関数は、ディラック作用素の行列式の「平方根」（パフィアン）$Z[A]=\Pf(\cdots)$ で定義され、その符号はあいまいである。
+
+\begin{mythm}{ウィッテンの $SU(2)$ アノマリー}{ch09-witten}
+$\pi_4(SU(2))=\Z_2$ の非自明な元を代表する大きなゲージ変換 $U\colon S^4\to SU(2)$ をとる。$A$ から $A^U$ へゲージ場の空間の中の道 $A_t$ でつなぐと、表現 $R$ のワイル・フェルミオンについて、ゼロを横切る固有値の対の数は $\bmod 2$ で $2T(R)$（$k=1$ インスタントン中のゼロモードの数）に等しい。したがって $2T(R)$ が奇数となるワイル・フェルミオン（例えば二重項）が奇数個あると
+\[
+Z[A^U]=-Z[A]
+\]
+となり、ゲージ不変性から $Z\equiv0$：理論は矛盾する。二重項が偶数個なら矛盾はない。
+\end{mythm}
+標準模型では世代あたり $SU(2)_L$ 二重項が $Q$ の3色と $L$ の計4個あるので、この条件をみたす。
+
+\section{問題}
+
+\subsection{指数の基本性質}
+
+\begin{problem}[難易度 A]\label{ch09-prob-pair}
+$\slashed D$ をコンパクト多様体上のエルミートなディラック作用素、$\gamma_5$ を $\{\gamma_5,\slashed D\}=0$ をみたすカイラリティ演算子とする。\\
+(1) $\slashed D\varphi=\lambda\varphi$ ならば $\slashed D(\gamma_5\varphi)=-\lambda\gamma_5\varphi$ であることを示せ。$\lambda\neq0$ のとき、$\varphi$ と $\gamma_5\varphi$ は直交し、$\varphi$ はカイラリティの固有状態でないことを示せ。\\
+(2) $\lambda\neq0$ のとき、$\slashed D^2$ の固有値 $\lambda^2$ の固有空間 $E_{\lambda^2}$ は $\gamma_5$ と可換で $E_{\lambda^2}=E^+\oplus E^-$ と分かれ、$\slashed D\colon E^+\to E^-$ が同型であることを示せ。\\
+(3) $2$ 次元の空間 $\C\oplus\C$（第1成分が正カイラリティ）上の $\slashed D(s)=\begin{pmatrix}0&s\\ s&0\end{pmatrix}$（$s\in\R$）について、$n_\pm(s)$ と指数を求め、指数の変形不変性を確かめよ。物理的に、なぜ「ゼロモードの総数」ではなく「$n_+-n_-$」が背景場の位相だけで決まると期待されるかを述べよ。
+\end{problem}
+
+\begin{solution}
+(1) $\slashed D\gamma_5\varphi=-\gamma_5\slashed D\varphi=-\lambda\gamma_5\varphi$。$\gamma_5\varphi$ は固有値 $-\lambda$ の固有ベクトルで、$\slashed D$ はエルミートなので異なる固有値の固有ベクトルは直交する：$\lambda\neq-\lambda$（$\lambda\neq0$）より $\langle\varphi,\gamma_5\varphi\rangle=0$。もし $\gamma_5\varphi=\pm\varphi$ なら $\langle\varphi,\gamma_5\varphi\rangle=\pm\lVert\varphi\rVert^2\neq0$ となって矛盾する。
+
+(2) $\gamma_5\slashed D^2=-\slashed D\gamma_5\slashed D=\slashed D^2\gamma_5$ なので $\gamma_5$ は $E_{\lambda^2}$ を保ち、$\gamma_5^2=1$ より $E_{\lambda^2}=E^+\oplus E^-$（$\gamma_5=\pm1$）。$\slashed D$ は $\gamma_5$ と反可換なので $E^+$ を $E^-$ に写す（$\gamma_5\slashed D\varphi=-\slashed D\gamma_5\varphi=-\slashed D\varphi$）。また $\slashed D^2=\lambda^2\ne0$ が $E_{\lambda^2}$ 上で可逆なので、$\slashed D|_{E^+}$ は単射、同様に $\slashed D|_{E^-}\colon E^-\to E^+$ も単射。有限次元（楕円型作用素の固有空間）なので $\dim E^+\le\dim E^-\le\dim E^+$、よって同型。
+
+(3) $s\neq0$ では $\slashed D(s)$ は可逆（$\det=-s^2$）なので $n_+=n_-=0$。$s=0$ では $\slashed D=0$ で $n_+=n_-=1$。いずれも $\ind=n_+-n_-=0$ で、$s$ によらない。ゼロモードの総数は $0\to2$ と跳ぶが、跳ぶときは正と負のカイラリティが対になって現れ、対になって消える。
+
+物理的には、(2) により非ゼロの固有値は必ず $(+,-)$ の対をなして現れる。背景場を連続に変えると、固有値は連続に動き、ゼロに落ちてくるときもゼロから離れるときも正負カイラリティの対としてしか動けない。したがって $n_+$ と $n_-$ は個別には背景場の詳細（偶然の縮退）に依存しうるが、差 $n_+-n_-$ は連続変形で不変であり、背景場の位相的なデータだけで決まると期待される。それを具体的に与えるのが指数定理である。
+\end{solution}
+
+\begin{problem}[難易度 B]\label{ch09-prob-mckean}
+コンパクト多様体上のエルミートなディラック作用素 $\slashed D$ の固有値は離散的で、各固有空間は有限次元とする。\\
+(1) $t>0$ に対し $\operatorname{Tr}\bigl(\gamma_5e^{-t\slashed D^2}\bigr)=n_+-n_-$ を示せ（マッキーン・シンガーの公式）。\\
+(2) 熱核の漸近展開により、$t\to0$ で $\operatorname{Tr}(\gamma_5e^{-t\slashed D^2})=\int_M\bigl(a_0(x)t^{-d/2}+a_1(x)t^{-d/2+1}+\cdots\bigr)$（$a_j$ は曲率と場の強さの局所的な多項式）と書けることを認める。$\ind\slashed D=\int_Ma_{d/2}(x)\,d^dx$ であることを説明し、ゲージ場 $A$ を連続に変形しても指数が変わらないことを結論せよ。\\
+(3) 平坦な $\R^4$ 上の $SU(2)$ ゲージ場で、作用有限のものを連続変形で $k=0$ から $k=1$ に移すことはできない。これを指数の言葉で説明せよ（$\R^4\cup\{\infty\}=S^4$ 上の束の位相型が変わることに注意）。
+\end{problem}
+
+\begin{solution}
+(1) $\slashed D^2$ の固有空間分解 $L^2=\bigoplus_{\mu}E_\mu$（$\mu=\lambda^2\ge0$）で
+\[
+\operatorname{Tr}\bigl(\gamma_5e^{-t\slashed D^2}\bigr)=\sum_\mu e^{-t\mu}\operatorname{tr}\bigl(\gamma_5|_{E_\mu}\bigr)=\sum_\mu e^{-t\mu}\bigl(\dim E_\mu^+-\dim E_\mu^-\bigr).
+\]
+前問 (2) より $\mu>0$ では $\dim E^+_\mu=\dim E^-_\mu$ なので寄与しない。$\mu=0$ では $E_0=\ker\slashed D^2=\ker\slashed D$（$\lVert\slashed D\varphi\rVert^2=\langle\varphi,\slashed D^2\varphi\rangle$）で、$\dim E_0^\pm=n_\pm$。よって $t$ によらず $n_+-n_-$。
+
+(2) 左辺は $t$ によらない（(1)）ので、$t\to0$ の漸近展開で $t$ の負べきの係数はすべて積分するとゼロ、$t^0$ の係数 $\int a_{d/2}$ が指数に等しい（正べきの係数もゼロ）。$a_{d/2}(x)$ は $A$ とその微分の多項式（ゲージ不変な曲率の多項式）なので、$A$ を連続に動かすと $\int a_{d/2}$ は連続に変わる。一方、それは整数 $n_+-n_-$ に等しいので、連続な整数値関数として一定である。
+
+(3) $\R^4$ 上の作用有限な配位は $S^4$ 上の束と接続に延長され、$k$ はその束の第2チャーン類（で決まる整数）である（第7, 8章）。同じ束の上の接続の空間はアフィン空間で連結なので、その中では指数 $=k$ は一定である。逆に、連続変形（作用有限のまま）で $k=0$ から $k=1$ に移れたとすると、指数 $=k$ が連続変形で変わることになり (2) に反する。物理的には、$k$ が変わる途中では、作用無限大の配位（インスタントンが点に縮む特異な配位など）を通らなければならない。
+\end{solution}
+
+\subsection{具体的なゼロモードと指数定理}
+
+\begin{problem}[難易度 C]\label{ch09-prob-s2}
+単位球面 $S^2$ を北極からの立体射影座標 $z=x+iy$ で表すと、計量は $g=e^{2\sigma}(dx^2+dy^2)$、$e^{\sigma}=\dfrac{2}{1+\lvert z\rvert^2}$ である。電荷1のフェルミオンが、一様な磁場 $F=\dfrac n2\,\mathrm{vol}_{S^2}$（$n\in\Z$、$\int_{S^2}F=2\pi n$）の中にあるとする。次の事実を認めてよい。
+\begin{itemize}
+\item[(i)] $S^2$ 上のディラック作用素のゼロモードは $\psi=e^{-\sigma/2}\psi_0$ で、$\psi_0$ は平坦な作用素 $\slashed D_0=i(\sigma_1D_1+\sigma_2D_2)$（$D_j=\partial_j-iA_j$）のゼロモード。ノルムは $\int e^{2\sigma}\lvert\psi\rvert^2d^2x=\int e^{\sigma}\lvert\psi_0\rvert^2d^2x$。カイラリティは $\gamma_5=\sigma_3$。
+\item[(ii)] 以下で現れる形のゼロモードが北極でも滑らかであることは、ノルムが有限であることと同値。
+\end{itemize}
+(1) $A_j=-\epsilon_{jk}\partial_k\chi$（$\epsilon_{12}=1$）とおくと $F_{12}=\nabla^2\chi$ であることを示し、$\chi=\dfrac n2\log(1+\lvert z\rvert^2)$ が上の磁場を与えることを確かめよ（$\mathrm{vol}_{S^2}=e^{2\sigma}dx\wedge dy$）。\\
+(2) 正カイラリティ $\psi_0=(u,0)^T$ のゼロモード方程式が $(\partial_{\bar z}+\partial_{\bar z}\chi)u=0$ となることを示し、$u=f(z)e^{-\chi}$（$f$ は整関数）を得よ。$n>0$ のとき、ノルム有限な解は $f$ が $n-1$ 次以下の多項式であるものに限り、$n_+=n$ であることを示せ。\\
+(3) 負カイラリティのゼロモードは $v=g(\bar z)e^{\chi}$ の形であることを示し、$n>0$ では $n_-=0$ であることを示せ。$n<0$ の場合も論じ、$\ind\slashed D=n$ が指数定理と一致することを確かめよ。\\
+(4) $n=0$ ではゼロモードがないことを、(2), (3) から確かめよ（曲率 $R>0$ のためのリヒネロヴィッツの消滅定理と整合する）。
+\end{problem}
+
+\begin{solution}
+(1) $A_1=-\partial_2\chi$、$A_2=\partial_1\chi$ なので $F_{12}=\partial_1A_2-\partial_2A_1=\partial_1^2\chi+\partial_2^2\chi=\nabla^2\chi$。$r=\lvert z\rvert$ として
+\[
+\nabla^2\log(1+r^2)=\frac1r\frac{d}{dr}\Bigl(r\cdot\frac{2r}{1+r^2}\Bigr)=\frac1r\cdot\frac{4r}{(1+r^2)^2}=\frac{4}{(1+r^2)^2}.
+\]
+よって $F_{12}=\dfrac{2n}{(1+r^2)^2}=\dfrac n2e^{2\sigma}$、すなわち $F=\frac n2\mathrm{vol}_{S^2}$。全磁束は $\int\frac{2n}{(1+r^2)^2}d^2x=2n\cdot\pi\int_0^\infty\frac{dr^2}{(1+r^2)^2}=2\pi n$。
+
+(2) $\sigma_1(u,0)^T=(0,u)^T$、$\sigma_2(u,0)^T=(0,iu)^T$ より $\slashed D_0(u,0)^T=i\bigl(0,(D_1+iD_2)u\bigr)^T$。$\partial_{\bar z}=\frac12(\partial_1+i\partial_2)$ として
+\[
+D_1+iD_2=2\partial_{\bar z}-i(A_1+iA_2)=2\partial_{\bar z}-i(-\partial_2\chi+i\partial_1\chi)=2\partial_{\bar z}+(\partial_1+i\partial_2)\chi=2(\partial_{\bar z}+\partial_{\bar z}\chi).
+\]
+$u=e^{-\chi}f$ とおくと $(\partial_{\bar z}+\partial_{\bar z}\chi)u=e^{-\chi}\partial_{\bar z}f$ なので、方程式は $\partial_{\bar z}f=0$、すなわち $f$ は $\C$ 上の正則関数（整関数）。
+
+ノルム：$e^{-\chi}=(1+r^2)^{-n/2}$ なので
+\[
+\int e^{\sigma}\lvert u\rvert^2d^2x=\int\frac{2\lvert f(z)\rvert^2}{(1+r^2)^{n+1}}d^2x .
+\]
+$f=\sum_mc_mz^m$ と展開すると、重みは回転対称なので $\int_0^{2\pi}z^m\bar z^{m'}d\phi=2\pi r^{2m}\delta_{mm'}$ により
+\[
+\lVert u\rVert^2=\sum_m\lvert c_m\rvert^2N_m,\qquad N_m=4\pi\int_0^\infty\frac{r^{2m+1}}{(1+r^2)^{n+1}}dr .
+\]
+被積分関数は $r\to\infty$ で $r^{2m-2n-1}$ のようにふるまうので、$N_m<\infty\iff2m-2n-1<-1\iff m\le n-1$。よってノルム有限 $\iff$ $m\ge n$ の係数がすべてゼロ、すなわち $f$ は $n-1$ 次以下の多項式。線形独立な解は $z^m(1+\lvert z\rvert^2)^{-n/2}$（$m=0,\dots,n-1$）で $n_+=n$。
+
+(3) $\sigma_1(0,v)^T=(v,0)^T$、$\sigma_2(0,v)^T=(-iv,0)^T$ より $\slashed D_0(0,v)^T=i\bigl((D_1-iD_2)v,0\bigr)^T$。$\partial_z=\frac12(\partial_1-i\partial_2)$ として
+\[
+D_1-iD_2=2\partial_z-i(A_1-iA_2)=2\partial_z-i(-\partial_2\chi-i\partial_1\chi)=2\partial_z-(\partial_1-i\partial_2)\chi=2(\partial_z-\partial_z\chi),
+\]
+よって $v=e^{\chi}g$、$\partial_zg=0$（$g$ は $\bar z$ の整関数）。ノルムは $\int\frac{2\lvert g\rvert^2(1+r^2)^{n}}{1+r^2}d^2x$。$g=\sum_m d_m\bar z^m$ とすると各項は $r^{2m+2n-1}$ のようにふるまい、$n>0$ では $m\ge0$ のどの項も $\int^\infty r^{2m+2n-1}dr=\infty$。よって $n_-=0$。
+
+$n<0$ では役割が入れかわる：$u=f(z)(1+r^2)^{\lvert n\rvert/2}$ はどれもノルム無限で $n_+=0$、$v=g(\bar z)(1+r^2)^{-\lvert n\rvert/2}$ は $g$ が $\lvert n\rvert-1$ 次以下の多項式のとき有限で $n_-=\lvert n\rvert$。いずれの場合も
+\[
+\ind\slashed D=n_+-n_-=n=\frac1{2\pi}\int_{S^2}F ,
+\]
+指数定理（2次元では $\Ahat$ の寄与なし）と一致する。また $n>0$ ならゼロモードはすべて正カイラリティで、カイラリティは磁束の符号で決まる。
+
+(4) $n=0$ では $\chi=0$。(2) で $N_m=4\pi\int_0^\infty r^{2m+1}(1+r^2)^{-1}dr=\infty$（すべての $m\ge0$）、(3) も同様で、ゼロモードはない。これは $\slashed D^2=\nabla^\dagger\nabla+R/4$（$R=2>0$）から $\slashed D\psi=0\Rightarrow\psi=0$ となるリヒネロヴィッツの議論と整合する。物理的には、(2) のゼロモードは「ハルデーン球面」上の最低ランダウ準位で、磁気単極子 $n$ のまわりの縮退度が $n$ であることを表す。
+\end{solution}
+
+\begin{problem}[難易度 B]\label{ch09-prob-landau}
+平坦なトーラス $T^2$（面積 $\mathcal A$）上に一様な磁場 $F_{12}=B>0$ があり、全磁束は $B\mathcal A=2\pi N$（$N\in\Z_{>0}$）とする。$\slashed D=i(\sigma_1D_1+\sigma_2D_2)$、$D_j=\partial_j-iA_j$ とする。\\
+(1) $\slashed D^2=-D_1^2-D_2^2-\sigma_3F_{12}$ を示せ。\\
+(2) 負カイラリティ（$\sigma_3=-1$）のゼロモードがないことを示し、指数定理から正カイラリティのゼロモードがちょうど $N$ 個あることを結論せよ。\\
+(3) 電子（スピン $\tfrac12$、$g=2$）の非相対論的なハミルトニアン $H=\dfrac{1}{2m}(\bm\sigma\cdot\bm\Pi)^2$（$\Pi_j=-iD_j$）が $H=\dfrac{1}{2m}\slashed D^2$ であることを示し、エネルギー $0$ の状態（スピン上向きの最低ランダウ準位）の縮退度が $N=B\mathcal A/2\pi$ であることを導け。さらにスピンのない粒子のハミルトニアン $\frac{1}{2m}\bm\Pi^2$ の最低準位がエネルギー $B/2m$ で縮退度 $N$ であることを示せ。\\
+(4) 磁場が一様でなくても $B(x)>0$ がいたるところで成り立ち全磁束が $2\pi N$ なら、エネルギー $0$ の状態はやはり $N$ 個であることを示せ（アハロノフ・キャッシャーの定理の一形）。
+\end{problem}
+
+\begin{solution}
+(1) $\slashed D^2=-(\sigma_jD_j)^2=-\sigma_j\sigma_kD_jD_k$。$\sigma_j\sigma_k=\delta_{jk}+i\epsilon_{jkl}\sigma_l$（2次元なので $l=3$）より
+\[
+\sigma_j\sigma_kD_jD_k=D_jD_j+i\sigma_3(D_1D_2-D_2D_1)=D_jD_j+i\sigma_3[D_1,D_2].
+\]
+$[D_1,D_2]=-i(\partial_1A_2-\partial_2A_1)=-iF_{12}$ なので $\sigma_j\sigma_kD_jD_k=D^2+\sigma_3F_{12}$、よって $\slashed D^2=-D^2-\sigma_3F_{12}$。
+
+(2) 負カイラリティでは $\slashed D^2=-D^2+B$。$-D^2=\sum_j(iD_j)^\dagger(iD_j)\ge0$ なので $\langle v,\slashed D^2v\rangle\ge B\lVert v\rVert^2>0$（$v\ne0$）であり、$\slashed D v=0$ の解はない：$n_-=0$。指数定理より $n_+=n_+-n_-=\frac1{2\pi}\int F=N$。
+
+(3) $\Pi_j=-iD_j$ なので $\bm\sigma\cdot\bm\Pi=-i\sigma_jD_j=-\slashed D$、よって $(\bm\sigma\cdot\bm\Pi)^2=\slashed D^2$ で $H=\slashed D^2/2m\ge0$。$H\psi=0\iff\slashed D\psi=0$ なので、エネルギー $0$ の状態はゼロモードであり、(2) より縮退度は $N=B\mathcal A/2\pi$（スピン上向き $\sigma_3=+1$）。これはランダウ準位の縮退度「単位面積あたり $B/2\pi$（$=eB/h$）」にほかならない。
+
+正カイラリティの空間では $\slashed D^2=-D^2-B$、すなわち $\bm\Pi^2=\slashed D^2|_{+}+B$。$\slashed D^2|_+\ge0$ で、その最小固有値 $0$ の固有空間の次元は $N$ なので、$\bm\Pi^2$ の最小固有値は $B$、縮退度 $N$。よってスピンのない粒子の最低準位は $B/2m$（$=\omega_c/2$）で縮退度 $N$。
+
+(4) 負カイラリティでは $\slashed D^2=-D^2+B(x)\ge\min_xB>0$（$T^2$ はコンパクトなので最小値が存在）。よって $n_-=0$、指数定理（局所的な磁場の形によらず $\frac1{2\pi}\int F$ だけで決まる）から $n_+=N$。ゼロエネルギー状態の数は磁場の詳細によらない。これは指数の頑健さの典型例である。
+\end{solution}
+
+\begin{problem}[難易度 A]\label{ch09-prob-gb}
+向き付けられた閉曲面 $\Sigma$ 上で、作用素 $\mathcal D=d+d^\dagger\colon\Omega^0\oplus\Omega^2\to\Omega^1$ を考える。\\
+(1) $\omega\in\Omega^0\oplus\Omega^2$ について $\lVert\mathcal D\omega\rVert^2=\lVert d\omega\rVert^2+\lVert d^\dagger\omega\rVert^2$ を示し、$\ker\mathcal D$ が調和0形式と調和2形式からなることを示せ。同様に $\ker\mathcal D^\dagger$（$\mathcal D^\dagger=d+d^\dagger\colon\Omega^1\to\Omega^0\oplus\Omega^2$）は調和1形式からなる。\\
+(2) ホッジの定理（第5章）を用いて $\ind\mathcal D=b_0-b_1+b_2=\chi(\Sigma)$ を示せ。\\
+(3) 指数定理の帰結であるガウス・ボンネの定理 $\chi=\frac1{2\pi}\int_\Sigma K\,dA$ を、半径 $a$ の球面と種数 $g$ の曲面について確かめよ（後者は $\chi=2-2g$ を用いてよい）。
+\end{problem}
+
+\begin{solution}
+(1) $\omega=f+\eta$（$f\in\Omega^0$, $\eta\in\Omega^2$）とすると $\mathcal D\omega=df+d^\dagger\eta\in\Omega^1$。
+\[
+\lVert df+d^\dagger\eta\rVert^2=\lVert df\rVert^2+\lVert d^\dagger\eta\rVert^2+2\,\mathrm{Re}\langle df,d^\dagger\eta\rangle,\qquad\langle df,d^\dagger\eta\rangle=\langle d^2f,\eta\rangle=0 .
+\]
+$d\omega=df$（$d\eta=0$）、$d^\dagger\omega=d^\dagger\eta$（$d^\dagger f=0$）なので主張が従う。よって $\mathcal D\omega=0\iff df=0,\ d^\dagger\eta=0$。$f$ については $d^\dagger f=0$、$\eta$ については $d\eta=0$ が自動的なので、$f$, $\eta$ はともに調和形式。1形式についても同様に $\lVert(d+d^\dagger)\alpha\rVert^2=\lVert d\alpha\rVert^2+\lVert d^\dagger\alpha\rVert^2$（$d\alpha\in\Omega^2$, $d^\dagger\alpha\in\Omega^0$ は次数が異なり直交）なので、$\ker\mathcal D^\dagger$ は調和1形式。
+
+(2) ホッジの定理より調和 $p$ 形式の空間の次元は $b_p$。よって $\ind\mathcal D=\dim\ker\mathcal D-\dim\ker\mathcal D^\dagger=(b_0+b_2)-b_1=\chi(\Sigma)$。
+
+(3) 半径 $a$ の球面：$K=1/a^2$、面積 $4\pi a^2$ なので $\frac1{2\pi}\int K\,dA=2=\chi(S^2)$。半径によらないことが位相不変性を表す。種数 $g$：$\chi=2-2g$ なので $\int K\,dA=2\pi(2-2g)$。例えば $g\ge2$ の定曲率 $K=-1$ の計量では面積が $4\pi(g-1)$ と決まる。$g=1$ では平坦な計量が可能で $\int K=0$。
+\end{solution}
+
+\begin{problem}[難易度 B]\label{ch09-prob-cp2}
+$\CP^2$ の全ポントリャーギン類は $p(\CP^2)=1+3x^2$（$x\in H^2(\CP^2;\Z)$ は生成元で $\int_{\CP^2}x^2=1$）であることを認める（第8章）。\\
+(1) ヒルツェブルフの符号数定理から $\sigma(\CP^2)$ を求め、交叉形式（第6章）と比べよ。$S^2\times S^2$ についても同様に論ぜよ（$p_1(S^2\times S^2)=0$ を用いてよい）。\\
+(2) $\CP^2$ がスピン構造をもたないことを、指数定理を用いて示せ。\\
+(3) $\CP^2$ はスピン$^c$構造をもち、そのディラック作用素の指数は $\int_{\CP^2}e^{c}\Ahat$（$c=(m+\tfrac12)x$、$m\in\Z$）で与えられる。この指数を計算し、つねに整数であることを確かめよ。物理的には、$\CP^2$ 上の電荷をもつフェルミオンは「半整数の磁束」の背景にあるときに限り定義できることを意味する。
+\end{problem}
+
+\begin{solution}
+(1) $\sigma=\frac13\int p_1=\frac13\cdot3=1$。$\CP^2$ の交叉形式は $H^2=\Z x$ 上の $(1)$（$x\cdot x=1$）で、符号数 $b_2^+-b_2^-=1-0=1$ と一致する。$S^2\times S^2$ では $\sigma=0$。交叉形式は $\begin{pmatrix}0&1\\1&0\end{pmatrix}$ で固有値 $\pm1$、符号数 $0$ と一致する。
+
+(2) $\CP^2$ がスピンなら、ディラック作用素の指数は $\int\Ahat=-\frac1{24}\int p_1=-\frac{3}{24}=-\frac18$ となる。指数は整数なので矛盾。よって $\CP^2$ はスピンでない（$w_2(\CP^2)=x\bmod2\ne0$ と整合する）。
+
+(3) 4次の部分を取り出すと
+\[
+\bigl[e^c\Ahat\bigr]_4=\frac{c^2}{2}-\frac{p_1}{24}=\Bigl(\frac{(2m+1)^2}{8}-\frac{3}{24}\Bigr)x^2=\frac{4m^2+4m}{8}x^2=\frac{m(m+1)}{2}x^2 .
+\]
+よって $\ind=\frac{m(m+1)}2\in\Z$（$m(m+1)$ は偶数）。例えば $m=0,1,2$ で $0,1,3$。$m=1$ のとき $2c=3x=c_1(\CP^2)$ で、スピン$^c$ディラック作用素はドルボー作用素 $\bar\partial+\bar\partial^\dagger$ に一致し、指数はトッド種数 $1$ になる。
+
+物理的解釈：$c=(m+\frac12)x$ は「スピノル束の分の $\frac12x$」と「電荷を担う線束の分」の和である。スピン構造がないため $c$ を整数類（$m$ だけ）にすると (2) と同様に指数が整数にならず、フェルミオンが定義できない。半整数ずれた磁束 $\int_{\CP^1}F/2\pi=m+\frac12$ をとって初めて整合的になる（曲がった空間上の量子化条件のずれ）。
+\end{solution}
+
+\begin{problem}[難易度 B]\label{ch09-prob-k3}
+$K3$ 曲面は単連結な4次元閉スピン多様体で、$\chi=24$、$\sigma=-16$ であり、ホロノミーが $SU(2)$ のリッチ平坦計量をもつ。\\
+(1) $\int_{K3}p_1$ と $\Ahat[K3]$ を求めよ。\\
+(2) リヒネロヴィッツの公式 $\slashed D^2=\nabla^\dagger\nabla+\frac R4$ を用いて、リッチ平坦（$R=0$）の閉多様体上のディラック作用素のゼロモードは平行スピノル（$\nabla\psi=0$）であることを示せ。$\Spin(4)=SU(2)_+\times SU(2)_-$ で $S^\pm$ が $(\mathbf 2,\mathbf 1)$, $(\mathbf 1,\mathbf 2)$ であり、ホロノミー群 $SU(2)$ がどちらか一方の因子に含まれることを用いて、$(n_+,n_-)=(2,0)$ であることを指数と整合的に説明せよ。\\
+(3) ロホリンの定理を、(i) 指数定理 $\sigma=-8\ind\slashed D$、(ii) $n_\pm$ が偶数（四元数構造）から導け。$K3$ がこれをみたすことを確かめ、交叉形式が $E_8$ 形式（偶、ユニモジュラー、符号数8）となる単連結な滑らかな閉4次元多様体が存在しないことを結論せよ（単連結な4次元多様体では、交叉形式が偶であることとスピンであることは同値であることを用いてよい）。\\
+(4) 弦理論で10次元の理論を $K3$ 上にコンパクト化すると、6次元のカイラルなフェルミオンが現れる。(1), (2) のどの事実がそれを保証するか、一言で述べよ（詳細は第10章）。
+\end{problem}
+
+\begin{solution}
+(1) 符号数定理より $\int p_1=3\sigma=-48$。$\Ahat[K3]=-\frac1{24}\int p_1=2$。
+
+(2) $\slashed D\psi=0$ なら $0=\langle\psi,\slashed D^2\psi\rangle=\lVert\nabla\psi\rVert^2+\frac14\int R\lvert\psi\rvert^2=\lVert\nabla\psi\rVert^2$ なので $\nabla\psi=0$。逆に平行スピノルは $\slashed D\psi=i\gamma^\mu\nabla_\mu\psi=0$。平行スピノルは1点での値で決まり、その値はホロノミー群で不変でなければならない（平行移動で一周しても戻る）。ホロノミー $SU(2)$ が例えば $SU(2)_-$ に含まれるとすると、$S^+=(\mathbf 2,\mathbf 1)$ には自明に作用するので $S^+$ の2次元すべてが不変：平行スピノルが2個。$S^-=(\mathbf 1,\mathbf 2)$ には基本表現として作用し不変ベクトルはない。よって $(n_+,n_-)=(2,0)$ で $\ind=2=\Ahat[K3]$ と整合する（逆に、指数が $+2$ であることが、規約のもとでホロノミーが $SU(2)_-$ 側にあることを決めている）。
+
+(3) (i) より $\sigma=-8(n_+-n_-)$、(ii) より $n_+-n_-$ は偶数なので $\sigma\in16\Z$。$K3$：$\sigma=-16$ でみたす。$E_8$ 形式をもつ単連結な滑らかな閉4次元多様体があれば、交叉形式が偶なのでスピンであり、ロホリンの定理から $\sigma\equiv0\pmod{16}$ でなければならないが $\sigma=8$ なので矛盾。よって存在しない（位相多様体としては存在する：フリードマン。滑らかさが本質的）。
+
+(4) $\ind\slashed D=2\ne0$ で、ゼロモードが一方のカイラリティにだけ偏っていること（$(n_+,n_-)=(2,0)$）。10次元のワイル・スピノルを $K3$ 上のゼロモードで展開すると、6次元のスピノルのカイラリティは $K3$ 方向のカイラリティと連動するので、6次元に正味のカイラルなフェルミオンが残る。
+\end{solution}
+
+\begin{problem}[難易度 B]\label{ch09-prob-reps}
+平坦な $S^4$（$\int p_1=0$）上で $SU(N)$ のインスタントン数 $k$ の背景を考える。\\
+(1) $\tr_R(T^aT^b)=T(R)\delta^{ab}$ とするとき、表現 $R$ のディラック・フェルミオンの指数が $2T(R)k$ であることを示せ。\\
+(2) 随伴表現では $T(\mathrm{adj})=N$ である。$\mathcal N=1$ 超対称ヤン・ミルズ理論のゲージーノ（随伴表現のマヨラナ＝ワイル・フェルミオン）は、$k=1$ の背景で何個のゼロモードをもつか。$U(1)_R$（ゲージーノの位相回転）がどの離散部分群に破れるかを答えよ（ワイル・フェルミオン1個の測度は、ディラックの場合の半分の位相 $e^{-i\alpha\cdot2Nk}$ を出すとしてよい）。\\
+(3) $SU(2)$ のスピン $j$ 表現で $T(j)=\frac13j(j+1)(2j+1)$ を示し、$j=\frac12,1,\frac32,\frac52$ の指数を $k=1$ で求めよ。\\
+(4) $K3$ 上で $SU(N)$ の基本表現のディラック・フェルミオンが、インスタントン数 $k$ の背景にあるときの指数を求めよ。
+\end{problem}
+
+\begin{solution}
+(1) $\ch(F)$ の4次の部分は $\frac{1}{8\pi^2}\tr_RF^2=\frac{1}{8\pi^2}F^aF^b\tr_R(T^aT^b)=\frac{T(R)}{8\pi^2}F^aF^a$。基本表現（$T=\frac12$）で $k=\frac1{8\pi^2}\int\frac12F^aF^a$ なので $\frac1{8\pi^2}\int\tr_RF^2=2T(R)k$。$\int p_1=0$ なので指数は $2T(R)k$。
+
+(2) 随伴表現の指数は $2Nk$。ゲージーノはワイル（かつマヨラナ）なので、ディラックの場合の正カイラリティ側だけを数え、$k=1$ でゼロモードは $2N$ 個。ゲージーノの回転 $\lambda\to e^{i\alpha}\lambda$ のもとで測度は $e^{-2iN\alpha k}$ を出すので（題意）、これが $1$ となる $\alpha\in\frac{2\pi}{2N}\Z$ だけが対称性として残る：$U(1)_R\to\Z_{2N}$。$2N$ 個のゼロモードを吸収する演算子は $\lambda^{2N}$ 型で、例えばゲージーノ凝縮 $\langle\lambda\lambda\rangle$ の議論に使われる。
+
+(3) $T_3$ の固有値 $m=-j,\dots,j$ で $\tr(T_3^2)=\sum_mm^2=\frac13j(j+1)(2j+1)$。$\tr(T^aT^b)=T\delta^{ab}$ の $a=b=3$ 成分から $T(j)=\frac13j(j+1)(2j+1)$。$k=1$ の指数 $2T(j)$ は
+\[
+j=\tfrac12:\ 1,\qquad j=1:\ 4,\qquad j=\tfrac32:\ 10,\qquad j=\tfrac52:\ 35 .
+\]
+（$j=1$ は (2) の $2N=4$ と一致。）
+
+(4) $\ch(F)=N+\ch_2$、$\Ahat=1-\frac{p_1}{24}$ より 4次の部分は $\ch_2-\frac{N}{24}p_1$。$\int\ch_2=k$、$\int_{K3}p_1=-48$ なので $\ind=k+2N$。
+\end{solution}
+
+\subsection{藤川の方法とABJアノマリー}
+
+\begin{problem}[難易度 A]\label{ch09-prob-schwinger}
+2次元の $U(1)$ ゲージ理論で、電荷1の質量ゼロのディラック・フェルミオン1個を考える（シュウィンガー模型）。\\
+(1) コンパクト化したユークリッド時空 $M$ 上で磁束 $\int_MF=2\pi n$ の背景があるとき、命題 \ref{prop:ch09-selection} を用いて、非ゼロとなりうる演算子の軸性電荷を求めよ。\\
+(2) ミンコフスキー時空のアノマリー方程式 $\partial_\mu j_5^\mu=\frac{1}{2\pi}\epsilon^{\mu\nu}F_{\mu\nu}$（$\epsilon^{01}=1$）から、長さ $L$ の空間円周上で一様な電場 $E=F_{01}$ を時間 $T$ だけかけたときの $\Delta Q_5$ を求めよ。$A_1$ が $2\pi/L$ だけ変化するごとに $\Delta Q_5=2$ となることを確かめ、本章冒頭のスペクトル流の図と比べよ。
+\end{problem}
+
+\begin{solution}
+(1) 2次元の指数は $n$（例 \ref{ex:ch09-ascases}）。$N_f=1$ の選択則より $q=2n$。例えば $n=1$ では軸性電荷 $2$ の演算子 $\bar\psi P_+\psi$ が期待値をもちうる（実際、シュウィンガー模型ではカイラル凝縮 $\langle\bar\psi\psi\rangle\ne0$ がこのセクターから生じる）。
+
+(2) $\epsilon^{\mu\nu}F_{\mu\nu}=F_{01}-F_{10}=2E$ なので $\partial_\mu j_5^\mu=E/\pi$。空間について積分すると（円周上で全微分は落ちる）$\dot Q_5=EL/\pi$、よって
+\[
+\Delta Q_5=\frac{ELT}{\pi}=2\cdot\frac{1}{2\pi}\int F_{01}\,dt\,dx .
+\]
+$E=\partial_0A_1$（$A_0=0$ のゲージ）なら $\int E\,dt=\Delta A_1$、$\Delta Q_5=L\Delta A_1/\pi$。$\Delta A_1=2\pi/L$ で $\Delta Q_5=2$。図では右巻き粒子が1個減り（または増え）、左巻きが1個増え（または減り）、$N_R-N_L$ が2変化する。ベクトル電荷 $N_R+N_L$ は保存し、軸性電荷だけが変化する。
+\end{solution}
+
+\begin{problem}[難易度 C]\label{ch09-prob-fujikawa2d}
+平坦な2次元ユークリッド空間で $\slashed D=i(\gamma^1D_1+\gamma^2D_2)$、$\gamma^1=\sigma_1$, $\gamma^2=\sigma_2$, $\gamma_5=\sigma_3$、$D_\mu=\partial_\mu-iA_\mu$ とする（$U(1)$, 電荷1）。\\
+(1) 局所的な軸性変換 $\psi\to e^{i\alpha(x)\gamma_5}\psi$, $\bar\psi\to\bar\psi e^{i\alpha(x)\gamma_5}$ のもとで、ヤコビアンが $\exp\bigl(-2i\int\alpha(x)\mathcal A(x)d^2x\bigr)$、$\mathcal A(x)=\sum_n\varphi_n^\dagger(x)\gamma_5\varphi_n(x)$ となることを示せ（グラスマン積分の変数変換の規則は既知としてよい）。\\
+(2) 正則化 $\mathcal A(x)=\lim_{M\to\infty}\operatorname{tr}\bigl[\gamma_5\,e^{-\slashed D^2/M^2}\bigr](x,x)$ を、平面波基底
+\[
+\operatorname{tr}\bigl[\gamma_5e^{-\slashed D^2/M^2}\bigr](x,x)=\int\frac{d^2p}{(2\pi)^2}\operatorname{tr}\Bigl[\gamma_5\,e^{-ip\cdot x}e^{-\slashed D^2/M^2}e^{ip\cdot x}\Bigr]
+\]
+で計算し、$\mathcal A(x)=\dfrac{F_{12}}{2\pi}$ を示せ。$\slashed D^2=-D^2-\sigma_3F_{12}$（問題 \ref{ch09-prob-landau}）を用いてよい。\\
+(3) 結果が指数定理（$\int\mathcal A=n$）と一致すること、$\gamma_5$ を $-\sigma_3$ にとると符号が反転すること（規約の確認）を述べよ。また、正則化に $\slashed D^2$ のかわりにゲージ不変でない $-\partial^2$ を用いると何が問題か述べよ。
+\end{problem}
+
+\begin{solution}
+(1) $\psi'=\sum_na'_n\varphi_n$ とすると $a'_n=\sum_mC_{nm}a_m$、$C_{nm}=\int\varphi_n^\dagger e^{i\alpha\gamma_5}\varphi_m$。グラスマン変数では $\prod_nda'_n=(\det C)^{-1}\prod_nda_n$。$\bar\psi'=\bar\psi e^{i\alpha\gamma_5}$ の係数 $\bar b'_m=\sum_n\bar b_nC_{nm}$ も同じ行列なので $\prod d\bar b'=(\det C)^{-1}\prod d\bar b$。無限小 $\alpha$ で $C=1+iK$、$K_{nm}=\int\alpha\varphi_n^\dagger\gamma_5\varphi_m$ なので
+\[
+(\det C)^{-2}=\exp(-2\operatorname{Tr}\log C)=\exp\Bigl(-2i\sum_nK_{nn}\Bigr)=\exp\Bigl(-2i\int\alpha(x)\sum_n\varphi_n^\dagger\gamma_5\varphi_n\,d^2x\Bigr).
+\]
+有限の $\alpha$ はこれを積み重ねて得られる（指数の肩は $\alpha$ について線形のまま）。
+
+(2) $e^{-ip\cdot x}D_\mu e^{ip\cdot x}=D_\mu+ip_\mu$ なので
+\[
+e^{-ip\cdot x}\slashed D^2e^{ip\cdot x}=-(D+ip)^2-\sigma_3F_{12}=p^2-2ip\cdot D-D^2-\sigma_3F_{12}.
+\]
+$p=Mq$ と変数変換すると $d^2p=M^2d^2q$ で
+\[
+\operatorname{tr}[\gamma_5e^{-\slashed D^2/M^2}](x,x)=M^2\int\frac{d^2q}{(2\pi)^2}e^{-q^2}\operatorname{tr}\Bigl[\gamma_5\exp\Bigl(\frac{2iq\cdot D}{M}+\frac{D^2+\sigma_3F_{12}}{M^2}\Bigr)\Bigr]\cdot1 .
+\]
+（最後の $1$ は作用素を定数関数1に作用させることを表す。）指数関数を $1/M$ で展開する。$\operatorname{tr}\gamma_5=\operatorname{tr}\sigma_3=0$ なので、トレースが残るのは $\sigma_3$ を1個含む項（$\operatorname{tr}(\sigma_3\sigma_3)=2$）だけである。$\sigma_3$ は $\sigma_3F_{12}/M^2$ からしか来ないので、$M^2$ をかけて $M\to\infty$ で生き残るのは $\sigma_3F_{12}/M^2$ の1次の項だけ（他の因子をかけると $1/M$ 以上の負べきが余分につく）。よって
+\[
+\mathcal A(x)=M^2\cdot\frac{F_{12}}{M^2}\operatorname{tr}(\sigma_3\sigma_3)\int\frac{d^2q}{(2\pi)^2}e^{-q^2}=2F_{12}\cdot\frac{\pi}{4\pi^2}=\frac{F_{12}}{2\pi}.
+\]
+
+(3) $\int\mathcal A\,d^2x=\frac1{2\pi}\int F_{12}d^2x=n$ で、マッキーン・シンガーの公式と指数定理に一致する。$\gamma_5=-\sigma_3$ なら $\operatorname{tr}(\gamma_5\sigma_3)=-2$ で $\mathcal A=-F_{12}/2\pi$、指数が $-n$ になる。記法と規約（$S^2$ で $\int F/2\pi=n$ なら $\ind=n$）は $\gamma_5=\sigma_3=-i\gamma^1\gamma^2$ を選ぶことにあたる。
+
+ゲージ不変でない正則化 $e^{\partial^2/M^2}$ を使うと、正則化された量がゲージ場 $A_\mu$ そのもの（$F$ でなく）に依存しうるので、ゲージ不変でない項（例えばベクトルの変換に対して $M^2$ や $\partial_\mu A^\mu$ に比例する項）が現れ、ベクトル電流の保存まで破れてしまう。$\slashed D^2$ を用いると、ベクトル $U(1)$ のゲージ不変性を保ったまま軸性の部分にアノマリーを押し付けることができ、結果は一意的にゲージ不変な指数密度になる。
+\end{solution}
+
+\begin{problem}[難易度 B]\label{ch09-prob-thooft}
+$SU(N_c)$ ゲージ理論に、基本表現の質量ゼロのディラック・フェルミオンが $N_f$ 個あるとする。$k=1$ の自己双対なインスタントン背景では、各フレーバーについて $\slashed D$ のゼロモードは正カイラリティの1個 $\varphi_0$ だけであることを認める。\\
+(1) 指数定理と整合することを確かめよ。\\
+(2) $\psi_f=a_{f,0}\varphi_0+\cdots$、$\bar\psi_f=\bar b_{f,0}\varphi_0^\dagger+\cdots$ と展開するとき、$\int\prod_fda_{f,0}d\bar b_{f,0}$ のために、$\langle\mathcal O\rangle_{k=1}\ne0$ となる $\mathcal O$ は各フレーバーの $\psi_f$ と $\bar\psi_f$ を少なくとも1個ずつ含まなければならないことを説明せよ。最小の演算子として $\det_{fg}\bigl(\bar\psi_fP_+\psi_g\bigr)$ が現れることを述べ、その軸性電荷が命題 \ref{prop:ch09-selection} と一致することを確かめよ。\\
+(3) $N_f=3$（$u,d,s$）のとき、トフーフト頂点は何フェルミオン相互作用か。それが $SU(3)_L\times SU(3)_R\times U(1)_V$ を保ち、$U(1)_A$ を $\Z_6$ に破ることを示せ。
+\end{problem}
+
+\begin{solution}
+(1) $\ind\slashed D=n_+-n_-=1-0=1=k$（基本表現、$\int p_1=0$）で整合する。
+
+(2) $\varphi_0$ は $\slashed D\varphi_0=0$ なので作用 $S=\int\bar\psi\slashed D\psi=\sum_n\lambda_n\bar b_na_n$ に $a_{f,0}$, $\bar b_{f,0}$ は現れない。グラスマン積分では $\int da=0$、$\int da\,a=1$ なので、被積分関数に $a_{f,0}$ と $\bar b_{f,0}$ がちょうど1個ずつ含まれていない限り積分はゼロになる。$a_{f,0}$ は $\psi_f$ から、$\bar b_{f,0}$ は $\bar\psi_f$ からしか来ないので、$\mathcal O$ は全フレーバーの $\psi_f$ と $\bar\psi_f$ を含まなければならない。$\varphi_0$ は正カイラリティなので、$\psi_f$ の中で効くのは $P_+\psi_f$、$\bar\psi_f$ では $\varphi_0^\dagger=\varphi_0^\dagger P_+$ より $\bar\psi_fP_+$ の部分。フレーバーについて反対称化（グラスマン性）すると、最小の演算子は $\det_{fg}(\bar\psi_fP_+\psi_g)$（$2N_f$ フェルミオン）。
+
+軸性変換で $\bar\psi P_+\psi\to\bar\psi e^{i\alpha\gamma_5}P_+e^{i\alpha\gamma_5}\psi=e^{2i\alpha}\bar\psi P_+\psi$ なので、$\det$ は $e^{2iN_f\alpha}$：$q=2N_f=2N_fk$ で選択則と一致する。
+
+(3) $2N_f=6$ フェルミオン相互作用（図）。カイラル対称性 $SU(3)_+\times SU(3)_-$（$=SU(3)_L\times SU(3)_R$ のどちらかの対応）は $P_\pm\psi\to U_\pm P_\pm\psi$ と作用し、$\bar\psi P_+$ は $P_-\psi$ の共役にあたるので $\bar\psi P_+\to\bar\psi P_+U_-^\dagger$ と変換する。すると$\det(\bar\psi P_+\psi)\to\det(U_-^\dagger)\det(U_+)\det(\bar\psi P_+\psi)=\det(\bar\psi P_+\psi)$（$SU(3)$ では $\det=1$）。$U(1)_V$（$\psi\to e^{i\beta}\psi$, $\bar\psi\to\bar\psi e^{-i\beta}$）では各因子が不変。$U(1)_A$ では $e^{6i\alpha}$ がかかるので、不変なのは $\alpha\in\frac{2\pi}{6}\Z$：$U(1)_A\to\Z_6$（$\alpha=\pi$ はフェルミオン数 $(-1)^F$ に等しく、$\Z_6$ に含まれる）。
+\end{solution}
+
+\begin{problem}[難易度 C]\label{ch09-prob-theta}
+命題 \ref{prop:ch09-theta} の設定（重み $e^{-S+i\theta k}$、質量項 $\bar\psi(MP_-+M^\dagger P_+)\psi$）で考える。\\
+(1) フレーバーに依存する軸性変換 $\psi\to e^{i\beta\gamma_5}\psi$, $\bar\psi\to\bar\psi e^{i\beta\gamma_5}$（$\beta$ はフレーバー空間のエルミート行列で定数）により、理論が $(\theta,M)\to(\theta-2\tr\beta,\ e^{-i\beta}Me^{-i\beta})$ と等価になることを示し、$\bar\theta=\theta-\arg\det M$ が不変であることを示せ。\\
+(2) $k=1$ セクターで、質量について1次の寄与が $e^{i\theta}\det M^\dagger\propto e^{i\bar\theta}$ の位相をもつことを前問の結果から説明せよ。\\
+(3) $u$ クォークの質量がゼロなら $\bar\theta$ は物理的でないことを示せ。\\
+(4) 仮に $U(1)_A$ にアノマリーがなく自発的にのみ破れていたら、$N_f=3$ のQCDには9個目の擬南部・ゴールドストン粒子が現れるはずである（ワインバーグはその質量が $\lesssim\sqrt3m_\pi$ であることを示した）。実際の $\eta'(958)$ がなぜ重くてよいのか、本章の言葉で説明せよ。
+\end{problem}
+
+\begin{solution}
+(1) $\beta$ を対角化するフレーバー基底で考えれば十分で、各フレーバー $f$ が独立に角度 $\beta_f$ で回る。各フレーバーの測度は $e^{-2i\beta_fk}$ を出すので、全体で $e^{-2i\tr\beta\,k}$。$Z(\theta,M)=\sum_ke^{i\theta k}\int\mathcal D\psi\mathcal D\bar\psi e^{-S_M[\psi]}$ で $\psi=e^{i\beta\gamma_5}\chi$ と変数変換すると $\mathcal D\psi\mathcal D\bar\psi=e^{-2i\tr\beta\,k}\mathcal D\chi\mathcal D\bar\chi$。運動項は不変（$\beta$ 定数）、質量項は
+\[
+\bar\chi e^{i\beta\gamma_5}(MP_-+M^\dagger P_+)e^{i\beta\gamma_5}\chi=\bar\chi\bigl(e^{-i\beta}Me^{-i\beta}P_-+e^{i\beta}M^\dagger e^{i\beta}P_+\bigr)\chi
+\]
+（$e^{i\beta\gamma_5}P_\mp=e^{\mp i\beta}P_\mp$ と $P_\pm$ が $\beta$ と可換なことを用いた）。よって $Z(\theta,M)=Z(\theta-2\tr\beta,\ e^{-i\beta}Me^{-i\beta})$。$\det(e^{-i\beta}Me^{-i\beta})=e^{-2i\tr\beta}\det M$ なので $\arg\det M\to\arg\det M-2\tr\beta$、$\theta-\arg\det M$ は不変。
+
+(2) $k=1$ では各フレーバーの正カイラリティのゼロモードを吸収する必要がある（前問）。$e^{-S}$ を質量で展開すると、$-\bar\psi M^\dagger P_+\psi$ の項がちょうど $\bar\psi P_+\psi$ 型なので、最低次は $\det M^\dagger$ に比例し、$\theta$ 項と合わせて $e^{i\theta}\det M^\dagger=\lvert\det M\rvert e^{i(\theta-\arg\det M)}=\lvert\det M\rvert e^{i\bar\theta}$。物理量は $\bar\theta$ だけに依存する。
+
+(3) $m_u=0$ なら $M$ の固有値の1つがゼロで $\det M=0$、$\arg\det M$ は定義されない。より具体的には、$u$ クォークだけを回す $\beta=\operatorname{diag}(\beta_u,0,0)$ は質量項を変えずに $\theta\to\theta-2\beta_u$ と任意にずらせるので、$\theta$ は物理的でない。
+
+(4) $U(1)_A$ はアノマリーにより、インスタントン（より一般にトポロジカル電荷の揺らぎ）のある真空では陽に破れている：測度が $e^{-2iN_f\alpha k}$ を出し、$U(1)_A$ は $\Z_{2N_f}$ にまで破れる（前問）。陽に破れた連続対称性に南部・ゴールドストンの定理は適用されないので、$\eta'$ はゴールドストン粒子である必要はない。トフーフト頂点は $\eta'$ の方向（$\det$ の位相）にだけ質量を与え、$SU(3)_L\times SU(3)_R$ の8個のゴールドストン粒子には影響しない。ワインバーグの上限はアノマリーを無視した議論から来ており、アノマリーを考慮すると解消される（ウィッテン・ヴェネツィアーノ公式は $m_{\eta'}^2$ をトポロジカル感受率で与える）。
+\end{solution}
+
+\begin{problem}[難易度 B]\label{ch09-prob-bl}
+標準模型の $SU(2)_L$ インスタントン（$k=\pm1$）を考える。$SU(2)_L$ に結合するのは左巻きの二重項 $Q$（各世代3色）と $L$ だけであり、各二重項（ワイル・フェルミオン）は $k=\pm1$ の背景でちょうど1個のゼロモードをもつことを認める。\\
+(1) 3世代の場合のトフーフト頂点のフェルミオン線の数と、そのフレーバー構造を答えよ。\\
+(2) バリオン数 $B$（クォーク $\frac13$）とレプトン数 $L$ の変化 $\Delta B$, $\Delta L$ を求め、$B-L$ が保存することを示せ。\\
+(3) 同じ結論を、$B$ 流と $L$ 流の $SU(2)^2$ アノマリー係数 $\sum_{\text{二重項}}(\text{電荷})\times T(\mathbf 2)$ から導け。さらに $SU(3)$ のインスタントンは $B$ を破らないことを示せ（$Q$ は $B=\frac13$、$u^c$, $d^c$ は $B=-\frac13$）。\\
+(4) 零温度でのこの過程の振幅は $e^{-8\pi^2/g^2}$（$g$ は $SU(2)$ 結合定数、$\alpha_W=g^2/4\pi\approx1/30$）程度に抑えられる。おおよその桁を見積もれ。
+\end{problem}
+
+\begin{solution}
+(1) 二重項は世代あたり $Q$ 3個（色）と $L$ 1個の計4個、3世代で12個。各二重項から1本の線が出るので12本：世代ごとに $qqq\ell$、全体で $\prod_{i=1}^3(q_iq_iq_i\ell_i)$ の形（色は $\epsilon_{abc}$ で反対称化）。
+
+(2) 各世代で3個のクォーク（$B=\frac13$ ずつ）と1個のレプトンが生成（または消滅）するので、$\Delta B=\pm3\cdot\frac13\cdot3=\pm3$、$\Delta L=\pm3$（3世代）。一般に $\Delta B=\Delta L=N_{\mathrm{gen}}k$。$\Delta(B-L)=0$、$\Delta(B+L)=2N_{\mathrm{gen}}k$。
+
+(3) 左巻きワイル・フェルミオン1個は $k$ の背景で $\pm2T(R)k$ だけ数が変わる（ゼロモード数＝$2T(R)k$）。二重項は $2T=1$。$B$ 流：$Q$ が世代あたり3個、各 $B=\frac13$ なので係数 $3\cdot\frac13=1$、3世代で $\Delta B=3k$。$L$ 流：$L$ が世代あたり1個で $\Delta L=3k$。$U(1)_Y$ の $F_Y\wedge F_Y$ の寄与は、$\R^4$ 上の作用有限な配位では $\int F_Y\wedge F_Y=0$ なので効かない。
+
+$SU(3)$：$B$ 流の $SU(3)^2$ 係数は $\sum B\cdot T(R)\cdot(\text{多重度})=\frac12\bigl(2\cdot\frac13-\frac13-\frac13\bigr)=0$（$Q$ は $SU(2)$ 二重項なので3重項が2個）。よって QCD のインスタントンは $B$ を変えない（$u,d$ についてカイラリティは変えるが、クォーク数は保つ）。
+
+(4) $8\pi^2/g^2=2\pi/\alpha_W\approx2\pi\cdot30\approx190$。振幅は $e^{-190}\sim10^{-82}$、確率（振幅の2乗）は $10^{-164}$ 程度で、実験的には全く観測されない。ただし高温（電弱相転移付近）ではスファレロンによる熱的な遷移で $B+L$ の破れが速くなり、バリオン数生成の議論で重要になる。
+\end{solution}
+
+\subsection{ゲージ・アノマリーの相殺}
+
+\begin{problem}[難易度 B]\label{ch09-prob-sm}
+例 \ref{ex:ch09-sm} の標準模型1世代（左巻きワイル）について、\\
+(1) $SU(3)^3$, $SU(3)^2U(1)_Y$, $SU(2)^2U(1)_Y$, $U(1)_Y^3$, 重力$^2U(1)_Y$ の5つのアノマリー係数を表にしてすべてゼロであることを確かめよ。$SU(3)$ の3次の係数は $A(\mathbf3)=1$, $A(\bar{\mathbf 3})=-1$、$SU(N)$ の2次の係数は $T=\frac12$ とせよ。\\
+(2) $SU(2)^3$, $SU(2)^2SU(3)$, $SU(3)^2SU(2)$, $SU(2)U(1)^2$ のような係数が自動的に消える理由を述べよ。\\
+(3) 右巻きニュートリノ $\nu^c\sim(\mathbf 1,\mathbf 1)_0$ を加えると、$U(1)_{B-L}$（$Q:\frac13$, $u^c,d^c:-\frac13$, $L:-1$, $e^c,\nu^c:+1$）もゲージ化できることを、$U(1)_{B-L}$ を含む6つの条件 $SU(3)^2U(1)_{B-L}$, $SU(2)^2U(1)_{B-L}$, $U(1)_{B-L}^3$, 重力$^2U(1)_{B-L}$, $U(1)_Y^2U(1)_{B-L}$, $U(1)_YU(1)_{B-L}^2$ を調べて確かめよ。$\nu^c$ がないとどの条件が破れるか。
+\end{problem}
+
+\begin{solution}
+(1) 多重度（色・アイソスピンの成分数）を考慮して計算する。
+\begin{center}
+\renewcommand{\arraystretch}{1.3}\small
+\resizebox{\linewidth}{!}{\begin{tabular}{l|ccccc|c}
+ & $Q$ & $u^c$ & $d^c$ & $L$ & $e^c$ & 和\\ \hline
+$SU(3)^3$：$A\times(SU(2)\text{ 多重度})$ & $2$ & $-1$ & $-1$ & -- & -- & $0$\\
+$SU(3)^2U(1)$：$T\times Y\times(\cdots)$ & $\frac12\cdot2\cdot\frac16$ & $\frac12\cdot(-\frac23)$ & $\frac12\cdot\frac13$ & -- & -- & $0$\\
+$SU(2)^2U(1)$：$T\times Y\times(\text{色})$ & $\frac12\cdot3\cdot\frac16$ & -- & -- & $\frac12\cdot(-\frac12)$ & -- & $0$\\
+$U(1)^3$：$(\text{成分数})\times Y^3$ & $6\cdot\frac1{216}$ & $3\cdot(-\frac8{27})$ & $3\cdot\frac1{27}$ & $2\cdot(-\frac18)$ & $1$ & $0$\\
+重力$^2U(1)$：$(\text{成分数})\times Y$ & $6\cdot\frac16$ & $3\cdot(-\frac23)$ & $3\cdot\frac13$ & $2\cdot(-\frac12)$ & $1$ & $0$
+\end{tabular}}
+\end{center}
+各行の和：$SU(3)^2U(1)$ は $\frac16-\frac13+\frac16=0$。$SU(2)^2U(1)$ は $\frac14-\frac14=0$。$U(1)^3$ は
+\[
+\frac1{36}-\frac89+\frac19-\frac14+1=\frac{1-32+4-9+36}{36}=0 .
+\]
+重力は $1-2+1-1+1=0$。
+
+(2) $SU(2)^3$：$SU(2)$ の表現は実または擬実で $d^{abc}=0$（問題 \ref{ch09-prob-witten}）。$G_1^2G_2$（$G_2$ が非可換単純群）：係数は $\tr(T_1^aT_1^b)\tr(T_2^c)$ に比例し、単純リー群の生成子はトレースゼロなので消える。$SU(2)U(1)^2$ も $\tr T_2^a=0$ で消える。$SU(3)^2SU(2)$ なども同様。
+
+(3) $X=B-L$ とする。
+\begin{itemize}
+\item $SU(3)^2X$：$\frac12\bigl(2\cdot\frac13-\frac13-\frac13\bigr)=0$。
+\item $SU(2)^2X$：$\frac12\bigl(3\cdot\frac13-1\bigr)=0$。
+\item $X^3$：$6\cdot\frac1{27}+3\cdot(-\frac1{27})+3\cdot(-\frac1{27})+2\cdot(-1)+1+1=0$。
+\item 重力$^2X$：$6\cdot\frac13-1-1-2+1+1=0$。
+\item $Y^2X$：$6\cdot\frac1{36}\cdot\frac13+3\cdot\frac49\cdot(-\frac13)+3\cdot\frac19\cdot(-\frac13)+2\cdot\frac14\cdot(-1)+1\cdot1\cdot1+0=\frac1{18}-\frac49-\frac19-\frac12+1=0$。
+\item $YX^2$：$6\cdot\frac16\cdot\frac19+3\cdot(-\frac23)\cdot\frac19+3\cdot\frac13\cdot\frac19+2\cdot(-\frac12)\cdot1+1\cdot1+0=\frac19-\frac29+\frac19-1+1=0$。
+\end{itemize}
+$\nu^c$ は $Y=0$ なので $Y^2X$, $YX^2$ には寄与しないが、$X^3$ と重力$^2X$ にはそれぞれ $+1$ 寄与する。$\nu^c$ がないとこの2つが $-1$ となり破れる。したがって $B-L$ をゲージ化するには（世代ごとに）右巻きニュートリノが必要である。
+\end{solution}
+
+\begin{problem}[難易度 D]\label{ch09-prob-charge}
+標準模型の1世代の場の $SU(3)\times SU(2)$ 表現（$Q,u^c,d^c,L,e^c$）を固定し、ハイパーチャージ $Y_Q,Y_u,Y_d,Y_L,Y_e$ を未知数とする。\\
+(1) $SU(3)^2U(1)$, $SU(2)^2U(1)$, 重力$^2U(1)$, $U(1)^3$ の4条件を書き、$Y_Q=a$ とおいて解け。$a\ne0$ のとき $\{Y_u,Y_d\}=\{-4a,2a\}$、$Y_L=-3a$, $Y_e=6a$ となることを示せ。\\
+(2) $a=0$ の解も求めよ。\\
+(3) ヒッグス二重項 $H\sim(\mathbf 1,\mathbf 2)_{Y_H}$ との湯川結合 $Qu^cH$, $Qd^cH^\dagger$, $Le^cH^\dagger$ がゲージ不変であることを要請すると、(1) の解のうちどれが選ばれ、(2) の解が排除されることを示せ。$Y_H=\frac12$ の規格化で標準模型の値を再現せよ。\\
+(4) 電荷 $Q_{\mathrm{em}}=T_3+Y$ を各粒子について求め、水素原子（陽子 $uud$ と電子）が電気的に中性であることがアノマリー相殺から導かれることを説明せよ。
+\end{problem}
+
+\begin{solution}
+(1) 条件は（$Q$ は2成分×3色、$L$ は2成分、$u^c,d^c$ は3色）
+\begin{align*}
+SU(3)^2U(1):&\quad 2Y_Q+Y_u+Y_d=0,\\
+SU(2)^2U(1):&\quad 3Y_Q+Y_L=0,\\
+\text{重力}^2U(1):&\quad 6Y_Q+3Y_u+3Y_d+2Y_L+Y_e=0,\\
+U(1)^3:&\quad 6Y_Q^3+3Y_u^3+3Y_d^3+2Y_L^3+Y_e^3=0 .
+\end{align*}
+$Y_Q=a$ とおくと、第2式より $Y_L=-3a$、第1式より $Y_u+Y_d=-2a$。第3式は $6a-6a-6a+Y_e=0$ で $Y_e=6a$。第4式に代入して
+\[
+6a^3+3(Y_u^3+Y_d^3)-54a^3+216a^3=0\quad\Longrightarrow\quad Y_u^3+Y_d^3=-56a^3 .
+\]
+$s=Y_u+Y_d=-2a$、$p=Y_uY_d$ とおくと $Y_u^3+Y_d^3=s^3-3sp=-8a^3+6ap$。よって $6ap=-48a^3$、$a\ne0$ なら $p=-8a^2$。$Y_u,Y_d$ は $t^2+2at-8a^2=(t+4a)(t-2a)=0$ の根で、$\{Y_u,Y_d\}=\{-4a,2a\}$。
+
+(2) $a=0$ なら $Y_L=Y_e=0$、$Y_u=-Y_d=b$（任意）で、第4式は $b^3-b^3=0$ と自動的にみたされる。これはクォークだけがベクトル的な電荷をもつ解である。
+
+(3) 湯川結合の不変性は
+\[
+Y_Q+Y_u+Y_H=0,\qquad Y_Q+Y_d-Y_H=0,\qquad Y_L+Y_e-Y_H=0 .
+\]
+(1) の解で $Y_u=-4a$, $Y_d=2a$ とすると第1式から $Y_H=3a$、第2式 $a+2a-3a=0$、第3式 $-3a+6a-3a=0$ ですべてみたされる。逆の割り当て $Y_u=2a$, $Y_d=-4a$ では第1式から $Y_H=-3a$、第2式は $a-4a+3a=0$ でみたされるが、第3式は $-3a+6a+3a=6a\ne0$ となり不適。(2) の解では第1式から $Y_H=-b$ で、第2式 $0+Y_d-Y_H=-b+b=0$ はみたされるが、第3式 $0+0-Y_H=0$ から $Y_H=0$、よって $b=0$：自明な $U(1)$ しか残らない。$Y_H=3a=\frac12$ とすれば $a=\frac16$ で
+\[
+Y_Q=\tfrac16,\ Y_u=-\tfrac23,\ Y_d=\tfrac13,\ Y_L=-\tfrac12,\ Y_e=1,
+\]
+標準模型の値が再現される。全体の規格化以外にハイパーチャージの自由度はない。
+
+(4) $Q=(u,d)$：$Q_{\mathrm{em}}(u)=\frac12+\frac16=\frac23$、$Q_{\mathrm{em}}(d)=-\frac12+\frac16=-\frac13$。$L=(\nu,e)$：$0$, $-1$。$u^c$, $d^c$, $e^c$ は $-\frac23$, $\frac13$, $1$（反粒子の電荷）。陽子 $uud$ は $\frac23+\frac23-\frac13=1$、電子 $-1$ で、水素原子は厳密に中性。
+
+これが規格化 $Y_H=\frac12$ によらないことを見るため、一般の $a$ で考える。破れずに残る電荷は、ヒッグスの真空期待値をもつ成分（$T_3=-\frac12$）を中性にする組合せ $Q_{\mathrm{em}}=T_3+cY$ で、$-\frac12+c\cdot3a=0$ より $c=\frac{1}{6a}$。すると
+\begin{gather*}
+Q_{\mathrm{em}}(u)=\tfrac12+\tfrac{a}{6a}=\tfrac23,\quad Q_{\mathrm{em}}(d)=-\tfrac12+\tfrac16=-\tfrac13,\\
+Q_{\mathrm{em}}(e)=-\tfrac12+\tfrac{-3a}{6a}=-1,\quad Q_{\mathrm{em}}(\nu)=0
+\end{gather*}
+となり、$a$ によらない。したがって $Q_{\mathrm{em}}(p)+Q_{\mathrm{em}}(e)=0$ は、ゲージ・アノマリーの相殺（と湯川結合の存在）だけから導かれる。電荷の量子化と原子の中性は、大統一理論を仮定しなくてもアノマリー相殺の帰結として理解できる。
+\end{solution}
+
+\begin{problem}[難易度 C]\label{ch09-prob-descent}
+電荷1の $U(1)$ ゲージ場 $A$（$F=dA$）、ゲージ変換 $\delta_\lambda A=d\lambda$ とする。\\
+(1) 2次元：$I_4=\frac{1}{8\pi^2}F^2$ から $I_3^{(0)}=\frac1{8\pi^2}A\,dA$、$I_2^{(1)}=\frac1{8\pi^2}\lambda\,dA$ を導け。$2\pi\int I_2^{(1)}$ を、問題 \ref{ch09-prob-fujikawa2d} の指数密度 $\frac{1}{2\pi}F$（ワイル・フェルミオン1個の\term{共変的アノマリー}{covariant anomaly}。ディラック・フェルミオンの軸性アノマリーはその2倍）と比べ、ワイル・フェルミオン1個の整合的アノマリーは「共変的アノマリー $\frac1{2\pi}F$」の $\frac12$ であることを確かめよ。\\
+(2) 4次元：$I_6=\frac1{48\pi^3}F^3$ について同様に $I_5^{(0)}$, $I_4^{(1)}$ を求め、$2\pi I_4^{(1)}=\frac{1}{24\pi^2}\lambda F\wedge F$ を示せ。共変的アノマリー（指数密度 $\frac1{8\pi^2}F\wedge F$）との比が $\frac13$ であることを確かめよ。\\
+(3) チャーン・サイモンズ形式の取り方の不定性 $I^{(0)}_{d+1}\to I^{(0)}_{d+1}+dX_d$ のもとで、$I^{(1)}_d$ が $\delta_\lambda X_d$（＋完全形式）だけ変わることを示し、これが有効作用への局所的な counterterm $\int X_d$ の付加に対応することを説明せよ。\\
+(4) $U(1)$ でワイル・フェルミオン（電荷 $q_i$）が複数あるとき、2次元・4次元のゲージ・アノマリー相殺条件がそれぞれ $\sum_i\pm q_i^2=0$, $\sum_iq_i^3=0$ であることを説明せよ（2次元の符号はカイラリティ）。
+\end{problem}
+
+\begin{solution}
+(1) $d(A\,dA)=dA\,dA=F^2$ なので $I_3^{(0)}=\frac1{8\pi^2}AdA$。$\delta_\lambda(AdA)=d\lambda\,dA$（$\delta F=0$）$=d(\lambda\,dA)$ なので $I_2^{(1)}=\frac1{8\pi^2}\lambda\,dA$。よって
+\[
+2\pi\int I_2^{(1)}=\frac1{4\pi}\int\lambda F .
+\]
+ディラック・フェルミオン（正・負カイラリティ各1）の軸性アノマリー $\frac1{2\pi}F\cdot2$（$\Delta Q_5=2n$）は、各カイラリティについて $\pm\frac{1}{2\pi}F$ ずつの寄与の差である。これが共変的アノマリーで、ワイル・フェルミオン1個の整合的アノマリー $\frac1{4\pi}F$ はその $\frac12$。
+
+(2) $d(A(dA)^2)=(dA)^3=F^3$ なので $I_5^{(0)}=\frac1{48\pi^3}A\,F^2$。$\delta_\lambda I_5^{(0)}=\frac1{48\pi^3}d\lambda\,F^2=d\bigl(\frac1{48\pi^3}\lambda F^2\bigr)$（$dF=0$）なので $I_4^{(1)}=\frac{1}{48\pi^3}\lambda F^2$、$2\pi I_4^{(1)}=\frac1{24\pi^2}\lambda F\wedge F$。指数密度 $\frac1{8\pi^2}F\wedge F$（正カイラリティ1個のゼロモードの数に対応）との比は $\frac{8\pi^2}{24\pi^2}=\frac13$。成分では、整合的アノマリー $\frac1{96\pi^2}\epsilon^{\mu\nu\rho\sigma}F_{\mu\nu}F_{\rho\sigma}$ と共変的アノマリー $\frac1{32\pi^2}\epsilon^{\mu\nu\rho\sigma}F_{\mu\nu}F_{\rho\sigma}$。三角形図の3つの頂点を対称に扱う（ボーズ対称性）と、アノマリーが3つの頂点に $\frac13$ ずつ分配されることにあたる。
+
+(3) $\delta_\lambda(I^{(0)}_{d+1}+dX_d)=dI^{(1)}_d+d\,\delta_\lambda X_d$ なので、新しい $I^{(1)}_d$ は $I^{(1)}_d+\delta_\lambda X_d$（完全形式の不定性を除く）。有効作用を $W\to W\mp2\pi i\int X_d$ と局所項で修正すると、そのゲージ変換は $\mp2\pi i\int\delta_\lambda X_d$ だけ変わるので、アノマリーの表式の変化と一致する。したがってアノマリーとは「局所的な counterterm で消せない部分」であり、それは $I_{d+2}$（ゲージ不変な特性類）だけで決まる。例えば4次元のディラック・フェルミオン（ベクトル場 $V$ と軸性場 $A$ に結合）では、バーディーンの counterterm によりアノマリーをすべて軸性の側に移し、ベクトル電流を保存させることができる。
+
+(4) アノマリー多項式は加法的で、電荷 $q$ では $F\to qF$。2次元：$I_4=\sum_i(\pm)\frac{q_i^2}{8\pi^2}F^2$（符号はカイラリティ）なので条件は $\sum_\pm q_i^2=0$（右巻きと左巻きの電荷の2乗和が等しい）。4次元：すべて左巻きにそろえると $I_6=\sum_i\frac{q_i^3}{48\pi^3}F^3$ で条件は $\sum q_i^3=0$。これは定理 \ref{thm:ch09-pertcond} の $U(1)^3$ 条件に一致する（重力との混合アノマリーからは $\sum q_i=0$）。
+\end{solution}
+
+\begin{problem}[難易度 C]\label{ch09-prob-witten}
+(1) 表現 $R$ が自分自身の複素共役と同値（$R\cong\bar R$）なら、$\tr_R(T^a\{T^b,T^c\})=0$ であることを示せ。$\bar R$ の生成子は $-(T^a)^*$ であること、$\tr(T^a\{T^b,T^c\})$ が実数であることを用いよ。特に $SU(2)$ には摂動論的なゲージ・アノマリーがないことを結論せよ。\\
+(2) $SU(2)$ ゲージ理論で、左巻きワイル二重項が $n_D$ 個ある。$\pi_4(SU(2))=\Z_2$（第3章）を認め、定理 \ref{thm:ch09-witten} の論理を次の順に説明せよ：(i) 大きなゲージ変換 $U$ の存在、(ii) $A$ と $A^U$ を結ぶ道に沿ったスペクトル流、(iii) $Z=(\Pf)^{n_D}$ の符号、(iv) $n_D$ が奇数なら $Z\equiv0$。\\
+(3) 標準模型、および「$SU(2)$ に二重項を1個だけ加えた理論」について判定せよ。\\
+(4) スピン $j$ 表現のワイル・フェルミオン1個がウィッテン・アノマリーをもつのはどのような $j$ か。問題 \ref{ch09-prob-reps} の結果を用いて $j=\frac12,\frac32,\frac52$ を判定せよ。\\
+(5) 「トフーフト頂点のフェルミオン線の数が奇数だと $(-1)^F$ が破れる」という観点から、(2) の結論を直観的に説明せよ。
+\end{problem}
+
+\begin{solution}
+(1) $R\cong\bar R$ なら、ユニタリな $U$ があって $-(T^a)^*=UT^aU^{-1}$。よって
+\[
+\tr\bigl(T^a\{T^b,T^c\}\bigr)=\tr\bigl(UT^aU^{-1}\{UT^bU^{-1},UT^cU^{-1}\}\bigr)=-\tr\bigl((T^a)^*\{(T^b)^*,(T^c)^*\}\bigr)
+\]
+\[
+=-\overline{\tr\bigl(T^a\{T^b,T^c\}\bigr)} .
+\]
+一方 $T$ はエルミートなので $\overline{\tr(T^aT^bT^c)}=\tr((T^aT^bT^c)^\dagger)=\tr(T^cT^bT^a)$ で、$\overline{\tr(T^a\{T^b,T^c\})}=\tr(T^cT^bT^a+T^bT^cT^a)=\tr(T^aT^cT^b+T^aT^bT^c)$（巡回性）$=\tr(T^a\{T^b,T^c\})$：実数。したがって $x=-x$ で $x=0$。$SU(2)$ の既約表現（スピン $j$）はすべて実（$j$ 整数）または擬実（$j$ 半整数）なので、$SU(2)$ には摂動論的なアノマリーがない。
+
+(2) (i) $\pi_4(SU(2))=\Z_2$ なので、$S^4$（コンパクト化した時空）から $SU(2)$ への写像で、定値写像に連続変形できないもの $U$ がある。$A^U=UAU^{-1}+iUdU^{-1}$ は $A$ とゲージ同値。
+
+(ii) ゲージ場の空間はアフィン空間なので、$A_t=(1-t)A+tA^U$ で結べる。$t$ に沿った（4次元の）ディラック作用素の固有値は $\pm\lambda_n(t)$ の対で現れ、$t=0$ と $t=1$ でスペクトルは一致する（ゲージ同値）。定理 \ref{thm:ch09-witten} によれば、二重項1個につき奇数対の固有値が入れ替わる（$\lambda_1(0)>0$ が $\lambda_1(1)<0$ へ；冒頭の図右）。これは5次元の時空 $S^4\times S^1$（$t$ 方向を周期化し $U$ で貼り合わせた写像トーラス）上の mod 2 指数として位相的に定まる量である。
+
+(iii) ワイル二重項は擬実なので、その経路積分は（ディラック二重項の行列式 $\prod_n\lambda_n^2$ の平方根である）パフィアン $\prod_n\lambda_n$（各対から1つ）で定義される。これを $t$ に沿って連続に追跡すると、奇数個の $\lambda_n$ が符号を変えるので $\Pf(A^U)=-\Pf(A)$。$n_D$ 個なら $Z[A^U]=(-1)^{n_D}Z[A]$。
+
+(iv) ゲージ不変性は $Z[A^U]=Z[A]$ を要求するので、$n_D$ 奇数では $Z[A]=-Z[A]$、すなわち $Z\equiv0$。期待値 $\langle\mathcal O\rangle=Z_{\mathcal O}/Z$ が $0/0$ となり理論は定義されない。
+
+(3) 標準模型：世代あたり二重項 $Q$（3色）＋$L$ で4個、偶数なので問題なし（第3世代までで12個）。$SU(2)$ に二重項1個だけの理論は $n_D=1$ で矛盾する。例えば標準模型にベクトル的でない二重項を1個追加すると、ハイパーチャージのアノマリーとは独立にこの条件で排除される。
+
+(4) $k=1$ のゼロモード数 $2T(j)$ が奇数のとき、スペクトル流が奇数となりアノマリーをもつ。$2T(\frac12)=1$（奇数：アノマリーあり）、$2T(\frac32)=10$（偶数：なし）、$2T(\frac52)=35$（奇数：あり）。一般に $2T(j)=\frac23j(j+1)(2j+1)$ で、$r\in\Z_{\ge0}$ として
+\[
+j=2r+\tfrac12:\ 2T=\frac{(4r+1)(4r+3)(2r+1)}{3},
+\]
+\[
+j=2r+\tfrac32:\ 2T=2\cdot\frac{(4r+3)(4r+5)(r+1)}{3}.
+\]
+前者は奇数の積を3で割った整数なので奇数、後者は偶数。よって $j=\frac12,\frac52,\frac92,\dots$ がアノマリーをもつ。整数 $j$ では $2T=4\cdot\frac{j(j+1)(2j+1)}{6}=4\sum_{m=1}^jm^2$ で偶数（表現は実）。
+
+(5) $k=1$ のインスタントンは各二重項から1本ずつ、計 $n_D$ 本のフェルミオン線をもつトフーフト頂点を生む。$n_D$ が奇数だと、真空からフェルミオン数が奇数だけ変化する振幅が現れる。しかし $2\pi$ 回転 $(-1)^F$ はローレンツ群（$SU(2)$ ゲージ変換の $-1$ とも一致する）の元であり、奇数個のフェルミオンを含む演算子の真空期待値はゼロでなければならない。この矛盾が「$Z=0$」の形で現れていると理解できる。
+\end{solution}
+
+\begin{problem}[難易度 D]\label{ch09-prob-inflow}
+3次元の境界付き多様体 $M$（例えば円板 $\times$ 時間）上の $U(1)$ チャーン・サイモンズ作用
+\[
+S_{CS}=\frac{k}{4\pi}\int_MA\wedge dA\qquad(k\in\Z)
+\]
+を考える（量子ホール流体の低エネルギー有効作用）。\\
+(1) $A\to A+d\lambda$ のもとで $\delta S_{CS}=\frac{k}{4\pi}\int_{\partial M}\lambda\,dA$ となることを示せ。\\
+(2) 境界 $\partial M$ 上の電荷1のカイラル（ワイル）フェルミオン1個のゲージ変換は、問題 \ref{ch09-prob-descent}(1) より大きさ $\frac{1}{4\pi}\int\lambda F$ をもつ。全体がゲージ不変となるには、境界に正味 $k$ 個の（適切なカイラリティの）カイラル・フェルミオンが必要であることを説明せよ。\\
+(3) $S_{CS}$ から電流 $j^\mu=\delta S_{CS}/\delta A_\mu$ を求め、$j^0=\frac{k}{2\pi}B$、$j^x=\frac{k}{2\pi}E_y$ を示せ（成分は $A\wedge dA=\epsilon^{\mu\nu\rho}A_\mu\partial_\nu A_\rho\,d^3x$、$\epsilon^{txy}=1$、$E_i=\partial_iA_t-\partial_tA_i$ とせよ）。ホール伝導度 $\sigma_{xy}=k/2\pi$（$\hbar$, $e$ を戻すと $ke^2/h$）を結論せよ。\\
+(4) 円環（コルビノ円板）の穴に磁束を $0$ から $2\pi$ まで断熱的に挿入するとき（ラフリンの議論）、ちょうど $k$ 単位の電荷が内側の境界から外側の境界へ運ばれることを (3) から示し、これを境界のカイラル・フェルミオンのスペクトル流（本章冒頭の図）と関係づけよ。
+\end{problem}
+
+\begin{solution}
+(1) $\delta(A\wedge dA)=d\lambda\wedge dA+A\wedge d(d\lambda)=d\lambda\wedge dA=d(\lambda\,dA)$。ストークスの定理より $\delta S_{CS}=\frac k{4\pi}\int_M d(\lambda dA)=\frac{k}{4\pi}\int_{\partial M}\lambda\,dA$。閉じた $M$ では不変だが、境界があるとゲージ不変性が破れる。
+
+(2) 境界のカイラル・フェルミオン1個の有効作用は $\delta_\lambda W=\pm\frac{i}{4\pi}\int\lambda F$（ユークリッド。符号はカイラリティによる）、すなわち作用の言葉で大きさ $\frac1{4\pi}\int\lambda F$ だけ変化する。これは $k=1$ のときの (1) の境界項と同じ形である。したがって (1) の変化と打ち消し合うカイラリティのフェルミオンが（右巻きと左巻きの差として）正味 $k$ 個あれば、バルク＋境界の全体はゲージ不変になる。バルクのチャーン・サイモンズ項のアノマリーが境界に「流れ込み」、境界のアノマリーを相殺している（アノマリー流入）。境界のカイラル・モード単独ではゲージ・アノマリーをもつので、2次元の理論としては存在できず、3次元のバルクの境界としてのみ存在できる。これは整数量子ホール効果のエッジ状態がカイラルで「後方散乱で局在しない」理由でもある。
+
+(3) 2形式は1形式と可換なので $A\wedge d\delta A=d\delta A\wedge A=d(\delta A\wedge A)+\delta A\wedge dA$。よって
+\[
+\delta S_{CS}=\frac{k}{4\pi}\int(\delta A\wedge dA+A\wedge d\delta A)=\frac{k}{2\pi}\int\delta A\wedge dA+(\text{境界項}),
+\]
+すなわち成分で $j^\mu=\frac{k}{2\pi}\epsilon^{\mu\nu\rho}\partial_\nu A_\rho$。
+\[
+j^t=\frac{k}{2\pi}(\partial_xA_y-\partial_yA_x)=\frac{k}{2\pi}B,
+\]
+\[
+j^x=\frac{k}{2\pi}\bigl(\epsilon^{xty}\partial_tA_y+\epsilon^{xyt}\partial_yA_t\bigr)=\frac{k}{2\pi}(\partial_yA_t-\partial_tA_y)=\frac{k}{2\pi}E_y .
+\]
+（$\epsilon^{xty}=-1$, $\epsilon^{xyt}=+1$。）電場に垂直な電流が流れ、$\sigma_{xy}=k/2\pi$。単位を戻すと $\sigma_{xy}=k\,e^2/2\pi\hbar=k\,e^2/h$。
+
+(4) 穴を貫く磁束 $\Phi(t)$ を変えると、ファラデーの法則により円環の周方向に電場 $\oint E_\phi\,d\ell=-\dot\Phi$ が生じる。(3) より動径方向の電流（ホール電流）が流れ、内側の境界から外側へ運ばれる電荷は（向きの符号を除き）
+\[
+\Delta q=\int dt\oint j^r\,d\ell=\frac{k}{2\pi}\int dt\oint E_\phi\,d\ell=\frac{k}{2\pi}\lvert\Delta\Phi\rvert=k .
+\]
+境界から見ると、磁束 $2\pi$ の挿入は境界の円周上で $A_\phi$ を1量子ずらすことにあたる。冒頭の図のように、各カイラル・フェルミオンの準位が1段ずれ、ディラックの海から1個の粒子が押し出される（スペクトル流）。外側の境界のカイラル・モード $k$ 個はそれぞれ電荷 $1$ を得、内側の境界（逆向きのカイラリティ）はそれぞれ $1$ を失う。各境界の電荷の非保存（2次元のアノマリー）は、バルクを流れるホール電流（流入）によって正確に補われている。
+\end{solution}

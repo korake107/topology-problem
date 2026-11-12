@@ -1,0 +1,919 @@
+%================================================
+\chapter{微分形式とド・ラーム・コホモロジー}\label{ch:05}
+% 18問
+%================================================
+
+\section{物理からの動機}
+
+\subsection*{ポテンシャルはいつ存在するか}
+マクスウェル方程式の半分 $\nabla\cdot\bm B=0$、$\nabla\times\bm E+\partial_t\bm B=0$ は、微分形式で書くと $dF=0$ の一つの式になる（本章）。$F$ が閉形式であることから「$F=dA$ となるベクトル・ポテンシャル $A$ がある」と結論するのが普通であるが、これは\textbf{局所的に}しか正しくない。$d\omega=0$ をみたす形式（\term{閉形式}{closed form}）が $\omega=d\alpha$（\term{完全形式}{exact form}）と書けるかどうかは、空間の形に依存する。その障害を測るのが
+\[
+H^p_{\mathrm{dR}}(M)=\frac{\{\text{閉 $p$ 形式}\}}{\{\text{完全 $p$ 形式}\}}
+\]
+で、これを\term{ド・ラーム・コホモロジー}{de Rham cohomology}という。可縮な領域では $H^p_{\mathrm{dR}}=0$（$p\ge1$）であり（\term{ポアンカレの補題}{Poincar\'e lemma}）、物理で「ポテンシャルが存在する」と言うときに暗黙に使っているのはこの事実である。
+
+\subsection*{ディラック・モノポール}
+原点に磁荷 $g$ をおくと、$\R^3\setminus\{0\}$ 上で $\bm B=g\,\hat{\bm r}/4\pi r^2$、すなわち
+\[
+F=\frac{g}{4\pi}\sin\theta\,d\theta\wedge d\phi ,\qquad dF=0,\qquad \int_{S^2}F=g
+\]
+である。もし $\R^3\setminus\{0\}$ 全体で $F=dA$ となる $A$ があれば、ストークスの定理により $\int_{S^2}F=\int_{\partial S^2}A=0$ となって矛盾する。したがって $F$ は閉形式だが完全形式ではなく、$[F]\neq0\in H^2_{\mathrm{dR}}(\R^3\setminus\{0\})\cong\R$。実際には、北側と南側の二つの領域でそれぞれポテンシャル $A_N$, $A_S$ をとり、重なりでゲージ変換で貼り合わせる（下図）。貼り合わせが量子力学的に矛盾しないという条件が、\term{ディラックの量子化条件}{Dirac quantization condition} $qg\in2\pi\Z$ である。
+\begin{center}
+\begin{tikzpicture}[scale=1.15]
+  \fill[red!8] (-1.6,0) arc (180:360:1.6) -- cycle;
+  \fill[blue!8] (-1.6,0) arc (180:0:1.6) -- cycle;
+  \begin{scope}
+    \clip (0,0) circle (1.6);
+    \fill[violet!18] (-1.7,-0.45) rectangle (1.7,0.45);
+  \end{scope}
+  \draw[thick] (0,0) circle (1.6);
+  \draw[gray] (-1.6,0) arc (180:360:1.6 and 0.35);
+  \draw[gray,dashed] (1.6,0) arc (0:180:1.6 and 0.35);
+  \foreach \a in {0,30,...,330}{
+    \draw[-{Stealth[length=1.6mm]},orange!80!black] (\a:0.25) -- (\a:0.75);
+  }
+  \node[vtx] at (0,0) {};
+  \node at (0.25,0.15) {\footnotesize $g$};
+  \draw[ultra thick,red!70!black] (0,-0.1) -- (0,-2.6);
+  \node[red!70!black,right] at (0.05,-2.4) {\footnotesize $A_N$ のディラック弦};
+  \draw[very thick,blue!70!black,dashed] (0,0.1) -- (0,2.6);
+  \node[blue!70!black,right] at (0.05,2.4) {\footnotesize $A_S$ のディラック弦};
+  \node[blue!70!black] at (-2.4,1.0) {\footnotesize $U_N$：$A_N$};
+  \node[red!70!black] at (-2.4,-1.0) {\footnotesize $U_S$：$A_S$};
+  \node[violet] at (2.75,0) {\footnotesize $U_N\cap U_S$};
+  \draw[violet,->] (2.1,0) -- (1.65,0.05);
+\end{tikzpicture}
+\zucap{ディラック・モノポール。$A_N=\frac{g}{4\pi}(1-\cos\theta)d\phi$ は北側 $U_N$（負の $z$ 軸を除く）で、$A_S=-\frac{g}{4\pi}(1+\cos\theta)d\phi$ は南側 $U_S$（正の $z$ 軸を除く）で滑らか。それぞれが特異になる半直線がディラック弦である。赤道付近の重なりで $A_N-A_S=\frac{g}{2\pi}d\phi$。}
+\end{center}
+
+\subsection*{アハロノフ・ボーム効果}
+無限に長いソレノイドの外側では $\bm B=0$、すなわち $F=dA=0$ であるが、ソレノイドを囲む閉曲線に沿って $\oint A=\Phi$（内部の磁束）$\neq0$ である。外側の領域 $\simeq S^1$ では $A$ は閉形式だが完全形式でなく、その類 $[A]\in H^1_{\mathrm{dR}}$ が電荷 $q$ の粒子の干渉縞をずらす位相 $e^{iq\Phi}$ を決める。\textbf{場の強さが局所的にゼロでも、コホモロジー類として観測可能な情報が残る}。
+
+\subsection*{保存量と位相的項}
+電荷 $Q=\int_{S^2}{*F}$ は、源のない領域では $d{*F}=0$ なので、$S^2$ を連続的に変形しても変わらない。一般に「閉形式をサイクルの上で積分した量」はサイクルのホモロジー類と形式のコホモロジー類だけで決まる（ストークスの定理）。また $\theta$ 項 $F\wedge F=d(A\wedge dA)$ のような\term{位相的項}{topological term}は局所的には完全形式なので運動方程式を変えないが、大域的には完全でないことがあり、量子論で意味をもつ（第6, 8章）。
+
+\subsection*{カルツァ・クライン理論のゼロモード}
+時空 $M_4\times K$（$K$ はコンパクトな内部空間）上の $p$ 形式ゲージ場を4次元から見ると、質量ゼロ（massless）の場の数は $K$ 上の\term{調和形式}{harmonic form}の数、すなわち $K$ の\term{ベッチ数}{Betti number}で決まる（\textbf{ホッジの定理}）。弦理論のコンパクト化で現れる質量ゼロのスカラー（モジュライ）や $U(1)$ ゲージ場の数は、内部空間のトポロジーで決まるのである（第10章）。
+
+\begin{physbox}[：本章の辞書]
+\begin{center}
+\small
+\begin{tabular}{p{0.46\linewidth}p{0.44\linewidth}}
+物理 & 数学\\ \hline
+場の強さ $F$、カレント $j$ & 2形式、1形式（${*j}$ は3形式）\\
+ビアンキ恒等式、電荷保存 & $d^2=0$\\
+ポテンシャルの存在（局所） & ポアンカレの補題\\
+モノポール、AB効果 & 閉形式だが完全でない形式、$H^2$, $H^1\neq0$\\
+ゲージ変換 $A\to A+d\alpha$ & コホモロジー類を変えない\\
+ガウスの法則・保存電荷 & ストークスの定理、周期\\
+ディラックの量子化 & 周期 $\int F\in2\pi\Z$（整数類）\\
+KK の massless モード & 調和形式、ベッチ数 $b_p$\\
+クーロン・ゲージ & ホッジ分解
+\end{tabular}
+\end{center}
+\end{physbox}
+
+\section{基本事項のまとめ}
+
+\subsection{微分形式と外微分}
+$M$ を $n$ 次元の滑らかな多様体、$x^\mu$ を局所座標とする。
+
+\begin{mydef}{微分形式}{ch05-forms}
+$M$ 上の\term{$p$ 形式}{$p$-form}とは、局所的に
+\[
+\omega=\frac1{p!}\,\omega_{\mu_1\cdots\mu_p}(x)\,dx^{\mu_1}\wedge\cdots\wedge dx^{\mu_p}
+\]
+（$\omega_{\mu_1\cdots\mu_p}$ は完全反対称）と書かれ、座標変換で反対称共変テンソルとして変換するものである。全体を $\Omega^p(M)$ と書く。\term{外積}{wedge product} $\wedge$ は $\alpha\wedge\beta=(-1)^{pq}\beta\wedge\alpha$（$\alpha\in\Omega^p$, $\beta\in\Omega^q$）をみたす。\term{外微分}{exterior derivative} $d\colon\Omega^p\to\Omega^{p+1}$ は
+\[
+d\omega=\frac1{p!}\,\partial_\nu\omega_{\mu_1\cdots\mu_p}\,dx^\nu\wedge dx^{\mu_1}\wedge\cdots\wedge dx^{\mu_p}
+\]
+で、座標によらない。
+\end{mydef}
+
+\begin{myprop}{外微分の性質}{ch05-dprop}
+\begin{enumerate}
+\item $d^2=0$（偏微分の対称性と $dx^\mu\wedge dx^\nu$ の反対称性による）。
+\item ライプニッツ則 $d(\alpha\wedge\beta)=d\alpha\wedge\beta+(-1)^p\alpha\wedge d\beta$（$\alpha\in\Omega^p$）。
+\item 滑らかな写像 $f\colon M\to N$ の\term{引き戻し}{pullback} $f^*$ は $f^*(\alpha\wedge\beta)=f^*\alpha\wedge f^*\beta$、$f^*d=d f^*$ をみたす。
+\end{enumerate}
+\end{myprop}
+
+\begin{myex}{$\R^3$ のベクトル解析}{ch05-r3}
+$\R^3$（ユークリッド計量、向き $dx\wedge dy\wedge dz$）では、$d\bm S=(dy\wedge dz,\ dz\wedge dx,\ dx\wedge dy)$、$d^3x=dx\wedge dy\wedge dz$ として
+\[
+f\ \xrightarrow{\ d\ }\ \nabla f\cdot d\bm x,\qquad
+\bm v\cdot d\bm x\ \xrightarrow{\ d\ }\ (\nabla\times\bm v)\cdot d\bm S,\qquad
+\bm v\cdot d\bm S\ \xrightarrow{\ d\ }\ (\nabla\cdot\bm v)\,d^3x .
+\]
+$d^2=0$ は $\nabla\times\nabla f=0$、$\nabla\cdot(\nabla\times\bm v)=0$ にほかならない（問題 \ref{ch05-prob-r3}）。
+\end{myex}
+
+\subsection{内部積・リー微分・ストークスの定理}
+ベクトル場 $X$ に対し、\term{内部積}{interior product} $\iota_X\colon\Omega^p\to\Omega^{p-1}$ を $(\iota_X\omega)_{\mu_2\cdots\mu_p}=X^\nu\omega_{\nu\mu_2\cdots\mu_p}$ で定める。$X$ の流れ $\varphi_s$ による\term{リー微分}{Lie derivative} $L_X\omega=\frac{d}{ds}\varphi_s^*\omega\big|_{s=0}$ について、次の\textbf{カルタンの公式}が成り立つ：
+\[
+L_X=d\,\iota_X+\iota_X\,d .
+\]
+例えば $\R^3$ で $L_{\bm v}(d^3x)=d(\iota_{\bm v}d^3x)=d(\bm v\cdot d\bm S)=(\nabla\cdot\bm v)\,d^3x$（体積の変化率は発散）。
+
+\begin{mythm}{ストークスの定理}{ch05-stokes}
+$M$ を境界つきの向きづけられた $n$ 次元多様体、$\omega$ をコンパクト台の $(n-1)$ 形式とすると
+\[
+\int_M d\omega=\int_{\partial M}\omega .
+\]
+ただし $\partial M$ の向きは「外向き法線を先頭に置いて $M$ の向きになる」ように定める（\textbf{外向き法線先頭の規約}）。
+\end{mythm}
+特に、境界のない閉多様体 $M$ 上で完全形式の積分はゼロであり、$\int_M$ は $H^n_{\mathrm{dR}}(M)$ 上の線形写像を定める。
+
+\begin{center}
+\begin{tikzpicture}[scale=1.0]
+  \fill[blue!8] plot[smooth cycle,tension=0.8] coordinates {(-2.2,0) (-1.4,1.3) (0.2,1.5) (1.6,0.9) (1.9,-0.5) (0.6,-1.4) (-1.3,-1.2)};
+  \draw[thick,blue!70!black,mid arrow] plot[smooth cycle,tension=0.8] coordinates {(-2.2,0) (-1.3,-1.2) (0.6,-1.4) (1.9,-0.5) (1.6,0.9) (0.2,1.5) (-1.4,1.3)};
+  \fill[white] (-0.3,0.1) circle (0.45);
+  \draw[thick,red!70!black,mid arrow] (-0.3,0.1) ++(0:0.45) arc (0:-360:0.45);
+  \node[vtx] at (-0.3,0.1) {};
+  \node at (-0.3,-0.12) {\scriptsize $0$};
+  \node[blue!70!black] at (1.15,0.35) {\small $V$};
+  \node[blue!70!black] at (2.25,0.6) {\small $\Sigma_1$};
+  \node[red!70!black] at (-0.3,0.82) {\small $S_\varepsilon$};
+  \begin{scope}[xshift=4.6cm]
+    \fill[green!8] plot[smooth cycle,tension=0.9] coordinates {(-0.9,-0.4) (0.1,0.9) (1.2,0.5) (1.0,-0.8)};
+    \draw[thick,green!50!black,mid arrow] plot[smooth cycle,tension=0.9] coordinates {(-0.9,-0.4) (1.0,-0.8) (1.2,0.5) (0.1,0.9)};
+    \node[green!50!black] at (1.55,0.75) {\small $\Sigma_2$};
+    \node[vtx] at (-1.6,0.6) {};
+    \node at (-1.6,0.35) {\scriptsize $0$};
+  \end{scope}
+\end{tikzpicture}
+\zucap{ストークスの定理の使い方（断面図）。左：原点を囲む閉曲面 $\Sigma_1$ と小球面 $S_\varepsilon$ は、原点を含まない領域 $V$ の境界 $\partial V=\Sigma_1-S_\varepsilon$ をなす。右：原点を囲まない $\Sigma_2$ は $\R^3\setminus\{0\}$ 内の領域の境界。閉形式 $F$ の積分は $\int_{\Sigma_1}F=\int_{S_\varepsilon}F$、$\int_{\Sigma_2}F=0$（問題 \ref{ch05-prob-flux}）。}
+\end{center}
+
+\subsection{ホッジ作用素}
+\begin{mydef}{ホッジ作用素}{ch05-hodge}
+向きづけられた $n$ 次元（擬）リーマン多様体 $(M,g)$ の体積形式を $\mathrm{vol}=\sqrt{\lvert g\rvert}\,dx^1\wedge\cdots\wedge dx^n$ とする。$p$ 形式の内積 $\langle\ ,\ \rangle$ を $\langle dx^{\mu_1}\wedge\cdots\wedge dx^{\mu_p},dx^{\nu_1}\wedge\cdots\wedge dx^{\nu_p}\rangle=\det(g^{\mu_i\nu_j})$ で定め、\term{ホッジ作用素}{Hodge star} ${*}\colon\Omega^p\to\Omega^{n-p}$ を
+\[
+\alpha\wedge{*\beta}=\langle\alpha,\beta\rangle\,\mathrm{vol}
+\]
+で定める。成分では（$\varepsilon_{12\cdots n}=+1$）
+\[
+{*}(dx^{\mu_1}\wedge\cdots\wedge dx^{\mu_p})=\frac{\sqrt{\lvert g\rvert}}{(n-p)!}\,g^{\mu_1\nu_1}\cdots g^{\mu_p\nu_p}\,\varepsilon_{\nu_1\cdots\nu_p\rho_1\cdots\rho_{n-p}}\,dx^{\rho_1}\wedge\cdots\wedge dx^{\rho_{n-p}} .
+\]
+\end{mydef}
+
+\begin{myprop}{${**}$ の符号}{ch05-starstar}
+$s=\operatorname{sign}\det g$ とすると、$p$ 形式上で
+\[
+{**}=(-1)^{p(n-p)}\,s .
+\]
+ユークリッド計量（$s=+1$）の4次元では2形式上 ${**}=+1$ で、${*}$ の固有値 $\pm1$ に応じて\textbf{自己双対}・\textbf{反自己双対}に分解できる（インスタントン、第8章）。ローレンツ計量（$s=-1$）の4次元では2形式上 ${**}=-1$ であり、実の自己双対形式は存在しない（問題 \ref{ch05-prob-star}）。
+\end{myprop}
+
+本書のミンコフスキー空間では $x^\mu=(t,x,y,z)$、$\eta=\operatorname{diag}(-1,1,1,1)$、向きは $dt\wedge dx\wedge dy\wedge dz$（$\varepsilon_{0123}=+1$）とする。このとき
+\[
+{*}dt=-d^3x,\quad {*}dx^i=-dt\wedge dS_i,\quad {*}(dt\wedge dx^i)=-dS_i,\quad {*}dS_i=dt\wedge dx^i,\quad {*}d^3x=-dt
+\]
+である。ここで $dS_i=\tfrac12\varepsilon_{ijk}dx^j\wedge dx^k$。
+
+\begin{mydef}{余微分とラプラシアン}{ch05-codiff}
+$L^2$ 内積 $(\alpha,\beta)=\int_M\alpha\wedge{*\beta}$ に関する $d$ の形式的随伴を\term{余微分}{codifferential} $\delta$ という。$p$ 形式に対し
+\[
+\delta=(-1)^p\,{*}^{-1}d\,{*}\qquad\bigl(\text{リーマンの場合}=(-1)^{n(p+1)+1}{*d*}\bigr)
+\]
+であり、$\delta^2=0$。\term{ラプラシアン}{Laplacian}（ホッジ・ラプラシアン）を $\Delta=d\delta+\delta d$ と定め、$\Delta\omega=0$ をみたす形式を\textbf{調和形式}という。
+\end{mydef}
+\begin{note}
+$\alpha\in\Omega^{p-1}$, $\beta\in\Omega^p$ とすると $d(\alpha\wedge{*\beta})=d\alpha\wedge{*\beta}+(-1)^{p-1}\alpha\wedge d{*\beta}$。閉多様体上で積分すると $(d\alpha,\beta)=(-1)^p\int\alpha\wedge d{*\beta}=\int\alpha\wedge{*}\bigl((-1)^p{*}^{-1}d{*\beta}\bigr)$ となり、上の $\delta$ を得る。平坦な $\R^n$ では関数に対し $\Delta f=\delta df=-\sum_i\partial_i^2f$（正の作用素）、1形式に対し $\delta(A_idx^i)=-\partial_iA_i$ である。ミンコフスキー空間では $\Delta=-\Box$、$\Box=-\partial_t^2+\nabla^2$。
+\end{note}
+
+\subsection{形式で書いたマクスウェル方程式}
+$A=A_\mu dx^\mu$、$A_\mu=(-\varphi,\bm A)$、$\bm E=-\nabla\varphi-\partial_t\bm A$、$\bm B=\nabla\times\bm A$ とすると、$F=dA=\tfrac12F_{\mu\nu}dx^\mu\wedge dx^\nu$ は
+\[
+F=-E_i\,dt\wedge dx^i+B_i\,dS_i,\qquad {*F}=B_i\,dt\wedge dx^i+E_i\,dS_i
+\]
+である。カレント $j=j_\mu dx^\mu=-\rho\,dt+J_i\,dx^i$ に対し ${*j}=\rho\,d^3x-J_i\,dt\wedge dS_i$。
+
+\begin{physbox}[：マクスウェル方程式（mostly plus、本書の規約）]
+\[
+dF=0\quad\Longleftrightarrow\quad\nabla\cdot\bm B=0,\ \ \nabla\times\bm E+\partial_t\bm B=0,
+\]
+\[
+d{*F}={*j}\ \ (\Longleftrightarrow\ \delta F=j\ \Longleftrightarrow\ \partial_\mu F^{\nu\mu}=j^\nu)\quad\Longleftrightarrow\quad\nabla\cdot\bm E=\rho,\ \ \nabla\times\bm B-\partial_t\bm E=\bm J .
+\]
+作用は $S=\int\bigl(-\tfrac12F\wedge{*F}+A\wedge{*j}\bigr)$ で、$-\tfrac12F\wedge{*F}=\tfrac12(\bm E^2-\bm B^2)\,d^4x$（$d^4x=dt\wedge d^3x$）。$d^2=0$ から $d{*j}=0$（連続の式）が従う。時刻一定面 $\Sigma_t$ 上で ${*j}|_{\Sigma_t}=\rho\,d^3x$、${*F}|_{\Sigma_t}=\bm E\cdot d\bm S$、$F|_{\Sigma_t}=\bm B\cdot d\bm S$ なので
+\[
+Q_e=\int_{\Sigma_t}{*j}=\oint_{S^2_\infty}{*F},\qquad Q_m=\oint_{S^2}F .
+\]
+導出は問題 \ref{ch05-prob-maxwell}。
+\end{physbox}
+
+\subsection{ド・ラーム・コホモロジー}
+\begin{mydef}{ド・ラーム・コホモロジー}{ch05-dR}
+$Z^p(M)=\ker(d\colon\Omega^p\to\Omega^{p+1})$（閉形式）、$B^p(M)=d\Omega^{p-1}(M)$（完全形式）とし、
+\[
+H^p_{\mathrm{dR}}(M)=Z^p(M)/B^p(M)
+\]
+と定める。$d(\alpha\wedge\beta)$ の公式から、外積は $H^p\times H^q\to H^{p+q}$ を誘導する（コホモロジー環、第6章）。$b_p(M)=\dim H^p_{\mathrm{dR}}(M)$ をベッチ数という。
+\end{mydef}
+$H^0_{\mathrm{dR}}(M)$ は局所定数関数の空間で、$\dim H^0=$（連結成分の数）。また $p>n$ では $H^p=0$。ゲージ変換 $A\to A+d\alpha$ は $A$ のコホモロジー類を変えない（$A$ が閉のとき）。
+
+\begin{mythm}{ポアンカレの補題}{ch05-poincare}
+$U\subset\R^n$ が原点に関して星形（$x\in U\Rightarrow tx\in U$, $0\le t\le1$）ならば、$p\ge1$ で $H^p_{\mathrm{dR}}(U)=0$。具体的に、オイラー・ベクトル場 $X=x^\mu\partial_\mu$ を用いて
+\[
+(K\omega)(x)=\int_0^1 t^{p-1}\,(\iota_X\omega)(tx)\,dt\qquad(\omega\in\Omega^p)
+\]
+（$(\iota_X\omega)(tx)$ は係数を $tx$ で評価し、$dx$ はそのまま）とおくと、$p\ge1$ で
+\[
+\omega=dK\omega+Kd\omega
+\]
+が成り立つ。特に $d\omega=0$ なら $\omega=d(K\omega)$（問題 \ref{ch05-prob-poincare}）。
+\end{mythm}
+$K\omega$ は $\iota_X K\omega=0$、すなわち $x^\mu A_\mu=0$ をみたす。これは場の理論で使われる\textbf{フォック・シュウィンガー・ゲージ}である。
+
+\begin{mythm}{ホモトピー不変性}{ch05-htpy}
+滑らかな写像 $f,g\colon M\to N$ がホモトピックならば $f^*=g^*\colon H^p_{\mathrm{dR}}(N)\to H^p_{\mathrm{dR}}(M)$。したがってホモトピー同値な多様体は同じド・ラーム・コホモロジーをもつ。
+\end{mythm}
+\begin{note}
+ホモトピー $H\colon M\times I\to N$ に対し、$\omega\in\Omega^p(N)$ から $(\mathcal K\omega)=\int_0^1\iota_{\partial_t}H^*\omega\,dt$ を作ると $g^*\omega-f^*\omega=d\mathcal K\omega+\mathcal Kd\omega$ となる（ポアンカレの補題と同じ形の\term{ホモトピー作用素}{homotopy operator}）。閉形式なら右辺は完全形式。
+\end{note}
+例えば $\R^n\setminus\{0\}\simeq S^{n-1}$（第1章）なので $H^*_{\mathrm{dR}}(\R^n\setminus\{0\})\cong H^*_{\mathrm{dR}}(S^{n-1})$、ソレノイドの外側 $\simeq S^1$、など。
+
+\begin{mythm}{マイヤー・ヴィートリス完全列}{ch05-MV}
+$M=U\cup V$（$U,V$ 開集合）とする。$\Omega^p(M)\to\Omega^p(U)\oplus\Omega^p(V)$, $\omega\mapsto(\omega|_U,\omega|_V)$ と $\Omega^p(U)\oplus\Omega^p(V)\to\Omega^p(U\cap V)$, $(\alpha,\beta)\mapsto\beta|_{U\cap V}-\alpha|_{U\cap V}$ から、長い完全列
+\[
+\cdots\to H^p(M)\to H^p(U)\oplus H^p(V)\to H^p(U\cap V)\xrightarrow{\ \partial^*\ }H^{p+1}(M)\to\cdots
+\]
+が得られる。$\partial^*$ は、1の分割 $\rho_U+\rho_V=1$（$\operatorname{supp}\rho_U\subset U$, $\operatorname{supp}\rho_V\subset V$）を用いて、閉形式 $\omega\in\Omega^p(U\cap V)$ に対し $U$ 上で $d(\rho_V\omega)$、$V$ 上で $-d(\rho_U\omega)$ に等しい $M$ 上の閉形式の類を対応させる（符号は規約による）。
+\end{mythm}
+第4章のホモロジーのマイヤー・ヴィートリス完全列と同じ構造であり、物理的には「北側・南側のパッチで書いた量を、重なりでの差（遷移関数）で貼り合わせる」操作そのものである。
+
+\begin{myex}{基本的な計算結果}{ch05-results}
+\begin{center}
+\renewcommand{\arraystretch}{1.25}\small
+\begin{tabular}{lll}
+$M$ & $H^p_{\mathrm{dR}}(M)$ & 生成元\\ \hline
+$\R^n$, 星形領域 & $\R$（$p=0$）、$0$（$p\ge1$） & $1$\\
+$S^1$, $\R^2\setminus\{0\}$ & $\R$（$p=0,1$） & $1$, $\frac{1}{2\pi}d\theta$\\
+$S^n$ ($n\ge1$) & $\R$（$p=0,n$）、他は $0$ & $1$, 体積形式／$\mathrm{Vol}(S^n)$\\
+$\R^3\setminus\{0\}$ & $\R$（$p=0,2$） & $1$, $\frac{1}{4\pi}\sin\theta\,d\theta\wedge d\phi$\\
+$\R^2\setminus\{a_1,\dots,a_k\}$ & $\R$（$p=0$）、$\R^k$（$p=1$） & $\frac1{2\pi}d\theta_i$\\
+$T^n$ & $\R^{\binom np}$ & $dx^{i_1}\wedge\cdots\wedge dx^{i_p}$\\
+$\Sigma_g$（種数 $g$ の閉曲面） & $\R,\ \R^{2g},\ \R$ & 第4章のホモロジーと双対
+\end{tabular}
+\end{center}
+$T^n$ や $S^2\times S^2$ のような積には\textbf{キュネットの公式} $H^k(M\times N)\cong\bigoplus_{p+q=k}H^p(M)\otimes H^q(N)$ を用いる（$\pi_M^*\alpha\wedge\pi_N^*\beta$ が生成する。詳しくは第6章）。
+\end{myex}
+
+\subsection{ド・ラームの定理と周期}
+滑らかな $p$ 次元サイクル $c$（例えば向きづけられた閉部分多様体）と閉 $p$ 形式 $\omega$ に対し、\term{周期}{period} $\int_c\omega$ はストークスの定理により $[\omega]\in H^p_{\mathrm{dR}}$ と $[c]\in H_p(M)$ だけで決まる：
+\[
+\int_c(\omega+d\alpha)=\int_c\omega,\qquad \int_{c+\partial b}\omega=\int_c\omega+\int_bd\omega=\int_c\omega .
+\]
+\begin{mythm}{ド・ラームの定理}{ch05-deRham}
+積分のペアリングは同型
+\[
+H^p_{\mathrm{dR}}(M)\xrightarrow{\ \cong\ }H^p(M;\R)\cong\Hom(H_p(M),\R),\qquad[\omega]\mapsto\Bigl([c]\mapsto\int_c\omega\Bigr)
+\]
+を与える。特に、\textbf{閉形式が完全形式であるための必要十分条件は、すべての周期がゼロであること}。$b_p(M)$ は第4章のホモロジーのベッチ数（$H_p(M)$ の階数）と一致する。
+\end{mythm}
+すべての周期が $\Z$ に属する閉形式を\textbf{整数類}を代表するという。ディラックの量子化 $\int_\Sigma F\in2\pi\Z$ は「$F/2\pi$ は整数類」と言い換えられ、これが第1チャーン類 $c_1=[F/2\pi]$ である（第7, 8章）。ねじれ（torsion）はド・ラーム・コホモロジーでは見えない（第6章の普遍係数定理）。
+
+\begin{center}
+\begin{tikzpicture}[scale=1.0]
+  \draw[thick] (0,0) ellipse (2.6 and 1.25);
+  \draw[thick] (-1.1,0.08) .. controls (-0.5,-0.35) and (0.5,-0.35) .. (1.1,0.08);
+  \draw[thick] (-0.9,-0.05) .. controls (-0.4,0.25) and (0.4,0.25) .. (0.9,-0.05);
+  \draw[very thick,blue!70!black,mid arrow] (0,-0.03) ellipse (1.85 and 0.82);
+  \node[blue!70!black] at (0,-1.05) {$a$};
+  \draw[very thick,red!70!black,mid arrow] (1.9,-0.02) arc (90:270:0.24 and 0.6);
+  \draw[very thick,red!70!black,dashed] (1.9,-1.22) arc (-90:90:0.24 and 0.6);
+  \node[red!70!black] at (1.35,-0.75) {$b$};
+  \begin{scope}[xshift=5cm,yshift=-1.1cm]
+    \draw[thick,blue!70!black,mid arrow] (0,0) -- (2.2,0);
+    \draw[thick,blue!70!black,mid arrow] (0,2.2) -- (2.2,2.2);
+    \draw[thick,red!70!black,mid arrows] (0,0) -- (0,2.2);
+    \draw[thick,red!70!black,mid arrows] (2.2,0) -- (2.2,2.2);
+    \node[blue!70!black,below] at (1.1,0) {$a$};
+    \node[red!70!black,right] at (2.2,1.1) {$b$};
+    \node at (1.1,1.1) {$T^2$};
+    \node[below left] at (0,0) {\scriptsize $(0,0)$};
+    \node[above right] at (2.2,2.2) {\scriptsize $(1,1)$};
+    \node at (1.1,-0.75) {\scriptsize $x$ 方向};
+    \node[rotate=90] at (-0.45,1.1) {\scriptsize $y$ 方向};
+  \end{scope}
+\end{tikzpicture}
+\zucap{トーラス $T^2=\R^2/\Z^2$ の基本サイクル $a$（$x$ 方向）と $b$（$y$ 方向）。右は正方形の辺を同一視した表示。閉1形式 $\omega$ の類は二つの周期 $\oint_a\omega$, $\oint_b\omega$ で決まる（問題 \ref{ch05-prob-torus}）。}
+\end{center}
+
+\subsection{ディラック・モノポール}
+\begin{myex}{ディラック・モノポールのポテンシャル}{ch05-dirac}
+$\R^3\setminus\{0\}$ 上の $F=\frac{g}{4\pi}\sin\theta\,d\theta\wedge d\phi$ に対し、
+\begin{gather*}
+A_N=\frac{g}{4\pi}(1-\cos\theta)\,d\phi\quad(U_N=\R^3\setminus\{\theta=\pi\}),\\
+A_S=-\frac{g}{4\pi}(1+\cos\theta)\,d\phi\quad(U_S=\R^3\setminus\{\theta=0\})
+\end{gather*}
+はそれぞれの領域で滑らかで $dA_N=dA_S=F$ をみたす。重なりで
+\[
+A_N-A_S=\frac{g}{2\pi}\,d\phi=d\alpha,\qquad\alpha=\frac{g\phi}{2\pi}
+\]
+であり、これは $U(1)$ ゲージ変換 $A\to A+d\alpha$（本書の規約 $A\to gAg^{-1}+i\,g\,dg^{-1}$ で $g=e^{i\alpha}$）である。電荷 $q$ の波動関数は $\psi_N=e^{iq\alpha}\psi_S$ と変換するので、$e^{iqg\phi/2\pi}$ が $\phi\sim\phi+2\pi$ で一価であることを要求すると
+\[
+qg\in2\pi\Z .
+\]
+単位電荷 $q=1$ が存在すれば $g=\int_{S^2}F\in2\pi\Z$ で、本書の規約 $\int_\Sigma F\in2\pi\Z$ と一致する（問題 \ref{ch05-prob-dirac}）。$e^{i\alpha}$ を遷移関数とする $U(1)$ 主束としての定式化は第7章で扱う。
+\end{myex}
+
+\subsection{ホッジの定理}
+\begin{mythm}{ホッジの定理}{ch05-hodgethm}
+$M$ をコンパクトで向きづけられた境界のないリーマン多様体とする。
+\begin{enumerate}
+\item $\omega$ が調和 $\iff$ $d\omega=0$ かつ $\delta\omega=0$（$(\Delta\omega,\omega)=\lVert d\omega\rVert^2+\lVert\delta\omega\rVert^2$ による）。
+\item \textbf{ホッジ分解}：$L^2$ 直交分解
+\[
+\Omega^p(M)=\mathcal H^p\oplus d\,\Omega^{p-1}(M)\oplus\delta\,\Omega^{p+1}(M)
+\]
+が成り立つ。ここで $\mathcal H^p$ は調和 $p$ 形式の空間。
+\item 各コホモロジー類はただ一つの調和代表元をもち、$\mathcal H^p\cong H^p_{\mathrm{dR}}(M)$。特に $\dim\mathcal H^p=b_p(M)$ で、計量によらない。
+\end{enumerate}
+\end{mythm}
+${*}$ は $\mathcal H^p$ を $\mathcal H^{n-p}$ に同型に写すので $b_p=b_{n-p}$（ポアンカレ双対性、第6章）。調和代表元は、各類の中で $L^2$ ノルム $\lVert\omega\rVert^2$ を最小にするものである：$\lVert h+d\alpha\rVert^2=\lVert h\rVert^2+\lVert d\alpha\rVert^2$。物理的には「固定したフラックス（周期）をもつ配位のうちエネルギー最小のもの」が調和形式である。
+
+\begin{physbox}[：カルツァ・クライン理論とベッチ数]
+$M_d\times K$（$K$ はコンパクトな $k$ 次元リーマン多様体）上の $p$ 形式ゲージ場 $C$（作用 $-\tfrac12\int dC\wedge{*dC}$）を
+\[
+C=\sum_{q}\sum_{i} c^{(i)}_q(x)\wedge\omega^{(i)}_{p-q}(y)
+\]
+と内部空間 $K$ の固有形式で展開すると、$\Delta_K\omega=m^2\omega$ の固有値 $m^2$ が $d$ 次元の質量の2乗を与える。\textbf{質量ゼロのモードは調和形式}に対応し、$d$ 次元の質量ゼロの $q$ 形式場の数は
+\[
+b_{p-q}(K)
+\]
+である（問題 \ref{ch05-prob-kk}, \ref{ch05-prob-kkgen}）。例：$K=S^1$ 上の5次元マクスウェル場 → 光子（$b_0=1$）＋スカラー（$b_1=1$、ウィルソン線）。ベッチ数は位相不変量なので、低エネルギーの場の数は内部空間の計量の詳細によらない。
+\end{physbox}
+
+\subsection{位相的項とガウス・ボンネの予告}
+$U(1)$ では $F\wedge F=d(A\wedge F)$、非可換では
+\[
+\frac{1}{8\pi^2}\tr F\wedge F=d\,CS(A),\qquad CS(A)=\frac{1}{8\pi^2}\tr\Bigl(A\wedge dA-\frac{2i}{3}A\wedge A\wedge A\Bigr)
+\]
+（記法と規約）。このように局所的に完全な形式の積分は場の局所的変分に依存せず、トポロジーだけを拾う。$CS(A)$ のゲージ変換性と大きなゲージ変換、$\theta$ 真空は第8章で扱う。同様に、曲面の曲率2形式 $R$ も局所的には $d\omega$（$\omega$ はスピン接続）であり、$\frac{1}{2\pi}\int_\Sigma R=\chi(\Sigma)$（ガウス・ボンネの定理、第8章）となる。$S^2$ の場合は問題 \ref{ch05-prob-gb} で、モノポールと同じ構造であることを見る。
+
+\section{問題}
+
+\subsection{微分形式とマクスウェル方程式}
+
+\begin{problem}[難易度 A]\label{ch05-prob-r3}
+$\R^3$（ユークリッド計量、向き $d^3x=dx\wedge dy\wedge dz$）で、ベクトル場 $\bm v$ に1形式 $\bm v\cdot d\bm x=v_idx^i$ と2形式 $\bm v\cdot d\bm S=\iota_{\bm v}d^3x$ を対応させる。\\
+(1) $df=\nabla f\cdot d\bm x$、$d(\bm v\cdot d\bm x)=(\nabla\times\bm v)\cdot d\bm S$、$d(\bm v\cdot d\bm S)=(\nabla\cdot\bm v)\,d^3x$ を示し、$d^2=0$ から $\nabla\times\nabla f=0$、$\nabla\cdot(\nabla\times\bm v)=0$ を導け。\\
+(2) ${*}dx^i=dS_i$、${*}dS_i=dx^i$、${*}1=d^3x$ を確かめ、$\delta df=-\nabla^2f$ を示せ。\\
+(3) カルタンの公式を用いて $L_{\bm v}d^3x=(\nabla\cdot\bm v)\,d^3x$ を示し、非圧縮流体（$\nabla\cdot\bm v=0$）の流れが体積を保つことの形式による表現であることを説明せよ。
+\end{problem}
+
+\begin{solution}
+(1) $df=\partial_if\,dx^i$。次に
+\[
+d(v_idx^i)=\partial_jv_i\,dx^j\wedge dx^i=\sum_{j<i}(\partial_jv_i-\partial_iv_j)\,dx^j\wedge dx^i .
+\]
+$dx^j\wedge dx^i$ を $dS_k$（$\varepsilon_{kji}=1$）で書くと、例えば $dy\wedge dz=dS_1$ の係数は $\partial_yv_z-\partial_zv_y=(\nabla\times\bm v)_1$。他も同様で $d(\bm v\cdot d\bm x)=(\nabla\times\bm v)\cdot d\bm S$。最後に
+\[
+d(v_1dy\wedge dz+v_2dz\wedge dx+v_3dx\wedge dy)=(\partial_xv_1+\partial_yv_2+\partial_zv_3)\,dx\wedge dy\wedge dz .
+\]
+$d^2f=0$ は $(\nabla\times\nabla f)\cdot d\bm S=0$、$d^2(\bm v\cdot d\bm x)=0$ は $\nabla\cdot(\nabla\times\bm v)\,d^3x=0$ を意味する。
+
+(2) ユークリッド計量では $\langle dx^i,dx^j\rangle=\delta^{ij}$。$dx\wedge dy\wedge dz=\mathrm{vol}$ なので $dx\wedge{*dx}=\mathrm{vol}$ をみたすのは ${*dx}=dy\wedge dz=dS_1$（$dx\wedge dS_2=dx\wedge dz\wedge dx=0$ などから他の成分は入らない）。同様に ${*}dS_1$：$dS_1\wedge{*dS_1}=\mathrm{vol}$ より ${*}dS_1=dx$。${*}1=\mathrm{vol}$ は定義そのもの。$n=3$ では ${**}=(-1)^{p(3-p)}=+1$ である。
+$df=\partial_if\,dx^i$ に対し $\delta=(-1)^1{*}^{-1}d{*}$ を使うと
+\[
+{*df}=\partial_if\,dS_i,\quad d{*df}=\nabla^2f\,d^3x,\quad \delta df=-{*}^{-1}(\nabla^2f\,d^3x)=-\nabla^2f .
+\]
+
+(3) $d(d^3x)=0$（4形式は $\R^3$ でゼロ）なので $L_{\bm v}d^3x=d\iota_{\bm v}d^3x+\iota_{\bm v}d(d^3x)=d(\bm v\cdot d\bm S)=(\nabla\cdot\bm v)\,d^3x$。流れ $\varphi_s$ で運ばれる領域 $D_s=\varphi_s(D)$ の体積は $\int_{D_s}d^3x=\int_D\varphi_s^*d^3x$ で、その $s$ 微分は $\int_{D_s}L_{\bm v}d^3x=\int_{D_s}\nabla\cdot\bm v\,d^3x$。$\nabla\cdot\bm v=0$ なら体積は時間によらない。ハミルトン力学では位相空間の体積形式 $\omega^n/n!$ についての同じ計算がリウヴィルの定理になる。
+\end{solution}
+
+\begin{problem}[難易度 A]\label{ch05-prob-star}
+(1) ユークリッド $\R^4$（向き $dx^1\wedge dx^2\wedge dx^3\wedge dx^4$）で ${*}(dx^1\wedge dx^2)=dx^3\wedge dx^4$、${*}(dx^1\wedge dx^3)=-dx^2\wedge dx^4$ を確かめ、2形式上 ${**}=1$ であることを示せ。2形式の空間（6次元）は自己双対・反自己双対の3次元ずつに分かれることを、基底を与えて示せ。\\
+(2) ミンコフスキー空間（$\eta=\operatorname{diag}(-1,1,1,1)$、向き $dt\wedge dx\wedge dy\wedge dz$）で ${*}(dt\wedge dx)=-dy\wedge dz$、${*}(dy\wedge dz)=dt\wedge dx$ を示し、2形式上 ${**}=-1$ であることを確かめよ。また1形式上 ${**}=+1$ であることを ${*}dt$ を計算して確かめよ。\\
+(3) (2) の状況で、実の2形式 $F\neq0$ が $F={*F}$ をみたすことはないことを示せ。$F=-E_idt\wedge dx^i+B_idS_i$ のとき $F-i{*F}$ が $\bm E+i\bm B$ だけで書け、${*}$ の固有値 $i$ の固有形式であることを示せ。
+\end{problem}
+
+\begin{solution}
+(1) 定義 $\alpha\wedge{*\beta}=\langle\alpha,\beta\rangle\mathrm{vol}$ を使う。$\langle dx^1\wedge dx^2,dx^1\wedge dx^2\rangle=1$、他の基底との内積は $0$ なので、${*}(dx^1\wedge dx^2)=c\,dx^3\wedge dx^4$ で $dx^1\wedge dx^2\wedge dx^3\wedge dx^4=\mathrm{vol}$ より $c=1$。同様に $dx^1\wedge dx^3\wedge(-dx^2\wedge dx^4)=+dx^1\wedge dx^2\wedge dx^3\wedge dx^4$ なので ${*}(dx^1\wedge dx^3)=-dx^2\wedge dx^4$。一般式 ${**}=(-1)^{2\cdot2}\cdot(+1)=1$。直接にも ${*}(dx^3\wedge dx^4)=dx^1\wedge dx^2$（$dx^3\wedge dx^4\wedge dx^1\wedge dx^2=\mathrm{vol}$）である。
+${**}=1$ なので $P_\pm=\frac12(1\pm{*})$ は射影で、$\Omega^2=\Omega^2_+\oplus\Omega^2_-$。基底は
+\[
+dx^1\wedge dx^2\pm dx^3\wedge dx^4,\qquad dx^1\wedge dx^3\mp dx^2\wedge dx^4,\qquad dx^1\wedge dx^4\pm dx^2\wedge dx^3
+\]
+（${*}(dx^1\wedge dx^4)=dx^2\wedge dx^3$ を用いた）で、それぞれ3次元。これが $\mathfrak{so}(4)\cong\mathfrak{su}(2)\oplus\mathfrak{su}(2)$ の分解に対応し、インスタントン $F=\pm{*F}$ の舞台になる（第8章）。
+
+(2) $\langle dt\wedge dx,dt\wedge dx\rangle=\eta^{tt}\eta^{xx}=-1$。$\mathrm{vol}=dt\wedge dx\wedge dy\wedge dz$ なので $dt\wedge dx\wedge{*}(dt\wedge dx)=-\mathrm{vol}$ より ${*}(dt\wedge dx)=-dy\wedge dz$。$\langle dy\wedge dz,dy\wedge dz\rangle=1$ と $dy\wedge dz\wedge dt\wedge dx=+\mathrm{vol}$（2形式どうしの交換は符号なし）より ${*}(dy\wedge dz)=dt\wedge dx$。したがって
+\[
+{**}(dt\wedge dx)={*}(-dy\wedge dz)=-dt\wedge dx ,
+\]
+他の基底も同様で ${**}=-1=(-1)^{2\cdot2}\cdot(-1)$。
+1形式：$\langle dt,dt\rangle=-1$ より $dt\wedge{*dt}=-\mathrm{vol}$、${*dt}=-dx\wedge dy\wedge dz$。また $\langle d^3x,d^3x\rangle=1$ と $d^3x\wedge dt=-dt\wedge d^3x$ より ${*}d^3x=-dt$。よって ${**}dt=-{*}d^3x=dt$、一般式 $(-1)^{1\cdot3}(-1)=+1$ と一致。
+
+(3) $F={*F}$ なら $F={**F}=-F$ で $F=0$。よって実の自己双対2形式はない。${*}$ の固有値は ${*}^2=-1$ より $\pm i$ である。
+${*F}=-E_i{*}(dt\wedge dx^i)+B_i{*}dS_i=E_idS_i+B_idt\wedge dx^i$。したがって
+\[
+F-i{*F}=-(E_i+iB_i)\,dt\wedge dx^i+(B_i-iE_i)\,dS_i=-(E_i+iB_i)\,dt\wedge dx^i-i(E_i+iB_i)\,dS_i ,
+\]
+は $\bm E+i\bm B$ だけで書ける。さらに ${*}(F-i{*F})={*F}+iF=i(F-i{*F})$。$\bm E+i\bm B$（リーマン・ジルバーシュタイン・ベクトル）は光子の一方のヘリシティに対応し、ローレンツ符号では自己双対性は複素化して初めて意味をもつ。
+\end{solution}
+
+\begin{problem}[難易度 B]\label{ch05-prob-maxwell}
+ミンコフスキー空間（本書の規約）で $A=A_\mu dx^\mu$、$A_\mu=(-\varphi,\bm A)$、$\bm E=-\nabla\varphi-\partial_t\bm A$、$\bm B=\nabla\times\bm A$ とし、$j=j_\mu dx^\mu$、$j^\mu=(\rho,\bm J)$ とする。\\
+(1) $F=dA=-E_idt\wedge dx^i+B_idS_i$ を示せ。\\
+(2) $dF=dt\wedge(\nabla\times\bm E+\partial_t\bm B)\cdot d\bm S+(\nabla\cdot\bm B)\,d^3x$ を示し、$dF=0$ が斉次方程式であることを確かめよ。\\
+(3) ${*F}$ と ${*j}$ を求め、$d{*F}={*j}$ が $\nabla\cdot\bm E=\rho$、$\nabla\times\bm B-\partial_t\bm E=\bm J$ と同値であることを示せ。\\
+(4) $d{*j}=0$ が連続の式 $\partial_t\rho+\nabla\cdot\bm J=0$ であることを示し、それが $d^2=0$ から従うことを説明せよ。\\
+(5) $-\tfrac12F\wedge{*F}=\tfrac12(\bm E^2-\bm B^2)\,d^4x$ を示せ。また $S=\int(-\tfrac12F\wedge{*F}+A\wedge{*j})$ を $A$ について変分すると $d{*F}={*j}$ が得られることを示せ。
+\end{problem}
+
+\begin{solution}
+(1) $F_{\mu\nu}=\partial_\mu A_\nu-\partial_\nu A_\mu$ より $F_{0i}=\partial_tA_i+\partial_i\varphi=-E_i$、$F_{ij}=\partial_iA_j-\partial_jA_i=\varepsilon_{ijk}B_k$。したがって
+\[
+F=F_{0i}\,dt\wedge dx^i+\tfrac12F_{ij}dx^i\wedge dx^j=-E_i\,dt\wedge dx^i+B_k\,dS_k .
+\]
+
+(2) $d(-E_idt\wedge dx^i)=-\partial_jE_i\,dx^j\wedge dt\wedge dx^i=dt\wedge(\partial_jE_i\,dx^j\wedge dx^i)=dt\wedge(\nabla\times\bm E)\cdot d\bm S$（問題 \ref{ch05-prob-r3}(1)）。また
+\[
+d(B_kdS_k)=\partial_tB_k\,dt\wedge dS_k+(\nabla\cdot\bm B)\,d^3x .
+\]
+和をとれば主張の式。$dt\wedge dS_k$ と $d^3x$ は独立なので、$dF=0\iff\nabla\cdot\bm B=0$ かつ $\nabla\times\bm E+\partial_t\bm B=0$。
+
+(3) 問題 \ref{ch05-prob-star} の結果 ${*}(dt\wedge dx^i)=-dS_i$、${*}dS_i=dt\wedge dx^i$ から
+\[
+{*F}=E_i\,dS_i+B_i\,dt\wedge dx^i .
+\]
+$j_\mu=\eta_{\mu\nu}j^\nu=(-\rho,\bm J)$ と ${*dt}=-d^3x$、${*}dx^i=-dt\wedge dS_i$（$dx\wedge(-dt\wedge dy\wedge dz)=\mathrm{vol}$ で確かめられる）から
+\[
+{*j}=\rho\,d^3x-J_i\,dt\wedge dS_i .
+\]
+(2) と同じ計算で（$-E\to B$、$B\to E$ と置き換える）
+\[
+d{*F}=dt\wedge(\partial_t\bm E-\nabla\times\bm B)\cdot d\bm S+(\nabla\cdot\bm E)\,d^3x .
+\]
+係数を比べて、$d{*F}={*j}\iff\nabla\cdot\bm E=\rho$ かつ $\partial_t\bm E-\nabla\times\bm B=-\bm J$。
+
+(4) $d(\rho\,d^3x)=\partial_t\rho\,dt\wedge d^3x$、$d(J_idt\wedge dS_i)=\partial_kJ_i\,dx^k\wedge dt\wedge dS_i=-dt\wedge(\nabla\cdot\bm J)\,d^3x$（$dx^k\wedge dS_i=\delta^k_id^3x$）。よって
+\[
+d{*j}=(\partial_t\rho+\nabla\cdot\bm J)\,dt\wedge d^3x .
+\]
+$d{*F}={*j}$ が成り立てば $d{*j}=d^2{*F}=0$。すなわち電荷保存はマクスウェル方程式の可積分条件であり、カレントが保存しなければ方程式に解がない。
+
+(5) $\alpha\wedge{*\alpha}=\langle\alpha,\alpha\rangle\mathrm{vol}$ で、$\langle dt\wedge dx^i,dt\wedge dx^j\rangle=-\delta^{ij}$、$\langle dS_i,dS_j\rangle=\delta_{ij}$、交差項はゼロ。よって $\langle F,F\rangle=-\bm E^2+\bm B^2$、$-\frac12F\wedge{*F}=\frac12(\bm E^2-\bm B^2)\,d^4x$。これは $-\frac14F_{\mu\nu}F^{\mu\nu}$ に等しい。
+変分：$\alpha\wedge{*\beta}=\beta\wedge{*\alpha}$（内積の対称性）より $\delta(F\wedge{*F})=2\,d\delta A\wedge{*F}$。$d(\delta A\wedge{*F})=d\delta A\wedge{*F}-\delta A\wedge d{*F}$ を使い、表面項を落とすと
+\[
+\delta S=\int\bigl(-d\delta A\wedge{*F}+\delta A\wedge{*j}\bigr)=\int\delta A\wedge\bigl(-d{*F}+{*j}\bigr).
+\]
+任意の $\delta A$ に対しゼロなので $d{*F}={*j}$。成分では $\partial_\mu F^{\mu\nu}=-j^\nu$（mostly plus 特有の符号）である。
+\end{solution}
+
+\begin{problem}[難易度 B]\label{ch05-prob-bianchi}
+(1) $U(1)$ ゲージ場について、$F=dA$ ならば $dF=0$（ビアンキ恒等式）であることを示せ。逆に、$\R^4$ 全体で $dF=0$ ならば $F=dA$ となる $A$ があることを、定理 \ref{thm:ch05-poincare} を用いて述べよ。\\
+(2) 非可換ゲージ場 $F=dA-iA\wedge A$ について、$DF:=dF-i(A\wedge F-F\wedge A)=0$ を示せ。\\
+(3) 静的な磁場 $\bm B$ が $\R^3\setminus\{0\}$ 上で $\nabla\cdot\bm B=0$ をみたし、原点を囲む球面を通る磁束がゼロでないとする。このとき $\R^3\setminus\{0\}$ 全体で滑らかなベクトル・ポテンシャルは存在しないことを示せ。
+\end{problem}
+
+\begin{solution}
+(1) $dF=d^2A=0$。成分では $\partial_{[\lambda}F_{\mu\nu]}=0$。逆に $\R^4$ は星形なので、閉2形式 $F$ に対しポアンカレの補題から $A=KF$ をとれば $F=dA$。
+
+(2) 外微分は $d(A\wedge A)=dA\wedge A-A\wedge dA$（$A$ は1形式）なので
+\[
+dF=-i\,(dA\wedge A-A\wedge dA).
+\]
+一方 $A\wedge F-F\wedge A=A\wedge dA-iA^3-dA\wedge A+iA^3=A\wedge dA-dA\wedge A$（$A^3=A\wedge A\wedge A$）。よって
+\[
+DF=-i(dA\wedge A-A\wedge dA)-i(A\wedge dA-dA\wedge A)=0 .
+\]
+ゲージ変換 $F\to gFg^{-1}$ のもとで $DF\to g(DF)g^{-1}$ と共変である。
+
+(3) $F=\bm B\cdot d\bm S$ とする（問題 \ref{ch05-prob-r3}）。$\nabla\cdot\bm B=0$ は $dF=0$。もし $\R^3\setminus\{0\}$ 全体で $\bm B=\nabla\times\bm A$、すなわち $F=dA$（$A=\bm A\cdot d\bm x$）なら、原点を囲む球面 $S^2$（境界なし）上でストークスの定理より
+\[
+\int_{S^2}\bm B\cdot d\bm S=\int_{S^2}dA=\int_{\partial S^2}A=0 ,
+\]
+仮定に反する。よって $[F]\neq0\in H^2_{\mathrm{dR}}(\R^3\setminus\{0\})$ であり、ポテンシャルは局所的にしか存在しない。モノポールの磁荷は「ビアンキ恒等式 $dF=0$ が成り立つ領域でも $F$ が完全とは限らない」ことの表れである。
+\end{solution}
+
+\subsection{ド・ラーム・コホモロジーの計算}
+
+\begin{problem}[難易度 A]\label{ch05-prob-dtheta}
+$X=\R^2\setminus\{0\}$ 上の1形式 $\omega=\dfrac{-y\,dx+x\,dy}{x^2+y^2}$ を考える。\\
+(1) $d\omega=0$ を示し、局所的には $\omega=d\theta$（偏角）であることを確かめよ。\\
+(2) 単位円周（反時計回り）に沿った積分を求め、$\omega$ は $X$ 上で完全形式でないことを示せ。\\
+(3) 閉曲線 $\gamma\colon[0,2\pi]\to X$ の巻き付き数を $w(\gamma)=\frac1{2\pi}\oint_\gamma\omega$ と定める。$\gamma(t)=e^{2it}\bigl(1+\tfrac12e^{it}\bigr)$（複素数表示）について $w(\gamma)$ を求めよ。\\
+(4) $X$ 上の任意の閉1形式 $\eta$ は、$c=\frac1{2\pi}\oint_{S^1}\eta$ と関数 $f$ を用いて $\eta=c\,\omega+df$ と書けることを示せ。ただし「$X$ 内の閉曲線は単位円周の $n$ 周とホモトピックで、ホモトピックな閉曲線に沿った閉1形式の積分は等しい」ことを認めてよい。
+\end{problem}
+
+\begin{solution}
+(1) $\omega=P\,dx+Q\,dy$、$P=-y/r^2$、$Q=x/r^2$（$r^2=x^2+y^2$）とすると
+\[
+\partial_xQ=\frac{r^2-2x^2}{r^4}=\frac{y^2-x^2}{r^4},\qquad \partial_yP=-\frac{r^2-2y^2}{r^4}=\frac{y^2-x^2}{r^4},
+\]
+$d\omega=(\partial_xQ-\partial_yP)dx\wedge dy=0$。$x=r\cos\theta$, $y=r\sin\theta$ とすると $-y\,dx+x\,dy=r^2d\theta$ なので、$\theta$ が一価に定まる領域（例えば負の $x$ 軸を除いた領域）では $\omega=d\theta$。複素数で書けば $\omega=\mathrm{Im}(dz/z)$。
+
+(2) $\gamma(t)=(\cos t,\sin t)$ で $\gamma^*\omega=dt$、$\oint\omega=2\pi$。$\omega=df$ ならば閉曲線上の積分は $f(\gamma(2\pi))-f(\gamma(0))=0$ となるはずなので、$\omega$ は完全でない。したがって $H^1_{\mathrm{dR}}(X)\neq0$。
+
+(3) $\gamma=z_1z_2$、$z_1=e^{2it}$、$z_2=1+\frac12e^{it}$ とすると $dz/z=dz_1/z_1+dz_2/z_2$ で
+\[
+\oint\omega=\mathrm{Im}\oint\frac{dz_1}{z_1}+\mathrm{Im}\oint\frac{dz_2}{z_2}=4\pi+0 .
+\]
+第2項：$z_2$ は中心 $1$、半径 $\frac12$ の円を動き原点を囲まない。その円を含む半平面 $\mathrm{Re}\,z>0$ では偏角が一価で $\omega=d\theta$ なので積分はゼロ。よって $w(\gamma)=2$。
+
+(4) $\eta'=\eta-c\,\omega$ は閉で、$\oint_{S^1}\eta'=0$。任意の閉曲線 $\gamma$ は $S^1$ の $n$ 周とホモトピックなので $\oint_\gamma\eta'=n\oint_{S^1}\eta'=0$。そこで基点 $x_0$ を固定して $f(x)=\int_{x_0}^{x}\eta'$（任意の道に沿う）と定めると、二つの道の差は閉曲線なので $f$ は道によらず well-defined で、$df=\eta'$。よって $\eta=c\,\omega+df$、すなわち $H^1_{\mathrm{dR}}(X)=\R[\omega]$ で、類は周期 $\oint_{S^1}\eta=2\pi c$ で決まる。
+
+物理：2次元の渦（第1章）の位相 $\theta(\bm x)$ について、$d\theta$ は芯の外で閉1形式であり、巻き付き数は $\frac1{2\pi}\oint d\theta\in\Z$。超流動の循環の量子化 $\oint\bm v_s\cdot d\bm x=\frac{2\pi n}{m}$ はこの式である。
+\end{solution}
+
+\begin{problem}[難易度 C]\label{ch05-prob-poincare}
+$U\subset\R^n$ を原点に関して星形な開集合、$X=x^\mu\partial_\mu$ とし、$p\ge1$ の $p$ 形式 $\omega$ に対し定理 \ref{thm:ch05-poincare} の $K\omega$ を考える。\\
+(1) $h_t(x)=tx$ とすると $(K\omega)=\int_0^1\frac1t\,h_t^*(\iota_X\omega)\,dt$ と書けることを示せ。\\
+(2) $\frac{d}{dt}h_t^*\omega=\frac1t\,h_t^*(L_X\omega)$（$0<t\le1$）を示し、カルタンの公式を用いて $\omega=dK\omega+Kd\omega$ を証明せよ。\\
+(3) 一様磁場 $F=B\,dx\wedge dy$（$\R^3$）に対し $A=KF$ を求めよ。一般の一様磁場 $F=\bm B\cdot d\bm S$ では $\bm A=\frac12\bm B\times\bm r$ となることを示し、これが $\bm r\cdot\bm A=0$ と $\nabla\cdot\bm A=0$ をみたすことを確かめよ。\\
+(4) ディラック・モノポールの $F$ に対し北側の領域 $U_N=\R^3\setminus\{(0,0,z):z\le0\}$ でポテンシャルが存在することを、ポアンカレの補題から説明せよ（$U_N$ が点 $(0,0,1)$ に関して星形であることを示せ）。
+\end{problem}
+
+\begin{solution}
+(1) $\iota_X\omega=\frac{1}{(p-1)!}x^\nu\omega_{\nu\mu_2\cdots\mu_p}(x)\,dx^{\mu_2}\wedge\cdots\wedge dx^{\mu_p}$。$h_t^*$ は $x\to tx$、$dx^\mu\to t\,dx^\mu$ と置き換えるので
+\[
+h_t^*(\iota_X\omega)=\frac{t^p}{(p-1)!}\,x^\nu\omega_{\nu\mu_2\cdots\mu_p}(tx)\,dx^{\mu_2}\wedge\cdots\wedge dx^{\mu_p}=t^p\,(\iota_X\omega)(tx).
+\]
+$\frac1t$ をかけて積分すれば $K\omega$ の定義式 $\int_0^1t^{p-1}(\iota_X\omega)(tx)\,dt$ に一致する。$p\ge1$ なので被積分関数は $t\to0$ で有界である。
+
+(2) $X$ の流れは $\varphi_s(x)=e^sx$ で、$h_t=\varphi_{\log t}$。$t=e^s$ とすると
+\[
+\frac{d}{dt}h_t^*\omega=\frac{ds}{dt}\frac{d}{ds}\varphi_s^*\omega=\frac1t\,\varphi_s^*L_X\omega=\frac1t\,h_t^*L_X\omega .
+\]
+（$\frac{d}{ds}\varphi_s^*\omega=\varphi_s^*L_X\omega$ は流れの群性 $\varphi_{s+u}=\varphi_s\circ\varphi_u$ から従う。）カルタンの公式 $L_X=d\iota_X+\iota_Xd$ と $h_t^*d=dh_t^*$ により
+\[
+\frac{d}{dt}h_t^*\omega=d\Bigl(\frac1th_t^*\iota_X\omega\Bigr)+\frac1th_t^*\iota_X(d\omega).
+\]
+$\varepsilon<t\le1$ で積分して $\varepsilon\to0$ とすると、左辺は $h_1^*\omega-h_\varepsilon^*\omega\to\omega-0$（$h_\varepsilon^*\omega$ は係数に $\varepsilon^p$ がかかるので $p\ge1$ でゼロに行く）。右辺は (1) により $dK\omega+K(d\omega)$。（$d\omega$ は $p+1$ 形式なので $K$ の中の冪は $t^{p}$ になる。）以上で $\omega=dK\omega+Kd\omega$。
+
+(3) $\iota_X(dx\wedge dy)=x\,dy-y\,dx$ なので
+\[
+KF=\int_0^1t\,B\,(x\,dy-y\,dx)\,dt=\frac B2(x\,dy-y\,dx),
+\]
+対称ゲージである。一般に $F=\frac12\varepsilon_{ijk}B_i\,dx^j\wedge dx^k$ で $\iota_XF=\varepsilon_{ijk}B_ix^j\,dx^k=(\bm B\times\bm r)_k\,dx^k$。よって $\bm A=\frac12\bm B\times\bm r$。検算：$\nabla\times(\bm B\times\bm r)=\bm B(\nabla\cdot\bm r)-(\bm B\cdot\nabla)\bm r=3\bm B-\bm B=2\bm B$ なので $\nabla\times\bm A=\bm B$。$\bm r\cdot(\bm B\times\bm r)=0$（フォック・シュウィンガー・ゲージ、一般に $\iota_XK\omega=0$ は $\iota_X^2=0$ から従う）。$\nabla\cdot(\bm B\times\bm r)=\bm r\cdot(\nabla\times\bm B)-\bm B\cdot(\nabla\times\bm r)=0$。
+
+(4) $p=(0,0,1)$、$x\in U_N$ とし、線分 $(1-s)p+sx$（$0\le s\le1$）を考える。$x$ が $z$ 軸上にないとき、$s>0$ の点の $(x,y)$ 成分は $s(x_1,x_2)\neq0$ で、$s=0$ は $p$ なので負の $z$ 軸に触れない。$x=(0,0,x_3)$、$x_3>0$ のときは線分は正の $z$ 軸上にある。よって $U_N$ は $p$ に関して星形であり、平行移動してポアンカレの補題を使えば、$U_N$ 上の閉2形式 $F$ は完全：$F=dA$ となる $A$ が $U_N$ 上にある。$A_N=\frac{g}{4\pi}(1-\cos\theta)d\phi$ はその一つの例である（問題 \ref{ch05-prob-dirac}）。
+\end{solution}
+
+\begin{problem}[難易度 B]\label{ch05-prob-sn}
+(1) マイヤー・ヴィートリス完全列を用いて、$n\ge1$ に対し
+\[
+H^p_{\mathrm{dR}}(S^n)\cong\begin{cases}\R&(p=0,n)\\0&(\text{それ以外})\end{cases}
+\]
+を示せ。$U=S^n\setminus\{N\}$、$V=S^n\setminus\{S\}$（北極・南極を除く）とし、$U\cap V\simeq S^{n-1}$ を用いよ。\\
+(2) 向きづけられた閉多様体 $M$（境界なし、$\dim M=n$）上の体積形式は完全形式でないことを示せ。特に $S^2$ 上の $\sin\theta\,d\theta\wedge d\phi$ は閉だが完全でない。\\
+(3) $S^n$ 上の $n$ 形式 $\omega$ が完全であるための必要十分条件は $\int_{S^n}\omega=0$ であることを示せ。電荷密度 $\rho$ をもつ静電場を $S^3$ 型の閉じた宇宙（空間が $S^3$）で考えると、全電荷 $\int\rho\,\mathrm{vol}$ がゼロでなければならないことを説明せよ。
+\end{problem}
+
+\begin{solution}
+(1) 立体射影で $U\cong V\cong\R^n$ は可縮なので $H^p(U)=H^p(V)=0$（$p\ge1$）、$H^0=\R$。$U\cap V\cong\R^n\setminus\{0\}\simeq S^{n-1}$。
+
+\textbf{$n=1$}：$U\cap V$ は2つの開弧で $H^0(U\cap V)=\R^2$、$H^1(U\cap V)=0$。完全列
+\[
+0\to H^0(S^1)\to\R\oplus\R\xrightarrow{\ r\ }\R^2\xrightarrow{\partial^*}H^1(S^1)\to0,\qquad r(a,b)=(b-a,\,b-a)
+\]
+で、$r$ の像は1次元なので $H^1(S^1)\cong\R^2/\R\cong\R$、$H^0(S^1)=\R$（連結）。
+
+\textbf{$n\ge2$}：$p\ge1$ では $H^p(U)\oplus H^p(V)=0$ なので完全列の部分 $0\to H^p(U\cap V)\xrightarrow{\partial^*}H^{p+1}(S^n)\to0$ から $H^{p+1}(S^n)\cong H^p(S^{n-1})$（$p\ge1$）。$p=0$ の部分
+\[
+0\to H^0(S^n)\to\R\oplus\R\xrightarrow{\ r\ }H^0(U\cap V)=\R\xrightarrow{\partial^*}H^1(S^n)\to0,\qquad r(a,b)=b-a
+\]
+（$U\cap V$ は連結）で、$(a,b)\mapsto b-a$ は全射なので $H^1(S^n)=0$、$H^0(S^n)=\R$。$p\ge2$ では $H^p(S^n)\cong H^{p-1}(S^{n-1})$ を繰り返す。$p<n$ なら $H^1(S^{n-p+1})=0$（$n-p+1\ge2$）に、$p=n$ なら $H^1(S^1)=\R$ に、$p>n$ なら $H^{p-n+1}(S^1)=0$（次数 $\ge2$）に行き着く。よって主張が成り立つ。
+
+(2) 体積形式 $\mathrm{vol}$ が $d\alpha$ なら、ストークスの定理より $\int_M\mathrm{vol}=\int_{\partial M}\alpha=0$ だが、$\int_M\mathrm{vol}>0$ なので矛盾。$S^2$ では $\int\sin\theta\,d\theta\wedge d\phi=4\pi\neq0$。
+
+(3) ストークスより $\int_{S^n}:H^n(S^n)\to\R$ は well-defined な線形写像で、(2) より $[\mathrm{vol}]\mapsto\mathrm{Vol}(S^n)\neq0$。$H^n(S^n)\cong\R$ は1次元なのでこの写像は同型であり、核はゼロ。すなわち $\int\omega=0\iff[\omega]=0\iff\omega$ は完全。
+静電場：空間 $S^3$ 上でガウスの法則は $d({*_3E})=\rho\,\mathrm{vol}$（${*_3E}$ は電場の2形式、問題 \ref{ch05-prob-maxwell} の ${*F}|_{\Sigma_t}=\bm E\cdot d\bm S$）。右辺は完全形式なので $\int_{S^3}\rho\,\mathrm{vol}=0$。閉じた空間では電気力線の逃げ場がなく、正味の電荷を置くことはできない（ガウスの法則の大域的な制約）。逆に $\int\rho=0$ なら (3) により解 $\bm E$ が存在する。
+\end{solution}
+
+\begin{center}
+\begin{tikzpicture}[scale=1.05]
+  \fill[gray!20] (0,1) circle (0.3); \draw[thick] (0,1) circle (0.3);
+  \fill[gray!20] (0,-1) circle (0.3); \draw[thick] (0,-1) circle (0.3);
+  \node at (0,1) {\scriptsize $\Phi_1$}; \node at (0,-1) {\scriptsize $\Phi_2$};
+  \node[right] at (0.3,1.15) {\footnotesize $a_1$};
+  \node[right] at (0.3,-1.15) {\footnotesize $a_2$};
+  \node[vtx] at (-3.2,0) {}; \node[left] at (-3.2,0) {$S$};
+  \draw[thick] (3.4,-2.3) -- (3.4,2.3); \node[right] at (3.4,2.1) {\footnotesize スクリーン};
+  \node[vtx] at (3.4,0) {}; \node[right] at (3.4,-0.25) {$P$};
+  \draw[thick,blue!70!black,mid arrow] (-3.2,0) .. controls (-1.5,2.2) and (1.5,2.2) .. (3.4,0);
+  \draw[thick,green!50!black,mid arrow] (-3.2,0) .. controls (-1.5,0.2) and (1.5,-0.2) .. (3.4,0);
+  \draw[thick,red!70!black,mid arrow] (-3.2,0) .. controls (-1.5,-2.2) and (1.5,-2.2) .. (3.4,0);
+  \node[blue!70!black] at (-1.3,1.75) {$\gamma_+$};
+  \node[green!50!black] at (-1.3,0.35) {$\gamma_0$};
+  \node[red!70!black] at (-1.3,-1.75) {$\gamma_-$};
+\end{tikzpicture}
+\zucap{2本のソレノイド（$z$ 軸に平行、断面は点 $a_1=(0,1)$, $a_2=(0,-1)$ のまわりの灰色の円板、磁束 $\Phi_1,\Phi_2$ は $+z$ 向き）と、源 $S$ からスクリーン上の点 $P$ へ向かう3つの経路。ソレノイドの外側では $F=0$ だが $A$ は完全でない（問題 \ref{ch05-prob-ab2}）。}
+\end{center}
+
+\begin{problem}[難易度 B]\label{ch05-prob-ab2}
+平面 $M=\R^2\setminus\{a_1,a_2\}$（$a_1=(0,1)$, $a_2=(0,-1)$）を考え、$\theta_i$ を $a_i$ のまわりの偏角、$\omega_i=\frac1{2\pi}d\theta_i$ とする。\\
+(1) $U=\{y>-\tfrac12\}\setminus\{a_1\}$、$V=\{y<\tfrac12\}\setminus\{a_2\}$ としてマイヤー・ヴィートリス完全列を使い、$H^1_{\mathrm{dR}}(M)\cong\R^2$ で $[\omega_1],[\omega_2]$ が基底であることを示せ。\\
+(2) 上図のように、断面が $a_i$ を中心とする小円板のソレノイドに磁束 $\Phi_i$（$+z$ 向き）が閉じ込められている。ソレノイドの外側では $A$ は閉形式で、ある関数 $\chi$ により $A=\Phi_1\omega_1+\Phi_2\omega_2+d\chi$ と書けることを示せ。\\
+(3) 電荷 $q$ の粒子が経路 $\gamma$ に沿って伝わるとき、振幅は位相 $\exp(iq\int_\gamma A)$ を得る。図の経路 $\gamma_+,\gamma_0,\gamma_-$ について、$P$ における振幅の相対位相 $\exp\bigl(iq\int_{\gamma_+}A-iq\int_{\gamma_0}A\bigr)$ などを求めよ。どの経路の組でも干渉縞がずれないための条件を求めよ。
+\end{problem}
+
+\begin{solution}
+(1) $U\simeq S^1$（$a_1$ を除いた半平面）、$V\simeq S^1$、$U\cup V=M$、$U\cap V=\{-\tfrac12<y<\tfrac12\}$ は帯で可縮（$a_1,a_2$ を含まない）。完全列
+\begin{multline*}
+0\to H^0(M)\to H^0(U)\oplus H^0(V)\to H^0(U\cap V)\\
+\xrightarrow{\partial^*}H^1(M)\to H^1(U)\oplus H^1(V)\to H^1(U\cap V)=0
+\end{multline*}
+で、$\R\oplus\R\to\R$, $(a,b)\mapsto b-a$ は全射なので $\partial^*=0$。よって $H^1(M)\cong H^1(U)\oplus H^1(V)\cong\R^2$（制限写像が同型）。
+$\omega_1$ の $U$ への制限は $H^1(U)$ の生成元（$a_1$ を回る円周での積分が $1$）。$V$ への制限：$\omega_1$ は凸集合 $\{y<\frac12\}$ 全体で滑らかな閉形式なので完全、類はゼロ。同様に $\omega_2\mapsto(0,\text{生成元})$。よって $[\omega_1],[\omega_2]$ は基底。また $a_i$ のまわりの小円 $C_i$（反時計回り）について $\oint_{C_i}\omega_j=\delta_{ij}$。
+
+(2) 外側の領域 $M'$（平面から2つの閉円板を除いたもの）は $M$ にホモトピー同値なので（(1) と同じ議論で）$H^1(M')=\R^2$ で基底 $[\omega_1],[\omega_2]$。外側で $F=dA=0$ なので $A$ は閉。ソレノイドを含めた平面全体で $A$ は滑らかなので、ストークスの定理により $\oint_{C_i}A=\int_{D_i}F=\Phi_i$（$D_i$ は $C_i$ が囲む円板）。$A'=A-\Phi_1\omega_1-\Phi_2\omega_2$ は閉で、$\oint_{C_i}A'=0$。(1) の同型の下で $[A']$ の像は $H^1(U)$, $H^1(V)$ での類で、それらは $C_1$, $C_2$ 上の周期（ゼロ）で決まる（$H^1(S^1)\cong\R$ は周期で検出される、問題 \ref{ch05-prob-dtheta}）。よって $[A']=0$、$A'=d\chi$。
+
+(3) 位相差は閉曲線 $\gamma_+\cdot\gamma_0^{-1}$ 上の積分 $\exp(iq\oint A)$ で、$d\chi$ の寄与は消える。$\gamma_+\cdot\gamma_0^{-1}$ は $S\to$（上側）$\to P\to$（中央）$\to S$ と進み、$a_1$ だけを\textbf{時計回り}に1周する（$a_1$ の巻き付き数 $-1$、$a_2$ は $0$）。よって
+\begin{gather*}
+e^{iq(\int_{\gamma_+}A-\int_{\gamma_0}A)}=e^{-iq\Phi_1},\qquad
+e^{iq(\int_{\gamma_0}A-\int_{\gamma_-}A)}=e^{-iq\Phi_2},\\
+e^{iq(\int_{\gamma_+}A-\int_{\gamma_-}A)}=e^{-iq(\Phi_1+\Phi_2)} .
+\end{gather*}
+一般の2経路の差の閉曲線が $a_i$ を $n_i$ 回（反時計回り）回るなら位相は $e^{iq(n_1\Phi_1+n_2\Phi_2)}$。すべての組で干渉縞がずれない条件は $q\Phi_1\in2\pi\Z$ かつ $q\Phi_2\in2\pi\Z$。$q\Phi_1+q\Phi_2\in2\pi\Z$ だけでは $\gamma_+$ と $\gamma_0$ の干渉が区別できる。粒子が感じるのは $F$ そのものではなく、コホモロジー類 $[A]\in H^1(M;\R)$ を周期で読んだ $e^{iq\Phi_i}$ である。
+\end{solution}
+
+\begin{problem}[難易度 B]\label{ch05-prob-torus}
+$T^n=\R^n/\Z^n$（座標 $x^i\sim x^i+1$、平坦計量）とする。\\
+(1) 定数係数の形式 $dx^{i_1}\wedge\cdots\wedge dx^{i_p}$ は調和であることを示せ。さらに平坦計量のもとで調和形式は定数係数のものに限ることを示し、ホッジの定理から $b_p(T^n)=\binom np$ を結論せよ。オイラー標数 $\chi(T^n)=\sum_p(-1)^pb_p$ を求めよ。\\
+(2) $T^2$ の閉1形式 $\omega$ に対し、周期 $\alpha=\oint_a\omega$, $\beta=\oint_b\omega$（$a,b$ は図のサイクル）を用いて $\omega-\alpha\,dx-\beta\,dy$ が完全形式であることを、普遍被覆 $\R^2$ への持ち上げを用いて示せ。\\
+(3) $\omega=\bigl(2+2\pi\cos2\pi(x+y)\bigr)dx+\bigl(-1+2\pi\cos2\pi(x+y)\bigr)dy$ が閉であることを確かめ、周期と調和代表元を求めよ。\\
+(4) $T^2$ 上の $U(1)$ ゲージ場で $F=0$ のもの（平坦接続）を考える。ゲージ不変な量 $e^{i\oint_aA}$, $e^{i\oint_bA}$ は $A$ の調和部分（定数部分）だけで決まることを説明せよ。
+\end{problem}
+
+\begin{solution}
+(1) 平坦計量では ${*}$ は定数係数の形式を定数係数の形式に写すので、定数係数の $\omega$ は $d\omega=0$、$d{*\omega}=0$、よって $\delta\omega=0$、$\Delta\omega=0$。
+逆に、平坦計量の下で $\omega=\frac1{p!}\omega_I\,dx^I$ に対し $\Delta\omega=\frac1{p!}(-\sum_k\partial_k^2\omega_I)\,dx^I$（ユークリッド空間のホッジ・ラプラシアンは成分ごとに $-\nabla^2$ として働く）。調和なら各成分 $f=\omega_I$ は $T^n$ 上で $\nabla^2f=0$ をみたし、
+\[
+0=-\int_{T^n}f\,\nabla^2f\,d^nx=\int_{T^n}\lvert\nabla f\rvert^2d^nx
+\]
+（周期性により表面項なし）から $f$ は定数。よって $\mathcal H^p$ は $\{dx^{i_1}\wedge\cdots\wedge dx^{i_p}\}_{i_1<\cdots<i_p}$ で張られ、ホッジの定理より $b_p=\dim\mathcal H^p=\binom np$。$\chi(T^n)=\sum_p(-1)^p\binom np=(1-1)^n=0$。
+
+(2) $\pi\colon\R^2\to T^2$ で引き戻した $\tilde\omega=\pi^*\omega$ は $\R^2$ 上の閉形式なので、ポアンカレの補題により $\tilde\omega=d\tilde f$。$\tilde\omega'=\tilde\omega-\alpha\,dx-\beta\,dy=d\tilde g$、$\tilde g=\tilde f-\alpha x-\beta y$。$\tilde g(x+1,y)-\tilde g(x,y)$ は線分 $(x,y)\to(x+1,y)$ 上の $\tilde\omega'$ の積分で、その像は $T^2$ の閉曲線で $a$ にホモトピック（$y$ をずらすホモトピー）。閉形式の積分はホモトピー不変なので $\oint_a\omega-\alpha=0$。同様に $y$ 方向も周期的。よって $\tilde g$ は $T^2$ 上の関数 $g$ を定め、$\omega-\alpha\,dx-\beta\,dy=dg$。これは $H^1(T^2)\cong\R^2$ が周期 $(\alpha,\beta)$ で同定されることを示す（ド・ラームの定理の具体例）。
+
+(3) $u=2\pi(x+y)$ とすると $\omega=2\,dx-dy+\cos u\,du=2\,dx-dy+d(\sin u)$。よって $d\omega=0$。周期は
+\[
+\oint_a\omega=\int_0^1\bigl(2+2\pi\cos2\pi(x+y_0)\bigr)dx=2,\qquad\oint_b\omega=-1,
+\]
+調和代表元は $2\,dx-dy$（ノルム最小の代表元）。
+
+(4) $F=dA=0$ なので $A$ は閉。(2) より $A=\alpha\,dx+\beta\,dy+dg$ で、$\oint_aA=\alpha$、$\oint_bA=\beta$。$dg$ は小さなゲージ変換 $e^{ig}$ で消せ、周期に寄与しない。したがってウィルソン・ループ $e^{i\alpha}$, $e^{i\beta}$ は定数部分だけで決まる。さらに大きなゲージ変換 $e^{2\pi i(mx+ny)}$（$m,n\in\Z$）は $(\alpha,\beta)\to(\alpha+2\pi m,\beta+2\pi n)$ とずらすので、ゲージ同値類の空間は $\R^2/(2\pi\Z)^2\cong T^2$（問題 \ref{ch05-prob-holonomy}）。
+\end{solution}
+
+\subsection{ディラック・モノポールとAB効果}
+
+\begin{problem}[難易度 B]\label{ch05-prob-dirac}
+$\R^3\setminus\{0\}$ 上で $F=\frac{g}{4\pi}\sin\theta\,d\theta\wedge d\phi$ とする。\\
+(1) デカルト座標で $F=\frac{g}{4\pi r^3}(x\,dy\wedge dz+y\,dz\wedge dx+z\,dx\wedge dy)$、すなわち $\bm B=\frac{g\,\hat{\bm r}}{4\pi r^2}$ であることを示し、$dF=0$ と $\int_{S^2}F=g$ を確かめよ。\\
+(2) $(1-\cos\theta)\,d\phi=\dfrac{x\,dy-y\,dx}{r(r+z)}$ を示し、$A_N=\frac{g}{4\pi}(1-\cos\theta)d\phi$ が負の $z$ 軸の外で滑らかであることを示せ。$A_S$ についても同様に述べよ。\\
+(3) 負の $z$ 軸を囲む半径 $\varepsilon$ の小円（$\theta$ が $\pi$ に近い緯線、$+\phi$ 向き）に沿って $\oint A_N$ を計算し、$\varepsilon\to0$ の極限を求めよ。これを「ディラック弦に沿って磁束 $g$ が原点に流れ込んでいる」と解釈せよ。\\
+(4) $A_N-A_S$ を求め、電荷 $q$ の波動関数の貼り合わせが一価であるための条件として $qg\in2\pi\Z$ を導け。単位電荷 $q=1$ のとき最小の磁荷はいくらか。$\hbar$ と結合定数 $e$ を戻すとどう書けるか。
+\end{problem}
+
+\begin{solution}
+(1) $\Omega=\frac{1}{r^3}(x\,dy\wedge dz+y\,dz\wedge dx+z\,dx\wedge dy)=\frac1{r^3}\iota_X d^3x$（$X=x^i\partial_i$）とおく。$\iota_X\Omega=\frac1{r^3}\iota_X\iota_Xd^3x=0$ で、$\Omega$ は拡大 $x\to\lambda x$ で不変（係数が $-2$ 次、$dx\wedge dx$ が $+2$ 次）。したがって $\Omega$ は $\theta,\phi$ だけを含み $dr$ を含まない2形式で、$r$ によらない。単位球面上では $\iota_{\hat{\bm r}}d^3x$ は（外向きの向きの）面積要素 $\sin\theta\,d\theta\wedge d\phi$ に等しい。よって $\Omega=\sin\theta\,d\theta\wedge d\phi$（立体角の形式）。$F=\frac{g}{4\pi}\Omega=\bm B\cdot d\bm S$ で $\bm B=\frac{g\bm r}{4\pi r^3}$。
+$dF=0$：$\nabla\cdot(\bm r/r^3)=\frac{3}{r^3}-\frac{3r^2}{r^5}=0$（$r\neq0$）。あるいは $d(\sin\theta\,d\theta\wedge d\phi)=0$（$\theta$ だけの関数）。積分 $\int_0^\pi\!\int_0^{2\pi}\frac{g}{4\pi}\sin\theta\,d\phi\,d\theta=g$。
+
+(2) $\cos\theta=z/r$、$d\phi=\frac{x\,dy-y\,dx}{x^2+y^2}$、$x^2+y^2=r^2-z^2=(r-z)(r+z)$ より
+\[
+(1-\cos\theta)\,d\phi=\frac{r-z}{r}\cdot\frac{x\,dy-y\,dx}{(r-z)(r+z)}=\frac{x\,dy-y\,dx}{r(r+z)} .
+\]
+分母がゼロになるのは $r+z=0$、すなわち負の $z$ 軸（と原点）だけ。正の $z$ 軸上でも分子・分母は滑らかで分母 $=2r^2\neq0$。よって $A_N$ は $U_N$ で滑らか。同様に $(1+\cos\theta)d\phi=\frac{x\,dy-y\,dx}{r(r-z)}$ なので $A_S=-\frac{g}{4\pi}\frac{x\,dy-y\,dx}{r(r-z)}$ は正の $z$ 軸の外で滑らか。$dA_N=\frac{g}{4\pi}\sin\theta\,d\theta\wedge d\phi=F$、$dA_S=-\frac{g}{4\pi}(-\sin\theta)\,d\theta\wedge d\phi=F$。
+
+(3) $\theta=\theta_0$ の緯線上で $\oint A_N=\frac{g}{4\pi}(1-\cos\theta_0)\cdot2\pi=\frac g2(1-\cos\theta_0)$。$\theta_0\to\pi$（小円が負の $z$ 軸に縮む）で $\oint A_N\to g$。一方、点 $(0,0,-a)$ を中心とする半径 $\varepsilon$ の水平な円板（$+z$ 向き、境界は $+\phi$ 向き）を通るモノポールの磁束は、立体角が $O(\varepsilon^2/a^2)$ なので $\varepsilon\to0$ でゼロになる（しかも下向きの磁場なので符号は負）。境界の周回積分は $g$ に近づくのに、円板を通る $F$ の磁束はゼロに近づく。ストークスの定理と整合させるには、負の $z$ 軸上に $+z$ 向きの磁束 $g$ を運ぶ無限に細いソレノイド（ディラック弦）があると考えればよい：弦が $-\infty$ から原点に磁束 $g$ を運び込み、原点から等方的に湧き出す。$A_N$ を全空間で使うと、弦の分も含めて $d(\text{全磁束})=0$ が保たれる。弦が観測できない条件が次の量子化条件である（AB効果の位相 $e^{iqg}=1$）。
+
+(4) $A_N-A_S=\frac{g}{4\pi}\bigl[(1-\cos\theta)+(1+\cos\theta)\bigr]d\phi=\frac{g}{2\pi}d\phi=d\alpha$、$\alpha=\frac{g\phi}{2\pi}$。本書の規約で $U(1)$ ゲージ変換 $h=e^{i\alpha}$ は $A\to A+i\,h\,dh^{-1}=A+d\alpha$ であり、電荷 $q$ の場は $\psi\to e^{iq\alpha}\psi$（$D=d-iqA$ と共変）。よって重なりで $\psi_N=e^{iqg\phi/2\pi}\psi_S$。$\psi_N,\psi_S$ はそれぞれ一価なので、赤道を1周したとき $e^{iqg}=1$、すなわち $qg\in2\pi\Z$。
+$q=1$ なら最小の磁荷は $g=2\pi$、一般に $g=2\pi n$ で $\int_{S^2}F/2\pi=n\in\Z$（第1チャーン数、第7, 8章）。$e$ と $\hbar$ を戻すと（$A\to eA/\hbar$）$eg=2\pi\hbar n$。ヘヴィサイド・ローレンツ単位の慣用形 $\frac{eg}{4\pi\hbar}=\frac n2$ と同じである。
+\end{solution}
+
+\begin{problem}[難易度 B]\label{ch05-prob-flux}
+(1) $\Sigma$ を $\R^3\setminus\{0\}$ 内の向きづけられた閉曲面（外向き）とし、問題 \ref{ch05-prob-dirac} の $F$ について、$\Sigma$ が原点を囲むなら $\int_\Sigma F=g$、囲まないなら $0$ であることを、ストークスの定理を用いて示せ（基本事項の図を参照）。\\
+(2) 電荷分布 $\rho$ が有界領域 $D$ に台をもつとする。$D$ の外の閉曲面 $\Sigma$ に対し $Q(\Sigma)=\int_\Sigma{*F}$（$\Sigma$ は時刻一定面内）は、$\Sigma$ を $D$ と交わらないように連続変形しても変わらないことを示せ。$Q(\Sigma)$ は何に等しいか。\\
+(3) 時刻一定面 $\Sigma_t=\{t\}\times\R^3$ 上の全電荷 $Q(t)=\int_{\Sigma_t}{*j}$ が、$\bm J$ が空間遠方で十分速く減衰すれば $t$ によらないことを、$[t_1,t_2]\times\R^3$ 上のストークスの定理で示せ。境界の向きに注意せよ。
+\end{problem}
+
+\begin{solution}
+(1) 囲まない場合：$\Sigma$ は $\R^3$ の有界領域 $V$ の境界で、$V$ は原点を含まない（$\Sigma\subset\R^3\setminus\{0\}$ でジョルダン・ブラウワーの分離定理により $\R^3\setminus\Sigma$ の有界成分が $V$）。$F$ は $V$ 上滑らかで閉なので $\int_\Sigma F=\int_VdF=0$。
+囲む場合：十分小さな $\varepsilon$ で球面 $S_\varepsilon$ は $V$ の内部にあり、$V'=V\setminus B_\varepsilon$ の境界は $\partial V'=\Sigma-S_\varepsilon$（$S_\varepsilon$ の外向き法線は $V'$ にとって内向きなので負号）。$\int_\Sigma F-\int_{S_\varepsilon}F=\int_{V'}dF=0$。$\int_{S_\varepsilon}F=\frac{g}{4\pi}\cdot4\pi=g$（$\varepsilon$ によらない）。よって $\int_\Sigma F=g$。まとめて $\int_\Sigma F=g\cdot(\text{原点を囲む回数})$ で、これは $[\Sigma]\in H_2(\R^3\setminus\{0\})\cong\Z$ と $[F]$ のペアリングである。
+
+(2) $D$ の外 $\R^3\setminus D$ では $\rho=0$ なので、静的とは限らなくても時刻一定面に制限したガウスの法則 $d({*F}|_{\Sigma_t})=\rho\,d^3x$（問題 \ref{ch05-prob-maxwell}(3) の $d^3x$ 成分）から、${*F}|_{\Sigma_t}=\bm E\cdot d\bm S$ は $\R^3\setminus D$ 上の閉2形式。$\Sigma_0$ から $\Sigma_1$ への $D$ を避ける連続変形 $H\colon\Sigma\times[0,1]\to\R^3\setminus D$ があれば、
+\[
+\int_{\Sigma_1}{*F}-\int_{\Sigma_0}{*F}=\int_{\Sigma\times I}d(H^*{*F})=\int_{\Sigma\times I}H^*d{*F}=0 .
+\]
+（$\partial(\Sigma\times I)=\Sigma\times\{1\}-\Sigma\times\{0\}$。）$\Sigma$ が $D$ を囲むとき、$\Sigma$ の内部を $V$ として $\int_\Sigma\bm E\cdot d\bm S=\int_V\rho\,d^3x=Q_{\text{内部}}$：囲まれた電荷。
+
+(3) $W=[t_1,t_2]\times B_R$（向き $dt\wedge d^3x$）に $d{*j}=0$ を積分すると $0=\int_{\partial W}{*j}$。外向き法線先頭の規約により、$t=t_2$ の面は外向き法線 $+\partial_t$ で向き $d^3x$（$dt\wedge d^3x$ が正）、$t=t_1$ の面は外向き法線 $-\partial_t$ なので向き $-d^3x$。よって
+\[
+0=\int_{\{t_2\}\times B_R}\rho\,d^3x-\int_{\{t_1\}\times B_R}\rho\,d^3x+\int_{[t_1,t_2]\times\partial B_R}{*j}.
+\]
+側面の項は $-\int dt\oint_{\partial B_R}\bm J\cdot d\bm S$ で、$R\to\infty$ で $\bm J$ が十分速く減衰すれば消える。したがって $Q(t_2)=Q(t_1)$。$d{*j}=0$ は「閉形式の積分はサイクルを動かしても不変」という形で保存則を表す。ネーターの保存量一般（$d{*J}=0$）について同じことが言える。
+\end{solution}
+
+\begin{problem}[難易度 C]\label{ch05-prob-holonomy}
+$M=\R^3\setminus\{x^2+y^2\le r_0^2\}$（無限に長いソレノイドの外側）とし、$M$ 上の $U(1)$ ゲージ場 $A$ が $F=dA=0$ をみたすとする。ソレノイド内部の磁束を $\Phi$ とする（$+z$ 向き）。\\
+(1) $M\simeq S^1$ を示し、$H^1_{\mathrm{dR}}(M)=\R[\omega]$、$\omega=\frac1{2\pi}d\phi$ を結論せよ。\\
+(2) $M$ 内で自由ホモトピックな閉曲線 $\gamma_0,\gamma_1$ に対し $\oint_{\gamma_0}A=\oint_{\gamma_1}A$ を示せ。ホロノミー $\exp(iq\oint_\gamma A)$ が $[A]\in H^1_{\mathrm{dR}}(M)$ と $\gamma$ の巻き付き数 $n$ だけで決まり、$e^{iqn\Phi}$ に等しいことを示せ。\\
+(3) $M$ 上の滑らかな写像 $h\colon M\to U(1)$ によるゲージ変換を考える。$h=e^{i\lambda}$（$\lambda$ は一価関数）の場合と $h=e^{im\phi}$（$m\in\Z$）の場合で $[A]$ がどう変わるかを調べ、「物理的に区別できる平坦な配位」の空間が $\R/2\pi\Z\cong U(1)$ であることを示せ（すべての電荷 $q$ は整数とする）。\\
+(4) $M$ を $\R^3$ から $k$ 本の平行なソレノイドを除いたものに替えると、この空間はどうなるか。また、クーパー対（電荷 $2$）だけが関与する超伝導体の干渉実験では、$\Phi$ の周期がいくらになるか。
+\end{problem}
+
+\begin{solution}
+(1) $r_0'>r_0$ を固定し、$C=\{x^2+y^2=r_0'^2,\ z=0\}$ とする。$\rho=\sqrt{x^2+y^2}>r_0$ として
+\[
+H\bigl((x,y,z),t\bigr)=\Bigl(\bigl((1-t)+t\,r_0'/\rho\bigr)x,\ \bigl((1-t)+t\,r_0'/\rho\bigr)y,\ (1-t)z\Bigr)
+\]
+とおくと、動径は $(1-t)\rho+t\,r_0'$ で $\rho$ と $r_0'$ の間にあり $r_0$ より大きいので、点は $M$ 内にとどまる。$H(\cdot,0)=\id$、$H(\cdot,1)\in C$、$C$ 上では $H$ は恒等的なので、$C$ は $M$ の強変位レトラクト。よって $M\simeq S^1$、$H^1_{\mathrm{dR}}(M)\cong H^1_{\mathrm{dR}}(S^1)=\R$。$\oint_C\omega=1$ なので $[\omega]$ が生成元。
+
+(2) 自由ホモトピー $H\colon S^1\times[0,1]\to M$ を（滑らかに近似して）とると、ストークスの定理と $dA=0$ から
+\[
+\oint_{\gamma_1}A-\oint_{\gamma_0}A=\int_{\partial(S^1\times I)}H^*A=\int_{S^1\times I}H^*dA=0 .
+\]
+$A$ を $A+d\chi$ に替えても閉曲線上の積分は変わらないので、$\oint_\gamma A$ は $[A]$ と $\gamma$ のホモトピー類（$\pi_1(M)=\Z$ の元、すなわち巻き付き数 $n$）で決まる。$[A]=c[\omega]$ とすると $\oint_C A=c$。一方 $A$ はソレノイドの内部まで滑らかに伸びているので、$C$ が囲む円板に対しストークスの定理から $\oint_CA=\Phi$。よって $c=\Phi$、$\oint_\gamma A=n\Phi$、ホロノミーは $e^{iqn\Phi}$。
+
+(3) 本書の規約で $A\to A+i\,h\,dh^{-1}$。$h=e^{i\lambda}$ では $A\to A+d\lambda$ で $[A]$ は不変。$h=e^{im\phi}$ は $M$ 上で一価で滑らか（$\phi$ 自体は多価だが $e^{im\phi}$ は一価）であり、$i\,h\,dh^{-1}=i\,e^{im\phi}(-im\,d\phi)e^{-im\phi}=m\,d\phi$。よって $A\to A+m\,d\phi$、$[A]=\Phi[\omega]\to(\Phi+2\pi m)[\omega]$。これは $\oint_CA$ を $2\pi m$ ずらすが、整数電荷 $q$ の場は $h^q=e^{iqm\phi}$ と一価に変換されるので許されるゲージ変換であり、ホロノミー $e^{iqn\Phi}$ も不変。
+任意の $h\colon M\to U(1)$ は、$h|_C$ の巻き付き数を $m$ とすると $h=e^{im\phi}e^{i\lambda}$（$\lambda$ 一価）と書ける（$h\,e^{-im\phi}$ は巻き付き数ゼロなので対数が一価にとれる）。したがって $[A]$ はゲージ変換で $2\pi\Z[\omega]$ だけずれ、平坦な配位のゲージ同値類は
+\[
+H^1_{\mathrm{dR}}(M)/2\pi H^1(M;\Z)\cong\R/2\pi\Z\cong U(1),\qquad[A]\mapsto e^{i\Phi}.
+\]
+すべての観測量（ホロノミー）は $e^{i\Phi}$ の関数で、これが完全な不変量である。
+
+(4) $k$ 本なら $M\simeq\bigvee_kS^1$（$\R^2\setminus k$ 点）で $H^1=\R^k$（問題 \ref{ch05-prob-ab2}）、平坦配位の空間は $\R^k/(2\pi\Z)^k\cong T^k$（各ソレノイドの $e^{i\Phi_i}$）。一般に $H_1$ がねじれを持たないとき $H^1(M;\R)/2\pi H^1(M;\Z)\cong T^{b_1}$。
+電荷 $q$ の干渉では位相 $e^{iq\Phi}$ なので $\Phi$ の周期は $2\pi/q$。$q=2$ なら $\pi$。単位を戻すと $2\pi\hbar/(2e)=h/2e$ で、超伝導の磁束量子である。
+\end{solution}
+
+\begin{problem}[難易度 C]\label{ch05-prob-ff}
+(1) $U(1)$ ゲージ場について $F\wedge F=d(A\wedge dA)$ を示せ。4次元時空の作用に $\theta$ 項 $S_\theta=\frac{\theta}{8\pi^2}\int F\wedge F$ を加えても、運動方程式が変わらないことを示せ。\\
+(2) $M=S^2\times S^2$（積の向き）上で、$F=\pi_1^*F_1+\pi_2^*F_2$、$F_i$ は第 $i$ 因子の $S^2$ 上の閉2形式で $\int_{S^2}F_i=2\pi n_i$（$n_i\in\Z$）とする。$\frac{1}{8\pi^2}\int_MF\wedge F=n_1n_2$ を示せ。$n_1n_2\neq0$ ならば $M$ 全体で $F=dA$ となる $A$ は存在しないことを示せ。\\
+(3) 非可換の場合、$F=dA-iA\wedge A$ について
+\[
+\tr F\wedge F=d\,\tr\Bigl(A\wedge dA-\frac{2i}{3}A\wedge A\wedge A\Bigr)
+\]
+を示せ（行列値形式のトレースの巡回性 $\tr(\alpha\wedge\beta)=(-1)^{pq}\tr(\beta\wedge\alpha)$ を用いよ）。
+\end{problem}
+
+\begin{solution}
+(1) $d(A\wedge dA)=dA\wedge dA-A\wedge d^2A=F\wedge F$。変分：$\delta(F\wedge F)=2\,d\delta A\wedge F=2\,d(\delta A\wedge F)+2\,\delta A\wedge dF=2\,d(\delta A\wedge F)$（$dF=0$）。よって $\delta S_\theta$ は表面項だけで、局所的な変分（コンパクト台の $\delta A$）ではゼロ。運動方程式は変わらない。ただし $S_\theta$ の値そのものは大域的なトポロジーに依存しうる（(2)）。
+
+(2) $\pi_i^*F_i\wedge\pi_i^*F_i=\pi_i^*(F_i\wedge F_i)=0$（2次元上の4形式）なので
+\[
+F\wedge F=\pi_1^*F_1\wedge\pi_2^*F_2+\pi_2^*F_2\wedge\pi_1^*F_1=2\,\pi_1^*F_1\wedge\pi_2^*F_2
+\]
+（2形式どうしは可換）。積の向きでのフビニの定理により $\int_M\pi_1^*F_1\wedge\pi_2^*F_2=\int F_1\int F_2=4\pi^2n_1n_2$。よって
+\[
+\frac1{8\pi^2}\int_MF\wedge F=\frac{2\cdot4\pi^2n_1n_2}{8\pi^2}=n_1n_2 .
+\]
+$F=dA$ が $M$ 全体で成り立つなら $F\wedge F=d(A\wedge F)$ で、閉多様体上のストークスにより積分はゼロ。$n_1n_2\neq0$ と矛盾。（実際には $\int_{S^2\times\{pt\}}F=2\pi n_1\neq0$ だけで $F$ が完全でないことがわかる。）$\theta$ 項は $e^{iS_\theta}=e^{i\theta n_1n_2}$ を与え、$\theta\sim\theta+2\pi$。なお $\frac1{8\pi^2}\int F\wedge F=\frac12\int c_1^2$ は一般には半整数になりうる（例えば $\CP^2$。交叉形式、第6章）。
+
+(3) $\tr F\wedge F=\tr(dA\,dA)-i\tr(dA\,A^2)-i\tr(A^2\,dA)-\tr(A^4)$（$\wedge$ を省略）。$A^2$ は2形式なので $\tr(A^2dA)=\tr(dA\,A^2)$。$\tr(A^4)=\tr(A\cdot A^3)=(-1)^{1\cdot3}\tr(A^3\cdot A)=-\tr A^4$ より $\tr A^4=0$。よって
+\[
+\tr F\wedge F=\tr(dA\,dA)-2i\tr(dA\,A^2).
+\]
+一方 $d\tr(A\,dA)=\tr(dA\,dA)$、
+\[
+d\tr(A^3)=\tr(dA\,A^2)-\tr(A\,dA\,A)+\tr(A^2\,dA),
+\]
+ここで $\tr(A\cdot(dA\,A))=(-1)^{1\cdot3}\tr(dA\,A\cdot A)=-\tr(dA\,A^2)$、$\tr(A^2dA)=\tr(dA\,A^2)$ なので $d\tr A^3=3\tr(dA\,A^2)$。したがって
+\[
+d\,\tr\Bigl(A\,dA-\frac{2i}3A^3\Bigr)=\tr(dA\,dA)-2i\tr(dA\,A^2)=\tr F\wedge F .
+\]
+$8\pi^2$ で割れば記法と規約の $dCS(A)=\frac1{8\pi^2}\tr F\wedge F$。$CS(A)$ はゲージ不変でなく、大きなゲージ変換で整数（巻き付き数 $w$）だけ変わることを第8章で示す。
+\end{solution}
+
+\begin{problem}[難易度 B]\label{ch05-prob-gb}
+単位球面 $S^2$（計量 $d\theta^2+\sin^2\theta\,d\phi^2$、向き $d\theta\wedge d\phi$）上に正規直交な双対枠 $e^1=d\theta$, $e^2=\sin\theta\,d\phi$ をとる（極以外で定義）。接続形式 $\omega^a{}_b=-\omega^b{}_a$ を構造方程式 $de^a+\omega^a{}_b\wedge e^b=0$ で定め、曲率を $R^1{}_2=d\omega^1{}_2$ とする（2次元では $SO(2)$ が可換なので $\omega\wedge\omega$ の項は消える）。\\
+(1) $\omega^1{}_2=-\cos\theta\,d\phi$、$R^1{}_2=\sin\theta\,d\theta\wedge d\phi$ を示し、ガウス曲率 $K=1$（$R^1{}_2=K\,e^1\wedge e^2$）を確かめよ。\\
+(2) 複素枠 $\epsilon=e^1+ie^2$ について $d\epsilon=i\,\omega^1{}_2\wedge\epsilon$ を示し、枠を回転した $\epsilon'=e^{i\alpha}\epsilon$ の接続形式が $\omega'=\omega^1{}_2+d\alpha$ であることを示せ。\\
+(3) $\epsilon_N=e^{i\phi}\epsilon$ は北極の近傍で、$\epsilon_S=e^{-i\phi}\epsilon$ は南極の近傍で滑らかな枠であることを示し、対応する接続形式 $\omega_N=(1-\cos\theta)d\phi$、$\omega_S=-(1+\cos\theta)d\phi$ を求めよ。\\
+(4) 上半球と下半球に分けてストークスの定理を用い、$\int_{S^2}R^1{}_2=\oint_{\text{赤道}}(\omega_N-\omega_S)=4\pi$ を示せ。ディラック・モノポールとの対応（$g$ は何に当たるか）を述べ、$\frac1{2\pi}\int R=2=\chi(S^2)$ がガウス・ボンネの定理（第8章）の特別な場合であることを述べよ。
+\end{problem}
+
+\begin{solution}
+(1) $de^1=0$、$de^2=\cos\theta\,d\theta\wedge d\phi$。$\omega^1{}_2=-\cos\theta\,d\phi$（$\omega^2{}_1=\cos\theta\,d\phi$）とおくと
+\[
+de^1+\omega^1{}_2\wedge e^2=-\cos\theta\sin\theta\,d\phi\wedge d\phi=0,\qquad
+de^2+\omega^2{}_1\wedge e^1=\cos\theta\,d\theta\wedge d\phi+\cos\theta\,d\phi\wedge d\theta=0 .
+\]
+（反対称な解は一意。）$R^1{}_2=d(-\cos\theta\,d\phi)=\sin\theta\,d\theta\wedge d\phi=e^1\wedge e^2$ なので $K=1$。
+
+(2) $\omega\equiv\omega^1{}_2$ と書く。$de^1=-\omega\wedge e^2$、$de^2=-\omega^2{}_1\wedge e^1=\omega\wedge e^1$ より
+\[
+d\epsilon=-\omega\wedge e^2+i\,\omega\wedge e^1=i\,\omega\wedge(e^1+ie^2)=i\,\omega\wedge\epsilon .
+\]
+$d\epsilon'=i\,d\alpha\wedge e^{i\alpha}\epsilon+e^{i\alpha}i\,\omega\wedge\epsilon=i(\omega+d\alpha)\wedge\epsilon'$。よって $\omega'=\omega+d\alpha$ で、$U(1)$ ゲージ変換と同じ形である。曲率 $d\omega'=d\omega$ は不変。
+
+(3) 北極付近で $x=\theta\cos\phi$, $y=\theta\sin\phi$ を座標とすると $dx+i\,dy=d(\theta e^{i\phi})=e^{i\phi}(d\theta+i\theta\,d\phi)$。$\sin\theta=\theta+O(\theta^3)$ なので $\epsilon_N=e^{i\phi}(d\theta+i\sin\theta\,d\phi)$ は $dx+i\,dy$ に滑らかな補正を加えたもので、北極でも滑らかかつ非退化。南極付近では $\theta'=\pi-\theta$, $x'+iy'=\theta'e^{-i\phi}$ として $d(\theta'e^{-i\phi})=-e^{-i\phi}(d\theta+i\theta'd\phi)$ で、$\epsilon_S=e^{-i\phi}\epsilon\approx-(dx'+i\,dy')$ は南極で滑らか。(2) より
+\[
+\omega_N=-\cos\theta\,d\phi+d\phi=(1-\cos\theta)\,d\phi,\qquad\omega_S=-\cos\theta\,d\phi-d\phi=-(1+\cos\theta)\,d\phi .
+\]
+いずれも各極で滑らか（$(1\mp\cos\theta)\sim\theta^2/2$ 等が $d\phi$ の特異性を打ち消す、問題 \ref{ch05-prob-dirac}(2) と同じ）。
+
+(4) 上半球 $D_N$ の境界は、外向き法線 $\partial_\theta$ を先頭に置く規約で $+\phi$ 向きの赤道、下半球 $D_S$ の境界は $-\phi$ 向きの赤道。$R=d\omega_N$（$D_N$ 上）$=d\omega_S$（$D_S$ 上）なので
+\[
+\int_{S^2}R=\int_{D_N}d\omega_N+\int_{D_S}d\omega_S=\oint_{\text{赤道}}(\omega_N-\omega_S)=\oint2\,d\phi=4\pi .
+\]
+直接計算 $\int\sin\theta\,d\theta\,d\phi=4\pi$ とも一致。ディラック・モノポールの $A_N,A_S$ は $\frac{g}{4\pi}=1$、すなわち $g=4\pi$ の場合と全く同じ式であり、遷移関数は $e^{2i\phi}$（巻き付き数 $2$）。$\frac1{2\pi}\int R=2=\chi(S^2)$。遷移関数の巻き付き数は計量を連続的に変形しても変わらない整数なので、任意の計量で $\frac1{2\pi}\int R=2$ となる。一般の閉曲面で $\frac1{2\pi}\int_\Sigma R=\chi(\Sigma)=2-2g$ となることは第8章で示す。
+\end{solution}
+
+\subsection{ホッジ理論とカルツァ・クライン理論}
+
+\begin{problem}[難易度 C]\label{ch05-prob-riemann}
+$\Sigma_g$ を種数 $g$ の向きづけられた閉曲面、計量 $h$ をもつとする。$H_1(\Sigma_g;\Z)\cong\Z^{2g}$（第4章）とド・ラームの定理を用いてよい。\\
+(1) 2次元では、1形式上の ${*}$ が共形変換 $h\to e^{2\sigma}h$ で不変であることを示せ。局所共形座標（$h=e^{2\sigma}(dx^2+dy^2)$）で ${*}dx=dy$、${*}dy=-dx$、1形式上 ${**}=-1$ を確かめよ。\\
+(2) 調和1形式の空間 $\mathcal H^1$ の次元が $2g$ であること、および ${*}$ が $\mathcal H^1$ を保つことを示せ。\\
+(3) $z=x+iy$ として ${*}dz=-i\,dz$ を示し、$\omega=f\,dz+k\,d\bar z$ が調和であることと $f$ が正則・$k$ が反正則であることが同値であることを示せ。これより正則1形式の空間の複素次元が $g$ であることを説明せよ。\\
+(4) コンパクト・ボソン $X\sim X+2\pi$ の作用 $S=\frac{\kappa}{2}\int_{\Sigma_g}dX\wedge{*dX}$（$\kappa>0$）を考える。$dX$ は周期 $\oint_{c}dX\in2\pi\Z$ をもつ閉1形式である。周期を固定したとき作用を最小にする配位では $dX$ が調和であることを示せ。
+\end{problem}
+
+\begin{solution}
+(1) 定義式の成分表示で $n=2$, $p=1$：${*}dx^i=\sqrt{h}\,h^{ij}\varepsilon_{jk}dx^k$。$h_{ij}=e^{2\sigma}\delta_{ij}$ なら $\sqrt h=e^{2\sigma}$、$h^{ij}=e^{-2\sigma}\delta^{ij}$ で因子が打ち消し合い ${*}dx^i=\varepsilon_{ik}dx^k$：${*}dx=dy$、${*}dy=-dx$。共形因子によらない。任意の計量は局所的に共形平坦（等温座標の存在）なので、1形式上の ${*}$ は共形類だけで決まる。${**}dx={*}dy=-dx$、一般式 $(-1)^{1\cdot1}=-1$ と一致。
+
+(2) ホッジの定理より $\dim\mathcal H^1=b_1=\dim H^1_{\mathrm{dR}}(\Sigma_g)$。ド・ラームの定理より $H^1_{\mathrm{dR}}\cong\Hom(H_1(\Sigma_g),\R)\cong\R^{2g}$。
+2次元の1形式では $\delta=-{*d*}$（リーマンの式 $(-1)^{n(p+1)+1}=(-1)^{5}=-1$）。$\omega$ が調和 $\iff d\omega=0$ かつ $d{*\omega}=0$。このとき $\eta={*\omega}$ について $d\eta=d{*\omega}=0$、$d{*\eta}=d({**\omega})=-d\omega=0$ なので $\eta$ も調和。
+
+(3) ${*}dz={*}dx+i{*}dy=dy-i\,dx=-i(dx+i\,dy)=-i\,dz$。同様に ${*}d\bar z=i\,d\bar z$。$\partial=\partial_z$, $\bar\partial=\partial_{\bar z}$ として
+\[
+d\omega=\bar\partial f\,d\bar z\wedge dz+\partial k\,dz\wedge d\bar z=(\partial k-\bar\partial f)\,dz\wedge d\bar z ,
+\]
+\[
+{*\omega}=-i f\,dz+i k\,d\bar z,\qquad d{*\omega}=-i\bar\partial f\,d\bar z\wedge dz+i\partial k\,dz\wedge d\bar z=i(\bar\partial f+\partial k)\,dz\wedge d\bar z .
+\]
+両方ゼロ $\iff\bar\partial f=0$ かつ $\partial k=0$。（共形座標の取り替えは正則なので、この条件は座標によらない。）
+したがって $\mathcal H^1\otimes\C=\mathcal H^{1,0}\oplus\mathcal H^{0,1}$（${*}$ の固有値 $-i$, $+i$ の固有空間）で、$\mathcal H^{1,0}$ は正則1形式 $f\,dz$ の空間。複素共役は $\mathcal H^{1,0}$ と $\mathcal H^{0,1}$ を入れ替えるので両者の次元は等しく、$\dim_\C\mathcal H^{1,0}=\frac12\dim_\C(\mathcal H^1\otimes\C)=\frac12\cdot2g=g$。これは弦理論で種数 $g$ の世界面の正則微分の数（周期行列の大きさ）として現れる（第10章）。
+
+(4) 周期を固定すると $[dX]$ が固定され、$dX=h+df$（$h$ は類の調和代表元、$f$ は一価関数）と書ける。$(h,df)=(\delta h,f)=0$ なので
+\[
+S=\frac\kappa2\lVert h+df\rVert^2=\frac\kappa2\bigl(\lVert h\rVert^2+\lVert df\rVert^2\bigr)\ge\frac\kappa2\lVert h\rVert^2 ,
+\]
+等号は $df=0$。よって最小作用配位は $dX=h$（調和）。各巻き付きセクター（$H^1(\Sigma_g;2\pi\Z)\cong(2\pi\Z)^{2g}$ の元）に1つずつ古典解があり、分配関数はそれらの和（格子和、テータ関数）を含む。
+\end{solution}
+
+\begin{problem}[難易度 D]\label{ch05-prob-coulomb}
+$M$ をコンパクトで向きづけられた境界のない3次元リーマン多様体（例えば $T^3=\R^3/L\Z^3$）とする。ホッジの定理を用いてよい。\\
+(1) $(\Delta\omega,\omega)=\lVert d\omega\rVert^2+\lVert\delta\omega\rVert^2$ を示し、調和 $\iff$ 閉かつ余閉 を示せ。また $d\Omega^{p-1}$、$\delta\Omega^{p+1}$、$\mathcal H^p$ が互いに直交することを示せ。\\
+(2) 任意の1形式 $A$ に対し、関数 $\lambda$ で $\delta(A+d\lambda)=0$（クーロン・ゲージ）となるものが存在し、定数を除いて一意であることを示せ。（関数上 $\Delta=\delta d$ の像は定数の直交補空間であることを用いよ。）\\
+(3) クーロン・ゲージで $A=h+\delta\beta$（$h\in\mathcal H^1$）と書ける。$T^3$ 上で $h$ を具体的に書き、小さなゲージ変換では消せないが、大きなゲージ変換 $e^{i\lambda}$, $\lambda=2\pi\,\bm m\cdot\bm x/L$（$\bm m\in\Z^3$）でどう変わるかを述べよ。\\
+(4) 空間が $M$ の静電場について、ガウスの法則 $\nabla\cdot\bm E=\rho$ が解をもつための必要十分条件は $\int_M\rho\,\mathrm{vol}=0$ であることを示せ。解 $\bm E=-\nabla\varphi$ の一意性と、一般の解 $\bm E$ の不定性（調和部分）について述べよ。周期境界条件の格子QEDで1個の荷電粒子だけを置けない理由を説明せよ。
+\end{problem}
+
+\begin{solution}
+(1) $(\Delta\omega,\omega)=(d\delta\omega,\omega)+(\delta d\omega,\omega)=(\delta\omega,\delta\omega)+(d\omega,d\omega)$（$\delta$ は $d$ の随伴）。リーマン計量では $\lVert\cdot\rVert^2\ge0$ なので $\Delta\omega=0\iff d\omega=0$ かつ $\delta\omega=0$（逆は自明）。
+直交性：$(d\alpha,\delta\beta)=(d^2\alpha,\beta)=0$。$h$ 調和なら $(h,d\alpha)=(\delta h,\alpha)=0$、$(h,\delta\beta)=(dh,\beta)=0$。
+
+(2) $\delta(A+d\lambda)=\delta A+\Delta\lambda$（関数上 $\Delta=\delta d$）。よって $\Delta\lambda=-\delta A$ を解けばよい。関数上の調和形式は $d\lambda=0$、すなわち定数（$M$ 連結とする）であり、ホッジ分解 $\Omega^0=\mathcal H^0\oplus\delta\Omega^1$ と $\Delta$ の自己共役性から $\operatorname{im}\Delta=(\mathcal H^0)^\perp=\{f:\int_Mf\,\mathrm{vol}=0\}$。$\delta A$ は $(\delta A,1)=(A,d1)=0$ をみたすので像に入り、解 $\lambda$ が存在する。二つの解の差は $\Delta$ の核、すなわち定数（ゲージ変換としては大域的な位相 $e^{ic}$、$A$ を変えない）。$U(1)$ では「グリボフの曖昧さ」は生じない。
+
+(3) ホッジ分解 $A=h+d\lambda'+\delta\beta$ をとると、 $\delta A=\delta d\lambda'=\Delta\lambda'=0$ なので $d\lambda'=0$。よって $A=h+\delta\beta$。$T^3$（平坦）では問題 \ref{ch05-prob-torus} と同様に $h=\sum_ia_i\,dx^i$（$a_i$ 定数）。$h$ はゲージ変換 $A\to A+d\lambda$（$\lambda$ 一価）で変わらない（$d\lambda$ は $\mathcal H^1$ と直交）。しかし $e^{i\lambda}$, $\lambda=2\pi\bm m\cdot\bm x/L$ は $T^3$ 上一価な $U(1)$ 値関数であり（$x^i\to x^i+L$ で $\lambda\to\lambda+2\pi m_i$）、$A\to A+d\lambda$ で $a_i\to a_i+2\pi m_i/L$。物理的な自由度は $e^{ia_iL}$（$i$ 方向に一周するウィルソン・ループ）で、$(\R/\tfrac{2\pi}{L}\Z)^3\cong T^3$ に値をとる。これは $b_1(T^3)=3$ 個のゲージ場のゼロモード（\en{toron}）で、有限体積のQEDでは特別な扱いが必要になる。
+
+(4) $\bm E$ に対応する2形式 $\mathcal E={*_3}(E_idx^i)$ を用いるとガウスの法則は $d\mathcal E=\rho\,\mathrm{vol}$。必要性：ストークスの定理より $\int_M\rho\,\mathrm{vol}=\int_Md\mathcal E=0$（$\partial M=\emptyset$）。十分性：$\int\rho=0$ なら (2) と同じ理由で $\Delta\varphi=\rho$（$\Delta=-\nabla^2$ の平坦の場合、すなわち $-\nabla^2\varphi=\rho$）の解 $\varphi$ が存在し、$\bm E=-\nabla\varphi$ は $\nabla\cdot\bm E=-\nabla^2\varphi=\rho$ をみたす。
+一意性：$\varphi$ は定数を除いて一意なので $\bm E=-\nabla\varphi$ は一意。ガウスの法則だけを課した一般の解は、$d\mathcal E'=0$ をみたす $\mathcal E'$ を加える不定性があり、静電場（$\nabla\times\bm E=0$、すなわち $E_idx^i$ も閉）まで課すと差は閉かつ余閉、つまり調和1形式 $\sum c_idx^i$（一様電場、$b_1=3$ 個）だけが残る。これは「トーラスを一周する電気フラックス」のセクターである。
+格子QED：周期境界条件の空間はトーラスで閉多様体なので、ガウスの法則（の格子版）から全電荷はゼロでなければならない。1個の電荷を置くと矛盾し、一様な中和背景電荷を加えるか、荷電共役で捻った境界条件（C周期境界条件）などの工夫が必要になる。
+\end{solution}
+
+\begin{problem}[難易度 C]\label{ch05-prob-kk}
+5次元時空 $M_4\times S^1$（座標 $(x^\mu,y)$、$y\sim y+2\pi R$、計量 $\eta_{\mu\nu}dx^\mu dx^\nu+dy^2$）上のマクスウェル理論
+\[
+S=-\frac1{2g_5^2}\int F\wedge{*F}=-\frac{1}{4g_5^2}\int d^4x\,dy\,F_{MN}F^{MN}
+\]
+を考える。\\
+(1) $A_\mu(x,y)=\sum_{n\in\Z}A^{(n)}_\mu(x)e^{iny/R}$, $A_y(x,y)=\sum_n\phi^{(n)}(x)e^{iny/R}$ と展開する。$n\neq0$ のモードではゲージ変換で $\phi^{(n)}=0$ にできることを示し、そのとき $A^{(n)}_\mu$ が質量 $\lvert n\rvert/R$ のベクトル場になることを示せ。\\
+(2) $n=0$ のモードが4次元の質量ゼロの光子 $A_\mu^{(0)}$ と質量ゼロのスカラー $\phi^{(0)}$ を与えることを示し、4次元の結合定数 $g_4$ を $g_5$, $R$ で表せ。これらが $S^1$ の調和0形式・調和1形式（$b_0=b_1=1$）に対応することを説明せよ。\\
+(3) スカラーがウィルソン線 $W(x)=\oint_{S^1}A=2\pi R\,\phi^{(0)}(x)$ と同一視でき、大きなゲージ変換によって $W\sim W+2\pi$ と周期的（コンパクトなスカラー）であることを示せ。
+\end{problem}
+
+\begin{solution}
+(1) 5次元のゲージ変換 $A\to A+d\lambda$、$\lambda=\sum_n\lambda^{(n)}(x)e^{iny/R}$ で $A_y\to A_y+\partial_y\lambda$、すなわち $\phi^{(n)}\to\phi^{(n)}+\frac{in}{R}\lambda^{(n)}$。$n\neq0$ なら $\lambda^{(n)}=\frac{iR}{n}\phi^{(n)}$ と選べば $\phi^{(n)}=0$（スカラーは「食べられる」）。このとき $F_{\mu y}=\partial_\mu A_y-\partial_yA_\mu$ の $n$ モードは $-\frac{in}{R}A^{(n)}_\mu$。
+$F_{MN}F^{MN}=F_{\mu\nu}F^{\mu\nu}+2F_{\mu y}F^{\mu y}$（$g^{yy}=1$）なので、ラグランジアン密度は $-\frac1{4g_5^2}F_{\mu\nu}F^{\mu\nu}-\frac1{2g_5^2}F_{\mu y}F^{\mu}{}_y$。$y$ で積分すると $\int_0^{2\pi R}e^{i(n+m)y/R}dy=2\pi R\,\delta_{n,-m}$、$A^{(-n)}=\overline{A^{(n)}}$（$A$ は実）より、$n$ モードの部分は
+\[
+\frac{2\pi R}{g_5^2}\Bigl[-\frac12\overline{F^{(n)}_{\mu\nu}}F^{(n)\mu\nu}-\frac{n^2}{R^2}\overline{A^{(n)}_\mu}A^{(n)\mu}\Bigr]\qquad(n>0\text{ と }-n\text{ をまとめた})
+\]
+となる。mostly plus 計量でのプロカ場（複素）のラグランジアン $-\frac12\lvert F_{\mu\nu}\rvert^2-m^2\lvert A_\mu\rvert^2$ と比べて $m=\lvert n\rvert/R$。正準規格化は全体の因子 $2\pi R/g_5^2$ で場を再定義すればよい。
+
+(2) $n=0$：$\partial_y$ はゼロに作用するので $F_{\mu y}=\partial_\mu\phi^{(0)}$。
+\[
+S\supset2\pi R\int d^4x\Bigl[-\frac{1}{4g_5^2}F^{(0)}_{\mu\nu}F^{(0)\mu\nu}-\frac{1}{2g_5^2}\partial_\mu\phi^{(0)}\partial^\mu\phi^{(0)}\Bigr].
+\]
+質量項はなく、光子と質量ゼロのスカラー。$\frac1{g_4^2}=\frac{2\pi R}{g_5^2}$。$\phi^{(0)}$ に対するゲージ変換は $\lambda^{(0)}$ が $y$ によらないので作用せず、物理的なスカラーである（ただし (3) の大きなゲージ変換は除く）。
+展開 $A=\sum A^{(n)}_\mu dx^\mu e^{iny/R}+\sum\phi^{(n)}e^{iny/R}dy$ は $A=\sum_q c_q\wedge\omega_{1-q}$ の形で、$S^1$ のラプラシアン $-\partial_y^2$ の固有値 $n^2/R^2$ が質量の2乗。固有値ゼロ（調和形式）は0形式では定数 $1$（$b_0=1$）、1形式では $dy$（$b_1=1$）。前者に掛かる $A^{(0)}_\mu$ が光子、後者に掛かる $\phi^{(0)}$ がスカラー。
+
+(3) $\oint_{S^1}A=\int_0^{2\pi R}A_y\,dy=2\pi R\,\phi^{(0)}$（$n\neq0$ は積分で消える）で、ゲージ不変な量 $e^{iq\oint A}$ はウィルソン線（$S^1$ 方向のホロノミー）。ゲージ変換 $e^{i\lambda}$, $\lambda=my/R$（$m\in\Z$）は $S^1$ 上一価で、$A\to A+\frac mR dy$、$\phi^{(0)}\to\phi^{(0)}+\frac mR$、$W\to W+2\pi m$。よって $W$ は周期 $2\pi$ のコンパクトなスカラー（$H^1(S^1;\R)/2\pi H^1(S^1;\Z)$、問題 \ref{ch05-prob-holonomy}）。古典的には平坦方向（モジュライ）で、$W$ の値に応じて電荷 $q$ の場の KK 質量が $\lvert n-qW/2\pi\rvert/R$ にずれる（$\partial_y-iqA_y$ の固有値から）（ホソタニ機構の原型）。
+\end{solution}
+
+\begin{problem}[難易度 D]\label{ch05-prob-kkgen}
+$M_d\times K$（$K$ はコンパクトで向きづけられた $k$ 次元リーマン多様体、積計量）上の $p$ 形式ゲージ場 $C$（場の強さ $G=dC$、ゲージ変換 $C\to C+d\Lambda$、作用 $-\frac12\int G\wedge{*G}$）を考える。$K$ のホッジ分解と、積計量では（ユークリッド化して）$\Delta_{M\times K}(\alpha\wedge\beta)=\Delta_M\alpha\wedge\beta+\alpha\wedge\Delta_K\beta$ が成り立つことを用いてよい。\\
+(1) $C=\sum_q\sum_ic^{(i)}_q(x)\wedge\omega^{(i)}_{p-q}(y)$（$\omega^{(i)}_{p-q}$ は $\Delta_K$ の固有形式）と展開し、ゲージ $\delta_KC=0$ の下で運動方程式が $(\Delta_M+\Delta_K)C=0$（の各成分）になることを認めて、$d$ 次元で質量ゼロの $q$ 形式場の数が $b_{p-q}(K)$ であることを説明せよ。\\
+(2) $K=T^6$、$p=2$（10次元の2形式場 $B$）のとき、4次元の質量ゼロ場（2形式、ベクトル、スカラー）の数を求めよ。\\
+(3) $K=S^2\times S^2$（キュネットの公式を用いて $b_p$ を求めよ）、$p=3$ のとき、$d=7$ 次元の質量ゼロ場の数を求めよ。\\
+(4) 質量ゼロの場の数が $K$ の計量（大きさや形）によらないのはなぜか。$K$ を $S^6$ に替えると (2) の答えはどうなるか。
+\end{problem}
+
+\begin{solution}
+(1) $\Delta_K\omega=m^2\omega$ の固有形式に掛かる係数 $c_q$ は $(\Delta_M+m^2)c_q=0$、すなわち（ローレンツ符号に戻して）$(-\Box+m^2)c_q=0$ をみたし、質量 $m$ の $q$ 形式場になる。質量ゼロは $\Delta_K\omega=0$、すなわち調和形式。ホッジの定理により調和 $(p-q)$ 形式の空間の次元は $b_{p-q}(K)$。したがって質量ゼロの $q$ 形式場は $b_{p-q}(K)$ 個（$q=0,\dots,p$）。
+補足：$d$ 次元側にも残るゲージ変換 $c_q\to c_q+d\Lambda_{q-1}$（$\Lambda=\Lambda_{q-1}\wedge\omega_{p-q}$、$\omega$ 調和）があり、$c_q$ は $d$ 次元の $q$ 形式ゲージ場として振る舞う。$\delta_K C=0$ は $C$ の内部成分から $d_K$ の像（純ゲージ）を除く条件で、残る非調和モードは質量をもつ。
+
+(2) $b_p(T^6)=\binom6p$：$b_0=1$, $b_1=6$, $b_2=15$。よって4次元で2形式場 $B_{\mu\nu}$ が $1$ 個（4次元では質量ゼロの2形式はスカラー（アクシオン）と双対）、ベクトル場 $B_{\mu i}$ が $6$ 個、スカラー $B_{ij}$ が $15$ 個。最後の15個は $T^6$ 上の定数2形式（$B$ 場のモジュライ）である。
+
+(3) $S^2$ の $b=(1,0,1)$。キュネットより $b_k(S^2\times S^2)=\sum_{p+q=k}b_p(S^2)b_q(S^2)$：
+\[
+b_0=1,\quad b_1=0,\quad b_2=2,\quad b_3=0,\quad b_4=1 .
+\]
+$p=3$：質量ゼロの3形式 $b_0=1$ 個、2形式 $b_1=0$ 個、ベクトル $b_2=2$ 個（$S^2$ 各因子の面積形式に対応）、スカラー $b_3=0$ 個。
+
+(4) ベッチ数はトポロジー（ド・ラーム・コホモロジー＝特異コホモロジー）だけで決まり、計量によらないから。計量を変えると調和形式そのもの（どの形式が調和か）は変わるが、その数は変わらず、質量をもつモードの質量だけが変わる。$K=S^6$ なら $b_0=1$, $b_1=b_2=0$ なので、$B_{\mu\nu}$ が1個だけで、ベクトルもスカラーも出ない。弦理論のコンパクト化でモジュライや $U(1)$ ゲージ場の数がホッジ数（$b_p$ の精密化）で決まる、という第10章の議論の原型である。
+\end{solution}
